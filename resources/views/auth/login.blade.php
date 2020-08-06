@@ -1,11 +1,11 @@
 @extends('layouts.app')
-
+<link href="{{ asset('css/account.css') }}" rel="stylesheet">
 @section('content')
 <div class="container">
     <div class="row justify-content-center">
-        <div class="col-md-8">
+        <div class="col-md-8 form-box">
             <div class="card">
-                <div class="card-header">{{ __('Login') }}</div>
+                <div class="card-header text-center">{{ __('Are you client?') }}</div>
 
                 <div class="card-body">
                     <form method="POST" action="{{ route('login') }}">
@@ -62,6 +62,9 @@
                                         {{ __('Forgot Your Password?') }}
                                     </a>
                                 @endif
+                            </div>
+                            <div class="col-md-12 text-center pt-4">
+                                <a class="btn btn-link" href="{{ route('register') }}">{{ __('Create an account') }}</a>
                             </div>
                         </div>
                     </form>

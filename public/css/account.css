@@ -1,0 +1,11 @@
+body {
+    background: url(/img/login-background.jpg);
+    background-size: 100%;
+    background-repeat: no-repeat;
+    min-height: 100%;
+    opacity: 0.9;
+}
+
+.form-box{
+    margin-top: 5rem;
+}
