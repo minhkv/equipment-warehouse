@@ -4,7 +4,7 @@
     <div class="row">
         <a href="#" class="btn btn-primary mx-2">Thiết bị</a>
         <a href="#" class="btn btn-primary mx-2">Combo</a>
-        <a href="#" class="btn btn-danger ml-auto">Thêm thiết bị</a>
+        <a href="{{ route('create-equipment') }}" class="btn btn-danger ml-auto">Thêm thiết bị</a>
     </div>
     <div class="row">
         <div class="col-md-12 text-center">

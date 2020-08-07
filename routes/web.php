@@ -33,6 +33,10 @@ Route::get('/order', function() {
     return view('order');
 })->name('order');
 
+Route::get('/create-equipment', function() {
+    return view('create-equipment');
+})->name('create-equipment');
+
 Route::get('/borrowing-cart', function() {
     return view('borrowing-cart');
 })->name('borrowing-cart');
