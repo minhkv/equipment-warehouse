@@ -20,7 +20,7 @@
                 <tr>
                     <th scope="row"><img src="/img/sony-ax700.webp" height=100 alt="sony-ax700"></th>
                     <td class="align-middle">Sony AX700</td>
-                    <td class="align-middle">20</td>
+                    <td class="align-middle">2</td>
                     <td class="align-middle">
                         <button class="btn btn-primary"><span class="fa fa-pencil" /></button>
                         <button class="btn btn-danger"><span class="fa fa-trash" /></button>
@@ -29,7 +29,7 @@
                 <tr>
                     <th scope="row"><img src="/img/sony-pj440.png" height=100 alt="sony-pj440"></th>
                     <td class="align-middle">Sony PJ440</td>
-                    <td class="align-middle">25</td>
+                    <td class="align-middle">2</td>
                     <td class="align-middle">
                         <button class="btn btn-primary"><span class="fa fa-pencil" /></button>
                         <button class="btn btn-danger"><span class="fa fa-trash" /></button>
@@ -37,6 +37,16 @@
                 </tr>
             </tbody>
         </table>
+    </div>
+    <div class="row">
+        <p class="text-center">Tổng cộng: 4</p>
+        <div>
+            <label>Lý do mượn</label>
+            <input type="text" name="reason" />
+        </div>
+    </div>
+    <div class="row text-center">
+        <button class="btn btn-warning">Tạo yêu cầu</button>
     </div>
 </div>
 @endsection

@@ -21,6 +21,14 @@ Route::get('/equipment', function() {
     return view('equipment');
 })->name('equipment');
 
+Route::get('/equipment/{id}', function() {
+    return view('equipment-detail');
+})->name('equipment-detail');
+
+Route::get('/combo/{id}', function() {
+    return view('combo-detail');
+})->name('combo-detail');
+
 Route::get('/order', function() {
     return view('order');
 })->name('order');

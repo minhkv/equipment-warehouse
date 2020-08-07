@@ -18,7 +18,7 @@
                 <div class="card-body">
                     <h2 class="card-title">Sony AX700</h2>
                     <p class="card-text">Số lượng: 6</p>
-                    <a href="#" class="btn btn-primary"><span class="fa fa-pencil"></span></a>
+                    <a href="{{ route('equipment-detail', '1') }}" class="btn btn-primary"><span class="fa fa-pencil"></span></a>
                     <a href="#" class="btn btn-danger"><span class="fa fa-trash"></span></a>
                 </div>
             </div>

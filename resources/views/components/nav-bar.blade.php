@@ -10,16 +10,16 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <!-- Left Side Of Navbar -->
             <ul class="navbar-nav mr-auto">
-                <li class="nav-item active">
+                <li class="nav-item {{Route::currentRouteName() == 'home' ? 'active' : ''}}">
                     <a class="nav-link" href="{{route('home')}}">Trang chủ</a>
                 </li>
-                <li class="nav-item">
+                <li class="nav-item {{Route::currentRouteName() == 'equipment' ? 'active' : ''}}">
                     <a class="nav-link" href="{{route('equipment')}}">Thiết bị</a>
                 </li>
-                <li class="nav-item">
+                <li class="nav-item {{Route::currentRouteName() == 'order' ? 'active' : ''}}">
                     <a class="nav-link" href="{{route('order')}}">Đơn hàng</a>
                 </li>
-                <li class="nav-item">
+                <li class="nav-item {{Route::currentRouteName() == 'borrowing-cart' ? 'active' : ''}}">
                     <a class="nav-link" href="{{route('borrowing-cart')}}">Giỏ đồ</a>
                 </li>
             </ul>
