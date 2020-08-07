@@ -11,16 +11,16 @@
             <!-- Left Side Of Navbar -->
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item active">
-                    <a class="nav-link" href="#">Trang chủ</a>
+                    <a class="nav-link" href="{{route('home')}}">Trang chủ</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Thiết bị</a>
+                    <a class="nav-link" href="{{route('equipment')}}">Thiết bị</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Đơn hàng</a>
+                    <a class="nav-link" href="{{route('order')}}">Đơn hàng</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Giỏ đồ</a>
+                    <a class="nav-link" href="{{route('borrowing-cart')}}">Giỏ đồ</a>
                 </li>
             </ul>
 

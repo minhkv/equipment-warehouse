@@ -17,6 +17,18 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::get('/equipment', function() {
+    return view('equipment');
+})->name('equipment');
+
+Route::get('/order', function() {
+    return view('order');
+})->name('order');
+
+Route::get('/borrowing-cart', function() {
+    return view('borrowing-cart');
+})->name('borrowing-cart');
+
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
