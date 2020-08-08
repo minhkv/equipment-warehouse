@@ -4,20 +4,12 @@
     
     <div class="row">
         <div class="col-md-12 text-center">
-            <h2>Danh sách thiết bị</h2>
+            <h2>Combo thiết bị</h2>
         </div>
     </div>
 
     <div class="row">
-        <select class="dropdown-primary mx-4">
-            <option selected>Loại thiết bị</option>
-            <option value="camcorder">Máy quay</option>
-            <option value="camera">Máy ảnh</option>
-            <option value="tripod">Chân máy</option>
-            <option value="battery">Pin</option>
-        </select>
-    
-        <a href="{{ route('create-equipment') }}" class="btn btn-success ml-auto">Thêm thiết bị</a>
+        <a href="{{ route('create-combo') }}" class="btn btn-success ml-auto">Tạo combo</a>
     </div>
     
     <div class="row justify-content-center py-4">
@@ -27,7 +19,7 @@
                 <div class="card-body">
                     <h2 class="card-title">Sony AX700</h2>
                     <p class="card-text">Số lượng: 6</p>
-                    <a href="{{ route('equipment-detail', '1') }}" class="btn btn-primary"><span class="fa fa-pencil"></span></a>
+                    <a href="{{ route('combo-detail', '1') }}" class="btn btn-primary"><span class="fa fa-pencil"></span></a>
                     <a href="#" class="btn btn-danger"><span class="fa fa-trash"></span></a>
                 </div>
             </div>

@@ -49,7 +49,7 @@
             <textarea class="form-control" rows="5" cols="20" id="reason"></textarea>
         </div>
         <div class="row py-4 justify-content-center">
-            <button class="btn btn-warning">Tạo yêu cầu</button>
+            <a href="{{ route('create-order') }}" class="btn btn-success">Tạo yêu cầu</a>
         </div>
     </div>
     

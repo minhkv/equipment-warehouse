@@ -36,7 +36,7 @@
                 <a class="dropdown-item" href="#">Something else here</a>
             </div>
         </div>
-        <button type="button" class="btn btn-danger ml-auto">Tạo đơn hàng</button>
+        <a href="{{ route('create-order') }}" type="button" class="btn btn-success ml-auto">Tạo đơn hàng</a>
     </div>
     <div class="row">
         <table class="table">
@@ -56,8 +56,8 @@
                     <td>20</td>
                     <td><p class="btn btn-primary">Đang tiến hành</p></td>
                     <td>
-                        <button class="btn btn-primary"><span class="fa fa-pencil" /></button>
-                        <button class="btn btn-danger"><span class="fa fa-trash" /></button>
+                        <a href="{{ route('order-detail', 1) }}" class="btn btn-primary"><span class="fa fa-pencil" /></a>
+                        <a class="btn btn-danger"><span class="fa fa-trash" /></a>
                     </td>
                 </tr>
                 <tr>
@@ -66,8 +66,8 @@
                     <td>25</td>
                     <td><p class="btn btn-primary">Đang tiến hành</p></td>
                     <td>
-                        <button class="btn btn-primary"><span class="fa fa-pencil" /></button>
-                        <button class="btn btn-danger"><span class="fa fa-trash" /></button>
+                        <a class="btn btn-primary"><span class="fa fa-pencil" /></a>
+                        <a class="btn btn-danger"><span class="fa fa-trash" /></a>
                     </td>
                 </tr>
                 <tr>
@@ -76,8 +76,8 @@
                     <td>30</td>
                     <td><p class="btn btn-warning">Chờ xử lý</p></td>
                     <td>
-                        <button class="btn btn-primary"><span class="fa fa-pencil" /></button>
-                        <button class="btn btn-danger"><span class="fa fa-trash" /></button>
+                        <a class="btn btn-primary"><span class="fa fa-pencil" /></a>
+                        <a class="btn btn-danger"><span class="fa fa-trash" /></a>
                     </td>
                 </tr>
             </tbody>

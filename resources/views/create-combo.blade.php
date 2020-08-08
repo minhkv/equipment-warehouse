@@ -1,11 +1,10 @@
 @extends('layouts.app')
 @section('content')
-
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-6">
             <div class="card">
-                <div class="card-header text-center"><h1>Thêm thiết bị mới</h1></div>
+                <div class="card-header text-center"><h1>Thêm combo mới</h1></div>
                 <div class="card-body">
                     <form>
                         @csrf

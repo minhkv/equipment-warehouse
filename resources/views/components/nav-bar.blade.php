@@ -16,6 +16,9 @@
                 <li class="nav-item {{Route::currentRouteName() == 'equipment' ? 'active' : ''}}">
                     <a class="nav-link" href="{{route('equipment')}}">Thiết bị</a>
                 </li>
+                <li class="nav-item {{Route::currentRouteName() == 'combo' ? 'active' : ''}}">
+                    <a class="nav-link" href="{{route('combo')}}">Combo</a>
+                </li>
                 <li class="nav-item {{Route::currentRouteName() == 'order' ? 'active' : ''}}">
                     <a class="nav-link" href="{{route('order')}}">Đơn hàng</a>
                 </li>
@@ -26,6 +29,12 @@
 
             <!-- Right Side Of Navbar -->
             <ul class="navbar-nav ml-auto">
+            <form class="form-inline my-2 my-lg-0 px-2">
+                <div class="input-group">
+                    <input class="form-control mr-sm-2" type="search" placeholder="Tìm kiếm" aria-label="search" aria-describedby="basic-addon2">
+                    <button class="btn btn-outline-primary my-2 my-sm-0" type="submit"><span class="fa fa-search"></span></button>
+                </div>
+            </form>
                 <!-- Authentication Links -->
                 @guest
                     <li class="nav-item">
