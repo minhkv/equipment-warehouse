@@ -1,5 +1,10 @@
 @extends('layouts.app')
 @section('content')
+<style>
+.amount{
+    width: 30px
+}
+</style>
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-6">
@@ -9,28 +14,43 @@
                     <form>
                         @csrf
                         <div class="form-group">
-                            <label for="equipmentName">Tên thiết bị</label>
+                            <label for="equipmentName">Tên Combo</label>
                             <input type="text" class="form-control" id="equipmentName" placeholder="Tên thiết bị">
                         </div>
+                        
                         <div class="form-group">
-                            <label for="equipmentCategory">Loại thiết bị</label>
-                            <div class="input-group">
-                                <select class="form-control" id="equipmentCategory">
-                                    <option>Máy quay</option>
-                                    <option>Máy ảnh</option>
-                                    <option>Chân máy</option>
-                                    <option>Pin</option>
-                                </select>
-                                <div class="input-group-append">
-                                    <button type="button" class="btn btn-primary"><span class="fa fa-plus"></span></button>
+                            <label>Danh sách thiết bị</label>
+                            <div class="row mx-2">
+                                <div class="card" style="width: 10rem;">
+                                    <img class="card-img-top" height=100 src="/img/sony-ax700.jpg" alt="sony-ax700">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Sony AX700</h5>
+                                        <p class="card-text">
+                                            Số lượng: <input class="amount" type="text" name="" value="2" id="">
+                                        </p>
+                                        <a class="btn btn-danger btn-sm"><span class="fa fa-trash" /></a>
+                                    </div>
+                                </div>
+
+                                <div class="card" style="width: 10rem;">
+                                    <img class="card-img-top" height=100 src="/img/tripod.jpg" alt="sony-ax700">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Tripod</h5>
+                                        <p class="card-text">
+                                            Số lượng: <input class="amount" type="text" name="" value="2" id="">
+                                        </p>
+                                        <a class="btn btn-danger btn-sm"><span class="fa fa-trash" /></a>
+                                    </div>
+                                </div>
+
+                                <div class="row justify-content-center pt-3">
+                                    <x-equipment-add />
                                 </div>
                             </div>
                         </div>
-                        <div class="form-group">
-                            <label for="equipmentImage">Hình ảnh thiết bị</label>
-                            <input type="file" class="form-control-file" id="equipmentImage">
+                        <div class="row justify-content-center">
+                            <button type="submit" class="btn btn-success mb-2">Tạo combo</button>
                         </div>
-                        <button type="submit" class="btn btn-primary mb-2">Tạo thiết bị</button>
                     </form>
                 </div>
             </div>

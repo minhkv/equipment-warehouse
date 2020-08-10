@@ -43,6 +43,7 @@
             <thead class="thead-light">
                 <tr>
                     <th scope="col">Mã đơn</th>
+                    <th scope="col">Lý do mượn</th>
                     <th scope="col">Ngày tạo</th>
                     <th scope="col">Số lượng</th>
                     <th scope="col">Trạng thái</th>
@@ -52,6 +53,7 @@
             <tbody>
                 <tr>
                     <th scope="row">1</th>
+                    <td>Quay chương trình tụng kinh quanh chùa</td>
                     <td>20/07/2020</td>
                     <td>20</td>
                     <td><p class="btn btn-primary">Đang tiến hành</p></td>
@@ -62,6 +64,7 @@
                 </tr>
                 <tr>
                     <th scope="row">2</th>
+                    <td>Quay chương trình tụng kinh quanh chùa</td>
                     <td>21/07/2020</td>
                     <td>25</td>
                     <td><p class="btn btn-primary">Đang tiến hành</p></td>
@@ -72,6 +75,7 @@
                 </tr>
                 <tr>
                     <th scope="row">3</th>
+                    <td>Quay chương trình tụng kinh quanh chùa</td>
                     <td>22/07/2020</td>
                     <td>30</td>
                     <td><p class="btn btn-warning">Chờ xử lý</p></td>

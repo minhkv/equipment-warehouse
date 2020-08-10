@@ -4,16 +4,18 @@ namespace App\View\Components;
 
 use Illuminate\View\Component;
 
-class EquipmentAmountEdit extends Component
+class EditEquipmentMember extends Component
 {
+
+    public $eId;
     /**
      * Create a new component instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct($eId)
     {
-        //
+        $this->eId = $eId;
     }
 
     /**
@@ -23,6 +25,6 @@ class EquipmentAmountEdit extends Component
      */
     public function render()
     {
-        return view('components.equipment-amount-edit');
+        return view('components.edit-equipment-member');
     }
 }

@@ -51,7 +51,7 @@ input
                         <td class="align-middle">Giá 3</td>
                         <td class="align-middle"><button class="btn btn-success">Tốt</button></td>
                         <td class="align-middle">
-                            <button class="btn btn-danger">Thêm vào giỏ</button>
+                            <x-edit-equipment-member e-id="SAX001" />
                         </td>
                     </tr>
                     <tr>
@@ -62,11 +62,14 @@ input
                         <td class="align-middle">Giá 3</td>
                         <td class="align-middle"><button class="btn btn-warning">Hỏng nhẹ</button></td>
                         <td class="align-middle">
-                            <button class="btn btn-danger">Thêm vào giỏ</button>
+                            <x-edit-equipment-member e-id="SAX001" />
                         </td>
                     </tr>
                 </tbody>
             </table>
+            <div class="row justify-content-center">
+                <x-add-equipment-member />
+            </div>
         </div>
     </div>
 </div>

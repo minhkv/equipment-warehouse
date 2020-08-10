@@ -23,18 +23,18 @@
                     <a class="nav-link" href="{{route('order')}}">Đơn hàng</a>
                 </li>
                 <li class="nav-item {{Route::currentRouteName() == 'borrowing-cart' ? 'active' : ''}}">
-                    <a class="nav-link" href="{{route('borrowing-cart')}}">Giỏ đồ</a>
+                    <a class="nav-link" href="{{route('borrowing-cart')}}">Giỏ đồ <i class="fa fa-shopping-cart"></i></a>
                 </li>
             </ul>
 
             <!-- Right Side Of Navbar -->
             <ul class="navbar-nav ml-auto">
-            <form class="form-inline my-2 my-lg-0 px-2">
-                <div class="input-group">
-                    <input class="form-control mr-sm-2" type="search" placeholder="Tìm kiếm" aria-label="search" aria-describedby="basic-addon2">
-                    <button class="btn btn-outline-primary my-2 my-sm-0" type="submit"><span class="fa fa-search"></span></button>
-                </div>
-            </form>
+                <form class="form-inline my-2 my-lg-0 px-2">
+                    <div class="input-group">
+                        <input class="form-control mr-sm-2" type="search" placeholder="Tìm kiếm" aria-label="search" aria-describedby="basic-addon2">
+                        <button class="btn btn-outline-primary my-2 my-sm-0" type="submit"><span class="fa fa-search"></span></button>
+                    </div>
+                </form>
                 <!-- Authentication Links -->
                 @guest
                     <li class="nav-item">

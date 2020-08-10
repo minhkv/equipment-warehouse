@@ -23,8 +23,7 @@
                         <td class="align-middle">Sony AX700</td>
                         <td class="align-middle">2</td>
                         <td class="align-middle">
-                            <button class="btn btn-primary"><span class="fa fa-pencil" /></button>
-                            <button class="btn btn-danger"><span class="fa fa-trash" /></button>
+                            <button class="btn btn-danger btn-sm"><span class="fa fa-trash" /></button>
                         </td>
                     </tr>
                     <tr>
@@ -32,22 +31,21 @@
                         <td class="align-middle">Sony PJ440</td>
                         <td class="align-middle">2</td>
                         <td class="align-middle">
-                            <button class="btn btn-primary"><span class="fa fa-pencil" /></button>
-                            <button class="btn btn-danger"><span class="fa fa-trash" /></button>
+                            <button class="btn btn-danger btn-sm"><span class="fa fa-trash" /></button>
                         </td>
                     </tr>
                 </tbody>
             </table>
+            <div class="row justify-content-center py-3">
+                <x-equipment-add />
+            </div>
         </div>
     </div>
     <div class="row justify-content-center">
         <div class="row justify-content-center">
             <p><b>Tổng cộng: 4</b></p>
         </div>
-        <div class="row col-md-6">
-            <label for="reason">Lý do mượn:</label>
-            <textarea class="form-control" rows="5" cols="20" id="reason"></textarea>
-        </div>
+        
         <div class="row py-4 justify-content-center">
             <a href="{{ route('create-order') }}" class="btn btn-success">Tạo yêu cầu</a>
         </div>
