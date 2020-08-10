@@ -14,8 +14,8 @@ class CreateForeignKeyForBorrowedHistoryTable extends Migration
     public function up()
     {
         Schema::table('borrowed_history', function (Blueprint $table) {
-            $table->foreign('user_id')->references('id')->on('users');
-            $table->foreign('equipment_id')->references('id')->on('equipments');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('equipment_id')->references('id')->on('equipments')->onDelete('cascade');
         });
     }
 
@@ -26,6 +26,9 @@ class CreateForeignKeyForBorrowedHistoryTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('foreign_key_for_borrowed_history');
+        Schema::table('borrowed_history', function (Blueprint $table) {
+            $table->dropForeign('borrowed_history_user_id_foreign');
+            $table->dropForeign('borrowed_history_equipment_id_foreign');            
+        });
     }
 }

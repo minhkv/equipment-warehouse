@@ -14,8 +14,8 @@ class CreateForeignKeyForUsageHistoryTable extends Migration
     public function up()
     {
         Schema::table('usage_history', function (Blueprint $table) {
-            $table->foreign('order_id')->references('id')->on('orders');
-            $table->foreign('equipment_id')->references('id')->on('equipments');
+            $table->foreign('order_id')->references('id')->on('orders')->onDelete('cascade');
+            $table->foreign('equipment_id')->references('id')->on('equipments')->onDelete('cascade');
         });
     }
 
@@ -26,6 +26,9 @@ class CreateForeignKeyForUsageHistoryTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('foreign_key_for_usage_history');
+        Schema::table('usage_history', function (Blueprint $table) {
+            $table->dropForeign('usage_history_order_id_foreign');
+            $table->dropForeign('usage_history_equipment_id_foreign');            
+        });
     }
 }

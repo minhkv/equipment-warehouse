@@ -14,8 +14,8 @@ class CreateForeignKeyForOrderInfoTable extends Migration
     public function up()
     {
         Schema::table('order_info', function (Blueprint $table) {
-            $table->foreign('order_id')->references('id')->on('orders');
-            $table->foreign('equipment_id')->references('id')->on('equipments');
+            $table->foreign('order_id')->references('id')->on('orders')->onDelete('cascade');
+            $table->foreign('equipment_id')->references('id')->on('equipments')->onDelete('cascade');
         });
     }
 
@@ -26,6 +26,9 @@ class CreateForeignKeyForOrderInfoTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('foreign_key_for_order_info');
+        Schema::table('order_info', function (Blueprint $table) {
+            $table->dropForeign('order_info_order_id_foreign');
+            $table->dropForeign('order_info_equipment_id_foreign');            
+        });
     }
 }
