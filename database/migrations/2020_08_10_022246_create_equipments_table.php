@@ -17,12 +17,12 @@ class CreateEquipmentsTable extends Migration
             $table->id();
             $table->unsignedBigInteger('template_id');
             $table->string('price');
-            $table->unsignedBigInteger('supplier_id');
+            $table->unsignedBigInteger('supplier_id')->default('1');
             $table->string('size');
             $table->string('location');
             $table->string('condition');
-            $table->dateTime('input_date');
-            $table->dateTime('warranty');
+            $table->dateTime('input_date')->nullable();
+            $table->dateTime('warranty')->nullable();
             $table->timestamps();
             
         });
