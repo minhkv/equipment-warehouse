@@ -14,7 +14,7 @@ class ComboController extends Controller
      */
     public function index()
     {
-        //
+        return view('combo');
     }
 
     /**
@@ -24,7 +24,7 @@ class ComboController extends Controller
      */
     public function create()
     {
-        //
+        return view('create-combo');
     }
 
     /**
@@ -46,7 +46,7 @@ class ComboController extends Controller
      */
     public function show(Combo $combo)
     {
-        //
+        return view('combo-detail', compact($combo));
     }
 
     /**

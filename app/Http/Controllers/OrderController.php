@@ -14,7 +14,7 @@ class OrderController extends Controller
      */
     public function index()
     {
-        
+        return view('order');
     }
 
     /**
@@ -24,7 +24,7 @@ class OrderController extends Controller
      */
     public function create()
     {
-        //
+        return view('create-order');
     }
 
     /**
@@ -46,7 +46,7 @@ class OrderController extends Controller
      */
     public function show(Order $order)
     {
-        //
+        return view('order-detail', compact($order));
     }
 
     /**

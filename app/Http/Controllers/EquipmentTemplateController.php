@@ -16,7 +16,7 @@ class EquipmentTemplateController extends Controller
     public function index()
     {
         $equipmentTemplates = EquipmentTemplate::all();
-        return $equipmentTemplates;
+        return view('equipment', compact($equipmentTemplates));
     }
 
     /**
@@ -26,7 +26,7 @@ class EquipmentTemplateController extends Controller
      */
     public function create()
     {
-        return view('request-test');
+        return view('create-equipment');
     }
 
     /**
@@ -50,7 +50,7 @@ class EquipmentTemplateController extends Controller
     public function show(EquipmentTemplate $equipmentTemplate)
     {
         $equipments = $equipmentTemplate->equipments;
-        return view('request-test')->with([
+        return view('equipment-detail')->with([
             'equipmentTemplate' => $equipmentTemplate,
             'equipments' => $equipments
         ]);
