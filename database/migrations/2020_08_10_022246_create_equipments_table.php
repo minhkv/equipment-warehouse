@@ -17,7 +17,8 @@ class CreateEquipmentsTable extends Migration
             $table->id();
             $table->unsignedBigInteger('template_id');
             $table->string('price');
-            $table->unsignedBigInteger('supplier_id')->default('1');
+            // $table->unsignedBigInteger('supplier_id')->default('1');
+            $table->string('supplier');
             $table->string('size');
             $table->string('location');
             $table->string('condition');

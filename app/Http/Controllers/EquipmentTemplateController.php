@@ -17,7 +17,11 @@ class EquipmentTemplateController extends Controller
     public function index()
     {
         $equipmentTemplates = EquipmentTemplate::all();
-        return view('equipment')->with(['equipmentTemplates' => $equipmentTemplates]);
+        $categories = Category::all();
+        return view('equipment')->with([
+            'equipmentTemplates' => $equipmentTemplates,
+            'categories' => $categories
+        ]);
     }
 
     /**
@@ -106,7 +110,8 @@ class EquipmentTemplateController extends Controller
      */
     public function destroy(EquipmentTemplate $equipmentTemplate)
     {
+        // dd($equipmentTemplate);
         $equipmentTemplate->delete();
-        return redirect(route('equipment-template.index'));
+        return redirect()->back();
     }
 }

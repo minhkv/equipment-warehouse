@@ -16,10 +16,9 @@
     <div class="row">
         <select class="dropdown-primary mx-4">
             <option selected>Loại thiết bị</option>
-            <option value="camcorder">Máy quay</option>
-            <option value="camera">Máy ảnh</option>
-            <option value="tripod">Chân máy</option>
-            <option value="battery">Pin</option>
+            @foreach($categories as $category)
+            <option>{{ $category->name }}</option>
+            @endforeach
         </select>
     
         <a href="{{ route('equipment-template.create') }}" class="btn btn-success ml-auto">Thêm thiết bị</a>
@@ -35,7 +34,17 @@
                     <p class="card-text">Số lượng: {{ $template->equipments->count() }}</p>
                     <a href="#" class="btn btn-warning"><span class="fa fa-plus"></span> Thêm vào giỏ</a>
                     <a href="{{ route('equipment-template.show', $template) }}" class="btn btn-primary"><span class="fa fa-pencil"></span></a>
-                    <a href="#" class="btn btn-danger"><span class="fa fa-trash"></span></a>
+                    <button class="btn btn-danger" onclick="event.preventDefault();
+                        if(confirm('Bạn có chắc chắn muốn xóa?')){
+                            document.getElementById('form-delete-{{$template->id}}')
+                            .submit()
+                        }">
+                        <span class="fa fa-trash"></span>
+                    </button>
+                    <form style="display:none" id="{{'form-delete-'.$template->id}}" method="post" action="{{route('equipment-template.destroy',$template)}}">
+                        @csrf
+                        @method('delete')
+                    </form>
                 </div>
             </div>
         </div>
@@ -43,4 +52,5 @@
 
     </div>
 </div>
+
 @endsection

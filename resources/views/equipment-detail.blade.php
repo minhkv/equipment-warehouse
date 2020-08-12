@@ -48,7 +48,7 @@ input
                         <th class="align-middle" scope="row">{{ $equipment->id }}</th>
                         <td class="align-middle">{{ $equipment->size}}</td>
                         <td class="align-middle">{{ $equipment->price }}</td>
-                        <td class="align-middle">{{ $equipment->supplier_id }}</td>
+                        <td class="align-middle">{{ $equipment->supplier }}</td>
                         <td class="align-middle">{{ $equipment->location }}</td>
                         <td class="align-middle"><button class="btn btn-success">{{ $equipment->condition }}</button></td>
                         <td class="align-middle">
