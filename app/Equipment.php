@@ -8,6 +8,7 @@ class Equipment extends Model
 {
     protected $table="equipments";
     protected $fillable = [
+        'template_id',
         'price', 
         'size',
         'location',

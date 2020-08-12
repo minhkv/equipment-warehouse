@@ -8,18 +8,18 @@ input
 @section('content')
 <div class="container">
     <div class="row py-3">
-        <a href="{{ route('equipment') }}" class="btn btn-secondary mr-auto">Back</a>
+        <a href="{{ route('equipment-template.index') }}" class="btn btn-secondary mr-auto">Back</a>
     </div>
     <div class="row">
-        <div class="col-md-5">
-            <img class="w-100" src="/img/sony-ax700.jpg" alt="sony-ax700">
+        <div class="col-md-4">
+            <img class="w-100" src="{{ '/storage/img/'.$equipmentTemplate->image }}" alt="sony-ax700">
         </div>
-        <div class="col-md-7">
+        <div class="col-md-8">
             <h2><b>Sony AX700</b></h2>
-            <p><b>Số lượng trong kho:</b> 6</p>
+            <p><b>Số lượng trong kho:</b> {{ $equipmentTemplate->equipments->count() }}</p>
             <label>Số lượng mượn:</label>
             <input type="text" value="1">
-            <button type="button" class="btn btn-danger">Thêm vào giỏ</button>
+            <a href="#" class="btn btn-warning"><span class="fa fa-plus"></span> Thêm vào giỏ</a>
         </div>
     </div>
     <hr />
@@ -43,32 +43,23 @@ input
                     </tr>
                 </thead>
                 <tbody>
+                    @foreach($equipmentTemplate->equipments as $equipment)
                     <tr>
-                        <th class="align-middle" scope="row">1</th>
-                        <td class="align-middle">196.5mm x 89.5mm</td>
-                        <td class="align-middle">49,900,000vnd</td>
-                        <td class="align-middle">Sony</td>
-                        <td class="align-middle">Giá 3</td>
-                        <td class="align-middle"><button class="btn btn-success">Tốt</button></td>
+                        <th class="align-middle" scope="row">{{ $equipment->id }}</th>
+                        <td class="align-middle">{{ $equipment->size}}</td>
+                        <td class="align-middle">{{ $equipment->price }}</td>
+                        <td class="align-middle">{{ $equipment->supplier_id }}</td>
+                        <td class="align-middle">{{ $equipment->location }}</td>
+                        <td class="align-middle"><button class="btn btn-success">{{ $equipment->condition }}</button></td>
                         <td class="align-middle">
-                            <x-edit-equipment-member e-id="SAX001" />
+                            <x-edit-equipment-member e-id="{{ $equipment->id }}" />
                         </td>
                     </tr>
-                    <tr>
-                        <th class="align-middle" scope="row">2</th>
-                        <td class="align-middle">196.5mm x 89.5mm</td>
-                        <td class="align-middle">49,900,000vnd</td>
-                        <td class="align-middle">Sony</td>
-                        <td class="align-middle">Giá 3</td>
-                        <td class="align-middle"><button class="btn btn-warning">Hỏng nhẹ</button></td>
-                        <td class="align-middle">
-                            <x-edit-equipment-member e-id="SAX001" />
-                        </td>
-                    </tr>
+                    @endforeach
                 </tbody>
             </table>
             <div class="row justify-content-center">
-                <x-add-equipment-member />
+                <x-add-equipment-member template-id="{{ $equipmentTemplate->id }}" />
             </div>
         </div>
     </div>

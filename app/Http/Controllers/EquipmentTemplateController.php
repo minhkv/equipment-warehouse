@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\EquipmentTemplate;
 use Illuminate\Http\Request;
 use App\Equipment;
+use App\Category;
 
 class EquipmentTemplateController extends Controller
 {
@@ -16,7 +17,7 @@ class EquipmentTemplateController extends Controller
     public function index()
     {
         $equipmentTemplates = EquipmentTemplate::all();
-        return view('equipment', compact($equipmentTemplates));
+        return view('equipment')->with(['equipmentTemplates' => $equipmentTemplates]);
     }
 
     /**
@@ -26,7 +27,11 @@ class EquipmentTemplateController extends Controller
      */
     public function create()
     {
-        return view('create-equipment');
+        $categories = Category::all();
+        return view('create-equipment')->with([
+            'categories' => $categories,
+
+        ]);
     }
 
     /**
@@ -37,8 +42,18 @@ class EquipmentTemplateController extends Controller
      */
     public function store(Request $request)
     {
-        $template = new EquipmentTemplate($request->all());
-        return $equipmentTemplates;
+        if($request->hasFile('imageFile')) {
+            $fileName = $request->imageFile->getClientOriginalName();
+            $request->imageFile->storeAs('img', $fileName, 'public');
+            $template = new EquipmentTemplate($request->all());
+            $template->save();
+            $template->update(['image' => $fileName]);
+        } else {
+            $template = new EquipmentTemplate($request->all());
+            $template->save();
+        }
+        
+        return redirect(route('equipment-template.index'));
     }
 
     /**
@@ -49,10 +64,8 @@ class EquipmentTemplateController extends Controller
      */
     public function show(EquipmentTemplate $equipmentTemplate)
     {
-        $equipments = $equipmentTemplate->equipments;
         return view('equipment-detail')->with([
             'equipmentTemplate' => $equipmentTemplate,
-            'equipments' => $equipments
         ]);
     }
 

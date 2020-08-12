@@ -35,7 +35,7 @@ class ComboController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        
     }
 
     /**
@@ -57,7 +57,7 @@ class ComboController extends Controller
      */
     public function edit(Combo $combo)
     {
-        //
+        return view('combo-detail', compact($combo));
     }
 
     /**

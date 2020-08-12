@@ -6,14 +6,15 @@ use Illuminate\View\Component;
 
 class AddEquipmentMember extends Component
 {
+    public $templateId;
     /**
      * Create a new component instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct($templateId)
     {
-        //
+        $this->templateId = $templateId;
     }
 
     /**

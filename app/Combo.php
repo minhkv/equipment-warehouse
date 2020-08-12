@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use App\ComboInfo;
 class Combo extends Model
 {
+    protected $table = 'combo';
     protected $fillable = ['name'];
     
     public function comboInfos() {

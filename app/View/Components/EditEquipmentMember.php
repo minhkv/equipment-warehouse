@@ -3,6 +3,7 @@
 namespace App\View\Components;
 
 use Illuminate\View\Component;
+use App\Equipment;
 
 class EditEquipmentMember extends Component
 {
@@ -25,6 +26,9 @@ class EditEquipmentMember extends Component
      */
     public function render()
     {
-        return view('components.edit-equipment-member');
+        $equipment = Equipment::find($this->eId);
+        return view('components.edit-equipment-member')->with([
+            'equipment' => $equipment
+        ]);
     }
 }

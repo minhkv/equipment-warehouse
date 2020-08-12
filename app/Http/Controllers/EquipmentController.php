@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Equipment;
 
 class EquipmentController extends Controller
 {
@@ -34,7 +35,9 @@ class EquipmentController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // dd($request->all());
+        Equipment::create($request->all());
+        return redirect()->back();
     }
 
     /**
@@ -68,7 +71,8 @@ class EquipmentController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        Equipment::find($id)->update($request->all());
+        return redirect()->back();
     }
 
     /**

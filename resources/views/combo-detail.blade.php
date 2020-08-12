@@ -8,7 +8,7 @@ input
 @section('content')
 <div class="container">
     <div class="row py-3">
-        <a href="{{ route('equipment') }}" class="btn btn-secondary mr-auto">Back</a>
+        <a href="{{ route('combo.index') }}" class="btn btn-secondary mr-auto">Back</a>
     </div>
     <div class="row">
         <div class="col-md-5">

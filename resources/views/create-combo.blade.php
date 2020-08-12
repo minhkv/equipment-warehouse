@@ -15,7 +15,7 @@
                         @csrf
                         <div class="form-group">
                             <label for="equipmentName">Tên Combo</label>
-                            <input type="text" class="form-control" id="equipmentName" placeholder="Tên thiết bị">
+                            <input type="text" class="form-control" id="equipmentName" placeholder="Tên combo">
                         </div>
                         
                         <div class="form-group">

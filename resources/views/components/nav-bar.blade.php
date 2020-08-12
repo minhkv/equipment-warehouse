@@ -14,13 +14,13 @@
                     <a class="nav-link" href="{{route('home')}}">Trang chủ</a>
                 </li>
                 <li class="nav-item {{Route::currentRouteName() == 'equipment' ? 'active' : ''}}">
-                    <a class="nav-link" href="{{route('equipment')}}">Thiết bị</a>
+                    <a class="nav-link" href="{{route('equipment-template.index')}}">Thiết bị</a>
                 </li>
                 <li class="nav-item {{Route::currentRouteName() == 'combo' ? 'active' : ''}}">
-                    <a class="nav-link" href="{{route('combo')}}">Combo</a>
+                    <a class="nav-link" href="{{route('combo.index')}}">Combo</a>
                 </li>
                 <li class="nav-item {{Route::currentRouteName() == 'order' ? 'active' : ''}}">
-                    <a class="nav-link" href="{{route('order')}}">Đơn hàng</a>
+                    <a class="nav-link" href="{{route('order.index')}}">Đơn hàng</a>
                 </li>
                 <li class="nav-item {{Route::currentRouteName() == 'borrowing-cart' ? 'active' : ''}}">
                     <a class="nav-link" href="{{route('borrowing-cart')}}">Giỏ đồ <i class="fa fa-shopping-cart"></i></a>

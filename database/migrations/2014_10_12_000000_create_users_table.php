@@ -19,10 +19,10 @@ class CreateUsersTable extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
-            $table->string('privilege');
-            $table->string('phone_number');
-            $table->string('image');
-            $table->unsignedBigInteger('channel_id');
+            $table->string('privilege')->default('');
+            $table->string('phone_number')->default('');
+            $table->string('image')->default('');
+            $table->unsignedBigInteger('channel_id')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

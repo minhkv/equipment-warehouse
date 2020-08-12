@@ -1,5 +1,10 @@
 @extends('layouts.app')
 @section('content')
+<style>
+/* .card {
+    width: 15rem;
+} */
+</style>
 <div class="container">
     
     <div class="row">
@@ -17,46 +22,25 @@
             <option value="battery">Pin</option>
         </select>
     
-        <a href="{{ route('create-equipment') }}" class="btn btn-success ml-auto">Thêm thiết bị</a>
+        <a href="{{ route('equipment-template.create') }}" class="btn btn-success ml-auto">Thêm thiết bị</a>
     </div>
     
     <div class="row justify-content-center py-4">
-        <div class="col-md-4">
+        @foreach($equipmentTemplates as $template)
+        <div class="col-md-3">
             <div class="card">
-                <img src="/img/sony-ax700.webp" class="card-img-top" alt="sony ax700">
+                <img src="{{ '/storage/img/'.$template->image }}" class="card-img-top" alt="{{ $template->name }}">
                 <div class="card-body">
-                    <h2 class="card-title">Sony AX700</h2>
-                    <p class="card-text">Số lượng: 6</p>
-                    <a href="#" class="btn btn-success"><span class="fa fa-plus"></span></a>
-                    <a href="{{ route('equipment-detail', '1') }}" class="btn btn-primary"><span class="fa fa-pencil"></span></a>
+                    <h5 class="card-title">{{ $template->name }}</h5>
+                    <p class="card-text">Số lượng: {{ $template->equipments->count() }}</p>
+                    <a href="#" class="btn btn-warning"><span class="fa fa-plus"></span> Thêm vào giỏ</a>
+                    <a href="{{ route('equipment-template.show', $template) }}" class="btn btn-primary"><span class="fa fa-pencil"></span></a>
                     <a href="#" class="btn btn-danger"><span class="fa fa-trash"></span></a>
                 </div>
             </div>
         </div>
-        <div class="col-md-4">
-            <div class="card">
-                <img src="/img/sony-pj440.png" class="card-img-top" alt="sony pj440">
-                <div class="card-body">
-                    <h2 class="card-title">Sony PJ440</h2>
-                    <p class="card-text">Số lượng: 3</p>
-                    <a href="#" class="btn btn-success"><span class="fa fa-plus"></span></a>
-                    <a href="#" class="btn btn-primary"><span class="fa fa-pencil"></span></a>
-                    <a href="#" class="btn btn-danger"><span class="fa fa-trash"></span></a>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="card">
-                <img src="/img/sony-ax700.webp" class="card-img-top" alt="sony ax700">
-                <div class="card-body">
-                    <h2 class="card-title">Sony AX700</h2>
-                    <p class="card-text">Số lượng: 6</p>
-                    <a href="#" class="btn btn-success"><span class="fa fa-plus"></span></a>
-                    <a href="#" class="btn btn-primary"><span class="fa fa-pencil"></span></a>
-                    <a href="#" class="btn btn-danger"><span class="fa fa-trash"></span></a>
-                </div>
-            </div>
-        </div>
+        @endforeach
+
     </div>
 </div>
 @endsection
