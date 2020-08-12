@@ -110,7 +110,6 @@ class EquipmentTemplateController extends Controller
      */
     public function destroy(EquipmentTemplate $equipmentTemplate)
     {
-        // dd($equipmentTemplate);
         $equipmentTemplate->delete();
         return redirect()->back();
     }

@@ -34,17 +34,7 @@
                     <p class="card-text">Số lượng: {{ $template->equipments->count() }}</p>
                     <a href="#" class="btn btn-warning"><span class="fa fa-plus"></span> Thêm vào giỏ</a>
                     <a href="{{ route('equipment-template.show', $template) }}" class="btn btn-primary"><span class="fa fa-pencil"></span></a>
-                    <button class="btn btn-danger" onclick="event.preventDefault();
-                        if(confirm('Bạn có chắc chắn muốn xóa?')){
-                            document.getElementById('form-delete-{{$template->id}}')
-                            .submit()
-                        }">
-                        <span class="fa fa-trash"></span>
-                    </button>
-                    <form style="display:none" id="{{'form-delete-'.$template->id}}" method="post" action="{{route('equipment-template.destroy',$template)}}">
-                        @csrf
-                        @method('delete')
-                    </form>
+                    <x-delete-button id="{{ $template->id }}" route-name="equipment-template.destroy" />
                 </div>
             </div>
         </div>
