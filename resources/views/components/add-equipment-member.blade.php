@@ -17,10 +17,6 @@
                 <form action="{{ route('equipment.store') }}" method="POST">
                     @csrf
                     <input type="hidden" name="template_id" value="{{ $templateId }}">
-                    <!-- <div class="form-group">
-                        <label for="equipmentName"><i class="fa fa-barcode"></i> Mã</label>
-                        <input type="text" class="form-control" name="id" placeholder="Mã">
-                    </div> -->
                     <div class="form-group">
                         <label for="equipmentName"><i class="fa fa-cogs"></i> Kích thước</label>
                         <input type="text" class="form-control" name="size" placeholder="Kích thước">
@@ -30,8 +26,21 @@
                         <input type="text" class="form-control" name="price"  placeholder="Giá nhập">
                     </div>
                     <div class="form-group">
-                        <label for="price"><i class="fa fa-home"></i> Nhà cung cấp</label>
-                        <input type="text" class="form-control" name="supplier" placeholder="Nhà cung cấp">
+                        <label for="equipmentCategory">Nhà cung cấp</label>
+                        <div class="input-group">
+                            <select name="supplier_id" class="form-control" id="equipmentCategory">
+                                @foreach($suppliers as $supplier)
+                                <option value="{{$supplier->id}}">
+                                    {{$supplier->name}}
+                                </option>
+                                @endforeach
+                            </select>
+                            <div class="input-group-append">
+                                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalCreateCategory">
+                                    <span class="fa fa-plus"></span>
+                                </button>
+                            </div>
+                        </div>
                     </div>
                     <div class="form-group">
                         <label for="price"><i class="fa fa-location-arrow"></i> Vị trí</label>
@@ -39,7 +48,11 @@
                     </div>
                     <div class="form-group">
                         <label for="price"><i class="fa fa-signal"></i> Tình trạng</label>
-                        <input type="text" class="form-control" name="condition" placeholder="Tình trạng">
+                        <x-star-input name="condition" id="add" value="0" />
+                    </div>
+                    <div class="form-group">
+                        <label for="price"><i class="fa fa-clipboard"></i> Ghi chú</label>
+                        <textarea class="form-control" name="note" placeholder="Ghi chú" ></textarea>
                     </div>
 
                     <button type="submit" class="btn btn-primary mb-2">Thêm thiết bị</button>

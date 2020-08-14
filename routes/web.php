@@ -27,21 +27,18 @@ Route::get('/home', 'HomeController@index')->name('home');
 
 Route::resources([    
     'category' => 'CategoryController',
+    'channel' => 'ChannelController',
     'combo' => 'ComboController',
     'equipment' => 'EquipmentController',
     'equipment-template' => 'EquipmentTemplateController',
     'order' => 'OrderController',
+    'supplier' => 'SupplierController'
 ]);
 
 Route::resource('borrowed-history', 'BorrowedHistoryController')->only([
     'index'
 ]);
-Route::resource('channel', 'ChannelController')->only([
-    'index'
-]);
-Route::resource('supplier', 'SupplierController')->only([
-    'index'
-]);
+
 Route::resource('usage-history', 'UsageHistoryController')->only([
     'index'
 ]);

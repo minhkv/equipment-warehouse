@@ -14,7 +14,10 @@ class SupplierController extends Controller
      */
     public function index()
     {
-        //
+        $suppliers = Supplier::all();
+        return view('supplier')->with([
+            'suppliers' => $suppliers
+        ]);
     }
 
     /**
@@ -35,7 +38,9 @@ class SupplierController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // dd($request->all());
+        Supplier::create($request->all());
+        return redirect()->back();
     }
 
     /**
@@ -80,6 +85,7 @@ class SupplierController extends Controller
      */
     public function destroy(Supplier $supplier)
     {
-        //
+        $supplier->delete();
+        return redirect()->back();
     }
 }

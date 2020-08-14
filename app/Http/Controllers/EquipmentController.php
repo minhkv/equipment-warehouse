@@ -35,7 +35,6 @@ class EquipmentController extends Controller
      */
     public function store(Request $request)
     {
-        // dd($request->all());
         Equipment::create($request->all());
         return redirect()->back();
     }

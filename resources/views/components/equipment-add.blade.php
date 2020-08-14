@@ -14,6 +14,7 @@
             </button>
         </div>
         <div class="modal-body">
+            <!-- @{{equipments[0]->name}} -->
             <form class="my-2 my-lg-0 px-2">
                 <div class="input-group">
                     <input class="form-control mr-sm-2" type="search" placeholder="Tìm kiếm" aria-label="search" aria-describedby="basic-addon2">
@@ -26,56 +27,20 @@
                         <th scope="col"></th>
                         <th scope="col">Tên thiết bị</th>
                         <th scope="col">Số lượng</th>
-                        <th scope="col"></th>
+                        <th scope="col">Chọn</th>
                     </tr>
                 </thead>
                 <tbody>
+                    @foreach($equipmentTemplates as $template)
                     <tr>
-                        <th scope="row"><img src="/img/sony-ax700.webp" height=40 alt="sony-ax700"></th>
-                        <td class="align-middle">Sony AX700</td>
-                        <td class="align-middle">2</td>
+                        <th scope="row"><img src="{{$template->image}}" height=40 alt="{{$template->name}}"></th>
+                        <td class="align-middle">{{ $template->name }}</td>
+                        <td class="align-middle">{{ $template->equipments->count() }}</td>
                         <td class="align-middle">
-                            <button type="button" disabled class="btn btn-success btn-sm"><span class="fa fa-plus" /></button>
-                            <button type="button" class="btn btn-danger btn-sm"><span class="fa fa-minus" /></button>
+                            <input type="checkbox" id="{{'select-'.$template->id}}" name="select">
                         </td>
                     </tr>
-                    <tr>
-                        <th scope="row"><img src="/img/sony-ax700.webp" height=40 alt="sony-ax700"></th>
-                        <td class="align-middle">Sony AX700</td>
-                        <td class="align-middle">2</td>
-                        <td class="align-middle">
-                            <button type="button" class="btn btn-success btn-sm"><span class="fa fa-plus" /></button>
-                            <button type="button" disabled class="btn btn-danger btn-sm"><span class="fa fa-minus" /></button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th scope="row"><img src="/img/sony-ax700.webp" height=40 alt="sony-ax700"></th>
-                        <td class="align-middle">Sony AX700</td>
-                        <td class="align-middle">2</td>
-                        <td class="align-middle">
-                            <button type="button" class="btn btn-success btn-sm"><span class="fa fa-plus" /></button>
-                            <button type="button" disabled class="btn btn-danger btn-sm"><span class="fa fa-minus" /></button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th scope="row"><img src="/img/sony-ax700.webp" height=40 alt="sony-ax700"></th>
-                        <td class="align-middle">Sony AX700</td>
-                        <td class="align-middle">2</td>
-                        <td class="align-middle">
-                            <button type="button" class="btn btn-success btn-sm"><span class="fa fa-plus" /></button>
-                            <button type="button" disabled class="btn btn-danger btn-sm"><span class="fa fa-minus" /></button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th scope="row"><img src="/img/sony-ax700.webp" height=40 alt="sony-ax700"></th>
-                        <td class="align-middle">Sony AX700</td>
-                        <td class="align-middle">2</td>
-                        <td class="align-middle">
-                            <button type="button" class="btn btn-success btn-sm"><span class="fa fa-plus" /></button>
-                            <button type="button" disabled class="btn btn-danger btn-sm"><span class="fa fa-minus" /></button>
-                        </td>
-                    </tr>
-                    
+                    @endforeach
                 </tbody>
             </table>
             <div class="row justify-content-center">

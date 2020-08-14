@@ -6,6 +6,7 @@ use App\EquipmentTemplate;
 use Illuminate\Http\Request;
 use App\Equipment;
 use App\Category;
+use App\Supplier;
 
 class EquipmentTemplateController extends Controller
 {
@@ -34,7 +35,6 @@ class EquipmentTemplateController extends Controller
         $categories = Category::all();
         return view('create-equipment')->with([
             'categories' => $categories,
-
         ]);
     }
 
@@ -51,7 +51,7 @@ class EquipmentTemplateController extends Controller
             $request->imageFile->storeAs('img', $fileName, 'public');
             $template = new EquipmentTemplate($request->all());
             $template->save();
-            $template->update(['image' => $fileName]);
+            $template->update(['image' => '/storage/img/'.$fileName]);
         } else {
             $template = new EquipmentTemplate($request->all());
             $template->save();
@@ -68,8 +68,10 @@ class EquipmentTemplateController extends Controller
      */
     public function show(EquipmentTemplate $equipmentTemplate)
     {
+        $suppliers = Supplier::all();
         return view('equipment-detail')->with([
             'equipmentTemplate' => $equipmentTemplate,
+            'suppliers' => $suppliers
         ]);
     }
 

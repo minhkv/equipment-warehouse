@@ -28,7 +28,7 @@
         @foreach($equipmentTemplates as $template)
         <div class="col-md-3">
             <div class="card">
-                <img src="{{ '/storage/img/'.$template->image }}" class="card-img-top" alt="{{ $template->name }}">
+                <img src="{{ $template->image }}" class="card-img-top" alt="{{ $template->name }}">
                 <div class="card-body">
                     <h5 class="card-title">{{ $template->name }}</h5>
                     <p class="card-text">Số lượng: {{ $template->equipments->count() }}</p>

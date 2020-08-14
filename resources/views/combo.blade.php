@@ -13,42 +13,24 @@
     </div>
     
     <div class="row justify-content-center py-4">
-        <div class="col-md-4">
+        @foreach($combos as $combo)
+        <div class="col-md-3">
             <div class="card">
-                <img src="/img/sony-ax700.webp" class="card-img-top" alt="sony ax700">
+                @if($combo->comboInfos->count() > 0)
+                <img src="{{ $combo->comboInfos[0]->template->image }}" class="card-img-top" alt="{{$combo->name}}">
+                @else
+                <img src="/storage/img/empty.jpg" class="card-img-top" alt="{{$combo->name}}">
+                @endif
                 <div class="card-body">
-                    <h2 class="card-title">Combo Sony AX700, Tripod</h2>
-                    <p class="card-text">Số lượng: 6</p>
+                    <h2 class="card-title">{{ $combo->name }}</h2>
+                    <p class="card-text">Số lượng: {{ $combo->comboInfos->count() }}</p>
                     <a href="#" class="btn btn-warning"><span class="fa fa-plus"></span> Thêm vào giỏ</a>
-                    <a href="{{ route('combo.show', '1') }}" class="btn btn-primary"><span class="fa fa-pencil"></span></a>
-                    <a href="#" class="btn btn-danger"><span class="fa fa-trash"></span></a>
+                    <a href="{{ route('combo.show', $combo) }}" class="btn btn-primary"><span class="fa fa-pencil"></span></a>
+                    <x-delete-button route-name="combo.destroy" id="{{$combo->id}}" />
                 </div>
             </div>
         </div>
-        <div class="col-md-4">
-            <div class="card">
-                <img src="/img/sony-pj440.png" class="card-img-top" alt="sony pj440">
-                <div class="card-body">
-                    <h2 class="card-title">Combo Sony PJ440, Tripod</h2>
-                    <p class="card-text">Số lượng: 3</p>
-                    <a href="#" class="btn btn-warning"><span class="fa fa-plus"></span> Thêm vào giỏ</a>
-                    <a href="#" class="btn btn-primary"><span class="fa fa-pencil"></span></a>
-                    <a href="#" class="btn btn-danger"><span class="fa fa-trash"></span></a>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="card">
-                <img src="/img/sony-ax700.webp" class="card-img-top" alt="sony ax700">
-                <div class="card-body">
-                    <h2 class="card-title">Combo Sony AX700, Tripod</h2>
-                    <p class="card-text">Số lượng: 6</p>
-                    <a href="#" class="btn btn-warning"><span class="fa fa-plus"></span> Thêm vào giỏ</a>
-                    <a href="#" class="btn btn-primary"><span class="fa fa-pencil"></span></a>
-                    <a href="#" class="btn btn-danger"><span class="fa fa-trash"></span></a>
-                </div>
-            </div>
-        </div>
+        @endforeach
     </div>
 </div>
 @endsection

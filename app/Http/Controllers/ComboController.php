@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Combo;
 use Illuminate\Http\Request;
+use App\Equipment;
+use App\EquipmentTemplate;
+use App\ComboInfo;
 
 class ComboController extends Controller
 {
@@ -14,7 +17,10 @@ class ComboController extends Controller
      */
     public function index()
     {
-        return view('combo');
+        $combos = Combo::all();
+        return view('combo')->with([
+            'combos' => $combos
+        ]);
     }
 
     /**
@@ -24,7 +30,10 @@ class ComboController extends Controller
      */
     public function create()
     {
-        return view('create-combo');
+        $equipmentTemplates = EquipmentTemplate::all();
+        return view('create-combo')->with([
+            'equipmentTemplates' => $equipmentTemplates
+        ]);
     }
 
     /**
@@ -35,7 +44,17 @@ class ComboController extends Controller
      */
     public function store(Request $request)
     {
-        
+        $combo = Combo::create([
+            'name' => $request->input('name')
+        ]);
+        $templates = json_decode($request->input('templates')[0]);
+        foreach($templates as $template) {
+            $combo->comboInfos()->create([
+                'template_id' => $template->id,
+                'amount' => $template->amount
+            ]);            
+        }
+        return redirect(route('combo.index'));
     }
 
     /**
@@ -46,7 +65,11 @@ class ComboController extends Controller
      */
     public function show(Combo $combo)
     {
-        return view('combo-detail', compact($combo));
+        $equipmentTemplates = EquipmentTemplate::all();
+        return view('combo-detail')->with([
+            'combo' => $combo,
+            'equipmentTemplates' => $equipmentTemplates
+        ]);
     }
 
     /**
@@ -80,6 +103,7 @@ class ComboController extends Controller
      */
     public function destroy(Combo $combo)
     {
-        //
+        $combo->delete();
+        return redirect()->back();
     }
 }

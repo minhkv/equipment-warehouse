@@ -14,7 +14,7 @@ class CreateForeignKeyForComboInfoTable extends Migration
     public function up()
     {
         Schema::table('combo_info', function (Blueprint $table) {
-            $table->foreign('equipment_id')->references('id')->on('equipments')->onDelete('cascade');
+            $table->foreign('template_id')->references('id')->on('equipment_templates')->onDelete('cascade');
             $table->foreign('combo_id')->references('id')->on('combo')->onDelete('cascade');
         });
     }
@@ -27,7 +27,7 @@ class CreateForeignKeyForComboInfoTable extends Migration
     public function down()
     {
         Schema::table('combo_info', function (Blueprint $table) {
-            $table->dropForeign('combo_info_equipment_id_foreign');
+            $table->dropForeign('combo_info_template_id_foreign');
             $table->dropForeign('combo_info_combo_id_foreign');            
         });
     }

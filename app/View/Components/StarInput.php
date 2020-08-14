@@ -3,19 +3,22 @@
 namespace App\View\Components;
 
 use Illuminate\View\Component;
-use App\Supplier;
 
-class AddEquipmentMember extends Component
+class StarInput extends Component
 {
-    public $templateId;
+    public $name;
+    public $id;
+    public $value;
     /**
      * Create a new component instance.
      *
      * @return void
      */
-    public function __construct($templateId)
+    public function __construct($name, $id, $value)
     {
-        $this->templateId = $templateId;
+        $this->name = $name;
+        $this->id = $id;
+        $this->value = $value;
     }
 
     /**
@@ -25,9 +28,6 @@ class AddEquipmentMember extends Component
      */
     public function render()
     {
-        $suppliers = Supplier::all();
-        return view('components.add-equipment-member')->with([
-            'suppliers' => $suppliers
-        ]);
+        return view('components.star-input');
     }
 }

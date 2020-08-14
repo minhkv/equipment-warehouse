@@ -4,6 +4,9 @@ input
 {
     width: 30px;
 }
+.checked {
+  color: orange;
+}
 </style>
 @section('content')
 <div class="container">
@@ -12,7 +15,7 @@ input
     </div>
     <div class="row">
         <div class="col-md-4">
-            <img class="w-100" src="{{ '/storage/img/'.$equipmentTemplate->image }}" alt="sony-ax700">
+            <img class="w-100" src="{{ $equipmentTemplate->image }}" alt="sony-ax700">
         </div>
         <div class="col-md-8">
             <h2><b>Sony AX700</b></h2>
@@ -39,6 +42,7 @@ input
                         <th scope="col">Nhà cung cấp</th>
                         <th scope="col">Vị trí</th>
                         <th scope="col">Tình trạng</th>
+                        <th scope="col">Ghi chú</th>
                         <th scope="col"></th>
                     </tr>
                 </thead>
@@ -48,9 +52,18 @@ input
                         <th class="align-middle" scope="row">{{ $equipment->id }}</th>
                         <td class="align-middle">{{ $equipment->size}}</td>
                         <td class="align-middle">{{ $equipment->price }}</td>
-                        <td class="align-middle">{{ $equipment->supplier }}</td>
+                        <td class="align-middle">{{ $equipment->supplier->name }}</td>
                         <td class="align-middle">{{ $equipment->location }}</td>
-                        <td class="align-middle"><button class="btn btn-success">{{ $equipment->condition }}</button></td>
+                        <td class="align-middle">
+                            <div>
+                                <span class="fa fa-star {{$equipment->condition >= 1 ? 'checked':''}}"></span>
+                                <span class="fa fa-star {{$equipment->condition >= 2 ? 'checked':''}}"></span>
+                                <span class="fa fa-star {{$equipment->condition >= 3 ? 'checked':''}}"></span>
+                                <span class="fa fa-star {{$equipment->condition >= 4 ? 'checked':''}}"></span>
+                                <span class="fa fa-star {{$equipment->condition >= 5 ? 'checked':''}}"></span>
+                            </div>
+                        </td>
+                        <td>{{$equipment->note}}</td>
                         <td class="align-middle">
                             <x-edit-equipment-member e-id="{{ $equipment->id }}" />
                         </td>

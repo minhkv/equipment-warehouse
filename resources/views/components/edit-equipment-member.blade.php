@@ -17,11 +17,6 @@
                 <form action="{{ route('equipment.update', $eId) }}" method="POST">
                     @csrf
                     @method('PUT')
-                    <!-- <input type="hidden" name="id" value="{{ $eId }}"> -->
-                    <!-- <div class="form-group">
-                        <label for="equipmentName"><i class="fa fa-barcode"></i> Mã</label>
-                        <input type="text" class="form-control" id="equipmentName" placeholder="Mã">
-                    </div> -->
                     <div class="form-group">
                         <label for="equipmentName"><i class="fa fa-cogs"></i> Kích thước</label>
                         <input type="text" class="form-control" name="size" value="{{ $equipment->size }}" placeholder="Kích thước">
@@ -31,7 +26,7 @@
                         <input type="text" class="form-control" name="price" value="{{ $equipment->price }}" placeholder="Giá nhập">
                     </div>
                     <div class="form-group">
-                        <label for="price"><i class="fa fa-home"></i> Nhà cung cấp</label>
+                        <label for="price"><i class="fa fa-building"></i> Nhà cung cấp</label>
                         <input type="text" class="form-control" name="supplier_id" value="{{ $equipment->supplier_id }}" placeholder="Nhà cung cấp">
                     </div>
                     <div class="form-group">
@@ -40,7 +35,11 @@
                     </div>
                     <div class="form-group">
                         <label for="price"><i class="fa fa-signal"></i> Tình trạng</label>
-                        <input type="text" class="form-control" name="condition" value="{{ $equipment->condition }}" placeholder="Tình trạng">
+                        <x-star-input name="condition" id="edit-{{$eId}}" value="{{ $equipment->condition }}" />
+                    </div>
+                    <div class="form-group">
+                        <label for="price"><i class="fa fa-clipboard"></i> Ghi chú</label>
+                        <textarea class="form-control" name="note"  placeholder="Ghi chú" >{{ $equipment->note }}</textarea>
                     </div>
 
                     <button type="submit" class="btn btn-primary mb-2">Lưu thay đổi</button>

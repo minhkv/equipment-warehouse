@@ -3,6 +3,7 @@
 namespace App\View\Components;
 
 use Illuminate\View\Component;
+use App\EquipmentTemplate;
 
 class EquipmentAdd extends Component
 {
@@ -23,6 +24,9 @@ class EquipmentAdd extends Component
      */
     public function render()
     {
-        return view('components.equipment-add');
+        $equipmentTemplates = EquipmentTemplate::all();
+        return view('components.equipment-add')->with([
+            'equipmentTemplates' => $equipmentTemplates
+        ]);
     }
 }

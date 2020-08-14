@@ -13,16 +13,19 @@
                 <li class="nav-item {{Route::currentRouteName() == 'home' ? 'active' : ''}}">
                     <a class="nav-link" href="{{route('home')}}">Trang chủ</a>
                 </li>
-                <li class="nav-item {{Route::currentRouteName() == 'equipment' ? 'active' : ''}}">
+                <li class="nav-item {{Route::currentRouteName() == 'equipment-template.index' ? 'active' : ''}}">
                     <a class="nav-link" href="{{route('equipment-template.index')}}">Thiết bị</a>
                 </li>
-                <li class="nav-item {{Route::currentRouteName() == 'combo' ? 'active' : ''}}">
+                <li class="nav-item {{Route::currentRouteName() == 'combo.index' ? 'active' : ''}}">
                     <a class="nav-link" href="{{route('combo.index')}}">Combo</a>
                 </li>
-                <li class="nav-item {{Route::currentRouteName() == 'order' ? 'active' : ''}}">
+                <li class="nav-item {{Route::currentRouteName() == 'supplier.index' ? 'active' : ''}}">
+                    <a class="nav-link" href="{{route('supplier.index')}}">Nhà cung cấp</a>
+                </li>
+                <li class="nav-item {{Route::currentRouteName() == 'order.index' ? 'active' : ''}}">
                     <a class="nav-link" href="{{route('order.index')}}">Đơn hàng</a>
                 </li>
-                <li class="nav-item {{Route::currentRouteName() == 'borrowing-cart' ? 'active' : ''}}">
+                <li class="nav-item {{Route::currentRouteName() == 'borrowing-cart.index' ? 'active' : ''}}">
                     <a class="nav-link" href="{{route('borrowing-cart')}}">Giỏ đồ <i class="fa fa-shopping-cart"></i></a>
                 </li>
             </ul>

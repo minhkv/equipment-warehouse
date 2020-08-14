@@ -15,9 +15,9 @@ class CreateComboInfoTable extends Migration
     {
         Schema::create('combo_info', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('equipment_id');
+            $table->unsignedBigInteger('template_id');
             $table->unsignedBigInteger('combo_id');
-            
+            $table->integer('amount');
             $table->timestamps();
         });
     }
