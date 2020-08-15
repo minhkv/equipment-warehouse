@@ -65,10 +65,15 @@ class ComboController extends Controller
      */
     public function show(Combo $combo)
     {
+        $selectedTemplates = [];
+        foreach($combo->comboInfos as $info) {
+            $selectedTemplates[] = $info->template;
+        }
         $equipmentTemplates = EquipmentTemplate::all();
         return view('combo-detail')->with([
             'combo' => $combo,
-            'equipmentTemplates' => $equipmentTemplates
+            'equipmentTemplates' => $equipmentTemplates,
+            'selectedTemplates' => $selectedTemplates
         ]);
     }
 

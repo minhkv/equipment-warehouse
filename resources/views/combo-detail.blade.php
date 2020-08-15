@@ -22,7 +22,7 @@ input
             <h2><b>{{$combo->name}}</b></h2>
             <!-- <p><b>Chi tiết:</b> Sony AX700 + Tripod</p> -->
             <label>Số lượng mượn:</label>
-            <input type="number" value="1">
+            <input type="number" min="0" value="1">
             <button type="button" class="btn btn-danger">Thêm vào giỏ</button>
         </div>
     </div>
@@ -33,13 +33,13 @@ input
                 <h2>Danh sách thiết bị</h2>
             </div>
         </div>
-        <div >
+        <div>
             <div class="row mx-2 justify-content-center">
-                <div v-for="(info, index) in infos" class="col-md-2" >
+                <div v-for="(info, index) in selectedTemplates" class="col-md-2" >
                     <div  class="card">
                         <img class="card-img-top" :src="info.template.image" :alt="info.template.name">
                         <div class="card-body">
-                            <!-- <h5 class="card-title">@{{info.template.name}}</h5> -->
+                            <h5 class="card-title">@{{info.template.name}}</h5>
                             <p class="card-text">
                                 Số lượng: <input class="amount" type="number" name="" min="0" :value="info.amount">
                             </p>
@@ -48,7 +48,6 @@ input
                     </div>
                 </div>
                 
-
                 <div class="row justify-content-center pt-3">
                     <!-- Add equipment -->
                     <div class="row justify-content-center pt-3">
@@ -126,26 +125,27 @@ input
     </div>
     
 </div>
+
 <script>
     var equipmentTemplates = <?php echo $equipmentTemplates; ?>;
     var combo = <?php echo $combo; ?>;
-    var combo_infos = <?php echo $combo->comboInfos; ?>;
     var buttonDisabled = {};
+    var combo_infos = combo.combo_infos;
     combo_infos.forEach(function(info){
         buttonDisabled[info["template_id"]] = true;
     });
-    console.log(combo_infos);
+
     var app = new Vue({
         el: '#equipmentList',
         data: {
             combo: combo,
             templates: equipmentTemplates,
             buttonDisabled: buttonDisabled,
-            infos: combo_infos
+            selectedTemplates: combo_infos
         },
         methods:{
             addEquipment: function(template) {
-                this.infos.push({
+                this.selectedTemplates.push({
                     combo_id: combo.id,
                     template_id: template.id,
                     template: template
@@ -156,7 +156,7 @@ input
                 templateId = this.templates[index].id;
                 this.buttonDisabled[templateId] = false;
                 this.templates.splice(index, 1);
-            }
+            },
         }
     });
 </script>
