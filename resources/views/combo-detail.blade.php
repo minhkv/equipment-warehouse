@@ -35,15 +35,15 @@ input
         </div>
         <div>
             <div class="row mx-2 justify-content-center">
-                <div v-for="(info, index) in selectedTemplates" class="col-md-2" >
+                <div v-for="(info, index) in combo.combo_infos" class="col-md-2" >
                     <div  class="card">
                         <img class="card-img-top" :src="info.template.image" :alt="info.template.name">
                         <div class="card-body">
                             <h5 class="card-title">@{{info.template.name}}</h5>
                             <p class="card-text">
-                                Số lượng: <input class="amount" type="number" name="" min="0" :value="info.amount">
+                                Số lượng: <input class="amount" type="number" name="" min="0" v-model="info.amount">
                             </p>
-                            <a class="btn btn-danger btn-sm"><span class="fa fa-trash" /></a>
+                            <button @click="deleteInfo(info, index)" class="btn btn-danger btn-sm"><span class="fa fa-trash" /></button>
                         </div>
                     </div>
                 </div>
@@ -116,10 +116,10 @@ input
                     </div>
                     <!-- End Add Equipment -->
                     <div class="row justify-content-center pt-3">
-                        <button type="submit" class="btn btn-primary">Lưu thay đổi</button>
+                        <button type="button" @click="submitCombo" class="btn btn-primary">Lưu thay đổi</button>
                     </div>
+
                 </div>
-                
             </div>
         </div>
     </div>
@@ -141,22 +141,43 @@ input
             combo: combo,
             templates: equipmentTemplates,
             buttonDisabled: buttonDisabled,
-            selectedTemplates: combo_infos
         },
         methods:{
             addEquipment: function(template) {
-                this.selectedTemplates.push({
+                var info = {
                     combo_id: combo.id,
                     template_id: template.id,
-                    template: template
-                });
+                    template: template,
+                    amount: 0
+                };
+                this.combo.combo_infos.push(info);
                 this.buttonDisabled[template.id] = true;
+                axios.post('/combo-info', info)
+                .then(res => {
+                    console.log(res);
+                });
             },
             removeEquipmentCard: function(index) {
                 templateId = this.templates[index].id;
                 this.buttonDisabled[templateId] = false;
                 this.templates.splice(index, 1);
             },
+            submitCombo: function() {
+                axios.put('/combo/' + combo.id, {
+                    comboInfos: this.combo.combo_infos
+                })
+                .then(res => {
+                    console.log(res);
+                });
+            },
+            deleteInfo: function(info, index) {
+                console.log('deleteInfo');
+                this.combo.combo_infos.splice(index);
+                axios.delete('/combo-info/' + info.id)
+                .then(res => {
+                    console.log(res);
+                });
+            }
         }
     });
 </script>

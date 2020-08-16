@@ -39,6 +39,10 @@ Route::resource('borrowed-history', 'BorrowedHistoryController')->only([
     'index'
 ]);
 
+Route::resource('combo-info', 'ComboInfoController')->only([
+    'store', 'destroy'
+]);
+
 Route::resource('usage-history', 'UsageHistoryController')->only([
     'index'
 ]);

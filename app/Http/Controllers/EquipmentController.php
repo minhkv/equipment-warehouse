@@ -82,6 +82,7 @@ class EquipmentController extends Controller
      */
     public function destroy($id)
     {
-        //
+        Equipment::find($id)->delete();
+        return redirect()->back();
     }
 }

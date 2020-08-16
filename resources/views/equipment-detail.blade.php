@@ -66,6 +66,7 @@ input
                         <td>{{$equipment->note}}</td>
                         <td class="align-middle">
                             <x-edit-equipment-member e-id="{{ $equipment->id }}" />
+                            <x-delete-button id="{{ $equipment->id }}" route-name="equipment.destroy" />
                         </td>
                     </tr>
                     @endforeach

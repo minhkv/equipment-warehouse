@@ -35,7 +35,7 @@ class ComboInfoController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        ComboInfo::create($request->all());
     }
 
     /**
@@ -80,6 +80,6 @@ class ComboInfoController extends Controller
      */
     public function destroy(ComboInfo $comboInfo)
     {
-        //
+        $comboInfo->delete();
     }
 }

@@ -97,7 +97,10 @@ class ComboController extends Controller
      */
     public function update(Request $request, Combo $combo)
     {
-        //
+        $infos = $request->input('comboInfos');
+        foreach($infos as $info) {
+            ComboInfo::find($info['id'])->update($info);
+        }
     }
 
     /**
