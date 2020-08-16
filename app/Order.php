@@ -8,6 +8,8 @@ class Order extends Model
 {
     protected $fillable = [
         'type', 
+        'stocker_id',
+        'guest_id',
         'date_created', 
         'date_approved', 
         'date_completed', 
@@ -17,7 +19,7 @@ class Order extends Model
         'comment',
     ];
     public function orderInfos() {
-        return this->hasMany(OrderInfo::class);
+        return $this->hasMany(OrderInfo::class);
     }
 
 }

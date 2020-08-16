@@ -25,20 +25,25 @@
     </div>
     
     <div class="row justify-content-center py-4">
-        @foreach($equipmentTemplates as $template)
-        <div class="col-md-3">
-            <div class="card">
-                <img src="{{ $template->image }}" class="card-img-top" alt="{{ $template->name }}">
-                <div class="card-body">
-                    <h5 class="card-title">{{ $template->name }}</h5>
-                    <p class="card-text">Số lượng: {{ $template->equipments->count() }}</p>
-                    <a href="#" class="btn btn-warning"><span class="fa fa-plus"></span> Thêm vào giỏ</a>
-                    <a href="{{ route('equipment-template.show', $template) }}" class="btn btn-primary"><span class="fa fa-pencil"></span></a>
-                    <x-delete-button id="{{ $template->id }}" route-name="equipment-template.destroy" />
+        @if($equipmentTemplates->count() > 0)
+            @foreach($equipmentTemplates as $template)
+            <div class="col-md-3">
+                <div class="card">
+                    <img src="{{ $template->image }}" class="card-img-top" alt="{{ $template->name }}">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ $template->name }}</h5>
+                        <p class="card-text">Số lượng: {{ $template->equipments->count() }}</p>
+                        <a href="#" class="btn btn-warning"><span class="fa fa-plus"></span> Thêm vào giỏ</a>
+                        <a href="{{ route('equipment-template.show', $template) }}" class="btn btn-primary"><span class="fa fa-pencil"></span></a>
+                        <x-delete-button id="{{ $template->id }}" route-name="equipment-template.destroy" />
+                    </div>
                 </div>
             </div>
-        </div>
-        @endforeach
+            @endforeach
+        @else
+            <h5>Chưa có thiết bị nào.</h5>
+        @endif
+        
 
     </div>
 </div>

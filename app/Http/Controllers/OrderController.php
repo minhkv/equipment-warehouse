@@ -3,7 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Order;
+use App\Channel;
+use App\User;
+use App\EquipmentTemplate;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+use DateTime;
 
 class OrderController extends Controller
 {
@@ -14,7 +19,10 @@ class OrderController extends Controller
      */
     public function index()
     {
-        return view('order');
+        $orders = Order::all();
+        return view('order')->with([
+            'orders' => $orders
+        ]);
     }
 
     /**
@@ -24,7 +32,16 @@ class OrderController extends Controller
      */
     public function create()
     {
-        return view('create-order');
+        $users = User::all();
+        $equipmentTemplates = EquipmentTemplate::all();
+        $channels = Channel::all();
+        $stocker_id = Auth::user()->id;
+        return view('create-order')->with([
+            'users' => $users,
+            'channels' => $channels,
+            'equipmentTemplates' =>$equipmentTemplates,
+            'stocker_id' => $stocker_id
+        ]);
     }
 
     /**
@@ -35,7 +52,21 @@ class OrderController extends Controller
      */
     public function store(Request $request)
     {
+        $order = Order::create([
+            'type' => $request->input('type'),
+            'stocker_id' => $request->input('stocker_id'),
+            'guest_id' => $request->input('guest_id'),
+            'reason' => $request->input('reason')
+        ]);
+        $templates = json_decode($request->input('templates')[0]);
+        foreach($templates as $template) {
+            $order->orderInfos()->create([
+                'template_id' => $template->id,
+                'status' => '1',
+            ]);            
+        }
         Order::create($request->all());
+        return redirect(route('order.index'));
     }
 
     /**

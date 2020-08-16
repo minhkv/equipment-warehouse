@@ -36,9 +36,10 @@
                 <a class="dropdown-item" href="#">Something else here</a>
             </div>
         </div>
-        <a href="{{ route('create-order') }}" type="button" class="btn btn-success ml-auto">Tạo đơn hàng</a>
+        <a href="{{ route('order.create') }}" type="button" class="btn btn-success ml-auto">Tạo đơn hàng</a>
     </div>
     <div class="row">
+        @if($orders->count() > 0)
         <table class="table">
             <thead class="thead-light">
                 <tr>
@@ -58,34 +59,15 @@
                     <td>20</td>
                     <td><p class="btn btn-primary">Đang tiến hành</p></td>
                     <td>
-                        <a href="{{ route('order-detail', 1) }}" class="btn btn-primary"><span class="fa fa-pencil" /></a>
-                        <a class="btn btn-danger"><span class="fa fa-trash" /></a>
-                    </td>
-                </tr>
-                <tr>
-                    <th scope="row">2</th>
-                    <td>Quay chương trình tụng kinh quanh chùa</td>
-                    <td>21/07/2020</td>
-                    <td>25</td>
-                    <td><p class="btn btn-primary">Đang tiến hành</p></td>
-                    <td>
-                        <a class="btn btn-primary"><span class="fa fa-pencil" /></a>
-                        <a class="btn btn-danger"><span class="fa fa-trash" /></a>
-                    </td>
-                </tr>
-                <tr>
-                    <th scope="row">3</th>
-                    <td>Quay chương trình tụng kinh quanh chùa</td>
-                    <td>22/07/2020</td>
-                    <td>30</td>
-                    <td><p class="btn btn-warning">Chờ xử lý</p></td>
-                    <td>
-                        <a class="btn btn-primary"><span class="fa fa-pencil" /></a>
+                        <a href="{{ route('order.show', 1) }}" class="btn btn-primary"><span class="fa fa-pencil" /></a>
                         <a class="btn btn-danger"><span class="fa fa-trash" /></a>
                     </td>
                 </tr>
             </tbody>
         </table>
+        @else
+        <h5>Chưa có đơn hàng nào.</h5>
+        @endif
     </div>
 </div>
 @endsection

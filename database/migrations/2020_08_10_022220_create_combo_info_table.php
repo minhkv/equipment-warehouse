@@ -14,6 +14,7 @@ class CreateComboInfoTable extends Migration
     public function up()
     {
         Schema::create('combo_info', function (Blueprint $table) {
+            $table->engine = 'InnoDB';
             $table->id();
             $table->unsignedBigInteger('template_id');
             $table->unsignedBigInteger('combo_id');
