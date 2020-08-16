@@ -16,11 +16,10 @@ class CreateEquipmentsTable extends Migration
         Schema::create('equipments', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('template_id');
-            $table->string('price');
+            $table->string('price')->nullable();
             $table->unsignedBigInteger('supplier_id')->default('1');
-            // $table->string('supplier');
-            $table->string('size');
-            $table->string('location');
+            $table->string('size')->nullable();
+            $table->string('location')->nullable();
             $table->enum('status', ['available', 'working', 'losing']);
             $table->integer('condition');
             $table->text('note')->nullable();

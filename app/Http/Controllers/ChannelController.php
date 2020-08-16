@@ -14,7 +14,10 @@ class ChannelController extends Controller
      */
     public function index()
     {
-        //
+        $channels = Channel::all();
+        return view('channel')->with([
+            'channels' => $channels
+        ]);
     }
 
     /**
@@ -35,7 +38,8 @@ class ChannelController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        Channel::create($request->all());
+        return redirect()->back();
     }
 
     /**
@@ -69,7 +73,8 @@ class ChannelController extends Controller
      */
     public function update(Request $request, Channel $channel)
     {
-        //
+        $channel->update($request->all());
+        return redirect()->back();
     }
 
     /**
@@ -80,6 +85,7 @@ class ChannelController extends Controller
      */
     public function destroy(Channel $channel)
     {
-        //
+        $channel->delete();
+        return redirect()->back();
     }
 }

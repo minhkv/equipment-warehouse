@@ -17,8 +17,9 @@ class CreateBorrowedHistoryTable extends Migration
             $table->id();
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('equipment_id');
-            $table->unsignedInteger('amount');
-            
+            $table->unsignedInteger('amount')->nullable();
+            $table->integer('condition_received');
+            $table->string('note')->nullable();
             $table->timestamps();
         });
     }

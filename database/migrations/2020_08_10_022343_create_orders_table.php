@@ -15,16 +15,16 @@ class CreateOrdersTable extends Migration
     {
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
-            $table->string('type');
+            $table->integer('type');
             $table->unsignedBigInteger('stocker_id');
             $table->unsignedBigInteger('guest_id');
             $table->dateTime('date_created');
-            $table->dateTime('date_approved');
-            $table->dateTime('date_completed');
-            $table->dateTime('due_date');
+            $table->dateTime('date_approved')->nullable();
+            $table->dateTime('date_completed')->nullable();
+            $table->dateTime('due_date')->nullable();
             $table->string('reason');
             $table->string('status');
-            $table->string('comment');
+            $table->string('note')->nullable();
             $table->timestamps();
             
         });

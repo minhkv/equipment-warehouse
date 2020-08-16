@@ -35,7 +35,7 @@ class OrderController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        Order::create($request->all());
     }
 
     /**
@@ -69,7 +69,7 @@ class OrderController extends Controller
      */
     public function update(Request $request, Order $order)
     {
-        //
+        $order->update($request->all());
     }
 
     /**
