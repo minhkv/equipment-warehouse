@@ -59,13 +59,6 @@ class OrderController extends Controller
             'reason' => $request->input('reason'),
             'status' => '0',
         ]);
-        $templates = json_decode($request->input('templates')[0]);
-        // foreach($templates as $template) {
-        //     $order->orderRequestInfos()->create([
-        //         'template_id' => $template->id,
-        //         'amount' => $template->amount,
-        //     ]);            
-        // }
         return redirect(route('order.index'));
     }
 
@@ -78,8 +71,14 @@ class OrderController extends Controller
      */
     public function show(Order $order)
     {
+        $selectedTemplates = [];
+        foreach($order->orderRequestInfos as $info) {
+            $selectedTemplates[] = $info->template;
+            $a = $info->template->equipments;
+        }
         return view('order-detail')->with([
             'order' => $order,
+            'selectedTemplates' => $selectedTemplates
         ]);
     }
 
@@ -137,10 +136,19 @@ class OrderController extends Controller
     }
 
     public function acceptOrderRequest(Order $order) {
-
+        $order->update(['status' => 1]);
+        return 'accept';
     }
     
     public function rejectOrderRequest(Order $order) {
+        return 'reject';
+    }
 
+    public function equipmentOutput(Request $request) {
+        return $request->all();
+    }
+
+    public function equipmentReturn(Order $order) {
+        return 'equipmentReturn';
     }
 }
