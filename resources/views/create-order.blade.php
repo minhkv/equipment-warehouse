@@ -25,7 +25,7 @@
             <div class="card-body">
                 <div class="tab-content">
                     <div class="tab-pane active" id="tab-eg2-0" role="tabpanel">
-                        <form action="{{route('order.store')}}" method="POST">
+                        <form action="{{route('order-request.store')}}" method="POST">
                             @csrf
                             <div class="form-group">
                                 <input type="hidden" name="type" value="1">

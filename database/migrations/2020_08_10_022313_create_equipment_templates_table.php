@@ -16,6 +16,7 @@ class CreateEquipmentTemplatesTable extends Migration
         Schema::create('equipment_templates', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->unsignedBigInteger('category_id');
             $table->string('image')->nullable();
             $table->timestamps();
         });

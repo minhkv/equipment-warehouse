@@ -1,73 +1,116 @@
 @extends('layouts.app')
 @section('content')
 <div class="container">
-    <div class="row">
-        <div class="col-md-12 text-center">
-            <h2>Đơn mượn thiết bị</h2>
-        </div>
-    </div>
-    <div class="row py-4">
-        <div class="dropdown">
-            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                Loại đơn
-            </button>
-            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                <a class="dropdown-item" href="#">Đơn nhập</a>
-                <a class="dropdown-item" href="#">Đơn mượn</a>
+    <div class="row justify-content-center">
+        <div class="main-card mb-3 card col-md-12">
+            <div class="card-header">
+                <div class="btn-actions-pane-right">
+                    <div class="nav">
+                        <a data-toggle="tab" href="#tab-eg2-0" class="btn-pill btn-wide active btn btn-outline-alternate btn-sm">Đơn mượn</a>
+                        <a data-toggle="tab" href="#tab-eg2-1" class="btn-pill btn-wide mr-1 ml-1  btn btn-outline-alternate btn-sm">Đơn nhập</a>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="tab-content">
+                    <div class="tab-pane active" id="tab-eg2-0" role="tabpanel">
+                        <div class="row">
+                            <div class="col-md-12 text-center">
+                                <h2>Đơn mượn thiết bị</h2>
+                            </div>
+                        </div>
+                        <div class="row py-4">
+                            <div class="dropdown">
+                                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Loại đơn
+                                </button>
+                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                    <a class="dropdown-item" href="#">Đơn nhập</a>
+                                    <a class="dropdown-item" href="#">Đơn mượn</a>
+                                </div>
+                            </div>
+                            <div class="dropdown ml-4">
+                                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Lọc theo
+                                </button>
+                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                    <a class="dropdown-item" href="#">Action</a>
+                                    <a class="dropdown-item" href="#">Another action</a>
+                                    <a class="dropdown-item" href="#">Something else here</a>
+                                </div>
+                            </div>
+                            <div class="dropdown ml-4">
+                                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Sắp xếp theo
+                                </button>
+                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                    <a class="dropdown-item" href="#">Action</a>
+                                    <a class="dropdown-item" href="#">Another action</a>
+                                    <a class="dropdown-item" href="#">Something else here</a>
+                                </div>
+                            </div>
+                            <a href="{{ route('order.create') }}" type="button" class="btn btn-success ml-auto">Tạo đơn hàng</a>
+                        </div>
+                        <div class="row">
+                            @if($orders->count() > 0)
+                            <table class="table">
+                                <thead class="thead-light">
+                                    <tr>
+                                        <th scope="col">Mã đơn</th>
+                                        <th scope="col">Người mượn</th>
+                                        <th scope="col">Lý do mượn</th>
+                                        <th scope="col">Ngày tạo</th>
+                                        <th scope="col">Số lượng</th>
+                                        <th scope="col">Trạng thái</th>
+                                        <th scope="col"></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach($orders as $order)
+                                    <tr>
+                                        <th scope="row" class="align-middle">{{$order->id}}</th>
+                                        <td class="align-middle">{{$order->guest->name}}</td>
+                                        <td class="align-middle">{{$order->reason}}</td>
+                                        <td class="align-middle">{{$order->created_at}}</td>
+                                        <td class="align-middle">
+                                        @if($order->status <= 1)
+                                            {{$order->getTotalRequestAmount()}}
+                                        @else
+                                            {{$order->getTotalBorrowedAmount()}}
+                                        @endif
+                                            
+                                        </td>
+                                        <td class="align-middle"><p class="btn btn-primary">{{$order->status}}</p></td>
+                                        <td class="align-middle">
+                                            <a href="{{ route('order.show', $order) }}" class="btn btn-primary"><span class="fa fa-pencil" /></a>
+                                            <button type="button" class="btn btn-danger" 
+                                            onclick="event.preventDefault();
+                                            if(confirm('Bạn có chắc chắn muốn xóa?')){
+                                                document.getElementById('form-delete-{{$order->id}}')
+                                                .submit()
+                                            }">
+                                                <span class="fa fa-trash"></span>
+                                            </button>
+                                            <form style="display:none" id="{{'form-delete-'.$order->id}}" method="post" action="{{route('order.destroy',$order)}}">
+                                                @csrf
+                                                @method('delete')
+                                            </form>
+                                        </td>
+                                    </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                            @else
+                            <h5>Chưa có đơn hàng nào.</h5>
+                            @endif
+                        </div>
+                    </div>
+                    <div class="tab-pane" id="tab-eg2-1" role="tabpanel">
+                    </div>
+                </div>
             </div>
         </div>
-        <div class="dropdown ml-4">
-            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                Lọc theo
-            </button>
-            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                <a class="dropdown-item" href="#">Action</a>
-                <a class="dropdown-item" href="#">Another action</a>
-                <a class="dropdown-item" href="#">Something else here</a>
-            </div>
-        </div>
-        <div class="dropdown ml-4">
-            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                Sắp xếp theo
-            </button>
-            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                <a class="dropdown-item" href="#">Action</a>
-                <a class="dropdown-item" href="#">Another action</a>
-                <a class="dropdown-item" href="#">Something else here</a>
-            </div>
-        </div>
-        <a href="{{ route('order.create') }}" type="button" class="btn btn-success ml-auto">Tạo đơn hàng</a>
-    </div>
-    <div class="row">
-        @if($orders->count() > 0)
-        <table class="table">
-            <thead class="thead-light">
-                <tr>
-                    <th scope="col">Mã đơn</th>
-                    <th scope="col">Lý do mượn</th>
-                    <th scope="col">Ngày tạo</th>
-                    <th scope="col">Số lượng</th>
-                    <th scope="col">Trạng thái</th>
-                    <th scope="col"></th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <th scope="row">1</th>
-                    <td>Quay chương trình tụng kinh quanh chùa</td>
-                    <td>20/07/2020</td>
-                    <td>20</td>
-                    <td><p class="btn btn-primary">Đang tiến hành</p></td>
-                    <td>
-                        <a href="{{ route('order.show', 1) }}" class="btn btn-primary"><span class="fa fa-pencil" /></a>
-                        <a class="btn btn-danger"><span class="fa fa-trash" /></a>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-        @else
-        <h5>Chưa có đơn hàng nào.</h5>
-        @endif
     </div>
 </div>
+
 @endsection

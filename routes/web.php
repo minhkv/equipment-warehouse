@@ -46,3 +46,7 @@ Route::resource('combo-info', 'ComboInfoController')->only([
 Route::resource('usage-history', 'UsageHistoryController')->only([
     'index'
 ]);
+
+Route::post('order-request', 'OrderController@storeRequest')->name('order-request.store');
+Route::put('order-request/{order}/accept', 'OrderController@acceptOrderRequest')->name('order-request.accept');
+Route::put('order-request/{order}/reject', 'OrderController@rejectOrderRequest')->name('order-request.reject');

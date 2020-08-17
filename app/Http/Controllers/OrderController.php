@@ -56,19 +56,20 @@ class OrderController extends Controller
             'type' => $request->input('type'),
             'stocker_id' => $request->input('stocker_id'),
             'guest_id' => $request->input('guest_id'),
-            'reason' => $request->input('reason')
+            'reason' => $request->input('reason'),
+            'status' => '0',
         ]);
         $templates = json_decode($request->input('templates')[0]);
-        foreach($templates as $template) {
-            $order->orderInfos()->create([
-                'template_id' => $template->id,
-                'status' => '1',
-            ]);            
-        }
-        Order::create($request->all());
+        // foreach($templates as $template) {
+        //     $order->orderRequestInfos()->create([
+        //         'template_id' => $template->id,
+        //         'amount' => $template->amount,
+        //     ]);            
+        // }
         return redirect(route('order.index'));
     }
 
+    
     /**
      * Display the specified resource.
      *
@@ -77,7 +78,9 @@ class OrderController extends Controller
      */
     public function show(Order $order)
     {
-        return view('order-detail', compact($order));
+        return view('order-detail')->with([
+            'order' => $order,
+        ]);
     }
 
     /**
@@ -111,6 +114,33 @@ class OrderController extends Controller
      */
     public function destroy(Order $order)
     {
-        //
+        $order->delete();
+        return redirect()->back();
+    }
+
+    public function storeRequest(Request $request) {
+        $order = Order::create([
+            'type' => $request->input('type'),
+            'stocker_id' => $request->input('stocker_id'),
+            'guest_id' => $request->input('guest_id'),
+            'reason' => $request->input('reason'),
+            'status' => '0',
+        ]);
+        $templates = json_decode($request->input('templates')[0]);
+        foreach($templates as $template) {
+            $order->orderRequestInfos()->create([
+                'template_id' => $template->id,
+                'amount' => $template->amount,
+            ]);            
+        }
+        return redirect(route('order.index'));
+    }
+
+    public function acceptOrderRequest(Order $order) {
+
+    }
+    
+    public function rejectOrderRequest(Order $order) {
+
     }
 }

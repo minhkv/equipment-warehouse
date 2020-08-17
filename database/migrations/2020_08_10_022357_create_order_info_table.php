@@ -16,11 +16,10 @@ class CreateOrderInfoTable extends Migration
         Schema::create('order_info', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('order_id');
-            $table->unsignedBigInteger('template_id');
-            $table->unsignedBigInteger('equipment_id')->nullable();
+            $table->unsignedBigInteger('equipment_id');
             $table->string('status');
             $table->dateTime('date_received')->nullable();
-            $table->string('comment')->nullable();
+            $table->string('note')->nullable();
             $table->timestamps();
             
         });

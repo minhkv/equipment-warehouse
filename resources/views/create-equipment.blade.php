@@ -16,9 +16,9 @@
                         <div class="form-group">
                             <label for="equipmentCategory">Loại thiết bị</label>
                             <div class="input-group">
-                                <select name="category" class="form-control" id="equipmentCategory">
+                                <select name="category_id" class="form-control" id="equipmentCategory">
                                     @foreach($categories as $category)
-                                    <option>
+                                    <option value="{{$category->id}}">
                                         {{ $category->name }}
                                     </option>
                                     @endforeach

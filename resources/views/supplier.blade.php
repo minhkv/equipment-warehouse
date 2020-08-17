@@ -33,7 +33,7 @@
                             <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#{{'editSupplier'.$supplier->id}}">
                                 <span class="fa fa-pencil"></span>
                             </button>
-                            <button href="{{route('supplier.destroy', $supplier)}}" type="button" class="btn btn-danger" 
+                            <button type="button" class="btn btn-danger" 
                             onclick="event.preventDefault();
                             if(confirm('Bạn có chắc chắn muốn xóa?')){
                                 document.getElementById('form-delete-{{$supplier->id}}')
