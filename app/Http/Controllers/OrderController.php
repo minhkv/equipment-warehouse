@@ -141,11 +141,31 @@ class OrderController extends Controller
     }
     
     public function rejectOrderRequest(Order $order) {
+        $order->update(['status' => -1]);
         return 'reject';
     }
 
-    public function equipmentOutput(Request $request) {
-        return $request->all();
+    public function equipmentOutput(Request $request, Order $order) {
+        $equipment_ids = $request->input('equipments');
+        $templateBorrowedAmount = $request->input('templateBorrowedAmount');
+        // foreach($templateBorrowedAmount as $template_id => $borrowedAmount) {
+        //     $order->orderRequestInfos()->find($template_id)->update([
+        //         'borrowed_amount': $borrowedAmount
+        //     ]);
+        // }
+        // dd($request->all());
+        // return $templateBorrowedAmount;
+        // try {
+            
+            foreach($equipment_ids as $equipment_id) {
+                $order->orderInfos()->create([
+                    'equipment_id' => $equipment_id,
+                ]);
+            }
+        // } catch(Exception $error) {
+        //     return $error;
+        // }
+        return $order->orderInfos;
     }
 
     public function equipmentReturn(Order $order) {

@@ -9,11 +9,10 @@ class OrderInfo extends Model
 {
     protected $table = 'order_info';
     protected $fillable = [
-        'template_id',
         'equipment_id',
         'status',
         'date_received',
-        'comment',
+        'note',
     ];
     public function template() {
         return $this->belongsTo(EquipmentTemplate::class);

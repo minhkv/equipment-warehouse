@@ -77,6 +77,7 @@
                             <figcaption class="info align-self-center">
                                 <p class="title">{{$info->template->name}}</p> 
                                 <span class="text-muted">Yêu cầu: {{ $info->amount }}</span><br>
+                                @if($order->status == 1)
                                 <span class="text-muted">Cho mượn: 
                                     <input style="width: 50px;" disabled type="number" :value="getBorrowedAmount({{$info->template->id}})">
                                 </span>
@@ -146,6 +147,7 @@
                                         </div>
                                     </div>
                                 </div>
+                                @endif
 
                             </figcaption>
                         </figure>
@@ -192,7 +194,7 @@
     var order = <?php echo $order; ?>;
     var acceptUrl = '<?php echo route('order-request.accept', $order);?>';
     var rejectUrl = '<?php echo route('order-request.reject', $order);?>';
-    var equipmentOutputUrl = '<?php echo route('order-request.output'); ?>';
+    var equipmentOutputUrl = '<?php echo route('order-request.output', $order); ?>';
     var orderIndexUrl = '<?php echo route('order.index');?>';
     var equipmentSelected = {};
     var templateBorrowedAmount = {};
@@ -207,14 +209,17 @@
         el: '.card',
         data: {
             order: order,
-            outputInfos: [],
+            equipment_ids: [],
             buttonDisabled: false,
             templateBorrowedAmount: templateBorrowedAmount,
             equipmentSelected: equipmentSelected
         },
         methods:{
-            acceptOrder: function(button) {
+            disableButton: function() {
                 this.buttonDisabled = true;
+            },
+            acceptOrder: function(button) {
+                this.disableButton();
                 axios.put(acceptUrl).then(res => {
                     console.log(res);
                     window.location.reload();
@@ -224,7 +229,7 @@
             },
             rejectOrder: function() {
                 console.log(orderIndexUrl);
-                this.buttonDisabled = true;
+                this.disableButton();
                 axios.put(rejectUrl)
                 .then(res => {
                     console.log(res);
@@ -236,28 +241,30 @@
             selectEquipment: function(equipment_id, template_id) {
                 console.log('select');
                 this.templateBorrowedAmount[template_id] ++;
-                this.outputInfos.push(equipment_id);
+                this.equipment_ids.push(equipment_id);
                 this.equipmentSelected[equipment_id] = true;
             },
             removeEquipment: function(equipment_id, template_id) {
                 console.log('remove');
                 this.templateBorrowedAmount[template_id] --;
-                const index = this.outputInfos.indexOf(equipment_id);
+                const index = this.equipment_ids.indexOf(equipment_id);
                 if (index > -1) {
-                    this.outputInfos.splice(index, 1);
+                    this.equipment_ids.splice(index, 1);
                 }
                 this.equipmentSelected[equipment_id] = false;
             },
             equipmentOutput: function() {
                 axios({
                     url: equipmentOutputUrl,
-                    method: 'post',
+                    method: 'put',
                     data: {
-                        equipments: this.outputInfos
+                        equipments: this.equipment_ids,
+                        templateBorrowedAmount: this.templateBorrowedAmount
                     }
                 })
                 .then(function (response) {
                     console.log(response);
+                    // window.location.reload();
                 })
                 .catch(function (error) {
                     console.log(error);

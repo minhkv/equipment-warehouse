@@ -17,8 +17,9 @@ class CreateOrderInfoTable extends Migration
             $table->id();
             $table->unsignedBigInteger('order_id');
             $table->unsignedBigInteger('equipment_id');
-            $table->string('status');
+            $table->integer('condition_received')->nullable();
             $table->dateTime('date_received')->nullable();
+            $table->integer('status')->default(0);
             $table->string('note')->nullable();
             $table->timestamps();
             

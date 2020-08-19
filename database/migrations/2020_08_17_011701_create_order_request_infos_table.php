@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateOrderRequestTable extends Migration
+class CreateOrderRequestInfosTable extends Migration
 {
     /**
      * Run the migrations.
@@ -17,7 +17,8 @@ class CreateOrderRequestTable extends Migration
             $table->id();
             $table->unsignedBigInteger('order_id');
             $table->unsignedBigInteger('template_id');
-            $table->integer('amount');
+            $table->unsignedInteger('amount');
+            $table->unsignedInteger('borrowed_amount')->default(0);
             $table->timestamps();
         });
         Schema::table('order_request_infos', function(Blueprint $table) {
