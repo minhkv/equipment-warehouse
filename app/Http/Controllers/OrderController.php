@@ -132,7 +132,7 @@ class OrderController extends Controller
                 'amount' => $template->amount,
             ]);            
         }
-        return redirect(route('order.index'));
+        return redirect(route('order.show', $order));
     }
 
     public function acceptOrderRequest(Order $order) {
@@ -148,27 +148,23 @@ class OrderController extends Controller
     public function equipmentOutput(Request $request, Order $order) {
         $equipment_ids = $request->input('equipments');
         $templateBorrowedAmount = $request->input('templateBorrowedAmount');
-        // foreach($templateBorrowedAmount as $template_id => $borrowedAmount) {
-        //     $order->orderRequestInfos()->find($template_id)->update([
-        //         'borrowed_amount': $borrowedAmount
-        //     ]);
-        // }
-        // dd($request->all());
-        // return $templateBorrowedAmount;
-        // try {
-            
-            foreach($equipment_ids as $equipment_id) {
-                $order->orderInfos()->create([
-                    'equipment_id' => $equipment_id,
-                ]);
-            }
-        // } catch(Exception $error) {
-        //     return $error;
-        // }
+        $order->update(['status' => 2]);
+        foreach($templateBorrowedAmount as $template_id => $borrowedAmount) {
+            $order->orderRequestInfos()->where('template_id', $template_id)->update([
+                'borrowed_amount' => $borrowedAmount
+            ]);
+        }
+
+        foreach($equipment_ids as $equipment_id) {
+            $order->orderInfos()->create([
+                'equipment_id' => $equipment_id,
+            ]);
+        }
         return $order->orderInfos;
     }
 
     public function equipmentReturn(Order $order) {
+        $order->update(['status' => 3]);
         return 'equipmentReturn';
     }
 }

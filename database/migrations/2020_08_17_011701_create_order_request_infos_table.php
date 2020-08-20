@@ -17,6 +17,7 @@ class CreateOrderRequestInfosTable extends Migration
             $table->id();
             $table->unsignedBigInteger('order_id');
             $table->unsignedBigInteger('template_id');
+            $table->unique(['order_id', 'template_id']);
             $table->unsignedInteger('amount');
             $table->unsignedInteger('borrowed_amount')->default(0);
             $table->timestamps();

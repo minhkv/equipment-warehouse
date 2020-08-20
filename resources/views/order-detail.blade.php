@@ -13,7 +13,7 @@
             <!-- <div class="row"> -->
                 <a href="{{ route('order.index') }}" class="btn btn-light mb-3" data-abc="true"> <i class="fa fa-chevron-left"></i> Quay lại</a>
             <!-- </div> -->
-            <h6>Đơn mượn: {{$order->id}} <span class="badge badge-primary">{{$order->status}}</span></h6>
+            <h3>Đơn mượn: {{$order->id}} {{$order->getStatus()}}</h3>
             <article class="card">
                 <div class="card-body row">
                     <div class="col"> <strong><i class="fa fa-user"></i> Người mượn:</strong> <br>{{$order->guest->name}} </div>
@@ -53,6 +53,9 @@
             <div class="row justify-content-center">
                 <h3>
                     @switch($order->status)
+                        @case(-1)
+                            Từ chối
+                            @break
                         @case(0)
                             Duyệt đơn
                             @break
@@ -69,102 +72,136 @@
                 </h3>
             </div>
             <ul class="row justify-content-center">
-                @if($order->status <= 1)
-                    @foreach($order->orderRequestInfos as $info)
-                    <li class="col-md-4">
-                        <figure class="itemside mb-3">
-                            <div class="aside"><img src="{{$info->template->image}}" class="img-sm border"></div>
-                            <figcaption class="info align-self-center">
-                                <p class="title">{{$info->template->name}}</p> 
-                                <span class="text-muted">Yêu cầu: {{ $info->amount }}</span><br>
-                                @if($order->status == 1)
-                                <span class="text-muted">Cho mượn: 
-                                    <input style="width: 50px;" disabled type="number" :value="getBorrowedAmount({{$info->template->id}})">
-                                </span>
-                                
-                                <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#addEquipment-{{$info->template->id}}">
-                                    <span class="fa fa-pencil"></span>
-                                </button>
+                @foreach($order->orderRequestInfos as $info)
+                <li class="col-md-4">
+                    <figure class="itemside mb-3">
+                        <div class="aside"><img src="{{$info->template->image}}" class="img-sm border"></div>
+                        <figcaption class="info align-self-center">
+                            <p class="title">{{$info->template->name}}</p> 
+                            <span class="text-muted">Yêu cầu: {{ $info->amount }}</span><br>
+                            @if($order->status >= 1)
+                            <span class="text-muted">Cho mượn: 
+                                <input style="width: 50px;" disabled type="number" :value="getBorrowedAmount({{$info->template->id}})">
+                            </span>
+                            
+                            <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#addEquipment-{{$info->template->id}}">
+                                <span class="fa fa-pencil"></span>
+                            </button>
 
-                                <!-- Modal -->
-                                <div class="modal fade" id="addEquipment-{{$info->template->id}}" tabindex="-1" role="dialog" aria-labelledby="addEquipmentLabel-{{$info->template->id}}" aria-hidden="true">
-                                    <div class="modal-dialog modal-xl" role="document">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h5 class="modal-title" id="addEquipmentLabel-{{$info->template->id}}">Thêm thiết bị {{$info->template->id}}</h5>
-                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                    <span aria-hidden="true">&times;</span>
-                                                </button>
-                                            </div>
-                                            <div class="modal-body">
-                                                <form class="py-2 my-lg-0 px-2">
-                                                    <div class="input-group">
-                                                        <input class="form-control mr-sm-2" type="search" placeholder="Tìm kiếm" aria-label="search" aria-describedby="basic-addon2">
-                                                        <button class="btn btn-outline-primary my-2 my-sm-0" type="submit"><span class="fa fa-search"></span></button>
-                                                    </div>
-                                                </form>
-                                                <table class="table">
-                                                    <thead class="thead-light">
-                                                        <tr>
-                                                            <th scope="col">Mã</th>
-                                                            <th scope="col">Kích thước</th>
-                                                            <th scope="col">Giá nhập</th>
-                                                            <th scope="col">Nhà cung cấp</th>
-                                                            <th scope="col">Vị trí</th>
-                                                            <th scope="col">Tình trạng</th>
-                                                            <th scope="col">Ghi chú</th>
-                                                            <th scope="col"></th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        @foreach($info->template->equipments as $equipment)
-                                                        <tr>
-                                                            <th class="align-middle" scope="row">{{ $equipment->id }}</th>
-                                                            <td class="align-middle">{{ $equipment->size}}</td>
-                                                            <td class="align-middle">{{ $equipment->price }}</td>
-                                                            <td class="align-middle">{{ $equipment->supplier->name }}</td>
-                                                            <td class="align-middle">{{ $equipment->location }}</td>
-                                                            <td class="align-middle">
-                                                                <div>
-                                                                    <span class="fa fa-star {{$equipment->condition >= 1 ? 'checked':''}}"></span>
-                                                                    <span class="fa fa-star {{$equipment->condition >= 2 ? 'checked':''}}"></span>
-                                                                    <span class="fa fa-star {{$equipment->condition >= 3 ? 'checked':''}}"></span>
-                                                                    <span class="fa fa-star {{$equipment->condition >= 4 ? 'checked':''}}"></span>
-                                                                    <span class="fa fa-star {{$equipment->condition >= 5 ? 'checked':''}}"></span>
-                                                                </div>
-                                                            </td>
-                                                            <td>{{$equipment->note}}</td>
-                                                            <td class="align-middle">
-                                                                <button :disabled="isEquipmentSelected({{$equipment->id}})" @click="selectEquipment({{$equipment->id}}, {{$info->template->id}})" class="btn btn-success btn-sm"><span class="fa fa-plus"></span></button>
-                                                                <button :disabled="!isEquipmentSelected({{$equipment->id}})" @click="removeEquipment({{$equipment->id}}, {{$info->template->id}})" class="btn btn-danger btn-sm"><span class="fa fa-minus"></span></button>
-                                                            </td>
-                                                        </tr>
-                                                        @endforeach
-                                                    </tbody>
-                                                </table>
-                                            </div>
-
+                            <!-- Modal -->
+                            <div class="modal fade" id="addEquipment-{{$info->template->id}}" tabindex="-1" role="dialog" aria-labelledby="addEquipmentLabel-{{$info->template->id}}" aria-hidden="true">
+                                <div class="modal-dialog modal-xl" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            @if($order->status <= 1)
+                                            <h5 class="modal-title" id="addEquipmentLabel-{{$info->template->id}}">Thêm thiết bị {{$info->template->id}}</h5>
+                                            @else
+                                            <h5 class="modal-title" id="verifyEquipmentLabel-{{$info->template->id}}">Kiểm thiết bị {{$info->template->id}}</h5>
+                                            @endif
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
                                         </div>
+                                        <div class="modal-body">
+                                            <form class="py-2 my-lg-0 px-2">
+                                                <div class="input-group">
+                                                    <input class="form-control mr-sm-2" type="search" placeholder="Tìm kiếm" aria-label="search" aria-describedby="basic-addon2">
+                                                    <button class="btn btn-outline-primary my-2 my-sm-0" type="submit"><span class="fa fa-search"></span></button>
+                                                </div>
+                                            </form>
+                                            @if($order->status <= 1)
+                                            <table class="table">
+                                                <thead class="thead-light">
+                                                    <tr>
+                                                        <th scope="col">Mã</th>
+                                                        <th scope="col">Kích thước</th>
+                                                        <th scope="col">Giá nhập</th>
+                                                        <th scope="col">Nhà cung cấp</th>
+                                                        <th scope="col">Vị trí</th>
+                                                        <th scope="col">Tình trạng</th>
+                                                        <th scope="col">Ghi chú</th>
+                                                        <th scope="col"></th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @foreach($info->template->equipments as $equipment)
+                                                    <tr>
+                                                        <th class="align-middle" scope="row">{{ $equipment->id }}</th>
+                                                        <td class="align-middle">{{ $equipment->size}}</td>
+                                                        <td class="align-middle">{{ $equipment->price }}</td>
+                                                        <td class="align-middle">{{ $equipment->supplier->name }}</td>
+                                                        <td class="align-middle">{{ $equipment->location }}</td>
+                                                        <td class="align-middle">
+                                                            <div>
+                                                                <span class="fa fa-star {{$equipment->condition >= 1 ? 'checked':''}}"></span>
+                                                                <span class="fa fa-star {{$equipment->condition >= 2 ? 'checked':''}}"></span>
+                                                                <span class="fa fa-star {{$equipment->condition >= 3 ? 'checked':''}}"></span>
+                                                                <span class="fa fa-star {{$equipment->condition >= 4 ? 'checked':''}}"></span>
+                                                                <span class="fa fa-star {{$equipment->condition >= 5 ? 'checked':''}}"></span>
+                                                            </div>
+                                                        </td>
+                                                        <td>{{$equipment->note}}</td>
+                                                        <td class="align-middle">
+                                                            <button :disabled="isEquipmentSelected({{$equipment->id}})" @click="selectEquipment({{$equipment->id}}, {{$info->template->id}})" class="btn btn-success btn-sm"><span class="fa fa-plus"></span></button>
+                                                            <button :disabled="!isEquipmentSelected({{$equipment->id}})" @click="removeEquipment({{$equipment->id}}, {{$info->template->id}})" class="btn btn-danger btn-sm"><span class="fa fa-minus"></span></button>
+                                                        </td>
+                                                    </tr>
+                                                    @endforeach
+                                                </tbody>
+                                            </table>
+                                            @else
+                                            <table class="table">
+                                                <thead class="thead-light">
+                                                    <tr>
+                                                        <th class="text-center" scope="col" style="width: 5%;">Mã</th>
+                                                        <th class="text-center" scope="col" style="width: 20%;">Tình trạng trước khi mượn</th>
+                                                        <th class="text-center" scope="col" style="width: 30%;">Tình trạng sau khi mượn</th>
+                                                        <th class="text-center" scope="col" style="width: 30%;">Ghi chú</th>
+                                                        <th class="text-center" scope="col"></th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @foreach($info->template->equipments as $equipment)
+                                                    <tr>
+                                                        <th class="text-center"  class="align-middle" scope="row">{{ $equipment->id }}</th>
+                                                        <td class="text-center"  class="align-middle">
+                                                            <div>
+                                                                <span class="fa fa-star {{$equipment->condition >= 1 ? 'checked':''}}"></span>
+                                                                <span class="fa fa-star {{$equipment->condition >= 2 ? 'checked':''}}"></span>
+                                                                <span class="fa fa-star {{$equipment->condition >= 3 ? 'checked':''}}"></span>
+                                                                <span class="fa fa-star {{$equipment->condition >= 4 ? 'checked':''}}"></span>
+                                                                <span class="fa fa-star {{$equipment->condition >= 5 ? 'checked':''}}"></span>
+                                                            </div>
+                                                        </td>
+                                                        <td class="text-center" class="align-middle">
+                                                            <x-star-input id="condition-{{$equipment->id}}" name="condition-received-{{$equipment->id}}" value='0' />
+                                                        </td>
+                                                        <td class="text-center" >
+                                                            <textarea class="form-control" name="note" cols="10"></textarea>
+                                                        </td>
+                                                        <td class="align-middle">
+                                                            <!-- Material checked -->
+                                                            <div class="form-check">
+                                                                <input type="checkbox" class="form-check-input" id="materialChecked2" checked>
+                                                                <label class="form-check-label" for="materialChecked2">Material checked</label>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                    @endforeach
+                                                </tbody>
+                                            </table>
+                                            @endif
+                                        </div>
+
                                     </div>
                                 </div>
-                                @endif
+                            </div>
+                            @endif
 
-                            </figcaption>
-                        </figure>
-                    </li>
-                    @endforeach
-                @else
-                    @foreach($order->orderInfos as $info)
-                    <li class="col-md-4">
-                        <figure class="itemside mb-3">
-                            <div class="aside"><img src="{{$info->template->image}}" class="img-sm border"></div>
-                            <figcaption class="info align-self-center">
-                                <p class="title">{{$info->template->name}}</p> <span class="text-muted">Số lượng: {{ $info->amount }} </span>
-                            </figcaption>
-                        </figure>
-                    </li>
-                    @endforeach
-                @endif
+                        </figcaption>
+                    </figure>
+                </li>
+                @endforeach
             </ul>
             <hr>
             <div class="row justify-content-center">
@@ -199,7 +236,7 @@
     var equipmentSelected = {};
     var templateBorrowedAmount = {};
     order.order_request_infos.forEach(function(info) {
-        templateBorrowedAmount[info.template.id] = 0;
+        templateBorrowedAmount[info.template.id] = info.borrowed_amount;
         info.template.equipments.forEach(function(equipment) {
             equipmentSelected[equipment.id] = false;
         });
@@ -254,6 +291,7 @@
                 this.equipmentSelected[equipment_id] = false;
             },
             equipmentOutput: function() {
+                this.disableButton();
                 axios({
                     url: equipmentOutputUrl,
                     method: 'put',
@@ -264,7 +302,7 @@
                 })
                 .then(function (response) {
                     console.log(response);
-                    // window.location.reload();
+                    window.location.reload();
                 })
                 .catch(function (error) {
                     console.log(error);

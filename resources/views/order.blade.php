@@ -20,15 +20,6 @@
                             </div>
                         </div>
                         <div class="row py-4">
-                            <div class="dropdown">
-                                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    Loại đơn
-                                </button>
-                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                    <a class="dropdown-item" href="#">Đơn nhập</a>
-                                    <a class="dropdown-item" href="#">Đơn mượn</a>
-                                </div>
-                            </div>
                             <div class="dropdown ml-4">
                                 <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     Lọc theo
@@ -80,7 +71,7 @@
                                         @endif
                                             
                                         </td>
-                                        <td class="align-middle"><p class="btn btn-primary">{{$order->status}}</p></td>
+                                        <td class="align-middle"><h5>{{$order->getStatus()}}</h5></td>
                                         <td class="align-middle">
                                             <a href="{{ route('order.show', $order) }}" class="btn btn-primary"><span class="fa fa-pencil" /></a>
                                             <button type="button" class="btn btn-danger" 

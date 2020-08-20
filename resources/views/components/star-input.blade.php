@@ -11,7 +11,9 @@
     </div>
 </div>
 <style>
-
+    .checked {
+    color: orange;
+    }
     .starrating > input {display: none;}  /* Remove radio buttons */
 
     .starrating > label:before { 
