@@ -17,7 +17,7 @@ class EquipmentTemplateController extends Controller
      */
     public function index()
     {
-        $equipmentTemplates = EquipmentTemplate::all();
+        $equipmentTemplates = EquipmentTemplate::with('equipments')->get();
         $categories = Category::all();
         return view('equipment')->with([
             'equipmentTemplates' => $equipmentTemplates,
@@ -69,6 +69,10 @@ class EquipmentTemplateController extends Controller
     public function show(EquipmentTemplate $equipmentTemplate)
     {
         $suppliers = Supplier::all();
+        $equipmentTemplate->load([
+            'equipments',
+            'equipments.supplier'
+            ]);
         return view('equipment-detail')->with([
             'equipmentTemplate' => $equipmentTemplate,
             'suppliers' => $suppliers

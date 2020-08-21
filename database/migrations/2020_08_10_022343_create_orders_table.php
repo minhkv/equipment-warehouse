@@ -24,7 +24,7 @@ class CreateOrdersTable extends Migration
             $table->dateTime('date_completed')->nullable();
             $table->dateTime('due_date')->nullable();
             $table->string('reason')->nullable();
-            $table->integer('status')->default('0');
+            $table->integer('status')->default('0'); // -1: reject, 0: create, 1: accept, 2: output, 3: return, 4: complete
             $table->string('note')->nullable();
             $table->timestamps();
         });

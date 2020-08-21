@@ -51,3 +51,4 @@ Route::post('order-request', 'OrderController@storeRequest')->name('order-reques
 Route::put('order-request/{order}/accept', 'OrderController@acceptOrderRequest')->name('order-request.accept');
 Route::put('order-request/{order}/reject', 'OrderController@rejectOrderRequest')->name('order-request.reject');
 Route::put('order-request/{order}/output', 'OrderController@equipmentOutput')->name('order-request.output');
+Route::put('order-request/{order}/return', 'OrderController@equipmentReturn')->name('order-request.return');

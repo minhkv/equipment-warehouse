@@ -20,7 +20,8 @@ class CreateEquipmentsTable extends Migration
             $table->unsignedBigInteger('supplier_id')->default('1');
             $table->string('size')->nullable();
             $table->string('location')->nullable();
-            $table->enum('status', ['available', 'working', 'losing']);
+            // $table->enum('status', ['available', 'working', 'losing']);
+            $table->integer('status')->default(1); // 0: losing, 1: available, 2: working
             $table->integer('condition');
             $table->text('note')->nullable();
             $table->dateTime('input_date')->nullable();

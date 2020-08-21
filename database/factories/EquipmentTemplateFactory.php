@@ -20,13 +20,13 @@ $factory->define(EquipmentTemplate::class, function (Faker $faker) {
         ]),
         'category_id' => $faker->numberBetween($min=1, $max=5),
         'image' => $faker->randomElement([
-            'storage\img\icons8-angularjs-144.png',
-            'storage\img\icons8-c-programming-96.png',
-            'storage\img\icons8-nodejs-144.png',
-            'storage\img\sony-handycam.webp',
-            'storage\img\camera-hanh-dong-xiaomi-action-4k(2).jpg',
-            'storage\img\sony-hxrnx100-he-ntsc.jpg',
-            'storage\img\sony-hdrcx405e-mau-den(2).jpg'
+            join(DIRECTORY_SEPARATOR, ['/storage', 'img', 'icons8-angularjs-144.png']),
+            join(DIRECTORY_SEPARATOR, ['/storage', 'img', 'icons8-c-programming-96.png']),
+            join(DIRECTORY_SEPARATOR, ['/storage', 'img', 'icons8-nodejs-144.png']),
+            join(DIRECTORY_SEPARATOR, ['/storage', 'img', 'sony-handycam.webp']),
+            join(DIRECTORY_SEPARATOR, ['/storage', 'img', 'camera-hanh-dong-xiaomi-action-4k(2).jpg']),
+            join(DIRECTORY_SEPARATOR, ['/storage', 'img', 'sony-hxrnx100-he-ntsc.jpg']),
+            join(DIRECTORY_SEPARATOR, ['/storage', 'img', 'sony-hdrcx405e-mau-den(2).jpg'])
         ]),
     ];
 });

@@ -15,13 +15,12 @@ class CreateOrderInfoTable extends Migration
     {
         Schema::create('order_info', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('order_id');
             $table->unsignedBigInteger('request_id');
             $table->unsignedBigInteger('equipment_id');
-            $table->unique(['order_id', 'equipment_id']);
+            $table->unique(['request_id', 'equipment_id']);
             $table->integer('condition_received')->nullable();
             $table->dateTime('date_received')->nullable();
-            $table->integer('status')->default(0);
+            $table->integer('status')->default(0); //0: working, 1: received, 2: lost
             $table->string('note')->nullable();
             $table->timestamps();
             

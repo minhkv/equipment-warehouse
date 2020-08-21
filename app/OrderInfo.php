@@ -3,7 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-use App\EquipmentTemplate;
+use App\Equipment;
 
 class OrderInfo extends Model
 {
@@ -14,7 +14,7 @@ class OrderInfo extends Model
         'date_received',
         'note',
     ];
-    public function template() {
-        return $this->belongsTo(EquipmentTemplate::class);
+    public function equipment() {
+        return $this->belongsTo(Equipment::class);
     }
 }

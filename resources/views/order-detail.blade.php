@@ -74,19 +74,29 @@
             <ul class="row justify-content-center">
                 @foreach($order->orderRequestInfos as $info)
                 <li class="col-md-4">
-                    <figure class="itemside mb-3">
+                    <figure class="itemside mb-3 border">
                         <div class="aside"><img src="{{$info->template->image}}" class="img-sm border"></div>
                         <figcaption class="info align-self-center">
-                            <p class="title">{{$info->template->name}}</p> 
-                            <span class="text-muted">Yêu cầu: {{ $info->amount }}</span><br>
+                            <h5 class="title">{{$info->template->name}}</h5>
+                            @if($order->status <= 1)
+                            <div class="form-group row">
+                                <label for="borrowed-amount-{{$info->template->id}}" class="col-sm-6 col-form-label">Yêu cầu</label>
+                                <div class="col-sm-4">
+                                    <input class="form-control" style="width: 50px;" disabled type="number" value="{{ $info->amount }}">
+                                </div>
+                            </div>
+                            @endif
                             @if($order->status >= 1)
-                            <span class="text-muted">Cho mượn: 
-                                <input style="width: 50px;" disabled type="number" :value="getBorrowedAmount({{$info->template->id}})">
-                            </span>
+                            <div class="form-group row">
+                                <label for="borrowed-amount-{{$info->template->id}}" class="col-sm-6 col-form-label">Cho mượn</label>
+                                <div class="col-sm-4">
+                                    <input class="form-control" style="width: 50px;" disabled type="number" :value="getBorrowedAmount({{$info->template->id}})">
+                                </div>
+                                <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#addEquipment-{{$info->template->id}}">
+                                    <span class="fa fa-pencil"></span>
+                                </button>
+                            </div>
                             
-                            <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#addEquipment-{{$info->template->id}}">
-                                <span class="fa fa-pencil"></span>
-                            </button>
 
                             <!-- Modal -->
                             <div class="modal fade" id="addEquipment-{{$info->template->id}}" tabindex="-1" role="dialog" aria-labelledby="addEquipmentLabel-{{$info->template->id}}" aria-hidden="true">
@@ -155,35 +165,41 @@
                                                     <tr>
                                                         <th class="text-center" scope="col" style="width: 5%;">Mã</th>
                                                         <th class="text-center" scope="col" style="width: 20%;">Tình trạng trước khi mượn</th>
-                                                        <th class="text-center" scope="col" style="width: 30%;">Tình trạng sau khi mượn</th>
-                                                        <th class="text-center" scope="col" style="width: 30%;">Ghi chú</th>
-                                                        <th class="text-center" scope="col"></th>
+                                                        <th class="text-center" scope="col" style="width: 25%;">Tình trạng sau khi mượn</th>
+                                                        <th class="text-center" scope="col" style="width: 25%;">Ghi chú</th>
+                                                        <th class="text-center" scope="col">Đã nhận</th>
+                                                        <th class="text-center" scope="col">Thất lạc</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    @foreach($info->template->equipments as $equipment)
+                                                    @foreach($info->orderInfos as $orderInfo)
                                                     <tr>
-                                                        <th class="text-center"  class="align-middle" scope="row">{{ $equipment->id }}</th>
+                                                        <th class="text-center"  class="align-middle" scope="row">{{ $orderInfo->equipment->id }}</th>
                                                         <td class="text-center"  class="align-middle">
                                                             <div>
-                                                                <span class="fa fa-star {{$equipment->condition >= 1 ? 'checked':''}}"></span>
-                                                                <span class="fa fa-star {{$equipment->condition >= 2 ? 'checked':''}}"></span>
-                                                                <span class="fa fa-star {{$equipment->condition >= 3 ? 'checked':''}}"></span>
-                                                                <span class="fa fa-star {{$equipment->condition >= 4 ? 'checked':''}}"></span>
-                                                                <span class="fa fa-star {{$equipment->condition >= 5 ? 'checked':''}}"></span>
+                                                                <span class="fa fa-star {{$orderInfo->equipment->condition >= 1 ? 'checked':''}}"></span>
+                                                                <span class="fa fa-star {{$orderInfo->equipment->condition >= 2 ? 'checked':''}}"></span>
+                                                                <span class="fa fa-star {{$orderInfo->equipment->condition >= 3 ? 'checked':''}}"></span>
+                                                                <span class="fa fa-star {{$orderInfo->equipment->condition >= 4 ? 'checked':''}}"></span>
+                                                                <span class="fa fa-star {{$orderInfo->equipment->condition >= 5 ? 'checked':''}}"></span>
                                                             </div>
                                                         </td>
                                                         <td class="text-center" class="align-middle">
-                                                            <x-star-input id="condition-{{$equipment->id}}" name="condition-received-{{$equipment->id}}" value='0' />
+                                                            <x-star-input-condition id="condition-{{$orderInfo->equipment->id}}" name="condition-received-{{$orderInfo->equipment->id}}" value='{{ $orderInfo->equipment->condition }}' />
                                                         </td>
                                                         <td class="text-center" >
                                                             <textarea class="form-control" name="note" cols="10"></textarea>
                                                         </td>
-                                                        <td class="align-middle">
+                                                        <td class="align-middle text-center pb-5">
                                                             <!-- Material checked -->
                                                             <div class="form-check">
-                                                                <input type="checkbox" class="form-check-input" id="materialChecked2" checked>
-                                                                <label class="form-check-label" for="materialChecked2">Material checked</label>
+                                                                <input :disabled="equipmentLost[{{$orderInfo->equipment->id}}]" type="checkbox" class="form-check-input" v-model="equipmentReceived[{{$orderInfo->equipment->id}}]">
+                                                            </div>
+                                                        </td>
+                                                        <td class="align-middle text-center pb-5">
+                                                            <!-- Material checked -->
+                                                            <div class="form-check">
+                                                                <input :disabled="equipmentReceived[{{$orderInfo->equipment->id}}]" type="checkbox" class="form-check-input" v-model="equipmentLost[{{$orderInfo->equipment->id}}]">
                                                             </div>
                                                         </td>
                                                     </tr>
@@ -197,7 +213,20 @@
                                 </div>
                             </div>
                             @endif
-
+                            @if($order->status >= 2)
+                            <div class="form-group row">
+                                <label for="received-amount-{{$info->template->id}}" class="col-sm-6 col-form-label">Đã nhận</label>
+                                <div class="col-sm-4">
+                                <input class="form-control" id="received-amount-{{$info->template->id}}" style="width: 50px;" disabled type="number" :value="getReceivedAmount({{$info->template->id}})">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="lost-amount-{{$info->template->id}}" class="col-sm-6 col-form-label">Thất lạc</label>
+                                <div class="col-sm-4">
+                                <input class="form-control" id="lost-amount-{{$info->template->id}}" style="width: 50px;" disabled type="number" :value="getLostAmount({{$info->template->id}})">
+                                </div>
+                            </div>
+                            @endif
                         </figcaption>
                     </figure>
                 </li>
@@ -232,24 +261,42 @@
     var acceptUrl = '<?php echo route('order-request.accept', $order);?>';
     var rejectUrl = '<?php echo route('order-request.reject', $order);?>';
     var equipmentOutputUrl = '<?php echo route('order-request.output', $order); ?>';
+    var equipmentReturnUrl = '<?php echo route('order-request.return', $order); ?>';
     var orderIndexUrl = '<?php echo route('order.index');?>';
     var equipmentSelected = {};
+    var equipmentReceived = {};
+    var equipmentLost = {};
+    var equipment_ids = [];
     var templateBorrowedAmount = {};
+    var orderRequestInfos = {};
     order.order_request_infos.forEach(function(info) {
-        templateBorrowedAmount[info.template.id] = info.borrowed_amount;
+        info.order_infos.forEach(function(order_info) {
+            order_info.condition_received = order_info.equipment.condition;
+            equipmentSelected[order_info.equipment_id] = true;
+            equipmentReceived[order_info.equipment_id] = (order_info.status == 1);
+            equipmentLost[order_info.equipment_id] = (order_info.status == 2);
+            equipment_ids.push(order_info.equipment_id);
+        });
+        orderRequestInfos[info.template.id] = info;
+        orderRequestInfos[info.template.id]['order_infos'] = info.order_infos;
+        templateBorrowedAmount[info.template.id] = info.order_infos.length;
         info.template.equipments.forEach(function(equipment) {
             equipmentSelected[equipment.id] = false;
         });
+        
     });
     
     var app = new Vue({
         el: '.card',
         data: {
             order: order,
-            equipment_ids: [],
+            equipment_ids: equipment_ids,
             buttonDisabled: false,
             templateBorrowedAmount: templateBorrowedAmount,
-            equipmentSelected: equipmentSelected
+            equipmentSelected: equipmentSelected,
+            equipmentReceived: equipmentReceived,
+            equipmentLost: equipmentLost,
+            orderRequestInfos: orderRequestInfos
         },
         methods:{
             disableButton: function() {
@@ -277,6 +324,9 @@
             },
             selectEquipment: function(equipment_id, template_id) {
                 console.log('select');
+                this.orderRequestInfos[template_id].order_infos.push({
+                    'equipment_id': equipment_id
+                });
                 this.templateBorrowedAmount[template_id] ++;
                 this.equipment_ids.push(equipment_id);
                 this.equipmentSelected[equipment_id] = true;
@@ -297,7 +347,8 @@
                     method: 'put',
                     data: {
                         equipments: this.equipment_ids,
-                        templateBorrowedAmount: this.templateBorrowedAmount
+                        templateBorrowedAmount: this.templateBorrowedAmount,
+                        orderRequestInfos: this.orderRequestInfos
                     }
                 })
                 .then(function (response) {
@@ -308,16 +359,89 @@
                     console.log(error);
                 });
             },
+            updateOrderInfoStatus: function() {
+                for(i in this.orderRequestInfos) {
+                    for(j in this.orderRequestInfos[i].order_infos) {
+                        var orderInfo = this.orderRequestInfos[i].order_infos[j];
+                        orderInfo.status = this.getEquipmentStatus(orderInfo.equipment_id);
+                    }
+                }
+            },
+            equipmentCheck: function() {
+                for(i in this.orderRequestInfos) {
+                    for(j in this.orderRequestInfos[i].order_infos) {
+                        var orderInfo = this.orderRequestInfos[i].order_infos[j];
+                        if(this.getEquipmentStatus(orderInfo.equipment.id) == 0) {
+                            alert('Bạn chưa chọn trạng thái thiết bị ' + this.orderRequestInfos[i].template.name + ' có mã: ' + orderInfo.equipment.id);
+                            return false;
+                        }
+                    }
+                }
+                return true;
+            },
             equipmentReturn: function() {
-
+                console.log('return');
+                if(!this.equipmentCheck()) return;
+                this.updateOrderInfoStatus();
+                this.disableButton();
+                
+                axios({
+                    url: equipmentReturnUrl,
+                    method: 'put',
+                    data: {
+                        orderRequestInfos: this.orderRequestInfos
+                    }
+                })
+                .then(function (response) {
+                    console.log(response);
+                    window.location.reload();
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
             },
-            isEquipmentSelected: function(id) {
-                return this.equipmentSelected[id];
+            getEquipmentStatus: function(equipment_id) {
+                if(this.equipmentReceived[equipment_id])
+                    return 1;
+                if(this.equipmentLost[equipment_id])
+                    return 2;
+                return 0;
             },
-            getBorrowedAmount(template_id) {
+            isEquipmentSelected: function(equipment_id) {
+                return this.equipmentSelected[equipment_id];
+            },
+            getBorrowedAmount: function(template_id) {
                 return this.templateBorrowedAmount[template_id];
+            },
+            getReceivedAmount: function(template_id) {
+                total = 0;
+                for(i in this.orderRequestInfos[template_id].order_infos) {
+                    var orderInfo = this.orderRequestInfos[template_id].order_infos[i];
+                    if(this.getEquipmentStatus(orderInfo.equipment.id) == 1) {
+                        total += 1;
+                    }
+                }
+                
+                return total;
+            },
+            getLostAmount: function(template_id) {
+                total = 0;
+                for(i in this.orderRequestInfos[template_id].order_infos) {
+                    var orderInfo = this.orderRequestInfos[template_id].order_infos[i];
+                    if(this.getEquipmentStatus(orderInfo.equipment.id) == 2) {
+                        total += 1;
+                    }
+                }
+                
+                return total;
             }
         }
     });
+    function normalText(id, selected) {
+        document.getElementById(id).innerHTML = "Đánh giá";
+    }
+    function changeText(id, text) {
+        document.getElementById(id).innerHTML = text;
+    }
 </script>
 @endsection

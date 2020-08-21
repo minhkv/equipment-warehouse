@@ -9,6 +9,7 @@ use App\EquipmentTemplate;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use DateTime;
+use Carbon\Carbon;
 
 class OrderController extends Controller
 {
@@ -19,7 +20,11 @@ class OrderController extends Controller
      */
     public function index()
     {
-        $orders = Order::all();
+        $orders = Order::with([
+            'orderRequestInfos', 
+            'orderRequestInfos.orderInfos', 
+            'guest'
+            ])->get();
         return view('order')->with([
             'orders' => $orders
         ]);
@@ -33,7 +38,7 @@ class OrderController extends Controller
     public function create()
     {
         $users = User::all();
-        $equipmentTemplates = EquipmentTemplate::all();
+        $equipmentTemplates = EquipmentTemplate::with(['equipments'])->get();
         $channels = Channel::all();
         $stocker_id = Auth::user()->id;
         return view('create-order')->with([
@@ -72,13 +77,15 @@ class OrderController extends Controller
     public function show(Order $order)
     {
         $selectedTemplates = [];
-        foreach($order->orderRequestInfos as $info) {
-            $selectedTemplates[] = $info->template;
-            $a = $info->template->equipments;
-        }
+        $order->orderRequestInfos->load([
+            'template', 
+            'orderInfos', 
+            'orderInfos.equipment',
+            'template.equipments',
+            'template.equipments.supplier',
+            ]);
         return view('order-detail')->with([
             'order' => $order,
-            'selectedTemplates' => $selectedTemplates
         ]);
     }
 
@@ -136,7 +143,10 @@ class OrderController extends Controller
     }
 
     public function acceptOrderRequest(Order $order) {
-        $order->update(['status' => 1]);
+        $order->update([
+            'status' => 1,
+            'date_approved' => date('Y-m-d H:i:s')
+            ]);
         return 'accept';
     }
     
@@ -148,23 +158,40 @@ class OrderController extends Controller
     public function equipmentOutput(Request $request, Order $order) {
         $equipment_ids = $request->input('equipments');
         $templateBorrowedAmount = $request->input('templateBorrowedAmount');
-        $order->update(['status' => 2]);
-        foreach($templateBorrowedAmount as $template_id => $borrowedAmount) {
-            $order->orderRequestInfos()->where('template_id', $template_id)->update([
-                'borrowed_amount' => $borrowedAmount
+        $orderRequestInfos = $request->input('orderRequestInfos');
+        $order->update([
+            'status' => 2,
+            'date_output' => date('Y-m-d H:i:s')
             ]);
+        foreach($order->orderRequestInfos as $orderRequestInfoModel) {
+            $template_id = $orderRequestInfoModel->template_id;
+            $orderRequestInfoModel->update([
+                'borrowed_amount' => $templateBorrowedAmount[$template_id]
+            ]);
+            foreach($orderRequestInfos[$template_id]['order_infos'] as $orderInfo){
+                $orderRequestInfoModel->orderInfos()->create([
+                    'equipment_id' => $orderInfo['equipment_id']
+                ]);
+            }
         }
 
-        foreach($equipment_ids as $equipment_id) {
-            $order->orderInfos()->create([
-                'equipment_id' => $equipment_id,
-            ]);
-        }
-        return $order->orderInfos;
+        return json_encode($order->orderRequestInfos);
     }
 
-    public function equipmentReturn(Order $order) {
-        $order->update(['status' => 3]);
+    public function equipmentReturn(Request $request, Order $order) {
+        $orderRequestInfos = $request->input('orderRequestInfos');
+        $order->update([
+            'status' => 4,
+            'date_received' => date('Y-m-d H:i:s')
+            ]);
+        foreach($order->orderRequestInfos as $orderRequestInfoModel) {
+            $template_id = $orderRequestInfoModel->template_id;
+            foreach($orderRequestInfos[$template_id]['order_infos'] as $orderInfo){
+                $orderRequestInfoModel->orderInfos()->where('id', $orderInfo['id'])->update([
+                    'status' => $orderInfo['status']
+                ]);
+            }
+        }
         return 'equipmentReturn';
     }
 }

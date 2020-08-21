@@ -12,10 +12,10 @@ class EquipmentTemplateSeeder extends Seeder
      */
     public function run()
     {
-        $templates = factory(EquipmentTemplate::class, 5)
+        $templates = factory(EquipmentTemplate::class, 10)
                     ->create()
                     ->each(function($template) {
-                        $template->equipments()->createMany(factory(Equipment::class, 3)->make()->toArray());
+                        $template->equipments()->createMany(factory(Equipment::class, 7)->make()->toArray());
                     });
     }
 }

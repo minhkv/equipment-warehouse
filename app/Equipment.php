@@ -21,4 +21,14 @@ class Equipment extends Model
     public function supplier() {
         return $this->belongsTo(Supplier::class);
     }
+    public function getStatusAttribute($value) {
+        switch($value) {
+            case 0:
+                return "Thất lạc";
+            case 1:
+                return "Sẵn sàng";
+            case 2:
+                return "Đang cho mượn";
+        }
+    }
 }

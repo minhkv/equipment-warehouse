@@ -38,8 +38,10 @@ class Order extends Model
     }
     public function getTotalBorrowedAmount() {
         $total = 0;
-        foreach($this->orderInfos as $info) {
-            $total += 1;
+        foreach($this->orderRequestInfos as $orderRequestInfo) {
+            foreach($orderRequestInfo->orderInfos as $orderInfo) {
+                $total += 1;
+            }
         }
         return $total;
     }
