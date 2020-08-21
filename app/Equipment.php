@@ -21,14 +21,17 @@ class Equipment extends Model
     public function supplier() {
         return $this->belongsTo(Supplier::class);
     }
-    public function getStatusAttribute($value) {
-        switch($value) {
+    public function getStatusPretty() {
+        switch($this->status) {
             case 0:
-                return "Thất lạc";
+                echo '<span class="badge badge-pill badge-danger">Thất lạc</span>';
+                return;
             case 1:
-                return "Sẵn sàng";
+                echo '<span class="badge badge-pill badge-success">Sẵn sàng</span>';
+                return;
             case 2:
-                return "Đang cho mượn";
+                echo '<span class="badge badge-pill badge-primary">Đang cho mượn</span>';
+                return;
         }
     }
 }

@@ -6,6 +6,7 @@ use App\Order;
 use App\Channel;
 use App\User;
 use App\EquipmentTemplate;
+use App\Equipment;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use DateTime;
@@ -151,7 +152,7 @@ class OrderController extends Controller
     }
     
     public function rejectOrderRequest(Order $order) {
-        $order->update(['status' => -1]);
+        $order->update(['status' => -1]); //reject
         return 'reject';
     }
 
@@ -160,7 +161,7 @@ class OrderController extends Controller
         $templateBorrowedAmount = $request->input('templateBorrowedAmount');
         $orderRequestInfos = $request->input('orderRequestInfos');
         $order->update([
-            'status' => 2,
+            'status' => 2, //output
             'date_output' => date('Y-m-d H:i:s')
             ]);
         foreach($order->orderRequestInfos as $orderRequestInfoModel) {
@@ -169,24 +170,29 @@ class OrderController extends Controller
                 'borrowed_amount' => $templateBorrowedAmount[$template_id]
             ]);
             foreach($orderRequestInfos[$template_id]['order_infos'] as $orderInfo){
+                Equipment::where('id', $orderInfo['equipment_id'])->update([
+                    'status' => 2
+                ]);
                 $orderRequestInfoModel->orderInfos()->create([
                     'equipment_id' => $orderInfo['equipment_id']
                 ]);
             }
         }
-
-        return json_encode($order->orderRequestInfos);
+        return "equipmentOutput";
     }
 
     public function equipmentReturn(Request $request, Order $order) {
         $orderRequestInfos = $request->input('orderRequestInfos');
         $order->update([
-            'status' => 4,
+            'status' => 4, //complete
             'date_received' => date('Y-m-d H:i:s')
             ]);
         foreach($order->orderRequestInfos as $orderRequestInfoModel) {
             $template_id = $orderRequestInfoModel->template_id;
             foreach($orderRequestInfos[$template_id]['order_infos'] as $orderInfo){
+                Equipment::where('id', $orderInfo['equipment_id'])->update([
+                    'status' => $orderInfo['status']
+                ]);
                 $orderRequestInfoModel->orderInfos()->where('id', $orderInfo['id'])->update([
                     'status' => $orderInfo['status']
                 ]);

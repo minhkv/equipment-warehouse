@@ -65,7 +65,7 @@
                         @case(2)
                             Kiểm đồ
                             @break
-                        @case(3)
+                        @case(4)
                             Hoàn tất
                             @break
                     @endswitch
@@ -92,9 +92,11 @@
                                 <div class="col-sm-4">
                                     <input class="form-control" style="width: 50px;" disabled type="number" :value="getBorrowedAmount({{$info->template->id}})">
                                 </div>
+                                @if($order->status != 4)
                                 <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#addEquipment-{{$info->template->id}}">
                                     <span class="fa fa-pencil"></span>
                                 </button>
+                                @endif
                             </div>
                             
 
@@ -248,9 +250,7 @@
                     @case(3)
                         <button :disabled="buttonDisabled" class="btn btn-primary" data-abc="true">Hoàn tất</button>
                         @break
-                    @case(4)
-                        <button :disabled="buttonDisabled" class="btn btn-primary" data-abc="true">Quay lại</button>
-                        @break
+                    
                 @endswitch
             </div>
         </div>
@@ -274,7 +274,7 @@
             order_info.condition_received = order_info.equipment.condition;
             equipmentSelected[order_info.equipment_id] = true;
             equipmentReceived[order_info.equipment_id] = (order_info.status == 1);
-            equipmentLost[order_info.equipment_id] = (order_info.status == 2);
+            equipmentLost[order_info.equipment_id] = (order_info.status == 0);
             equipment_ids.push(order_info.equipment_id);
         });
         orderRequestInfos[info.template.id] = info;
@@ -371,7 +371,7 @@
                 for(i in this.orderRequestInfos) {
                     for(j in this.orderRequestInfos[i].order_infos) {
                         var orderInfo = this.orderRequestInfos[i].order_infos[j];
-                        if(this.getEquipmentStatus(orderInfo.equipment.id) == 0) {
+                        if(!this.equipmentLost[orderInfo.equipment.id] && !this.equipmentReceived[orderInfo.equipment.id]) {
                             alert('Bạn chưa chọn trạng thái thiết bị ' + this.orderRequestInfos[i].template.name + ' có mã: ' + orderInfo.equipment.id);
                             return false;
                         }
@@ -404,8 +404,8 @@
                 if(this.equipmentReceived[equipment_id])
                     return 1;
                 if(this.equipmentLost[equipment_id])
-                    return 2;
-                return 0;
+                    return 0;
+                return 2;
             },
             isEquipmentSelected: function(equipment_id) {
                 return this.equipmentSelected[equipment_id];
@@ -417,7 +417,7 @@
                 total = 0;
                 for(i in this.orderRequestInfos[template_id].order_infos) {
                     var orderInfo = this.orderRequestInfos[template_id].order_infos[i];
-                    if(this.getEquipmentStatus(orderInfo.equipment.id) == 1) {
+                    if(this.equipmentReceived[orderInfo.equipment.id]) {
                         total += 1;
                     }
                 }
@@ -428,7 +428,7 @@
                 total = 0;
                 for(i in this.orderRequestInfos[template_id].order_infos) {
                     var orderInfo = this.orderRequestInfos[template_id].order_infos[i];
-                    if(this.getEquipmentStatus(orderInfo.equipment.id) == 2) {
+                    if(this.equipmentLost[orderInfo.equipment.id]) {
                         total += 1;
                     }
                 }

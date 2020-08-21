@@ -64,7 +64,7 @@ input
                                 <span class="fa fa-star {{$equipment->condition >= 5 ? 'checked':''}}"></span>
                             </div>
                         </td>
-                        <td class="align-middle text-center">{{$equipment->status}}</td>
+                        <td class="align-middle text-center">{{$equipment->getStatusPretty()}}</td>
                         <td class="align-middle text-center">{{$equipment->note}}</td>
                         <td class="align-middle">
                             <x-edit-equipment-member e-id="{{ $equipment->id }}" />

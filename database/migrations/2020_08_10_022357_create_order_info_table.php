@@ -20,7 +20,7 @@ class CreateOrderInfoTable extends Migration
             $table->unique(['request_id', 'equipment_id']);
             $table->integer('condition_received')->nullable();
             $table->dateTime('date_received')->nullable();
-            $table->integer('status')->default(0); //0: working, 1: received, 2: lost
+            $table->integer('status')->default(2); //0: lost, 1: received, 2: working
             $table->string('note')->nullable();
             $table->timestamps();
             
