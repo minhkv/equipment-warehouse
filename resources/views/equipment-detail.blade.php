@@ -19,7 +19,7 @@ input
         </div>
         <div class="col-md-8">
             <h2><b>Sony AX700</b></h2>
-            <p><b>Số lượng trong kho:</b> {{ $equipmentTemplate->equipments->count() }}</p>
+            <p><b>Số lượng thiết bị:</b> {{ $equipmentTemplate->equipments->count() }}</p>
             <label>Số lượng mượn:</label>
             <input type="text" value="1">
             <a href="#" class="btn btn-warning"><span class="fa fa-plus"></span> Thêm vào giỏ</a>

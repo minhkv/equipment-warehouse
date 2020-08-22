@@ -47,7 +47,7 @@
         </div>
         
         <div class="row py-4 justify-content-center">
-            <a href="{{ route('create-order') }}" class="btn btn-success">Tạo yêu cầu</a>
+            <a href="{{ route('order.create') }}" class="btn btn-success">Tạo yêu cầu</a>
         </div>
     </div>
     

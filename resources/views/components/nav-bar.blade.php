@@ -16,18 +16,18 @@
                 <li class="nav-item {{Route::currentRouteName() == 'equipment-template.index' ? 'active' : ''}}">
                     <a class="nav-link" href="{{route('equipment-template.index')}}">Thiết bị</a>
                 </li>
-                <li class="nav-item {{Route::currentRouteName() == 'combo.index' ? 'active' : ''}}">
+                <!-- <li class="nav-item {{Route::currentRouteName() == 'combo.index' ? 'active' : ''}}">
                     <a class="nav-link" href="{{route('combo.index')}}">Combo</a>
-                </li>
+                </li> -->
                 <li class="nav-item {{Route::currentRouteName() == 'supplier.index' ? 'active' : ''}}">
                     <a class="nav-link" href="{{route('supplier.index')}}">Nhà cung cấp</a>
                 </li>
                 <li class="nav-item {{Route::currentRouteName() == 'order.index' ? 'active' : ''}}">
                     <a class="nav-link" href="{{route('order.index')}}">Đơn hàng</a>
                 </li>
-                <li class="nav-item {{Route::currentRouteName() == 'borrowing-cart.index' ? 'active' : ''}}">
+                <!-- <li class="nav-item {{Route::currentRouteName() == 'borrowing-cart.index' ? 'active' : ''}}">
                     <a class="nav-link" href="{{route('borrowing-cart')}}">Giỏ đồ <i class="fa fa-shopping-cart"></i></a>
-                </li>
+                </li> -->
             </ul>
 
             <!-- Right Side Of Navbar -->

@@ -25,7 +25,7 @@ class OrderController extends Controller
             'orderRequestInfos', 
             'orderRequestInfos.orderInfos', 
             'guest'
-            ])->get();
+            ])->orderBy('created_at', 'DESC')->get();
         return view('order')->with([
             'orders' => $orders
         ]);

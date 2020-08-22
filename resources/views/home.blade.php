@@ -12,8 +12,30 @@
                     </div>
                     <div class="card-body">
                         <div class="col-md-8">
-                            <p class="card-text">Tổng</p>
-                            <p class="card-text">Cho mượn</p>
+                            <div class="form-group row">
+                                <label for="totalEquipmentAmount" class="col-sm-8 col-form-label">Tổng</label>
+                                <div class="col-sm-4">
+                                    <input id="totalEquipmentAmount" class="form-control" style="width: 100px;" disabled type="number" value="{{$totalEquipmentAmount}}">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="borrowedAmount" class="col-sm-8 col-form-label">Sẵn sàng</label>
+                                <div class="col-sm-4">
+                                    <input id="borrowedAmount" class="form-control" style="width: 100px;" disabled type="number" value="{{$equipmentAvailableAmount}}">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="borrowedAmount" class="col-sm-8 col-form-label">Cho mượn</label>
+                                <div class="col-sm-4">
+                                    <input id="borrowedAmount" class="form-control" style="width: 100px;" disabled type="number" value="{{$equipmentWorkingAmount}}">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="borrowedAmount" class="col-sm-8 col-form-label">Thất lạc</label>
+                                <div class="col-sm-4">
+                                    <input id="borrowedAmount" class="form-control" style="width: 100px;" disabled type="number" value="{{$equipmentLostAmount}}">
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -29,9 +51,30 @@
                     </div>
                     <div class="card-body">
                         <div class="col-md-8">
-                            <p class="card-text">Tổng</p>
-                            <p class="card-text">Đang tiến hành</p>
-                            <p class="card-text">Hết hạn</p>
+                            <div class="form-group row">
+                                <label for="totalOrderAmount" class="col-sm-8 col-form-label">Tổng</label>
+                                <div class="col-sm-4">
+                                    <input id="totalOrderAmount" class="form-control" style="width: 100px;" disabled type="number" value="{{$totalOrderAmount}}">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="orderProcessingAmount" class="col-sm-8 col-form-label">Đang chờ</label>
+                                <div class="col-sm-4">
+                                    <input id="orderProcessingAmount" class="form-control" style="width: 100px;" disabled type="number" value="{{$orderPendingAmount}}">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="orderProcessingAmount" class="col-sm-8 col-form-label">Đang tiến hành</label>
+                                <div class="col-sm-4">
+                                    <input id="orderProcessingAmount" class="form-control" style="width: 100px;" disabled type="number" value="{{$orderProcessingAmount}}">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="orderProcessingAmount" class="col-sm-8 col-form-label">Hoàn tất</label>
+                                <div class="col-sm-4">
+                                    <input id="orderProcessingAmount" class="form-control" style="width: 100px;" disabled type="number" value="{{$orderCompletedAmount}}">
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

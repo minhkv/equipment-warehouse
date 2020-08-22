@@ -74,6 +74,7 @@
                                         <td class="align-middle"><h5>{{$order->getStatus()}}</h5></td>
                                         <td class="align-middle">
                                             <a href="{{ route('order.show', $order) }}" class="btn btn-primary"><span class="fa fa-pencil" /></a>
+                                            @if($order->status == -1 || $order->status == 4)
                                             <button type="button" class="btn btn-danger" 
                                             onclick="event.preventDefault();
                                             if(confirm('Bạn có chắc chắn muốn xóa?')){
@@ -86,6 +87,7 @@
                                                 @csrf
                                                 @method('delete')
                                             </form>
+                                            @endif
                                         </td>
                                     </tr>
                                     @endforeach

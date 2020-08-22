@@ -13,42 +13,41 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
 
-Route::get('/borrowing-cart', function() {
-    return view('borrowing-cart');
-})->name('borrowing-cart');
 
 Auth::routes();
 
-Route::get('/home', 'HomeController@index')->name('home');
-
-Route::resources([    
-    'category' => 'CategoryController',
-    'channel' => 'ChannelController',
-    'combo' => 'ComboController',
-    'equipment' => 'EquipmentController',
-    'equipment-template' => 'EquipmentTemplateController',
-    'order' => 'OrderController',
-    'supplier' => 'SupplierController'
-]);
-
-Route::resource('borrowed-history', 'BorrowedHistoryController')->only([
-    'index'
-]);
-
-Route::resource('combo-info', 'ComboInfoController')->only([
-    'store', 'destroy'
-]);
-
-Route::resource('usage-history', 'UsageHistoryController')->only([
-    'index'
-]);
-
-Route::post('order-request', 'OrderController@storeRequest')->name('order-request.store');
-Route::put('order-request/{order}/accept', 'OrderController@acceptOrderRequest')->name('order-request.accept');
-Route::put('order-request/{order}/reject', 'OrderController@rejectOrderRequest')->name('order-request.reject');
-Route::put('order-request/{order}/output', 'OrderController@equipmentOutput')->name('order-request.output');
-Route::put('order-request/{order}/return', 'OrderController@equipmentReturn')->name('order-request.return');
+Route::middleware('auth')->group(function() {
+    Route::get('/', 'HomeController@index');
+    Route::get('/home', 'HomeController@index')->name('home');
+    Route::get('/borrowing-cart', function() {
+        return view('borrowing-cart');
+    })->name('borrowing-cart');
+    Route::resources([    
+        'category' => 'CategoryController',
+        'channel' => 'ChannelController',
+        'combo' => 'ComboController',
+        'equipment' => 'EquipmentController',
+        'equipment-template' => 'EquipmentTemplateController',
+        'order' => 'OrderController',
+        'supplier' => 'SupplierController'
+    ]);
+    
+    Route::resource('borrowed-history', 'BorrowedHistoryController')->only([
+        'index'
+    ]);
+    
+    Route::resource('combo-info', 'ComboInfoController')->only([
+        'store', 'destroy'
+    ]);
+    
+    Route::resource('usage-history', 'UsageHistoryController')->only([
+        'index'
+    ]);
+    
+    Route::post('order-request', 'OrderController@storeRequest')->name('order-request.store');
+    Route::put('order-request/{order}/accept', 'OrderController@acceptOrderRequest')->name('order-request.accept');
+    Route::put('order-request/{order}/reject', 'OrderController@rejectOrderRequest')->name('order-request.reject');
+    Route::put('order-request/{order}/output', 'OrderController@equipmentOutput')->name('order-request.output');
+    Route::put('order-request/{order}/return', 'OrderController@equipmentReturn')->name('order-request.return');
+});

@@ -25,7 +25,7 @@
             <div class="card-body">
                 <div class="tab-content">
                     <div class="tab-pane active" id="tab-eg2-0" role="tabpanel">
-                        <form action="{{route('order-request.store')}}" method="POST">
+                        <form id="formCreateOrder" action="{{route('order-request.store')}}" method="POST">
                             @csrf
                             <div class="form-group">
                                 <input type="hidden" name="type" value="1">
@@ -48,8 +48,8 @@
                             <div class="form-group">
                                 <label>Danh sách thiết bị</label>
                                 <div id="equipmentList" class="row mx-2 justify-content-center">
-                                    <input type="hidden" name="templates[]" :value="JSON.stringify(templates)">
-                                    <div class="col-md-4" v-for="(template, index) in templates">
+                                    <input type="hidden" name="templates[]" :value="JSON.stringify(selectedTemplates)">
+                                    <div class="col-md-4" v-for="(template, index) in selectedTemplates">
                                         <div  class="card">
                                             <img class="card-img-top" :src="template.image" alt="sony-ax700">
                                             <div class="card-body">
@@ -80,10 +80,9 @@
                                                         </button>
                                                     </div>
                                                     <div class="modal-body">
-                                                        <!-- @{{equipments[0]->name}} -->
                                                         <form class="my-2 my-lg-0 px-2">
                                                             <div class="input-group">
-                                                                <input class="form-control mr-sm-2" type="search" placeholder="Tìm kiếm" aria-label="search" aria-describedby="basic-addon2">
+                                                                <input v-model="search" class="form-control mr-sm-2" type="search" placeholder="Tìm kiếm" aria-label="search" aria-describedby="basic-addon2">
                                                                 <button class="btn btn-outline-primary my-2 my-sm-0" type="submit"><span class="fa fa-search"></span></button>
                                                             </div>
                                                         </form>
@@ -97,19 +96,16 @@
                                                                 </tr>
                                                             </thead>
                                                             <tbody>
-                                                                @foreach($equipmentTemplates as $template)
-                                                                <tr>
-                                                                    <th scope="row"><img src="{{$template->image}}" height=40 alt="{{$template->name}}"></th>
-                                                                    <td class="align-middle">{{ $template->name }}</td>
-                                                                    <td class="align-middle">{{ $template->equipments->count() }}</td>
+                                                                <tr v-for="(template, index) in searchTemplates()">
+                                                                    <th scope="row"><img :src="template.image" height=40 :alt="template.name"></th>
+                                                                    <td class="align-middle">@{{ template.name }}</td>
+                                                                    <td class="align-middle">@{{ template.equipments.length }}</td>
                                                                     <td class="align-middle">
-                                                                        <!-- <input type="checkbox" id="{{'select-'.$template->id}}" name="select"> -->
-                                                                        <button :disabled="buttonDisabled[{{$template->id}}]" v-on:click="addEquipment({{$template}});" type="button" class="btn btn-success" id="{{'select-template-'.$template->id}}">
+                                                                        <button :disabled="buttonDisabled[template.id]" v-on:click="addEquipment(template);" type="button" class="btn btn-success" :id="'select-template-' + template.id">
                                                                             <span class="fa fa-plus"></span>
                                                                         </button>
                                                                     </td>
                                                                 </tr>
-                                                                @endforeach
                                                             </tbody>
                                                         </table>
                                                         <div class="row justify-content-center">
@@ -129,9 +125,9 @@
                                             </div>
                                         </div>
                                     </div>
-                                </div>
                                 <div class="row justify-content-center pt-3">
-                                    <button @click="submitBorrowedOrder" type="submit" class="btn btn-success mb-2">Tạo đơn mượn</button>
+                                    <button @click="submitBorrowedOrder" type="button" class="btn btn-success mb-2">Tạo đơn mượn</button>
+                                </div>
                                 </div>
                             </div>
                             
@@ -146,16 +142,19 @@
     </div>
 </div>
 <script>
+    var templates = <?php echo $equipmentTemplates; ?>;
     var app = new Vue({
         el: '#equipmentList',
         data: {
-            templates: [
+            selectedTemplates: [
             ],
-            buttonDisabled: {}
+            templates: templates,
+            buttonDisabled: {},
+            search: ''
         },
         methods:{
             addEquipment: function(template) {
-                this.templates.push({
+                this.selectedTemplates.push({
                     id: template.id,
                     name: template.name,
                     amount: '0',
@@ -165,12 +164,36 @@
                 this.buttonDisabled[template.id] = true;
             },
             removeEquipmentCard: function(index) {
-                templateId = this.templates[index].id;
+                templateId = this.selectedTemplates[index].id;
                 this.buttonDisabled[templateId] = false;
-                this.templates.splice(index, 1);
+                this.selectedTemplates.splice(index, 1);
+            },
+            checkZeroAmount: function(template) {
+                if(template.amount == 0) {
+                    return true;
+                }
+                return false;
+            },
+            searchTemplates: function() {
+                var search = this.search.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+                return this.templates.filter(function(template) {
+                    var name = template.name.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+                    return (name.includes(search));
+                });
             },
             submitBorrowedOrder: function() {
                 console.log('submit');
+                if(this.selectedTemplates.length == 0) {
+                    alert('Bạn chưa chọn thiết bị nào!');
+                    return;
+                }
+                for(i in this.selectedTemplates) {
+                    if(this.selectedTemplates[i].amount == 0) {
+                        alert('Số lượng mượn của thiết bị ' + this.selectedTemplates[i].name + ' phải lớn hơn 0!');
+                        return;
+                    }
+                }
+                document.getElementById('formCreateOrder').submit();
             }
         }
     });

@@ -24,7 +24,7 @@
             </article>
             <div class="track">
                 <div class="step {{$order->status >=0 ? 'active' : ''}}"> 
-                    <span class="icon"> <i class="fa fa-file"></i> </span> 
+                    <span class="icon"> <i class="fa fa-book"></i> </span> 
                     <span class="text">Tạo đơn hàng</span> 
                     <span class="text-muted">{{$order->created_at}}</span> 
                 </div>
@@ -44,7 +44,7 @@
                     <span class="text-muted">{{$order->date_received}}</span>
                 </div>
                 <div class="step {{$order->status >=4 ? 'active' : ''}}"> 
-                    <span class="icon"> <i class="fa fa-box"></i> </span> 
+                    <span class="icon"> <i class="fa fa-thumbs-up"></i> </span> 
                     <span class="text">Hoàn tất</span> 
                     <span class="text-muted">{{$order->date_completed}}</span>
                 </div>
@@ -72,7 +72,8 @@
                 </h3>
             </div>
             <ul class="row justify-content-center">
-                @foreach($order->orderRequestInfos as $info)
+            @foreach($order->orderRequestInfos as $info)
+                @if(!($order->status >= 2 && $info->borrowed_amount == 0))
                 <li class="col-md-4">
                     <figure class="itemside mb-3 border">
                         <div class="aside"><img src="{{$info->template->image}}" class="img-sm border"></div>
@@ -125,14 +126,15 @@
                                             <table class="table">
                                                 <thead class="thead-light">
                                                     <tr>
-                                                        <th scope="col">Mã</th>
-                                                        <th scope="col">Kích thước</th>
-                                                        <th scope="col">Giá nhập</th>
-                                                        <th scope="col">Nhà cung cấp</th>
-                                                        <th scope="col">Vị trí</th>
-                                                        <th scope="col">Tình trạng</th>
-                                                        <th scope="col">Ghi chú</th>
-                                                        <th scope="col"></th>
+                                                    <th class="text-center" scope="col" style="width: 5%">Mã</th>
+                                                    <th class="text-center" scope="col" style="width: 10%;">Kích thước</th>
+                                                    <th class="text-center" scope="col" style="width: 10%;">Giá nhập</th>
+                                                    <th class="text-center" scope="col" style="width: 12%;">Nhà cung cấp</th>
+                                                    <th class="text-center" scope="col" style="width: 8%;">Vị trí</th>
+                                                    <th class="text-center" scope="col" style="width: 10%;">Tình trạng</th>
+                                                    <th class="text-center" scope="col" style="width: 10%;">Trạng thái</th>
+                                                    <th class="text-center" scope="col" style="width: 15%;">Ghi chú</th>
+                                                    <th class="text-center" scope="col" style="width: 10%;"></th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -152,10 +154,11 @@
                                                                 <span class="fa fa-star {{$equipment->condition >= 5 ? 'checked':''}}"></span>
                                                             </div>
                                                         </td>
+                                                        <td class="align-middle text-center">{{$equipment->getStatusPretty()}}</td>
                                                         <td>{{$equipment->note}}</td>
                                                         <td class="align-middle">
-                                                            <button :disabled="isEquipmentSelected({{$equipment->id}})" @click="selectEquipment({{$equipment->id}}, {{$info->template->id}})" class="btn btn-success btn-sm"><span class="fa fa-plus"></span></button>
-                                                            <button :disabled="!isEquipmentSelected({{$equipment->id}})" @click="removeEquipment({{$equipment->id}}, {{$info->template->id}})" class="btn btn-danger btn-sm"><span class="fa fa-minus"></span></button>
+                                                            <button :disabled="disablePlusEquipmentButton({{$equipment->id}}, {{$equipment->status}})" @click="selectEquipment({{$equipment->id}}, {{$info->template->id}})" class="btn btn-success btn-sm"><span class="fa fa-plus"></span></button>
+                                                            <button :disabled="disableMinusEquipmentButton({{$equipment->id}}, {{$equipment->status}})" @click="removeEquipment({{$equipment->id}}, {{$info->template->id}})" class="btn btn-danger btn-sm"><span class="fa fa-minus"></span></button>
                                                         </td>
                                                     </tr>
                                                     @endforeach
@@ -232,7 +235,8 @@
                         </figcaption>
                     </figure>
                 </li>
-                @endforeach
+                @endif
+            @endforeach
             </ul>
             <hr>
             <div class="row justify-content-center">
@@ -400,15 +404,21 @@
                     console.log(error);
                 });
             },
-            getEquipmentStatus: function(equipment_id) {
-                if(this.equipmentReceived[equipment_id])
+            getEquipmentStatus: function(equipmentId) {
+                if(this.equipmentReceived[equipmentId])
                     return 1;
-                if(this.equipmentLost[equipment_id])
+                if(this.equipmentLost[equipmentId])
                     return 0;
                 return 2;
             },
-            isEquipmentSelected: function(equipment_id) {
-                return this.equipmentSelected[equipment_id];
+            isEquipmentSelected: function(equipmentId) {
+                return this.equipmentSelected[equipmentId];
+            },
+            disablePlusEquipmentButton: function(equipmentId, equipmentStatus) {
+                return this.isEquipmentSelected(equipmentId) || equipmentStatus != 1;
+            },
+            disableMinusEquipmentButton: function(equipmentId, equipmentStatus) {
+                return !this.isEquipmentSelected(equipmentId);
             },
             getBorrowedAmount: function(template_id) {
                 return this.templateBorrowedAmount[template_id];
