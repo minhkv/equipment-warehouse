@@ -17,6 +17,28 @@ class EquipmentController extends Controller
         //
     }
 
+    public function equipmentLost() {
+        $lostEquipments = Equipment::with([
+            'template',
+            ])->where('status', 0)->get();
+        $recentOrderInfos = [];
+        foreach($lostEquipments as $lostEquipment) {
+            $recentOrderInfos[$lostEquipment->id] = $lostEquipment->getRecentOrderInfo();
+        }
+        return view('equipment-lost')->with([
+            'lostEquipments' => $lostEquipments,
+            'recentOrderInfos' => $recentOrderInfos
+        ]);
+    }
+    public function receivedLostEquipment(Request $request, Equipment $equipment) {
+        $recentOrderInfos = $request->input('recentOrderInfos');
+        $equipment->update([
+            'status' => 1,
+            'condition' => $recentOrderInfos['condition_received']
+        ]);
+        return $equipment;
+    }
+
     /**
      * Show the form for creating a new resource.
      *

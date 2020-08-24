@@ -120,7 +120,9 @@
                                                             </nav>
                                                         </div>
                                                     </div>
-
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-primary" data-dismiss="modal">Xong</button>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -138,6 +140,9 @@
                     </div>
                 </div>
             </div>
+            <div class="card-header">
+            </div>
+            
         </div>
     </div>
 </div>

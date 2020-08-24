@@ -4,6 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use App\Equipment;
+use App\OrderRequestInfo;
 
 class OrderInfo extends Model
 {
@@ -16,5 +17,8 @@ class OrderInfo extends Model
     ];
     public function equipment() {
         return $this->belongsTo(Equipment::class);
+    }
+    public function orderRequestInfo() {
+        return $this->belongsTo(OrderRequestInfo::class, 'request_id', 'id');
     }
 }

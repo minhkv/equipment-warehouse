@@ -40,7 +40,7 @@
                                     <a class="dropdown-item" href="#">Something else here</a>
                                 </div>
                             </div>
-                            <a href="{{ route('order.create') }}" type="button" class="btn btn-success ml-auto">Tạo đơn hàng</a>
+                            <a href="{{ route('order.create') }}" type="button" class="btn btn-success ml-auto">Tạo đơn</a>
                         </div>
                         <div class="row">
                             @if($orders->count() > 0)

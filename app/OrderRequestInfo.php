@@ -15,4 +15,7 @@ class OrderRequestInfo extends Model
     public function orderInfos() {
         return $this->hasMany(OrderInfo::class, 'request_id', 'id');
     }
+    public function order() {
+        return $this->belongsTo(Order::class);
+    }
 }
