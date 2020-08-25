@@ -269,7 +269,7 @@ class EquipmentTemplateSeeder extends Seeder
             [
                 'name' => 'Thẻ Nhớ SDXC SanDisk Extreme Pro 128GB 170MB/s', 
                 'category_id' => 8,
-                'image' => join(DIRECTORY_SEPARATOR, ['/storage', 'img', ''])
+                'image' => join(DIRECTORY_SEPARATOR, ['/storage', 'img', 'the-nho-sdxc-sandisk-extreme-pro-128gb-170mbs (1).jpg'])
             ],
             [
                 'name' => 'Thẻ Nhớ MicroSDHC Sandisk Extreme 32GB 100MB/s (60MB/s)', 
