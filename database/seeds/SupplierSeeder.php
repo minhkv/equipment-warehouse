@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class SupplierSeeder extends Seeder
 {
@@ -12,12 +13,16 @@ class SupplierSeeder extends Seeder
     public function run()
     {
         DB::table('suppliers')->insertOrIgnore([
-            'name' => "Sony",
+            'name' => "Canon",
             'address' => "Hà Nội"
         ]);
         DB::table('suppliers')->insertOrIgnore([
             'name' => "Nikon",
             'address' => "Bắc Ninh"
+        ]);
+        DB::table('suppliers')->insertOrIgnore([
+            'name' => "Sony",
+            'address' => "Hà Nội"
         ]);
         DB::table('suppliers')->insertOrIgnore([
             'name' => "GoPro",
