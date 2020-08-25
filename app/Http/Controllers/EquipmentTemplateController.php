@@ -55,6 +55,7 @@ class EquipmentTemplateController extends Controller
         } else {
             $template = new EquipmentTemplate($request->all());
             $template->save();
+            $template->update(['image' => '/storage/img/empty.jpg']);
         }
         
         return redirect(route('equipment-template.index'));

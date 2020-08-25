@@ -93,7 +93,7 @@
                                 <div class="col-sm-4">
                                     <input class="form-control" style="width: 50px;" disabled type="number" :value="getBorrowedAmount({{$info->template->id}})">
                                 </div>
-                                @if($order->status != 4)
+                                @if($order->status < 3)
                                 <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#addEquipment-{{$info->template->id}}">
                                     <span class="fa fa-pencil"></span>
                                 </button>
@@ -188,7 +188,19 @@
                                                                 </div>
                                                             </td>
                                                             <td class="text-center" class="align-middle">
-                                                                <x-star-input-condition id="condition-{{$orderInfo->equipment->id}}" name="condition-received-{{$orderInfo->equipment->id}}" value='{{ $orderInfo->equipment->condition }}' />
+                                                                <div id="{{ $orderInfo->equipment->id }}">
+                                                                    <div class="starrating risingstar d-flex justify-content-center flex-row-reverse">
+                                                                        <input v-model="conditionReceived[<?php echo $orderInfo->equipment->id; ?>]" type="radio" id="star5-{{$orderInfo->equipment->id}}" name="condition-received-{{$orderInfo->equipment->id}}" value="5" {{ $orderInfo->equipment->condition == 5 ? 'checked':'' }} /><label for="star5-{{$orderInfo->equipment->id}}" onmouseout="normalText('scoreDescription-{{$orderInfo->equipment->id}}')" onmouseover="changeText('scoreDescription-{{$orderInfo->equipment->id}}', 'Hoàn hảo')" title="5 star">5</label>
+                                                                        <input v-model="conditionReceived[<?php echo $orderInfo->equipment->id; ?>]" type="radio" id="star4-{{$orderInfo->equipment->id}}" name="condition-received-{{$orderInfo->equipment->id}}" value="4" {{ $orderInfo->equipment->condition == 4 ? 'checked':'' }} /><label for="star4-{{$orderInfo->equipment->id}}" onmouseout="normalText('scoreDescription-{{$orderInfo->equipment->id}}')" onmouseover="changeText('scoreDescription-{{$orderInfo->equipment->id}}', 'Tốt')" title="4 star">4</label>
+                                                                        <input v-model="conditionReceived[<?php echo $orderInfo->equipment->id; ?>]" type="radio" id="star3-{{$orderInfo->equipment->id}}" name="condition-received-{{$orderInfo->equipment->id}}" value="3" {{ $orderInfo->equipment->condition == 3 ? 'checked':'' }} /><label for="star3-{{$orderInfo->equipment->id}}" onmouseout="normalText('scoreDescription-{{$orderInfo->equipment->id}}')" onmouseover="changeText('scoreDescription-{{$orderInfo->equipment->id}}', 'Bình thường')" title="3 star">3</label>
+                                                                        <input v-model="conditionReceived[<?php echo $orderInfo->equipment->id; ?>]" type="radio" id="star2-{{$orderInfo->equipment->id}}" name="condition-received-{{$orderInfo->equipment->id}}" value="2" {{ $orderInfo->equipment->condition == 2 ? 'checked':'' }} /><label for="star2-{{$orderInfo->equipment->id}}" onmouseout="normalText('scoreDescription-{{$orderInfo->equipment->id}}')" onmouseover="changeText('scoreDescription-{{$orderInfo->equipment->id}}', 'Không tốt')" title="2 star">2</label>
+                                                                        <input v-model="conditionReceived[<?php echo $orderInfo->equipment->id; ?>]" type="radio" id="star1-{{$orderInfo->equipment->id}}" name="condition-received-{{$orderInfo->equipment->id}}" value="1" {{ $orderInfo->equipment->condition == 1 ? 'checked':'' }} /><label for="star1-{{$orderInfo->equipment->id}}" onmouseout="normalText('scoreDescription-{{$orderInfo->equipment->id}}')" onmouseover="changeText('scoreDescription-{{$orderInfo->equipment->id}}', 'Kém')" title="1 star">1</label>
+                                                                    </div>
+                                                                    <div class="d-flex justify-content-center">
+                                                                        <p id="scoreDescription-{{$orderInfo->equipment->id}}">Đánh giá</p>
+                                                                    </div>
+                                                                </div>
+                                                                <!-- <x-star-input-condition id="condition-{{$orderInfo->equipment->id}}" name="condition-received-{{$orderInfo->equipment->id}}" value='{{ $orderInfo->equipment->condition }}' /> -->
                                                             </td>
                                                             <td class="text-center">
                                                                 <textarea class="form-control" name="note" cols="10"></textarea>
@@ -211,7 +223,9 @@
                                                 </table>
                                             @endif
                                         </div>
-
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-primary" data-dismiss="modal">Xong</button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -238,20 +252,23 @@
             </ul>
             <hr>
             <div class="row justify-content-center">
+                @if($order->status == 2 || $order->status == 3)
+                <button :disabled="buttonDisabled" @click="back" class="btn btn-secondary mr-2">< Quay lại</button>
+                @endif
                 @switch($order->status)
-                @case(0)
-                <button :disabled="buttonDisabled" @click="acceptOrder" class="btn btn-primary mx-2" data-abc="true">Chấp nhận</button>
-                <button :disabled="buttonDisabled" @click="rejectOrder" class="btn btn-danger" data-abc="true">Từ chối</button>
-                @break
-                @case(1)
-                <button :disabled="buttonDisabled" @click="equipmentOutput" class="btn btn-primary" data-abc="true">Xuất đồ</button>
-                @break
-                @case(2)
-                <button :disabled="buttonDisabled" @click="equipmentReturn" class="btn btn-primary" data-abc="true">Trả đồ</button>
-                @break
-                @case(3)
-                <button :disabled="buttonDisabled" class="btn btn-primary" data-abc="true">Hoàn tất</button>
-                @break
+                    @case(0)
+                    <button :disabled="buttonDisabled" @click="acceptOrder" class="btn btn-primary mx-2" data-abc="true">Chấp nhận</button>
+                    <button :disabled="buttonDisabled" @click="rejectOrder" class="btn btn-danger" data-abc="true">Từ chối</button>
+                    @break
+                    @case(1)
+                    <button :disabled="buttonDisabled" @click="equipmentOutput" class="btn btn-primary" data-abc="true">Xuất đồ</button>
+                    @break
+                    @case(2)
+                    <button :disabled="buttonDisabled" @click="equipmentReturn" class="btn btn-primary" data-abc="true">Trả đồ</button>
+                    @break
+                    @case(3)
+                    <button :disabled="buttonDisabled" @click="completeOrder" class="btn btn-primary" data-abc="true">Hoàn tất</button>
+                    @break
 
                 @endswitch
             </div>
@@ -268,23 +285,29 @@
     var equipmentSelected = {};
     var equipmentReceived = {};
     var equipmentLost = {};
-    var equipment_ids = [];
+    var equipmentIds = [];
+    var conditionReceived = {};
     var templateBorrowedAmount = {};
     var orderRequestInfos = {};
     order.order_request_infos.forEach(function(info) {
+        info.template.equipments.forEach(function(equipment) {
+            equipmentSelected[equipment.id] = false;
+        });
         info.order_infos.forEach(function(order_info) {
-            order_info.condition_received = order_info.equipment.condition;
+            if(order_info.condition_received) {
+                conditionReceived[order_info.equipment_id] = order_info.condition_received;
+            } else {
+                order_info.condition_received = order_info.equipment.condition;
+                conditionReceived[order_info.equipment_id] = order_info.equipment.condition;
+            }
             equipmentSelected[order_info.equipment_id] = true;
             equipmentReceived[order_info.equipment_id] = (order_info.status == 1);
             equipmentLost[order_info.equipment_id] = (order_info.status == 0);
-            equipment_ids.push(order_info.equipment_id);
+            equipmentIds.push(order_info.equipment_id);
         });
         orderRequestInfos[info.template.id] = info;
         orderRequestInfos[info.template.id]['order_infos'] = info.order_infos;
         templateBorrowedAmount[info.template.id] = info.order_infos.length;
-        info.template.equipments.forEach(function(equipment) {
-            equipmentSelected[equipment.id] = false;
-        });
 
     });
 
@@ -292,17 +315,28 @@
         el: '.card',
         data: {
             order: order,
-            equipment_ids: equipment_ids,
+            equipmentIds: equipmentIds,
             buttonDisabled: false,
             templateBorrowedAmount: templateBorrowedAmount,
             equipmentSelected: equipmentSelected,
             equipmentReceived: equipmentReceived,
             equipmentLost: equipmentLost,
-            orderRequestInfos: orderRequestInfos
+            orderRequestInfos: orderRequestInfos,
+            conditionReceived: conditionReceived
         },
         methods: {
             disableButton: function() {
                 this.buttonDisabled = true;
+            },
+            back: function() {
+                var backUrl = '<?php echo route('order-request.back', $order); ?>';
+                this.disableButton();
+                axios.put(backUrl).then(res => {
+                    console.log(res);
+                    window.location.reload();
+                }).catch(error => {
+                    console.log("handlesubmit error: ", error);
+                });
             },
             acceptOrder: function(button) {
                 this.disableButton();
@@ -330,25 +364,36 @@
                     'equipment_id': equipment_id
                 });
                 this.templateBorrowedAmount[template_id]++;
-                this.equipment_ids.push(equipment_id);
+                this.equipmentIds.push(equipment_id);
                 this.equipmentSelected[equipment_id] = true;
             },
             removeEquipment: function(equipment_id, template_id) {
                 console.log('remove');
                 this.templateBorrowedAmount[template_id]--;
-                const index = this.equipment_ids.indexOf(equipment_id);
+                const index = this.equipmentIds.indexOf(equipment_id);
                 if (index > -1) {
-                    this.equipment_ids.splice(index, 1);
+                    this.equipmentIds.splice(index, 1);
                 }
                 this.equipmentSelected[equipment_id] = false;
             },
+            equipmentCheckBorrowedAmount: function() {
+                for(var key in this.templateBorrowedAmount) {
+                    console.log(this.templateBorrowedAmount[key]);
+                    if(this.templateBorrowedAmount[key] == 0) {
+                        alert('Bạn chưa chọn thiết bị ' + this.orderRequestInfos[key].template.name);
+                        return false;
+                    }
+                }
+                return true;
+            },
             equipmentOutput: function() {
+                if(!this.equipmentCheckBorrowedAmount()) return;
                 this.disableButton();
                 axios({
                         url: equipmentOutputUrl,
                         method: 'put',
                         data: {
-                            equipments: this.equipment_ids,
+                            equipments: this.equipmentIds,
                             templateBorrowedAmount: this.templateBorrowedAmount,
                             orderRequestInfos: this.orderRequestInfos
                         }
@@ -381,14 +426,43 @@
                 }
                 return true;
             },
+            updateConditionReceived: function() {
+                for (i in this.orderRequestInfos) {
+                    for (j in this.orderRequestInfos[i].order_infos) {
+                        var orderInfo = this.orderRequestInfos[i].order_infos[j];
+                        orderInfo.condition_received = parseInt(conditionReceived[orderInfo.equipment_id]);
+                        this.orderRequestInfos[i].order_infos[j].condition_received = orderInfo.condition_received;
+                    }
+                }
+            },
             equipmentReturn: function() {
                 console.log('return');
                 if (!this.equipmentCheck()) return;
                 this.updateOrderInfoStatus();
                 this.disableButton();
-
+                this.updateConditionReceived();
                 axios({
                         url: equipmentReturnUrl,
+                        method: 'put',
+                        data: {
+                            orderRequestInfos: this.orderRequestInfos
+                        }
+                    })
+                    .then(function(response) {
+                        console.log(response);
+                        window.location.reload();
+                    })
+                    .catch(function(error) {
+                        console.log(error);
+                    });
+            },
+            completeOrder: function() {
+                var completeUrl = '<?php echo route('order-request.complete', $order);?>';
+                console.log(completeUrl);
+                this.disableButton();
+
+                axios({
+                        url: completeUrl,
                         method: 'put',
                         data: {
                             orderRequestInfos: this.orderRequestInfos

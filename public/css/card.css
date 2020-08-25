@@ -1,0 +1,25 @@
+.fast-transition {
+    position: relative;
+    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.3);
+    transition: all 0.3s ease-in-out;
+}
+
+.fast-transition::before {
+    content: ' ';
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    /* border-radius: 50px; */
+    box-shadow: 0 10px 50px 0 rgba(0, 0, 0, 0.5);
+    opacity: 0;
+    transition: opacity 500ms;
+}
+
+.fast-transition:hover::before {
+    opacity: 1;
+}
+.fast-transition:hover {
+    transform: scale(1.05);
+}

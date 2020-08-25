@@ -143,6 +143,37 @@ class OrderController extends Controller
         return redirect(route('order.show', $order));
     }
 
+    public function back(Order $order) {
+        if($order->status < 2 || $order->status > 3) {
+            return 'Order status must be 2 or 3';
+        }
+        foreach($order->orderRequestInfos as $orderRequestInfo) {
+            foreach($orderRequestInfo->orderInfos as $orderInfo) {
+                if($order->status == 2) {
+                    $orderInfo->equipment->update([
+                        'status' => 1
+                        ]);
+                } 
+                // else {
+                //     $orderInfo->equipment->update([
+                //         'status' => 2
+                //     ]);
+                // }
+            }
+        }
+        $order->update([
+            'status' => $order->status - 1
+            ]);
+        
+        return $order->load([
+            'orderRequestInfos', 
+            'orderRequestInfos.orderInfos', 
+            'orderRequestInfos.orderInfos.equipment'
+            ]);
+    }
+
+
+
     public function acceptOrderRequest(Order $order) {
         $order->update([
             'status' => 1,
@@ -157,7 +188,6 @@ class OrderController extends Controller
     }
 
     public function equipmentOutput(Request $request, Order $order) {
-        $equipment_ids = $request->input('equipments');
         $templateBorrowedAmount = $request->input('templateBorrowedAmount');
         $orderRequestInfos = $request->input('orderRequestInfos');
         $order->update([
@@ -169,6 +199,9 @@ class OrderController extends Controller
             $orderRequestInfoModel->update([
                 'borrowed_amount' => $templateBorrowedAmount[$template_id]
             ]);
+            if($orderRequestInfoModel->orderInfos->count() > 0) {
+                $orderRequestInfoModel->orderInfos()->delete();
+            }
             foreach($orderRequestInfos[$template_id]['order_infos'] as $orderInfo){
                 Equipment::where('id', $orderInfo['equipment_id'])->update([
                     'status' => 2
@@ -184,20 +217,35 @@ class OrderController extends Controller
     public function equipmentReturn(Request $request, Order $order) {
         $orderRequestInfos = $request->input('orderRequestInfos');
         $order->update([
-            'status' => 4, //complete
+            'status' => 3, //returnEquipment
             'date_received' => date('Y-m-d H:i:s')
             ]);
         foreach($order->orderRequestInfos as $orderRequestInfoModel) {
             $template_id = $orderRequestInfoModel->template_id;
             foreach($orderRequestInfos[$template_id]['order_infos'] as $orderInfo){
-                Equipment::where('id', $orderInfo['equipment_id'])->update([
-                    'status' => $orderInfo['status']
-                ]);
                 $orderRequestInfoModel->orderInfos()->where('id', $orderInfo['id'])->update([
-                    'status' => $orderInfo['status']
+                    'status' => $orderInfo['status'],
+                    'condition_received' => $orderInfo['condition_received']
                 ]);
             }
         }
         return 'equipmentReturn';
+    }
+
+    public function completeOrder(Request $request, Order $order) {
+        $orderRequestInfos = $request->input('orderRequestInfos');
+        $order->update([
+            'status' => 4, //complete
+            ]);
+            foreach($order->orderRequestInfos as $orderRequestInfoModel) {
+                $template_id = $orderRequestInfoModel->template_id;
+                foreach($orderRequestInfos[$template_id]['order_infos'] as $orderInfo){
+                    Equipment::where('id', $orderInfo['equipment_id'])->update([
+                        'status' => $orderInfo['status'],
+                        'condition' => $orderInfo['condition_received']
+                    ]);
+                }
+            }
+        return 'orderCompleted';
     }
 }

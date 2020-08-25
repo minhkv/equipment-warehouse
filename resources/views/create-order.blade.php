@@ -2,6 +2,7 @@
 @section('content')
 <link rel="stylesheet" href="/css/create-order.css" >
 <link rel="stylesheet" href="/css/order-detail.css" >
+<!-- <link rel="stylesheet" href="/css/card.css" > -->
 <style>
 .amount
 {
@@ -49,15 +50,18 @@
                                 <label>Danh sách thiết bị</label>
                                 <div id="equipmentList" class="row mx-2 justify-content-center">
                                     <input type="hidden" name="templates[]" :value="JSON.stringify(selectedTemplates)">
-                                    <div class="col-md-4" v-for="(template, index) in selectedTemplates">
-                                        <div  class="card">
+                                    <div class="col-md-4 my-1" v-for="(template, index) in selectedTemplates">
+                                        <div class="card shadow">
                                             <img class="card-img-top" :src="template.image" alt="sony-ax700">
-                                            <div class="card-body">
-                                                <h5 class="card-title">@{{ template.name }}</h5>
-                                                <input type="hidden" name="template_id" :value="template.id">
-                                                <p class="card-text">
-                                                    Số lượng: <input class="amount" type="number" name="amount" min='0' :max='template.maxAmount' value="1" v-model="template.amount">
-                                                </p>
+                                            <div class="card-body d-flex flex-column">
+                                                <div class="mt-auto">
+
+                                                    <h5 class="card-title">@{{ template.name }}</h5>
+                                                    <input type="hidden" name="template_id" :value="template.id">
+                                                </div>
+                                                    <p class="card-text">
+                                                        Số lượng: <input class="amount" type="number" name="amount" min='0' :max='template.maxAmount' value="1" v-model="template.amount">
+                                                    </p>
                                                 <button type="button" v-on:click="removeEquipmentCard(index)" class="btn btn-danger btn-sm"><span class="fa fa-trash" /></button>
                                             </div>
                                         </div>

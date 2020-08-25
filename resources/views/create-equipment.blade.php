@@ -11,7 +11,7 @@
                         @csrf
                         <div class="form-group">
                             <label for="equipmentName">Tên thiết bị</label>
-                            <input type="text" name="name" class="form-control" id="equipmentName" placeholder="Tên thiết bị">
+                            <input required type="text" name="name" class="form-control" id="equipmentName" placeholder="Tên thiết bị">
                         </div>
                         <div class="form-group">
                             <label for="equipmentCategory">Loại thiết bị</label>
