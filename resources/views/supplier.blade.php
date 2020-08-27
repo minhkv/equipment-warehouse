@@ -112,7 +112,7 @@
                                     @csrf
                                     <div class="form-group">
                                         <label><i class="fa fa-user"></i> Tên</label>
-                                        <input type="text" class="form-control" name="name" placeholder="Tên nhà cung cấp">
+                                        <input required type="text" class="form-control" name="name" placeholder="Tên nhà cung cấp">
                                     </div>
                                     <div class="form-group">
                                         <label><i class="fa fa-address-card"></i> Địa chỉ</label>

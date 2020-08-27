@@ -115,12 +115,12 @@
                                                 </button>
                                         </div>
                                         <div class="modal-body">
-                                            <form class="py-2 my-lg-0 px-2">
+                                            <!-- <form class="py-2 my-lg-0 px-2">
                                                 <div class="input-group">
                                                     <input class="form-control mr-sm-2" type="search" placeholder="Tìm kiếm" aria-label="search" aria-describedby="basic-addon2">
-                                                    <button class="btn btn-outline-primary my-2 my-sm-0" type="submit"><span class="fa fa-search"></span></button>
+                                                    <button class="btn btn-outline-primary my-2 my-sm-0" type="button"><span class="fa fa-search"></span></button>
                                                 </div>
-                                            </form>
+                                            </form> -->
                                             @if($order->status <= 1) <table class="table">
                                                 <thead class="thead-light">
                                                     <tr>

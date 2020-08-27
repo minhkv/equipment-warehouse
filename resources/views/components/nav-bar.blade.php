@@ -23,7 +23,7 @@
                     <a class="nav-link" href="{{route('supplier.index')}}">Nhà cung cấp</a>
                 </li>
                 <li class="nav-item {{Route::currentRouteName() == 'order.index' ? 'active' : ''}}">
-                    <a class="nav-link" href="{{route('order.index')}}">Đơn hàng</a>
+                    <a class="nav-link" href="{{route('order.index')}}">Đơn mượn</a>
                 </li>
                 <!-- <li class="nav-item {{Route::currentRouteName() == 'borrowing-cart.index' ? 'active' : ''}}">
                     <a class="nav-link" href="{{route('borrowing-cart')}}">Giỏ đồ <i class="fa fa-shopping-cart"></i></a>
@@ -35,7 +35,7 @@
                 <form class="form-inline my-2 my-lg-0 px-2">
                     <div class="input-group">
                         <input class="form-control mr-sm-2" type="search" placeholder="Tìm kiếm" aria-label="search" aria-describedby="basic-addon2">
-                        <button class="btn btn-outline-primary my-2 my-sm-0" type="submit"><span class="fa fa-search"></span></button>
+                        <button class="btn btn-outline-primary my-2 my-sm-0" type="button"><span class="fa fa-search"></span></button>
                     </div>
                 </form>
                 <!-- Authentication Links -->

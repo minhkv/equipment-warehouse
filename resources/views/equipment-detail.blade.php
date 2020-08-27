@@ -18,7 +18,7 @@ input
             <img class="w-100" src="{{ $equipmentTemplate->image }}" alt="sony-ax700">
         </div>
         <div class="col-md-8">
-            <h2><b>Sony AX700</b></h2>
+            <h2><b>{{$equipmentTemplate->name}}</b></h2>
             <p><b>Số lượng thiết bị:</b> {{ $equipmentTemplate->equipments->count() }}</p>
             <label>Số lượng mượn:</label>
             <input type="text" value="1">

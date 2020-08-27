@@ -23,3 +23,6 @@
 .fast-transition:hover {
     transform: scale(1.05);
 }
+.card {
+    min-height: 400px;
+}
