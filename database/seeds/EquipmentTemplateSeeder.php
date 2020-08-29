@@ -82,48 +82,6 @@ class EquipmentTemplateSeeder extends Seeder
         ]);
         EquipmentTemplate::insert([
             [
-                'name' => 'Chân Máy Velbon M45', 
-                'category_id' => 4,
-                'image' => join(DIRECTORY_SEPARATOR, ['/storage', 'img', 'chan-may-velbon-m45.jpg'])
-            ],
-            [
-                'name' => 'Chân Máy Benro T880EX', 
-                'category_id' => 4,
-                'image' => join(DIRECTORY_SEPARATOR, ['/storage', 'img', 'benro-t880ex.jpg'])
-            ],
-            [
-                'name' => 'Chân Máy Velbon M47', 
-                'category_id' => 4,
-                'image' => join(DIRECTORY_SEPARATOR, ['/storage', 'img', 'chan-may-velbon-m47(1).jpg'])
-            ],
-            [
-                'name' => 'Chân Máy Benro T660EX', 
-                'category_id' => 4,
-                'image' => join(DIRECTORY_SEPARATOR, ['/storage', 'img', 'benro-t660ex(2).jpg'])
-            ],
-            [
-                'name' => 'Chân Máy Ảnh Slik U873', 
-                'category_id' => 4,
-                'image' => join(DIRECTORY_SEPARATOR, ['/storage', 'img', 'Chan-may-Slik-U873.jpg'])
-            ],
-            [
-                'name' => 'Chân Máy Benro T800EX', 
-                'category_id' => 4,
-                'image' => join(DIRECTORY_SEPARATOR, ['/storage', 'img', 'benro-t800ex.jpg'])
-            ],
-            [
-                'name' => 'Chân Máy Velbon EX-630', 
-                'category_id' => 4,
-                'image' => join(DIRECTORY_SEPARATOR, ['/storage', 'img', 'velbon-ex630.jpg'])
-            ],
-            [
-                'name' => 'Chân Máy Benro Video Tripod KH25', 
-                'category_id' => 4,
-                'image' => join(DIRECTORY_SEPARATOR, ['/storage', 'img', 'benro-video-tripod-kh25.jpg'])
-            ],
-        ]);
-        EquipmentTemplate::insert([
-            [
                 'name' => 'Máy Quay Sony PXW-FS7M2K', 
                 'category_id' => 2,
                 'image' => join(DIRECTORY_SEPARATOR, ['/storage', 'img', 'sony-pxwfs7m2k.jpg'])
@@ -169,6 +127,71 @@ class EquipmentTemplateSeeder extends Seeder
                 'image' => join(DIRECTORY_SEPARATOR, ['/storage', 'img', 'may-quay-sony-xdcam-pxwz90.jpg'])
             ],
         ]);
+        EquipmentTemplate::insert([
+            [
+                'name' => 'Máy Ghi Âm Sony ICD-TX650 16GB', 
+                'category_id' => 3, 
+                'image' => join(DIRECTORY_SEPARATOR, ['/storage', 'img', 'may-ghi-am-sony-icdtx650-16gb-mau-den-4.jpg'])
+            ],
+            [
+                'name' => 'Máy Ghi Âm Sony ICD-UX570F', 
+                'category_id' => 3, 
+                'image' => join(DIRECTORY_SEPARATOR, ['/storage', 'img', 'may-ghi-am-sony-icd-ux570f.jpg'])
+            ],
+            [
+                'name' => 'Máy Ghi Âm Sony ICD-UX570F', 
+                'category_id' => 3, 
+                'image' => join(DIRECTORY_SEPARATOR, ['/storage', 'img', 'may-ghi-am-sony-icd-ux570f-bac.jpg'])
+            ],
+            [
+                'name' => 'Máy Ghi Âm Sony ICD-UX533', 
+                'category_id' => 3, 
+                'image' => join(DIRECTORY_SEPARATOR, ['/storage', 'img', 'may-ghi-am-sony-icdux533.jpg'])
+            ],
+        ]);
+        EquipmentTemplate::insert([
+            [
+                'name' => 'Chân Máy Velbon M45', 
+                'category_id' => 4,
+                'image' => join(DIRECTORY_SEPARATOR, ['/storage', 'img', 'chan-may-velbon-m45.jpg'])
+            ],
+            [
+                'name' => 'Chân Máy Benro T880EX', 
+                'category_id' => 4,
+                'image' => join(DIRECTORY_SEPARATOR, ['/storage', 'img', 'benro-t880ex.jpg'])
+            ],
+            [
+                'name' => 'Chân Máy Velbon M47', 
+                'category_id' => 4,
+                'image' => join(DIRECTORY_SEPARATOR, ['/storage', 'img', 'chan-may-velbon-m47(1).jpg'])
+            ],
+            [
+                'name' => 'Chân Máy Benro T660EX', 
+                'category_id' => 4,
+                'image' => join(DIRECTORY_SEPARATOR, ['/storage', 'img', 'benro-t660ex(2).jpg'])
+            ],
+            [
+                'name' => 'Chân Máy Ảnh Slik U873', 
+                'category_id' => 4,
+                'image' => join(DIRECTORY_SEPARATOR, ['/storage', 'img', 'Chan-may-Slik-U873.jpg'])
+            ],
+            [
+                'name' => 'Chân Máy Benro T800EX', 
+                'category_id' => 4,
+                'image' => join(DIRECTORY_SEPARATOR, ['/storage', 'img', 'benro-t800ex.jpg'])
+            ],
+            [
+                'name' => 'Chân Máy Velbon EX-630', 
+                'category_id' => 4,
+                'image' => join(DIRECTORY_SEPARATOR, ['/storage', 'img', 'velbon-ex630.jpg'])
+            ],
+            [
+                'name' => 'Chân Máy Benro Video Tripod KH25', 
+                'category_id' => 4,
+                'image' => join(DIRECTORY_SEPARATOR, ['/storage', 'img', 'benro-video-tripod-kh25.jpg'])
+            ],
+        ]);
+        
         EquipmentTemplate::insert([
             [
                 'name' => 'Đèn Flash Godox TT685C For Canon', 

@@ -7,10 +7,9 @@ use App\Channel;
 use App\User;
 use App\EquipmentTemplate;
 use App\Equipment;
+use App\Category;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
-use DateTime;
-use Carbon\Carbon;
 
 class OrderController extends Controller
 {
@@ -42,11 +41,13 @@ class OrderController extends Controller
         $equipmentTemplates = EquipmentTemplate::with(['equipments'])->get();
         $channels = Channel::all();
         $stocker_id = Auth::user()->id;
-        return view('create-order')->with([
+        $categories = Category::all();
+        return view('create-order-multi')->with([
             'users' => $users,
             'channels' => $channels,
             'equipmentTemplates' =>$equipmentTemplates,
-            'stocker_id' => $stocker_id
+            'stocker_id' => $stocker_id,
+            'categories' => $categories
         ]);
     }
 

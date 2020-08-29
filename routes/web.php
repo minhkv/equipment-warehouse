@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-
+use Illuminate\Support\Facades\Auth;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -54,6 +54,11 @@ Route::middleware('auth')->group(function() {
     Route::put('order-request/{order}/complete', 'OrderController@completeOrder')->name('order-request.complete');
     Route::put('order-request/{order}/back', 'OrderController@back')->name('order-request.back');
     Route::get('/test', function() {
-        return view('test');
+        $ar = [1,2,3,4,5];
+        $templates = App\EquipmentTemplate::with('equipments')->get();
+        return view('test')->with([
+            'ar' => $ar,
+            'templates' => $templates
+        ]);
     });
 });

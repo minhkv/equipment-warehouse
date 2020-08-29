@@ -9,20 +9,24 @@
         </div>
     </div>
 
-    <div class="row mb-3">
-        <select class="dropdown-primary mx-4 shadow" v-model="category_id">
-            <option selected value='-1'>Loại thiết bị</option>
-            <option selected value='0'>Tất cả</option>
-            @foreach($categories as $category)
-            <option value="{{$category->id}}">{{ $category->name }}</option>
-            @endforeach
-        </select>
-        <form class="my-2 my-lg-0 px-2">
-            <div class="input-group">
-                <input v-model="search" class="form-control mr-sm-2" type="search" placeholder="Tìm kiếm" aria-label="search" aria-describedby="basic-addon2">
-                <button class="btn btn-outline-primary my-2 my-sm-0" type="submit"><span class="fa fa-search"></span></button>
-            </div>
-        </form>
+    <div class="row mb-4">
+        <div class="dropdown col-2">
+            <select class="custom-select mx-4 shadow" v-model="category_id">
+                <option selected value='-1'>Loại thiết bị</option>
+                <option selected value='0'>Tất cả</option>
+                @foreach($categories as $category)
+                <option value="{{$category->id}}">{{ $category->name }}</option>
+                @endforeach
+            </select>
+        </div>
+        <div class="col-6 offset-1">
+            <form class="my-2 my-lg-0 px-2">
+                <div class="input-group">
+                    <input v-model="search" class="form-control mr-sm-2" type="search" placeholder="Tìm kiếm" aria-label="search" aria-describedby="basic-addon2">
+                    <button class="btn btn-outline-primary my-2 my-sm-0" type="submit"><span class="fa fa-search"></span></button>
+                </div>
+            </form>
+        </div>
         <a href="{{ route('equipment-template.create') }}" class="btn btn-success ml-auto shadow">Thêm thiết bị</a>
     </div>
     <!-- Paginator -->
@@ -78,7 +82,7 @@
             search: '',
             category_id: 0,
             page: 1,
-            perPage: 8,
+            perPage: 12,
             pages: [],
         },
         created: function() {

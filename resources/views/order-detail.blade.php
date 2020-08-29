@@ -1,11 +1,6 @@
 @extends('layouts.app')
 @section('content')
 <link rel="stylesheet" href="/css/order-detail.css">
-<style>
-    .checked {
-        color: orange;
-    }
-</style>
 <div class="container">
     <article class="card">
 

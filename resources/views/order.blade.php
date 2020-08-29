@@ -3,14 +3,14 @@
 <div class="container">
     <div class="row justify-content-center">
         <div class="main-card mb-3 card col-md-12">
-            <div class="card-header">
+            <!-- <div class="card-header">
                 <div class="btn-actions-pane-right">
                     <div class="nav">
                         <a data-toggle="tab" href="#tab-eg2-0" class="btn-pill btn-wide active btn btn-outline-alternate btn-sm">Đơn mượn</a>
-                        <!-- <a data-toggle="tab" href="#tab-eg2-1" class="btn-pill btn-wide mr-1 ml-1  btn btn-outline-alternate btn-sm">Đơn nhập</a> -->
+                        <a data-toggle="tab" href="#tab-eg2-1" class="btn-pill btn-wide mr-1 ml-1  btn btn-outline-alternate btn-sm">Đơn nhập</a>
                     </div>
                 </div>
-            </div>
+            </div> -->
             <div class="card-body">
                 <div class="tab-content">
                     <div class="tab-pane active" id="tab-eg2-0" role="tabpanel">
@@ -74,7 +74,9 @@
                                 </tbody>
                             </table>
                             @else
-                            <h5>Chưa có đơn hàng nào.</h5>
+                            <div class="row justify-content-center">
+                                <h5>Chưa có đơn mượn nào.</h5>
+                            </div>
                             @endif
                         </div>
                     </div>
