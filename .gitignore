@@ -12,3 +12,4 @@ npm-debug.log
 yarn-error.log
 resources/views/test.blade.php
 public/css/test.css
+resources/components/test.vue
