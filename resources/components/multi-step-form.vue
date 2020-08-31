@@ -25,32 +25,32 @@
                             <div class="form-group row">
                                 <label for="guest_name" class="col-3 col-form-label text-left">Người mượn</label>
                                 <div class="col-9">
-                                    <input v-model="guestName" required type="text" name="guest_name" id="guest_name" class="form-control" placeholder="Người mượn">
+                                    <input v-model="guestName" @blur="storeStorageValue" required type="text" name="guest_name" id="guest_name" class="form-control" placeholder="Người mượn">
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <label for="room" class="col-3 col-form-label text-left">Phòng</label>
                                 <div class="col-9">
-                                    <input v-model="department" required type="text" name="room" id="room" class="form-control" placeholder="Phòng">
+                                    <input v-model="department" @blur="storeStorageValue" required type="text" name="room" id="room" class="form-control" placeholder="Phòng">
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <label for="dateBorrowed" class="col-3 col-form-label text-left">Ngày mượn</label>
                                 <div class="col-9">
-                                    <input v-model="dateBorrowed" required class="form-control" type="datetime-local" id="dateBorrowed">
+                                    <input v-model="dateBorrowed" @blur="storeStorageValue" required class="form-control" type="datetime-local" id="dateBorrowed">
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <label for="dateReturn" class="col-3 col-form-label text-left">Ngày trả</label>
                                 <div class="col-9">
-                                    <input v-model="dateReturn" required class="form-control" type="datetime-local"  id="dateReturn">
+                                    <input v-model="dateReturn" @blur="storeStorageValue" required class="form-control" type="datetime-local"  id="dateReturn">
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <div class="offset-4">
                                     <div class="form-check">
                                         <label class="form-check-label" for="long-term">
-                                            <input v-model="longTerm" class="form-check-input" type="checkbox" name="long_term" id="long-term">
+                                            <input v-model="longTerm" @change="storeStorageValue" class="form-check-input" type="checkbox" name="long_term" id="long-term">
                                             Mượn lâu dài
                                         </label>
                                     </div>
@@ -59,7 +59,7 @@
                             <div class="form-group row">
                                 <label for="reason" class="col-3 col-form-label text-left">Lý do mượn</label>
                                 <div class="col-9">
-                                    <input v-model="reason" required class="form-control" type="text"  id="reason" placeholder="Lý do mượn">
+                                    <input v-model="reason" @blur="storeStorageValue" required class="form-control" type="text"  id="reason" placeholder="Lý do mượn">
                                 </div>
                             </div>
                         </div>
@@ -83,6 +83,7 @@
                                         <td class="align-middle text-center">{{template.maxAmount}}</td>
                                         <td class="align-middle text-center">
                                             <input 
+                                            @change="storeStorageValue();"
                                             class="form-control" 
                                             type="number" 
                                             name="amount" 
@@ -91,7 +92,7 @@
                                             v-model="template.amount"
                                             >
                                         </td>
-                                        <td class="align-middle text-center"><button @click="removeEquipmentCard(index)" type="button" class="btn btn-danger btn-sm"><span class="fa fa-trash"></span></button></td>
+                                        <td class="align-middle text-center"><button @click="removeEquipmentCard(index);storeStorageValue();" type="button" class="btn btn-danger btn-sm"><span class="fa fa-trash"></span></button></td>
                                     </tr>
                                     <tr v-show="selectedTemplates.length == 0">
                                         <td colspan="5">Chưa có thiết bị nào. Hãy chọn thiết bị cần mượn.</td>
@@ -134,10 +135,10 @@
                                                                     <thead class="thead-light">
                                                                         <tr>
                                                                             <th class="text-center" scope="col" width="10%"></th>
-                                                                            <th class="text-center" scope="col" width="50%">Tên thiết bị</th>
+                                                                            <th class="text-center" scope="col" width="45%">Tên thiết bị</th>
                                                                             <th class="text-center" scope="col" width="15%">Trong kho</th>
                                                                             <th class="text-center" scope="col" width="15%">Yêu cầu</th>
-                                                                            <th class="text-center" scope="col"></th>
+                                                                            <th class="text-center" scope="col" width="15%"></th>
                                                                         </tr>
                                                                     </thead>
                                                                     <tbody>
@@ -147,6 +148,7 @@
                                                                             <td class="align-middle text-center">{{ template.equipments.length }}</td>
                                                                             <td class="align-middle text-center">
                                                                                 <input 
+                                                                                @change="storeStorageValue();"
                                                                                 class="form-control" 
                                                                                 v-if="buttonDisabled[template.id]" 
                                                                                 type="number" 
@@ -160,11 +162,18 @@
                                                                             <td class="align-middle text-center">
                                                                                 <button 
                                                                                 :disabled="buttonDisabled[template.id]" 
-                                                                                v-on:click="addEquipment(template);" 
+                                                                                v-on:click="addEquipment(template);storeStorageValue();" 
                                                                                 type="button" 
                                                                                 class="btn btn-success btn-sm" 
-                                                                                :id="'select-template-' + template.id">
+                                                                                >
                                                                                     <span class="fa fa-plus"></span>
+                                                                                </button>
+                                                                                <button 
+                                                                                :disabled="!buttonDisabled[template.id]" 
+                                                                                @click="removeEquipmentCardById(template.id);storeStorageValue();" 
+                                                                                type="button" 
+                                                                                class="btn btn-danger btn-sm">
+                                                                                    <span class="fa fa-minus"></span>
                                                                                 </button>
                                                                             </td>
                                                                         </tr>
@@ -245,7 +254,7 @@
                         </div>
                         <button v-show="step > 0" type="button" class="btn btn-secondary next action-button" @click="previousStep()">Quay lại</button>
                         <button v-show="step < 2" type="button" class="btn btn-primary previous action-button" @click="nextStep()">Tiếp tục</button>
-                        <button v-show="step == 2" type="button" class="btn btn-success previous action-button" :disabled="submit" @click="submitBorrowedOrder()">Hoàn tất</button>
+                        <button v-show="step == 2" type="button" class="btn btn-success previous action-button" :disabled="submit" @click="clearStorage();submitBorrowedOrder();">Hoàn tất</button>
                     </fieldset>
                 </form>
             </div>
@@ -285,8 +294,51 @@ export default {
     },
     created() {
         this.filterTemplate();
+        this.loadStorageValue();
     },
     methods: {
+        hide() {
+            console.log('hide');
+        },
+        loadStorageValue() {
+            if(localStorage.guestName) {
+                this.guestName = localStorage.guestName;
+            }
+            if(localStorage.department) {
+                this.department = localStorage.department;
+            }
+            if(localStorage.dateBorrowed) {
+                this.dateBorrowed = localStorage.dateBorrowed;
+            }
+            if(localStorage.dateReturn) {
+                this.dateReturn = localStorage.dateReturn;
+            }
+            if(localStorage.longTerm) {
+                this.longTerm = (localStorage.longTerm == 'true');
+            }
+            if(localStorage.reason) {
+                this.reason = localStorage.reason;
+            }
+            if(localStorage.buttonDisabled) {
+                this.buttonDisabled = JSON.parse(localStorage.buttonDisabled);
+            }
+            if(localStorage.selectedTemplates) {
+                this.selectedTemplates = JSON.parse(localStorage.selectedTemplates);
+            }
+        },
+        storeStorageValue() {
+            localStorage.guestName = this.guestName;
+            localStorage.department = this.department;
+            localStorage.dateBorrowed = this.dateBorrowed;
+            localStorage.dateReturn = this.dateReturn;
+            localStorage.longTerm = this.longTerm;
+            localStorage.reason = this.reason;
+            localStorage.buttonDisabled = JSON.stringify(this.buttonDisabled);
+            localStorage.selectedTemplates = JSON.stringify(this.selectedTemplates);
+        },
+        clearStorage() {
+            localStorage.clear();
+        },
         validate() {
             if(this.step == 0) {
                 if(this.guestName == '') {
@@ -350,6 +402,11 @@ export default {
         removeEquipmentCard: function(index) {
             let templateId = this.selectedTemplates[index].id;
             this.buttonDisabled[templateId] = false;
+            this.selectedTemplates.splice(index, 1);
+        },
+        removeEquipmentCardById: function(id) {
+            let index = this.selectedTemplates.findIndex(x => x.id == id);
+            this.buttonDisabled[id] = false;
             this.selectedTemplates.splice(index, 1);
         },
         checkZeroAmount: function(template) {

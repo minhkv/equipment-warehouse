@@ -9,14 +9,44 @@
                 <h3>Đơn mượn: {{order.id}} 
                     <span :class="displayStatus()">{{getStatusName(order.status)}}</span>
                     </h3>
-                <article class="card">
+                <!-- <article class="card">
                     <div class="card-body row">
                         <div class="col"> <strong><i class="fa fa-user"></i> Người mượn:</strong> <br>{{order.guest_name}} </div>
+                        <div class="col"> <strong><i class="fa fa-user"></i> Phòng ban:</strong> <br>{{order.department}} </div>
+                        <div class="col"> <strong>Mượn lâu dài:</strong> <br> {{order.long_term|formatBoolean}} </div>
+                    </div>
+                    <div class="card-body row">
+                        <div class="col"> <strong><i class="fa fa-calendar"></i> Ngày mượn:</strong> <br> {{order.date_borrowed}} </div>
+                        <div class="col"> <strong><i class="fa fa-calendar"></i> Ngày hẹn trả:</strong> <br> {{order.date_return}} </div>
                         <div class="col"> <strong>Lý do:</strong> <br> {{order.reason}} </div>
-                        <div class="col"> <strong><i class="fa fa-calendar"></i> Thời hạn:</strong> <br> {{order.due_date}} </div>
                         <div class="col"> <strong>Ghi chú:</strong> <br> {{order.note}} </div>
                     </div>
-                </article>
+                </article> -->
+
+                <div class="col-8 mx-auto py-3">
+                    <div class="row">
+                        <label class="col-3 text-left"><strong><i class="fa fa-user"></i> Người mượn</strong></label>
+                        <label class="col-3 text-left">{{order.guest_name}}</label>
+                        <label class="col-3 text-left"><strong><i class="fa fa-calendar"></i> Ngày mượn</strong></label>
+                        <label class="col-3 text-left">{{order.date_borrowed|formatDate}}</label>
+                    </div>
+                    <div class="row">
+                        <label class="col-3 text-left"><strong><i class="fa fa-building"></i> Phòng ban</strong></label>
+                        <label class="col-3 text-left">{{order.department}}</label>
+                        <label class="col-3 text-left"><strong><i class="fa fa-calendar"></i> Ngày hẹn trả</strong></label>
+                        <label class="col-3 text-left">{{order.date_return|formatDate}}</label>
+                    </div>
+                    <div class="row">
+                        <label class="col-3 text-left"><strong>Mượn lâu dài:</strong></label>
+                        <label class="col-3 text-left"> {{order.long_term|formatBoolean}}</label>
+                        <label class="col-3 text-left"><strong>Lý do:</strong></label>
+                        <label class="col-3 text-left">{{order.reason}}</label>
+                    </div>
+                    <div class="row">
+                        <label class="col-3 offset-3 text-left"><strong>Ghi chú:</strong></label>
+                        <label class="col-6 text-left">{{order.note}}</label>
+                    </div>
+                </div>
                 
                 <div class="track">
                     <div :class="{'step': true, 'active': order.status >=0}">

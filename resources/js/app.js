@@ -21,6 +21,7 @@ Vue.component('multi-step-form',require('../components/multi-step-form.vue').def
 Vue.component('equipment-templates',require('../components/equipment-templates.vue').default);
 Vue.component('equipment-lost',require('../components/equipment-lost.vue').default);
 Vue.component('order-detail',require('../components/order-detail.vue').default);
+Vue.component('order',require('../components/order.vue').default);
 
 var app = new Vue({
     el: '#app'

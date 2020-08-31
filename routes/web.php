@@ -54,16 +54,13 @@ Route::middleware('auth')->group(function() {
     Route::put('order-request/{order}/complete', 'OrderController@completeOrder')->name('order-request.complete');
     Route::put('order-request/{order}/back', 'OrderController@back')->name('order-request.back');
     Route::get('/test', function() {
-        $lostEquipments = App\Equipment::with([
-            'template',
-            ])->where('status', 0)->get();
-        $recentOrderInfos = [];
-        foreach($lostEquipments as $lostEquipment) {
-            $recentOrderInfos[$lostEquipment->id] = $lostEquipment->getRecentOrderInfo();
-        }
+        $orders = App\Order::with([
+            'orderRequestInfos', 
+            'orderRequestInfos.orderInfos', 
+            'guest'
+            ])->orderBy('created_at', 'DESC')->get();
         return view('test')->with([
-            'lostEquipments' => $lostEquipments,
-            'recentOrderInfos' => $recentOrderInfos
+            'orders' => $orders
         ]);
     });
 });
