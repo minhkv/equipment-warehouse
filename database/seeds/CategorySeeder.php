@@ -54,5 +54,8 @@ class CategorySeeder extends Seeder
         DB::table('categories')->insertOrIgnore([
             'name' => "Dây đeo",
         ]);
+        DB::table('categories')->insertOrIgnore([
+            'name' => "Ống kính",
+        ]);
     }
 }

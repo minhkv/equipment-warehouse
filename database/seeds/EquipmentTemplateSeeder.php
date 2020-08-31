@@ -13,11 +13,7 @@ class EquipmentTemplateSeeder extends Seeder
      */
     public function run()
     {
-        // $templates = factory(EquipmentTemplate::class, 10)
-        //             ->create()
-        //             ->each(function($template) {
-        //                 $template->equipments()->createMany(factory(Equipment::class, 7)->make()->toArray());
-        //             });
+
         EquipmentTemplate::insert([
             [
                 'name' => 'MÁY ẢNH CANON EOS M50', 
@@ -396,6 +392,74 @@ class EquipmentTemplateSeeder extends Seeder
                 'category_id' => 13,
                 'image' => join(DIRECTORY_SEPARATOR, ['/storage', 'img', 'day-deo-thao-tac-nhanh-quick-strap-caden-k.jpg'])
             ],
+        ]);
+        EquipmentTemplate::insert([
+            [
+                'name' => 'Ống Kính Canon EF-S18-55mm f/3.5-5.6 IS STM', 
+                'category_id' => 14,
+                'image' => join(DIRECTORY_SEPARATOR, ['/storage', 'img', 'canon-efs-1855mm-f3556-is-stm(2).jpg'])
+            ],
+            [
+                'name' => 'Ống Kính Canon EF-S10-18mm F/4.5-5.6 IS STM', 
+                'category_id' => 14,
+                'image' => join(DIRECTORY_SEPARATOR, ['/storage', 'img', 'canon-efs-1018mm-f4556-is-stm.jpg'])
+            ],
+            [
+                'name' => 'Ống Kính Canon EF 300mm f2.8L IS II USM', 
+                'category_id' => 14,
+                'image' => join(DIRECTORY_SEPARATOR, ['/storage', 'img', 'canon-ef-300mm-f28l-is-ii-usm.jpg'])
+            ],
+            [
+                'name' => 'Ống Kính Canon EF11-24mm f/4L USM', 
+                'category_id' => 14,
+                'image' => join(DIRECTORY_SEPARATOR, ['/storage', 'img', 'canon-ef-1124mm-f4l-usm-l.jpg'])
+            ],
+            [
+                'name' => 'Ống Kính Canon RF 28-70mm F2 L USM', 
+                'category_id' => 14,
+                'image' => join(DIRECTORY_SEPARATOR, ['/storage', 'img', 'ong-kinh-canon-rf-28-70mm-f2-l-usm.jpg'])
+            ],
+            [
+                'name' => 'Ống Kính Canon RF 85mm f/1.2L USM', 
+                'category_id' => 14,
+                'image' => join(DIRECTORY_SEPARATOR, ['/storage', 'img', 'ong-kinh-canon-rf-85mm-f-1-2l-usm.jpg'])
+            ],
+            [
+                'name' => 'Ống Kính Canon RF 70-200mm F2.8L IS USM', 
+                'category_id' => 14,
+                'image' => join(DIRECTORY_SEPARATOR, ['/storage', 'img', 'ong-kinh-canon-rf-70-200mm-f2-8l-is-usm.jpg'])
+            ],
+            [
+                'name' => 'Ống Kính Canon RF 50mm F1.2 L USM For Canon EOS R', 
+                'category_id' => 14,
+                'image' => join(DIRECTORY_SEPARATOR, ['/storage', 'img', 'ong-kinh-canon-rf-50mm-f12-l-usm-for-canon-eos-r-hang-nhap-khau.jpg'])
+            ],
+            [
+                'name' => 'Ống Kính Canon RF 24-70mm f/2.8L IS USM', 
+                'category_id' => 14,
+                'image' => join(DIRECTORY_SEPARATOR, ['/storage', 'img', 'ong-kinh-canon-rf-24-70mm-f2-8l-is-usm-hang-nhap-khau.jpg'])
+            ],
+            [
+                'name' => 'Ống Kính Canon EF 14mm f / 2.8L II USM', 
+                'category_id' => 14,
+                'image' => join(DIRECTORY_SEPARATOR, ['/storage', 'img', 'canon-ef14mm-f28l-ii-usm-hang-nhap-khau.jpg'])
+            ],
+            [
+                'name' => 'Ống Kính Canon EF 70-200mm f/2.8L IS III', 
+                'category_id' => 14,
+                'image' => join(DIRECTORY_SEPARATOR, ['/storage', 'img', 'canon-ef-70200mm-f28l-is-iii.jpg'])
+            ],
+            [
+                'name' => 'Ống Kính Canon EF 100-400mm F4.5-5.6L IS II USM', 
+                'category_id' => 14,
+                'image' => join(DIRECTORY_SEPARATOR, ['/storage', 'img', 'ong-kinh-canon-ef-100400mm-f4556l-is-ii-usm-hang-nhap-khau.jpg'])
+            ],
+            [
+                'name' => 'Ống Kính Canon EF 85mm F/1.2L II USM', 
+                'category_id' => 14,
+                'image' => join(DIRECTORY_SEPARATOR, ['/storage', 'img', 'canon-ef-85mm-f12l-ii-usm.jpg'])
+            ],
+            
         ]);
         $templates = EquipmentTemplate::all();
         foreach($templates as $template) {

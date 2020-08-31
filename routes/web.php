@@ -54,11 +54,17 @@ Route::middleware('auth')->group(function() {
     Route::put('order-request/{order}/complete', 'OrderController@completeOrder')->name('order-request.complete');
     Route::put('order-request/{order}/back', 'OrderController@back')->name('order-request.back');
     Route::get('/test', function() {
-        $ar = [1,2,3,4,5];
-        $templates = App\EquipmentTemplate::with('equipments')->get();
+        $users = App\User::all();
+        $equipmentTemplates = App\EquipmentTemplate::with(['equipments'])->get();
+        $channels = App\Channel::all();
+        $stocker_id = Auth::user()->id;
+        $categories = App\Category::all();
         return view('test')->with([
-            'ar' => $ar,
-            'templates' => $templates
+            'users' => $users,
+            'channels' => $channels,
+            'equipmentTemplates' =>$equipmentTemplates,
+            'stocker_id' => $stocker_id,
+            'categories' => $categories
         ]);
     });
 });

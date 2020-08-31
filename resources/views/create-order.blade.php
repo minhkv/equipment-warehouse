@@ -39,7 +39,6 @@
                                     @endforeach
                                 </select>
 
-                                <!-- <input type="text" class="form-control" id="equipmentName" placeholder="Người mượn"> -->
                             </div>
                             <div class="form-group">
                                 <label for="reason">Lý do mượn</label>
@@ -60,7 +59,6 @@
                                                 <p class="card-text">
                                                     Số lượng: <input class="amount" type="number" name="amount" min='0' :max='template.maxAmount' value="1" v-model="template.amount">
                                                 </p>
-                                                @{{index}}
                                                 <button type="button" v-on:click="removeEquipmentCard(index)" class="btn btn-danger btn-sm"><span class="fa fa-trash" /></button>
                                             </div>
                                         </div>

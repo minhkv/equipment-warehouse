@@ -72,7 +72,7 @@
 <script>
 export default {
     props: [
-        'eqs',
+        'equipmentTemplates',
         'categories',
         'equipmentTemplateIndexUrl',
         'equipmentTemplateCreateUrl'
@@ -98,9 +98,9 @@ export default {
         },
         selectedType(){
             if(this.category_id == 0) {
-                this.displayedTemplates = this.eqs;
+                this.displayedTemplates = this.equipmentTemplates;
             } else {
-                this.displayedTemplates = this.eqs.filter(x => x.category_id == this.category_id);
+                this.displayedTemplates = this.equipmentTemplates.filter(x => x.category_id == this.category_id);
             }
         },
         searchTemplate() {
@@ -142,10 +142,10 @@ export default {
                 }).catch(function(error) {
                     console.log(error);
                 });
-                for(var i in this.eqs) {
-                    if(this.eqs[i].id == id) {
+                for(var i in this.equipmentTemplates) {
+                    if(this.equipmentTemplates[i].id == id) {
                         console.log(i);
-                        this.eqs.splice(i, 1);
+                        this.equipmentTemplates.splice(i, 1);
                         break;
                     }
                 }

@@ -78,7 +78,7 @@ class OrderController extends Controller
      */
     public function show(Order $order)
     {
-        $selectedTemplates = [];
+        $order->load(['guest']);
         $order->orderRequestInfos->load([
             'template', 
             'orderInfos', 
