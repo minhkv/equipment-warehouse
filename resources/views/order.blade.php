@@ -40,7 +40,7 @@
                                     @foreach($orders as $order)
                                     <tr>
                                         <th scope="row" class="align-middle">{{$order->id}}</th>
-                                        <td class="align-middle">{{$order->guest->name}}</td>
+                                        <td class="align-middle">{{$order->guest_name}}</td>
                                         <td class="align-middle">{{$order->reason}}</td>
                                         <td class="align-middle">{{$order->created_at}}</td>
                                         <td class="align-middle">

@@ -35,15 +35,15 @@
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label for="date-borrow" class="col-3 col-form-label text-left">Ngày mượn</label>
+                                <label for="dateBorrowed" class="col-3 col-form-label text-left">Ngày mượn</label>
                                 <div class="col-9">
                                     <input v-model="dateBorrowed" required class="form-control" type="datetime-local" id="dateBorrowed">
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label for="example-date-input" class="col-3 col-form-label text-left">Ngày trả</label>
+                                <label for="dateReturn" class="col-3 col-form-label text-left">Ngày trả</label>
                                 <div class="col-9">
-                                    <input v-model="dateReturn" required class="form-control" type="datetime-local"  id="example-date-input">
+                                    <input v-model="dateReturn" required class="form-control" type="datetime-local"  id="dateReturn">
                                 </div>
                             </div>
                             <div class="form-group row">
@@ -54,6 +54,12 @@
                                             Mượn lâu dài
                                         </label>
                                     </div>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="reason" class="col-3 col-form-label text-left">Lý do mượn</label>
+                                <div class="col-9">
+                                    <input v-model="reason" required class="form-control" type="text"  id="reason" placeholder="Lý do mượn">
                                 </div>
                             </div>
                         </div>
@@ -67,10 +73,11 @@
                                         <th class="text-center" scope="col" width="50%">Tên thiết bị</th>
                                         <th class="text-center" scope="col" width="15%">Trong kho</th>
                                         <th class="text-center" scope="col" width="15%">Yêu cầu</th>
+                                        <th class="text-center" scope="col" width="15%"></th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr v-for="template in selectedTemplates" :key="template.id">
+                                    <tr v-for="(template, index) in selectedTemplates" :key="template.id">
                                         <th class="text-center" scope="row"><img :src="template.image" height=40 alt="template.name"></th>
                                         <td class="align-middle text-center">{{template.name}}</td>
                                         <td class="align-middle text-center">{{template.maxAmount}}</td>
@@ -84,6 +91,7 @@
                                             v-model="template.amount"
                                             >
                                         </td>
+                                        <td class="align-middle text-center"><button @click="removeEquipmentCard(index)" type="button" class="btn btn-danger btn-sm"><span class="fa fa-trash"></span></button></td>
                                     </tr>
                                     <tr v-show="selectedTemplates.length == 0">
                                         <td colspan="5">Chưa có thiết bị nào. Hãy chọn thiết bị cần mượn.</td>
@@ -107,16 +115,16 @@
                                                             <div class="modal-body">
                                                                 <div class="row">
                                                                     <div class="dropdown col-3">
-                                                                        <select class="custom-select mx-0">
+                                                                        <select v-model="category_id" v-on:change="filterTemplate" class="custom-select mx-0">
                                                                             <option selected value='0'>Loại thiết bị</option>
                                                                             <!-- <option selected value='0'>Tất cả</option> -->
-                                                                            <option v-for="category in categories" :key="category.id">{{ category.name }}</option>
+                                                                            <option v-for="category in categories" :key="category.id" :value="category.id">{{ category.name }}</option>
                                                                         </select>
                                                                     </div>
                                                                     <div class="col-8">
                                                                         <form class="my-2 my-lg-0 px-2">
                                                                             <div class="input-group">
-                                                                                <input v-model="search" class="form-control mr-sm-2" type="search" placeholder="Tìm kiếm" aria-label="search" aria-describedby="basic-addon2">
+                                                                                <input v-model="search" v-on:keyup="filterTemplate" class="form-control mr-sm-2" type="search" placeholder="Tìm kiếm" aria-label="search" aria-describedby="basic-addon2">
                                                                                 <button class="btn btn-outline-primary my-2 my-sm-0" type="button"><span class="fa fa-search"></span></button>
                                                                             </div>
                                                                         </form>
@@ -133,7 +141,7 @@
                                                                         </tr>
                                                                     </thead>
                                                                     <tbody>
-                                                                        <tr v-for="template in templates" :key="template.id">
+                                                                        <tr v-for="template in paginate(displayedTemplates)" :key="template.id">
                                                                             <th class="text-center" scope="row"><img :src="template.image" height=40 :alt="template.name"></th>
                                                                             <td class="align-middle text-center">{{ template.name }}</td>
                                                                             <td class="align-middle text-center">{{ template.equipments.length }}</td>
@@ -162,6 +170,16 @@
                                                                         </tr>
                                                                     </tbody>
                                                                 </table>
+                                                                <!-- Paginator -->
+                                                                <div class="row justify-content-center">
+                                                                    <nav aria-label="Page navigation example">
+                                                                        <ul class="pagination">
+                                                                            <li class="page-item"><button class="page-link active" href="#" :disabled="page <= 1" @click="page--">Previous</button></li>
+                                                                            <li class="page-item" v-for="pageNumber in pages.slice(page-1, page+5)" :key="pageNumber"><a class="page-link" href="#"  @click="page = pageNumber">{{pageNumber}}</a></li>
+                                                                            <li class="page-item"><button class="page-link" href="#" @click="page++" :disabled="page >= pages.length">Next</button></li>
+                                                                        </ul>
+                                                                    </nav>
+                                                                </div>
                                                             </div>
                                                             <div class="modal-footer">
                                                                 <button type="button" class="btn btn-primary" data-dismiss="modal">Xong</button>
@@ -198,6 +216,10 @@
                                 <label class="col-3 text-left">Mượn lâu dài</label>
                                 <label class="col-9 text-left">{{ longTerm|formatBoolean }}</label>
                             </div>
+                            <div class="row">
+                                <label class="col-3 text-left">Lý do mượn</label>
+                                <label class="col-9 text-left">{{ reason }}</label>
+                            </div>
                             
                             <table class="table mt-2 templateTable">
                                 <thead class="thead-light">
@@ -223,14 +245,12 @@
                         </div>
                         <button v-show="step > 0" type="button" class="btn btn-secondary next action-button" @click="previousStep()">Quay lại</button>
                         <button v-show="step < 2" type="button" class="btn btn-primary previous action-button" @click="nextStep()">Tiếp tục</button>
-                        <button v-show="step == 2" type="button" class="btn btn-success previous action-button">Hoàn tất</button>
+                        <button v-show="step == 2" type="button" class="btn btn-success previous action-button" :disabled="submit" @click="submitBorrowedOrder()">Hoàn tất</button>
                     </fieldset>
                 </form>
             </div>
         </div>
     </div>
-
-    
 </template>
 
 <script>
@@ -240,7 +260,8 @@ export default {
         "templates",
         "categories",
         "type",
-        "stocker_id",
+        "stockerId",
+        "orderCreateUrl"
     ],
     data() {
         return {
@@ -250,17 +271,57 @@ export default {
             dateBorrowed: '',
             dateReturn: '',
             longTerm: false,
+            reason: '',
             selectedTemplates: [],
             buttonDisabled: {},
+            displayedTemplates: [],
             category_id: 0,
             search: '',
             page: 1,
             perPage: 5,
             pages: [],
+            submit: false
         };
     },
+    created() {
+        this.filterTemplate();
+    },
     methods: {
+        validate() {
+            if(this.step == 0) {
+                if(this.guestName == '') {
+                    alert('Người mượn không được để trống');
+                    return false;
+                };
+                if(this.department == '') {
+                    alert('Phòng không được để trống');
+                    return false;
+                }
+                if(this.dateBorrowed == '') {
+                    alert('Ngày mượn không được để trống');
+                    return false;
+                }
+                if(this.dateReturn == '') {
+                    alert('Ngày trả không được để trống');
+                    return false;
+                }
+            }
+            if(this.step == 1) {
+                if(this.selectedTemplates.length == 0) {
+                    alert('Bạn chưa chọn thiết bị nào. Hãy chọn thiết bị.');
+                    return false;
+                }
+                for(let i in this.selectedTemplates) {
+                    if (this.selectedTemplates[i].amount == 0) {
+                        alert('Số lượng mượn của thiết bị "' + this.selectedTemplates[i].name + '" phải lớn hơn 0.');
+                        return false;
+                    }
+                }
+            }
+            return true;
+        },
         nextStep: function() {
+            if(!this.validate()) return;
             if(this.step < 2)
                 this.step ++;
         },
@@ -287,7 +348,7 @@ export default {
             }
         },
         removeEquipmentCard: function(index) {
-            templateId = this.selectedTemplates[index].id;
+            let templateId = this.selectedTemplates[index].id;
             this.buttonDisabled[templateId] = false;
             this.selectedTemplates.splice(index, 1);
         },
@@ -306,17 +367,62 @@ export default {
         },
         submitBorrowedOrder: function() {
             console.log('submit');
-            if (this.selectedTemplates.length == 0) {
-                alert('Bạn chưa chọn thiết bị nào!');
-                return;
+            this.submit = true;
+            axios.post(this.orderCreateUrl, {
+                type: this.type,
+                stockerId: this.stockerId,
+                guestName: this.guestName,
+                department: this.department,
+                dateBorrowed: this.dateBorrowed,
+                dateReturn: this.dateReturn,
+                longTerm: this.longTerm,
+                reason: this.reason,
+                templates: this.selectedTemplates
+            })
+            .then(res => {
+                console.log(res);
+                window.location.replace(res.data);
+            }).catch(err => {
+                console.log(err);
+            });
+
+        },
+        filterTemplate() {
+            this.selectedType();
+            this.searchTemplate();
+            this.setPages();
+        },
+        selectedType(){
+            if(this.category_id == 0) {
+                this.displayedTemplates = this.templates;
+            } else {
+                this.displayedTemplates = this.templates.filter(x => x.category_id == this.category_id);
             }
-            for (let i in this.selectedTemplates) {
-                if (this.selectedTemplates[i].amount == 0) {
-                    alert('Số lượng mượn của thiết bị ' + this.selectedTemplates[i].name + ' phải lớn hơn 0!');
-                    return;
-                }
+        },
+        searchTemplate() {
+            this.displayedTemplates = this.displayedTemplates.filter(x => {
+                var name = this.normalizeSearchString(x.name);
+                var search = this.normalizeSearchString(this.search);
+                return name.includes(search);
+            });
+        },
+        normalizeSearchString(str) {
+            return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+        },
+        setPages() {
+            var itemPerPage = this.perPage;
+            let numberOfPages = Math.ceil(this.displayedTemplates.length / itemPerPage);
+            this.page = 1;
+            this.pages = [];
+            for (let index = 1; index <= numberOfPages; index++) {
+                this.pages.push(index);
             }
-            document.getElementById('formCreateOrder').submit();
+        },
+        paginate(itemList) {
+            let page = this.page;
+            let from = (page * this.perPage) - this.perPage;
+            let to = (page * this.perPage);
+            return itemList.slice(from, to);
         },
     }
 };

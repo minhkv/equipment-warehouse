@@ -127,21 +127,26 @@ class OrderController extends Controller
     }
 
     public function storeRequest(Request $request) {
+        // return $request->all();
         $order = Order::create([
             'type' => $request->input('type'),
-            'stocker_id' => $request->input('stocker_id'),
-            'guest_id' => $request->input('guest_id'),
+            'stocker_id' => $request->input('stockerId'),
+            'guest_name' => $request->input('guestName'),
+            'department' => $request->input('department'),
+            'date_borrowed' => $request->input('dateBorrowed'),
+            'date_return' => $request->input('dateReturn'),
+            'longTerm' => $request->input('longTerm'),
             'reason' => $request->input('reason'),
             'status' => '0',
         ]);
-        $templates = json_decode($request->input('templates')[0]);
+        $templates = ($request->input('templates'));
         foreach($templates as $template) {
             $order->orderRequestInfos()->create([
-                'template_id' => $template->id,
-                'amount' => $template->amount,
+                'template_id' => $template['id'],
+                'amount' => $template['amount'],
             ]);            
         }
-        return redirect(route('order.show', $order));
+        return (route('order.show', $order));
     }
 
     public function back(Order $order) {
@@ -175,7 +180,8 @@ class OrderController extends Controller
 
 
 
-    public function acceptOrderRequest(Order $order) {
+    public function acceptOrderRequest(Request $request, Order $order) {
+        // return $request->input('date_approved');
         $order->update([
             'status' => 1,
             'date_approved' => date('Y-m-d H:i:s')

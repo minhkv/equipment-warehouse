@@ -1899,497 +1899,6 @@ module.exports = {
 
 /***/ }),
 
-/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/components/create-order.vue?vue&type=script&lang=js&":
-/*!********************************************************************************************************************************************************************!*\
-  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/components/create-order.vue?vue&type=script&lang=js& ***!
-  \********************************************************************************************************************************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-/* harmony default export */ __webpack_exports__["default"] = ({
-  props: ["orderIndexUrl", "templates", "categories"],
-  data: function data() {
-    return {
-      step: 0,
-      selectedTemplates: [],
-      buttonDisabled: {},
-      category_id: 0,
-      search: '',
-      page: 1,
-      perPage: 5,
-      pages: []
-    };
-  },
-  methods: {
-    nextStep: function nextStep() {
-      if (this.step < 2) this.step++;
-    },
-    previousStep: function previousStep() {
-      if (this.step > 0) {
-        this.step--;
-      }
-    },
-    addEquipment: function addEquipment(template) {
-      this.selectedTemplates.push({
-        id: template.id,
-        name: template.name,
-        amount: '0',
-        maxAmount: template.equipments.length,
-        image: template.image
-      });
-      this.buttonDisabled[template.id] = true;
-    },
-    getSelectedTemplate: function getSelectedTemplate(template_id) {
-      for (i in this.selectedTemplates) {
-        if (this.selectedTemplates[i].id == template_id) {
-          return this.selectedTemplates[i];
-        }
-      }
-    },
-    removeEquipmentCard: function removeEquipmentCard(index) {
-      templateId = this.selectedTemplates[index].id;
-      this.buttonDisabled[templateId] = false;
-      this.selectedTemplates.splice(index, 1);
-    },
-    checkZeroAmount: function checkZeroAmount(template) {
-      if (template.amount == 0) {
-        return true;
-      }
-
-      return false;
-    },
-    equipmentTemplateCategory: function equipmentTemplateCategory(category_id, equipmentTemplateList) {
-      if (category_id <= 0) return equipmentTemplateList;
-      var result = equipmentTemplateList.filter(function (template) {
-        return template.category_id == category_id;
-      });
-      return result;
-    },
-    submitBorrowedOrder: function submitBorrowedOrder() {
-      console.log('submit');
-
-      if (this.selectedTemplates.length == 0) {
-        alert('Bạn chưa chọn thiết bị nào!');
-        return;
-      }
-
-      for (i in this.selectedTemplates) {
-        if (this.selectedTemplates[i].amount == 0) {
-          alert('Số lượng mượn của thiết bị ' + this.selectedTemplates[i].name + ' phải lớn hơn 0!');
-          return;
-        }
-      }
-
-      document.getElementById('formCreateOrder').submit();
-    }
-  }
-});
-
-/***/ }),
-
 /***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/components/equipment-lost.vue?vue&type=script&lang=js&":
 /*!**********************************************************************************************************************************************************************!*\
   !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/components/equipment-lost.vue?vue&type=script&lang=js& ***!
@@ -2533,12 +2042,73 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ['lostEquipments'],
+  props: ['lostEquipments', 'recentOrderInfos', 'equipmentIndexUrl'],
   data: function data() {
     return {
-      mess: 'Hello world',
-      active: 1
+      displayedEquipments: {},
+      scoreDescriptions: {}
     };
+  },
+  created: function created() {
+    var scoreDescriptions = {};
+    var recentOrderInfos = this.recentOrderInfos;
+    this.displayedEquipments = this.lostEquipments;
+    this.lostEquipments.forEach(function (equipment) {
+      recentOrderInfos[equipment.id].condition_received = equipment.condition;
+    });
+    this.lostEquipments.forEach(function (equipment) {
+      scoreDescriptions[equipment.id] = 'Đánh giá';
+    });
+    this.scoreDescriptions = scoreDescriptions;
+  },
+  methods: {
+    getRecentOrder: function getRecentOrder(equipment) {
+      if (this.recentOrderInfos[equipment.id]) return this.recentOrderInfos[equipment.id].order_request_info.order;else return {
+        id: 'không rõ',
+        guest: {
+          name: 'không rõ'
+        },
+        created_at: 'không rõ'
+      };
+    },
+    deleteEquipment: function deleteEquipment(equipment, index) {
+      console.log('/equipment/' + equipment.id);
+      axios["delete"](this.equipmentIndexUrl + '/' + equipment.id).then(function (res) {
+        console.log(res);
+      })["catch"](function (error) {
+        console.log("handlesubmit error: ", error);
+      });
+      this.displayedEquipments.splice(index, 1);
+    },
+    receivedLostEquipment: function receivedLostEquipment(equipment, index) {
+      console.log('received ' + equipment.id);
+      var equipmentReceivedUrl = '/equipment-template-lost-received/' + equipment.id;
+      axios({
+        url: equipmentReceivedUrl,
+        method: 'put',
+        data: {
+          recentOrderInfos: this.recentOrderInfos[equipment.id]
+        }
+      }).then(function (response) {
+        console.log(response); // window.location.reload();
+      })["catch"](function (error) {
+        console.log(error);
+      });
+      this.displayedEquipments.splice(index, 1);
+    },
+    starClass: function starClass(index, value) {
+      return {
+        'checked': index <= value,
+        'fa': true,
+        'fa-star': true
+      };
+    },
+    normalText: function normalText(id) {
+      this.scoreDescriptions[id] = 'Đánh giá';
+    },
+    changeText: function changeText(id, text) {
+      this.scoreDescriptions[id] = text;
+    }
   }
 });
 
@@ -2960,8 +2530,28 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ["orderIndexUrl", "templates", "categories", "type", "stocker_id"],
+  props: ["orderIndexUrl", "templates", "categories", "type", "stockerId", "orderCreateUrl"],
   data: function data() {
     return {
       step: 0,
@@ -2970,17 +2560,65 @@ __webpack_require__.r(__webpack_exports__);
       dateBorrowed: '',
       dateReturn: '',
       longTerm: false,
+      reason: '',
       selectedTemplates: [],
       buttonDisabled: {},
+      displayedTemplates: [],
       category_id: 0,
       search: '',
       page: 1,
       perPage: 5,
-      pages: []
+      pages: [],
+      submit: false
     };
   },
+  created: function created() {
+    this.filterTemplate();
+  },
   methods: {
+    validate: function validate() {
+      if (this.step == 0) {
+        if (this.guestName == '') {
+          alert('Người mượn không được để trống');
+          return false;
+        }
+
+        ;
+
+        if (this.department == '') {
+          alert('Phòng không được để trống');
+          return false;
+        }
+
+        if (this.dateBorrowed == '') {
+          alert('Ngày mượn không được để trống');
+          return false;
+        }
+
+        if (this.dateReturn == '') {
+          alert('Ngày trả không được để trống');
+          return false;
+        }
+      }
+
+      if (this.step == 1) {
+        if (this.selectedTemplates.length == 0) {
+          alert('Bạn chưa chọn thiết bị nào. Hãy chọn thiết bị.');
+          return false;
+        }
+
+        for (var i in this.selectedTemplates) {
+          if (this.selectedTemplates[i].amount == 0) {
+            alert('Số lượng mượn của thiết bị "' + this.selectedTemplates[i].name + '" phải lớn hơn 0.');
+            return false;
+          }
+        }
+      }
+
+      return true;
+    },
     nextStep: function nextStep() {
+      if (!this.validate()) return;
       if (this.step < 2) this.step++;
     },
     previousStep: function previousStep() {
@@ -3006,7 +2644,7 @@ __webpack_require__.r(__webpack_exports__);
       }
     },
     removeEquipmentCard: function removeEquipmentCard(index) {
-      templateId = this.selectedTemplates[index].id;
+      var templateId = this.selectedTemplates[index].id;
       this.buttonDisabled[templateId] = false;
       this.selectedTemplates.splice(index, 1);
     },
@@ -3026,20 +2664,69 @@ __webpack_require__.r(__webpack_exports__);
     },
     submitBorrowedOrder: function submitBorrowedOrder() {
       console.log('submit');
+      this.submit = true;
+      axios.post(this.orderCreateUrl, {
+        type: this.type,
+        stockerId: this.stockerId,
+        guestName: this.guestName,
+        department: this.department,
+        dateBorrowed: this.dateBorrowed,
+        dateReturn: this.dateReturn,
+        longTerm: this.longTerm,
+        reason: this.reason,
+        templates: this.selectedTemplates
+      }).then(function (res) {
+        console.log(res);
+        window.location.replace(res.data);
+      })["catch"](function (err) {
+        console.log(err);
+      });
+    },
+    filterTemplate: function filterTemplate() {
+      this.selectedType();
+      this.searchTemplate();
+      this.setPages();
+    },
+    selectedType: function selectedType() {
+      var _this = this;
 
-      if (this.selectedTemplates.length == 0) {
-        alert('Bạn chưa chọn thiết bị nào!');
-        return;
+      if (this.category_id == 0) {
+        this.displayedTemplates = this.templates;
+      } else {
+        this.displayedTemplates = this.templates.filter(function (x) {
+          return x.category_id == _this.category_id;
+        });
       }
+    },
+    searchTemplate: function searchTemplate() {
+      var _this2 = this;
 
-      for (var i in this.selectedTemplates) {
-        if (this.selectedTemplates[i].amount == 0) {
-          alert('Số lượng mượn của thiết bị ' + this.selectedTemplates[i].name + ' phải lớn hơn 0!');
-          return;
-        }
+      this.displayedTemplates = this.displayedTemplates.filter(function (x) {
+        var name = _this2.normalizeSearchString(x.name);
+
+        var search = _this2.normalizeSearchString(_this2.search);
+
+        return name.includes(search);
+      });
+    },
+    normalizeSearchString: function normalizeSearchString(str) {
+      return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+    },
+    setPages: function setPages() {
+      var itemPerPage = this.perPage;
+      var numberOfPages = Math.ceil(this.displayedTemplates.length / itemPerPage);
+      this.page = 1;
+      this.pages = [];
+
+      for (var index = 1; index <= numberOfPages; index++) {
+        this.pages.push(index);
       }
-
-      document.getElementById('formCreateOrder').submit();
+    },
+    paginate: function paginate(itemList) {
+      var page = this.page;
+      var from = page * this.perPage - this.perPage;
+      var to = page * this.perPage;
+      return itemList.slice(from, to);
     }
   }
 });
@@ -3660,7 +3347,9 @@ __webpack_require__.r(__webpack_exports__);
     },
     acceptOrder: function acceptOrder(button) {
       this.disableButton();
-      axios.put(acceptUrl).then(function (res) {
+      axios.put(this.acceptUrl, {
+        date_approved: new Date()
+      }).then(function (res) {
         console.log(res);
         window.location.reload();
       })["catch"](function (error) {
@@ -3668,11 +3357,13 @@ __webpack_require__.r(__webpack_exports__);
       });
     },
     rejectOrder: function rejectOrder() {
-      console.log(orderIndexUrl);
+      var _this = this;
+
+      console.log(this.orderIndexUrl);
       this.disableButton();
-      axios.put(rejectUrl).then(function (res) {
+      axios.put(this.rejectUrl).then(function (res) {
         console.log(res);
-        window.location.assign(orderIndexUrl);
+        window.location.assign(_this.orderIndexUrl);
       })["catch"](function (error) {
         console.log("handlesubmit error: ", error);
       });
@@ -8245,25 +7936,6 @@ __webpack_require__.r(__webpack_exports__);
 
 })));
 //# sourceMappingURL=bootstrap.js.map
-
-
-/***/ }),
-
-/***/ "./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/components/create-order.vue?vue&type=style&index=0&id=741f43e4&scoped=true&lang=css&":
-/*!***************************************************************************************************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/css-loader??ref--6-1!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src??ref--6-2!./node_modules/vue-loader/lib??vue-loader-options!./resources/components/create-order.vue?vue&type=style&index=0&id=741f43e4&scoped=true&lang=css& ***!
-  \***************************************************************************************************************************************************************************************************************************************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-exports = module.exports = __webpack_require__(/*! ../../node_modules/css-loader/lib/css-base.js */ "./node_modules/css-loader/lib/css-base.js")(false);
-// imports
-exports.push([module.i, "@import url(https://fonts.googleapis.com/css?family=Montserrat);", ""]);
-
-// module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\r\n/*custom font*/\r\n\r\n/*basic reset*/\n*[data-v-741f43e4] {\r\n    margin: 0;\r\n    padding: 0;\n}\r\n\r\n/*form styles*/\n#msform[data-v-741f43e4] {\r\n    text-align: center;\r\n    position: relative;\r\n    margin-top: 30px;\n}\n#msform fieldset[data-v-741f43e4] {\r\n    background: white;\r\n    border: 0 none;\r\n    border-radius: 0px;\r\n    box-shadow: 0 0 15px 1px rgba(0, 0, 0, 0.4);\r\n    padding: 20px 30px;\r\n    box-sizing: border-box;\r\n    width: 80%;\r\n    margin: 0 10%;\r\n\r\n    /*stacking fieldsets above each other*/\r\n    position: relative;\n}\r\n\r\n/*Hide all except first fieldset*/\n#msform fieldset[data-v-741f43e4]:not(:first-of-type) {\r\n    display: none;\n}\r\n\r\n/*buttons*/\n#msform .action-button[data-v-741f43e4] {\r\n    font-size: 13px;\r\n    font-weight: bold;\r\n    width: 100px;\r\n    cursor: pointer;\r\n    padding: 10px 5px;\r\n    margin: 10px 5px;\r\n    border-radius: 25px;\n}\n.page[data-v-741f43e4] {\r\n    min-height: 500px;\n}\n#msform .action-button[data-v-741f43e4]:hover, #msform .action-button[data-v-741f43e4]:focus {\r\n    box-shadow: 0 0 0 2px white, 0 0 0 3px #007bff;\n}\n#msform .action-button-previous[data-v-741f43e4] {\r\n    width: 100px;\r\n    border: 0 none;\r\n    border-radius: 25px;\r\n    cursor: pointer;\r\n    padding: 10px 5px;\r\n    margin: 10px 5px;\n}\n#msform .action-button-previous[data-v-741f43e4]:hover, #msform .action-button-previous[data-v-741f43e4]:focus {\r\n    box-shadow: 0 0 0 2px white, 0 0 0 3px #efefef;\n}\r\n\r\n/*headings*/\n.fs-title[data-v-741f43e4] {\r\n    font-size: 18px;\r\n    text-transform: uppercase;\r\n    color: #2C3E50;\r\n    margin-bottom: 10px;\r\n    letter-spacing: 2px;\r\n    font-weight: bold;\n}\n.fs-subtitle[data-v-741f43e4] {\r\n    font-weight: normal;\r\n    font-size: 13px;\r\n    color: #666;\r\n    margin-bottom: 20px;\n}\n.templateTable[data-v-741f43e4], .templateTable input[data-v-741f43e4] {\r\n    font-size: small;\n}\r\n\r\n\r\n/* Not relevant to this form */\n.dme_link[data-v-741f43e4] {\r\n    margin-top: 30px;\r\n    text-align: center;\n}\n.dme_link a[data-v-741f43e4] {\r\n    background: #FFF;\r\n    font-weight: bold;\r\n    color: #ee0979;\r\n    border: 0 none;\r\n    border-radius: 25px;\r\n    cursor: pointer;\r\n    padding: 5px 25px;\r\n    font-size: 12px;\n}\n.dme_link a[data-v-741f43e4]:hover, .dme_link a[data-v-741f43e4]:focus {\r\n    background: #C5C5F1;\r\n    text-decoration: none;\n}\n.track[data-v-741f43e4] {\r\n    position: relative;\r\n    background-color: #ddd;\r\n    height: 7px;\r\n    display: flex;\r\n    margin-bottom: 70px;\r\n    margin-top: 50px\n}\n.track .step[data-v-741f43e4] {\r\n    flex-grow: 1;\r\n    width: 25%;\r\n    margin-top: -18px;\r\n    text-align: center;\r\n    position: relative\n}\n.track .step.active[data-v-741f43e4]:before {\r\n    background: #009AEB\n}\n.track .step[data-v-741f43e4]::before {\r\n    height: 7px;\r\n    position: absolute;\r\n    content: \"\";\r\n    width: 100%;\r\n    left: 0;\r\n    top: 18px\n}\n.track .step.active .icon[data-v-741f43e4] {\r\n    background: #009AEB;\r\n    color: #fff\n}\n.track .icon[data-v-741f43e4] {\r\n    display: inline-block;\r\n    width: 40px;\r\n    height: 40px;\r\n    line-height: 40px;\r\n    position: relative;\r\n    border-radius: 100%;\r\n    background: #ddd\n}\n.track .step.active .text[data-v-741f43e4] {\r\n    font-weight: 400;\r\n    color: #000\n}\n.track .text[data-v-741f43e4] {\r\n    display: block;\r\n    margin-top: 7px\n}\r\n\r\n", ""]);
-
-// exports
 
 
 /***/ }),
@@ -60695,36 +60367,6 @@ process.umask = function() { return 0; };
 
 /***/ }),
 
-/***/ "./node_modules/style-loader/index.js!./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/components/create-order.vue?vue&type=style&index=0&id=741f43e4&scoped=true&lang=css&":
-/*!*******************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/style-loader!./node_modules/css-loader??ref--6-1!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src??ref--6-2!./node_modules/vue-loader/lib??vue-loader-options!./resources/components/create-order.vue?vue&type=style&index=0&id=741f43e4&scoped=true&lang=css& ***!
-  \*******************************************************************************************************************************************************************************************************************************************************************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-
-var content = __webpack_require__(/*! !../../node_modules/css-loader??ref--6-1!../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../node_modules/postcss-loader/src??ref--6-2!../../node_modules/vue-loader/lib??vue-loader-options!./create-order.vue?vue&type=style&index=0&id=741f43e4&scoped=true&lang=css& */ "./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/components/create-order.vue?vue&type=style&index=0&id=741f43e4&scoped=true&lang=css&");
-
-if(typeof content === 'string') content = [[module.i, content, '']];
-
-var transform;
-var insertInto;
-
-
-
-var options = {"hmr":true}
-
-options.transform = transform
-options.insertInto = undefined;
-
-var update = __webpack_require__(/*! ../../node_modules/style-loader/lib/addStyles.js */ "./node_modules/style-loader/lib/addStyles.js")(content, options);
-
-if(content.locals) module.exports = content.locals;
-
-if(false) {}
-
-/***/ }),
-
 /***/ "./node_modules/style-loader/index.js!./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/components/equipment-lost.vue?vue&type=style&index=0&id=239904d8&scoped=true&lang=css&":
 /*!*********************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/style-loader!./node_modules/css-loader??ref--6-1!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src??ref--6-2!./node_modules/vue-loader/lib??vue-loader-options!./resources/components/equipment-lost.vue?vue&type=style&index=0&id=239904d8&scoped=true&lang=css& ***!
@@ -61429,723 +61071,6 @@ exports.clearImmediate = (typeof self !== "undefined" && self.clearImmediate) ||
 
 /***/ }),
 
-/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/components/create-order.vue?vue&type=template&id=741f43e4&scoped=true&":
-/*!************************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/components/create-order.vue?vue&type=template&id=741f43e4&scoped=true& ***!
-  \************************************************************************************************************************************************************************************************************************/
-/*! exports provided: render, staticRenderFns */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
-var render = function() {
-  var _vm = this
-  var _h = _vm.$createElement
-  var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "container" }, [
-    _c("div", { staticClass: "row" }, [
-      _c("div", { staticClass: "col-lg-10 mx-auto" }, [
-        _c("form", { attrs: { id: "msform" } }, [
-          _c("div", { staticClass: "track" }, [
-            _c("div", { class: { step: true, active: _vm.step >= 0 } }, [
-              _vm._m(0),
-              _vm._v(" "),
-              _c("span", { staticClass: "text" }, [
-                _vm._v("Thông tin đơn mượn")
-              ])
-            ]),
-            _vm._v(" "),
-            _c("div", { class: { step: true, active: _vm.step >= 1 } }, [
-              _vm._m(1),
-              _vm._v(" "),
-              _c("span", { staticClass: "text" }, [_vm._v("Chọn thiết bị")])
-            ]),
-            _vm._v(" "),
-            _c("div", { class: { step: true, active: _vm.step >= 2 } }, [
-              _vm._m(2),
-              _vm._v(" "),
-              _c("span", { staticClass: "text" }, [_vm._v(" Xác nhận")])
-            ])
-          ]),
-          _vm._v(" "),
-          _c("fieldset", [
-            _c(
-              "div",
-              {
-                directives: [
-                  {
-                    name: "show",
-                    rawName: "v-show",
-                    value: _vm.step == 0,
-                    expression: "step==0"
-                  }
-                ]
-              },
-              [
-                _c("h2", { staticClass: "fs-title" }, [
-                  _vm._v("Thông tin đơn mượn")
-                ]),
-                _vm._v(" "),
-                _c("h3", { staticClass: "fs-subtitle" }, [
-                  _vm._v("Tell us something more about you")
-                ]),
-                _vm._v(" "),
-                _vm._m(3),
-                _vm._v(" "),
-                _vm._m(4),
-                _vm._v(" "),
-                _vm._m(5),
-                _vm._v(" "),
-                _vm._m(6),
-                _vm._v(" "),
-                _vm._m(7)
-              ]
-            ),
-            _vm._v(" "),
-            _c(
-              "div",
-              {
-                directives: [
-                  {
-                    name: "show",
-                    rawName: "v-show",
-                    value: _vm.step == 1,
-                    expression: "step==1"
-                  }
-                ]
-              },
-              [
-                _c("h2", { staticClass: "fs-title" }, [
-                  _vm._v("Chọn thiết bị")
-                ]),
-                _vm._v(" "),
-                _c("h3", { staticClass: "fs-subtitle" }, [
-                  _vm._v("Your presence on the social network")
-                ]),
-                _vm._v(" "),
-                _vm._m(8)
-              ]
-            ),
-            _vm._v(" "),
-            _c(
-              "div",
-              {
-                directives: [
-                  {
-                    name: "show",
-                    rawName: "v-show",
-                    value: _vm.step == 2,
-                    expression: "step==2"
-                  }
-                ]
-              },
-              [
-                _c("h2", { staticClass: "fs-title" }, [_vm._v("Xác nhận")]),
-                _vm._v(" "),
-                _c("h3", { staticClass: "fs-subtitle" }, [
-                  _vm._v("Your presence on the social network")
-                ]),
-                _vm._v(" "),
-                _vm._m(9)
-              ]
-            ),
-            _vm._v(" "),
-            _c(
-              "button",
-              {
-                staticClass: "btn btn-secondary next action-button",
-                attrs: { type: "button" },
-                on: {
-                  click: function($event) {
-                    return _vm.previousStep()
-                  }
-                }
-              },
-              [_vm._v("Previous")]
-            ),
-            _vm._v(" "),
-            _c(
-              "button",
-              {
-                staticClass: "btn btn-primary previous action-button",
-                attrs: { type: "button" },
-                on: {
-                  click: function($event) {
-                    return _vm.nextStep()
-                  }
-                }
-              },
-              [_vm._v("Next")]
-            )
-          ])
-        ])
-      ])
-    ])
-  ])
-}
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("span", { staticClass: "icon" }, [
-      _c("i", { staticClass: "fa fa-info" })
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("span", { staticClass: "icon" }, [
-      _c("i", { staticClass: "fa fa-desktop" })
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("span", { staticClass: "icon" }, [
-      _c("i", { staticClass: "fa fa-check" })
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "form-group row" }, [
-      _c(
-        "label",
-        {
-          staticClass: "col-3 col-form-label text-left",
-          attrs: { for: "guest_name" }
-        },
-        [_vm._v("Người mượn")]
-      ),
-      _vm._v(" "),
-      _c("div", { staticClass: "col-9" }, [
-        _c("input", {
-          staticClass: "form-control",
-          attrs: {
-            type: "text",
-            name: "guest_name",
-            id: "guest_name",
-            placeholder: "Người mượn"
-          }
-        })
-      ])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "form-group row" }, [
-      _c(
-        "label",
-        {
-          staticClass: "col-3 col-form-label text-left",
-          attrs: { for: "room" }
-        },
-        [_vm._v("Phòng")]
-      ),
-      _vm._v(" "),
-      _c("div", { staticClass: "col-9" }, [
-        _c("input", {
-          staticClass: "form-control",
-          attrs: {
-            type: "text",
-            name: "room",
-            id: "room",
-            placeholder: "Phòng"
-          }
-        })
-      ])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "form-group row" }, [
-      _c(
-        "label",
-        {
-          staticClass: "col-3 col-form-label text-left",
-          attrs: { for: "date-borrow" }
-        },
-        [_vm._v("Ngày mượn")]
-      ),
-      _vm._v(" "),
-      _c("div", { staticClass: "col-9" }, [
-        _c("input", {
-          staticClass: "form-control",
-          attrs: { type: "date", value: "2011-08-19", id: "date-borrow" }
-        })
-      ])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "form-group row" }, [
-      _c(
-        "label",
-        {
-          staticClass: "col-3 col-form-label text-left",
-          attrs: { for: "example-date-input" }
-        },
-        [_vm._v("Ngày trả")]
-      ),
-      _vm._v(" "),
-      _c("div", { staticClass: "col-9" }, [
-        _c("input", {
-          staticClass: "form-control",
-          attrs: { type: "date", value: "2011-08-19", id: "example-date-input" }
-        })
-      ])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "form-group row" }, [
-      _c("div", { staticClass: "offset-4" }, [
-        _c("div", { staticClass: "form-check" }, [
-          _c(
-            "label",
-            { staticClass: "form-check-label", attrs: { for: "long-term" } },
-            [
-              _c("input", {
-                staticClass: "form-check-input",
-                attrs: {
-                  type: "checkbox",
-                  name: "long_term",
-                  value: "",
-                  id: "long-term"
-                }
-              }),
-              _vm._v(
-                "\n                                        Mượn lâu dài\n                                    "
-              )
-            ]
-          )
-        ])
-      ])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("table", { staticClass: "table mt-2 templateTable" }, [
-      _c("thead", { staticClass: "thead-light" }, [
-        _c("tr", [
-          _c("th", {
-            staticClass: "text-center",
-            attrs: { scope: "col", width: "10%" }
-          }),
-          _vm._v(" "),
-          _c(
-            "th",
-            {
-              staticClass: "text-center",
-              attrs: { scope: "col", width: "50%" }
-            },
-            [_vm._v("Tên thiết bị")]
-          ),
-          _vm._v(" "),
-          _c(
-            "th",
-            {
-              staticClass: "text-center",
-              attrs: { scope: "col", width: "15%" }
-            },
-            [_vm._v("Trong kho")]
-          ),
-          _vm._v(" "),
-          _c(
-            "th",
-            {
-              staticClass: "text-center",
-              attrs: { scope: "col", width: "15%" }
-            },
-            [_vm._v("Yêu cầu")]
-          ),
-          _vm._v(" "),
-          _c("th", { staticClass: "text-center", attrs: { scope: "col" } })
-        ])
-      ]),
-      _vm._v(" "),
-      _c("tbody", [
-        _c("tr", [
-          _c("th", { staticClass: "text-center", attrs: { scope: "row" } }, [
-            _c("img", {
-              attrs: {
-                src: "images\\login-background.jpg",
-                height: "40",
-                alt: "template.name"
-              }
-            })
-          ]),
-          _vm._v(" "),
-          _c("td", { staticClass: "align-middle text-center" }, [
-            _vm._v("name")
-          ]),
-          _vm._v(" "),
-          _c("td", { staticClass: "align-middle text-center" }, [_vm._v("2")]),
-          _vm._v(" "),
-          _c("td", { staticClass: "align-middle text-center" }, [
-            _c("input", {
-              staticClass: "form-control",
-              attrs: { type: "number", name: "amount", min: "0", max: "8" }
-            })
-          ]),
-          _vm._v(" "),
-          _c("td", { staticClass: "align-middle text-center" }, [
-            _c(
-              "button",
-              {
-                staticClass: "btn btn-success btn-sm",
-                attrs: { type: "button" }
-              },
-              [_c("span", { staticClass: "fa fa-plus" })]
-            )
-          ])
-        ]),
-        _vm._v(" "),
-        _c("tr", [
-          _c("td", { attrs: { colspan: "5" } }, [
-            _c("div", { staticClass: "form-group" }, [
-              _c(
-                "button",
-                {
-                  staticClass: "btn btn-success",
-                  attrs: {
-                    type: "button",
-                    "data-toggle": "modal",
-                    "data-target": "#addEquipment"
-                  }
-                },
-                [
-                  _vm._v(
-                    "\n                                                Chọn thêm thiết bị\n                                            "
-                  )
-                ]
-              ),
-              _vm._v(" "),
-              _c(
-                "div",
-                {
-                  staticClass: "modal fade",
-                  attrs: {
-                    id: "addEquipment",
-                    tabindex: "-1",
-                    role: "dialog",
-                    "aria-labelledby": "addEquipmentLabel",
-                    "aria-hidden": "true"
-                  }
-                },
-                [
-                  _c(
-                    "div",
-                    {
-                      staticClass: "modal-dialog modal-lg",
-                      attrs: { role: "document" }
-                    },
-                    [
-                      _c("div", { staticClass: "modal-content" }, [
-                        _c("div", { staticClass: "modal-header" }, [
-                          _c(
-                            "h5",
-                            {
-                              staticClass: "modal-title",
-                              attrs: { id: "addEquipmentLabel" }
-                            },
-                            [_vm._v("Thêm thiết bị")]
-                          ),
-                          _vm._v(" "),
-                          _c(
-                            "button",
-                            {
-                              staticClass: "close",
-                              attrs: {
-                                type: "button",
-                                "data-dismiss": "modal",
-                                "aria-label": "Close"
-                              }
-                            },
-                            [
-                              _c("span", { attrs: { "aria-hidden": "true" } }, [
-                                _vm._v("×")
-                              ])
-                            ]
-                          )
-                        ]),
-                        _vm._v(" "),
-                        _c("div", { staticClass: "modal-body" }, [
-                          _c("div", { staticClass: "row" }, [
-                            _c("div", { staticClass: "dropdown col-3" }, [
-                              _c(
-                                "select",
-                                { staticClass: "custom-select mx-0" },
-                                [
-                                  _c(
-                                    "option",
-                                    { attrs: { selected: "", value: "-1" } },
-                                    [_vm._v("Loại thiết bị")]
-                                  ),
-                                  _vm._v(" "),
-                                  _c(
-                                    "option",
-                                    { attrs: { selected: "", value: "0" } },
-                                    [_vm._v("Tất cả")]
-                                  ),
-                                  _vm._v(" "),
-                                  _c("option", { attrs: { selected: "" } })
-                                ]
-                              )
-                            ]),
-                            _vm._v(" "),
-                            _c("div", { staticClass: "col-8" }, [
-                              _c("form", { staticClass: "my-2 my-lg-0 px-2" }, [
-                                _c("div", { staticClass: "input-group" }, [
-                                  _c("input", {
-                                    staticClass: "form-control mr-sm-2",
-                                    attrs: {
-                                      type: "search",
-                                      placeholder: "Tìm kiếm",
-                                      "aria-label": "search",
-                                      "aria-describedby": "basic-addon2"
-                                    }
-                                  }),
-                                  _vm._v(" "),
-                                  _c(
-                                    "button",
-                                    {
-                                      staticClass:
-                                        "btn btn-outline-primary my-2 my-sm-0",
-                                      attrs: { type: "button" }
-                                    },
-                                    [
-                                      _c("span", {
-                                        staticClass: "fa fa-search"
-                                      })
-                                    ]
-                                  )
-                                ])
-                              ])
-                            ])
-                          ]),
-                          _vm._v(" "),
-                          _c("table", { staticClass: "table mt-2" }, [
-                            _c("thead", { staticClass: "thead-light" }, [
-                              _c("tr", [
-                                _c("th", {
-                                  staticClass: "text-center",
-                                  attrs: { scope: "col", width: "10%" }
-                                }),
-                                _vm._v(" "),
-                                _c(
-                                  "th",
-                                  {
-                                    staticClass: "text-center",
-                                    attrs: { scope: "col", width: "50%" }
-                                  },
-                                  [_vm._v("Tên thiết bị")]
-                                ),
-                                _vm._v(" "),
-                                _c(
-                                  "th",
-                                  {
-                                    staticClass: "text-center",
-                                    attrs: { scope: "col", width: "15%" }
-                                  },
-                                  [_vm._v("Trong kho")]
-                                ),
-                                _vm._v(" "),
-                                _c(
-                                  "th",
-                                  {
-                                    staticClass: "text-center",
-                                    attrs: { scope: "col", width: "15%" }
-                                  },
-                                  [_vm._v("Yêu cầu")]
-                                ),
-                                _vm._v(" "),
-                                _c("th", {
-                                  staticClass: "text-center",
-                                  attrs: { scope: "col" }
-                                })
-                              ])
-                            ]),
-                            _vm._v(" "),
-                            _c("tbody", [
-                              _c("tr", [
-                                _c("th", {
-                                  staticClass: "text-center",
-                                  attrs: { scope: "row" }
-                                }),
-                                _vm._v(" "),
-                                _c("td", {
-                                  staticClass: "align-middle text-center"
-                                }),
-                                _vm._v(" "),
-                                _c("td", {
-                                  staticClass: "align-middle text-center"
-                                }),
-                                _vm._v(" "),
-                                _c(
-                                  "td",
-                                  { staticClass: "align-middle text-center" },
-                                  [
-                                    _c("input", {
-                                      staticClass: "form-control",
-                                      attrs: {
-                                        type: "number",
-                                        name: "amount",
-                                        min: "0"
-                                      }
-                                    })
-                                  ]
-                                ),
-                                _vm._v(" "),
-                                _c(
-                                  "td",
-                                  { staticClass: "align-middle text-center" },
-                                  [
-                                    _c(
-                                      "button",
-                                      {
-                                        staticClass: "btn btn-success btn-sm",
-                                        attrs: { type: "button" }
-                                      },
-                                      [
-                                        _c("span", {
-                                          staticClass: "fa fa-plus"
-                                        })
-                                      ]
-                                    )
-                                  ]
-                                )
-                              ])
-                            ])
-                          ])
-                        ]),
-                        _vm._v(" "),
-                        _c("div", { staticClass: "modal-footer" }, [
-                          _c(
-                            "button",
-                            {
-                              staticClass: "btn btn-primary",
-                              attrs: { type: "button", "data-dismiss": "modal" }
-                            },
-                            [_vm._v("Xong")]
-                          )
-                        ])
-                      ])
-                    ]
-                  )
-                ]
-              )
-            ])
-          ])
-        ])
-      ])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("table", { staticClass: "table mt-2 templateTable" }, [
-      _c("thead", { staticClass: "thead-light" }, [
-        _c("tr", [
-          _c("th", {
-            staticClass: "text-center",
-            attrs: { scope: "col", width: "10%" }
-          }),
-          _vm._v(" "),
-          _c(
-            "th",
-            {
-              staticClass: "text-center",
-              attrs: { scope: "col", width: "50%" }
-            },
-            [_vm._v("Tên thiết bị")]
-          ),
-          _vm._v(" "),
-          _c(
-            "th",
-            {
-              staticClass: "text-center",
-              attrs: { scope: "col", width: "15%" }
-            },
-            [_vm._v("Trong kho")]
-          ),
-          _vm._v(" "),
-          _c(
-            "th",
-            {
-              staticClass: "text-center",
-              attrs: { scope: "col", width: "15%" }
-            },
-            [_vm._v("Yêu cầu")]
-          ),
-          _vm._v(" "),
-          _c("th", { staticClass: "text-center", attrs: { scope: "col" } })
-        ])
-      ]),
-      _vm._v(" "),
-      _c("tbody", [
-        _c("tr", [
-          _c("th", { staticClass: "text-center", attrs: { scope: "row" } }, [
-            _c("img", {
-              attrs: {
-                src: "images\\login-background.jpg",
-                height: "40",
-                alt: "template.name"
-              }
-            })
-          ]),
-          _vm._v(" "),
-          _c("td", { staticClass: "align-middle text-center" }, [
-            _vm._v("name")
-          ]),
-          _vm._v(" "),
-          _c("td", { staticClass: "align-middle text-center" }, [_vm._v("2")]),
-          _vm._v(" "),
-          _c("td", { staticClass: "align-middle text-center" }, [
-            _c("input", {
-              staticClass: "form-control",
-              attrs: { type: "number", name: "amount", min: "0", max: "8" }
-            })
-          ]),
-          _vm._v(" "),
-          _c("td", { staticClass: "align-middle text-center" }, [
-            _c(
-              "button",
-              {
-                staticClass: "btn btn-success btn-sm",
-                attrs: { type: "button" }
-              },
-              [_c("span", { staticClass: "fa fa-plus" })]
-            )
-          ])
-        ])
-      ])
-    ])
-  }
-]
-render._withStripped = true
-
-
-
-/***/ }),
-
 /***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/components/equipment-lost.vue?vue&type=template&id=239904d8&scoped=true&":
 /*!**************************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/components/equipment-lost.vue?vue&type=template&id=239904d8&scoped=true& ***!
@@ -62169,13 +61094,13 @@ var render = function() {
         _vm._m(0),
         _vm._v(" "),
         _c("div", { staticClass: "row justify-content-center" }, [
-          _vm.lostEquipments.length > 0
+          _vm.displayedEquipments.length > 0
             ? _c("table", { staticClass: "table" }, [
                 _vm._m(1),
                 _vm._v(" "),
                 _c(
                   "tbody",
-                  _vm._l(_vm.lostEquipments, function(equipment, index) {
+                  _vm._l(_vm.displayedEquipments, function(equipment, index) {
                     return _c("tr", { key: equipment.id }, [
                       _c(
                         "th",
@@ -62190,6 +61115,7 @@ var render = function() {
                         _c("img", {
                           staticClass: "equipmentImg",
                           attrs: {
+                            height: "40",
                             src: equipment.template.image,
                             alt: equipment.name
                           }
@@ -62198,6 +61124,24 @@ var render = function() {
                       _vm._v(" "),
                       _c("td", { staticClass: "align-middle text-center" }, [
                         _vm._v(_vm._s(equipment.template.name))
+                      ]),
+                      _vm._v(" "),
+                      _c("td", { staticClass: "align-middle text-center" }, [
+                        _vm._v(_vm._s(_vm.getRecentOrder(equipment).id))
+                      ]),
+                      _vm._v(" "),
+                      _c("td", { staticClass: "align-middle text-center" }, [
+                        _vm._v(_vm._s(_vm.getRecentOrder(equipment).guest_name))
+                      ]),
+                      _vm._v(" "),
+                      _c("td", { staticClass: "align-middle text-center" }, [
+                        _vm._v(
+                          _vm._s(
+                            _vm._f("formatDate")(
+                              _vm.getRecentOrder(equipment).created_at
+                            )
+                          )
+                        )
                       ]),
                       _vm._v(" "),
                       _c("td", { staticClass: "align-middle text-center" }, [
@@ -62216,6 +61160,20 @@ var render = function() {
                               "\n                                Tìm thấy đồ\n                            "
                             )
                           ]
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "button",
+                          {
+                            staticClass: "btn btn-danger",
+                            attrs: { type: "button" },
+                            on: {
+                              click: function($event) {
+                                return _vm.deleteEquipment(equipment, index)
+                              }
+                            }
+                          },
+                          [_c("span", { staticClass: "fa fa-trash" })]
                         ),
                         _vm._v(" "),
                         _c(
@@ -62273,15 +61231,496 @@ var render = function() {
                                             [_vm._v(_vm._s(equipment.id))]
                                           ),
                                           _vm._v(" "),
-                                          _c("td", {
-                                            staticClass:
-                                              "text-center align-middle"
-                                          }),
+                                          _c(
+                                            "td",
+                                            {
+                                              staticClass:
+                                                "text-center align-middle"
+                                            },
+                                            [
+                                              _c("div", [
+                                                _c("span", {
+                                                  class: _vm.starClass(
+                                                    1,
+                                                    equipment.condition
+                                                  )
+                                                }),
+                                                _vm._v(" "),
+                                                _c("span", {
+                                                  class: _vm.starClass(
+                                                    2,
+                                                    equipment.condition
+                                                  )
+                                                }),
+                                                _vm._v(" "),
+                                                _c("span", {
+                                                  class: _vm.starClass(
+                                                    3,
+                                                    equipment.condition
+                                                  )
+                                                }),
+                                                _vm._v(" "),
+                                                _c("span", {
+                                                  class: _vm.starClass(
+                                                    4,
+                                                    equipment.condition
+                                                  )
+                                                }),
+                                                _vm._v(" "),
+                                                _c("span", {
+                                                  class: _vm.starClass(
+                                                    5,
+                                                    equipment.condition
+                                                  )
+                                                })
+                                              ])
+                                            ]
+                                          ),
                                           _vm._v(" "),
-                                          _c("td", {
-                                            staticClass:
-                                              "text-center align-middle"
-                                          }),
+                                          _c(
+                                            "td",
+                                            {
+                                              staticClass:
+                                                "text-center align-middle"
+                                            },
+                                            [
+                                              _c(
+                                                "div",
+                                                {
+                                                  attrs: {
+                                                    id:
+                                                      "condition-" +
+                                                      equipment.id
+                                                  }
+                                                },
+                                                [
+                                                  _c(
+                                                    "div",
+                                                    {
+                                                      staticClass:
+                                                        "starrating risingstar d-flex justify-content-center flex-row-reverse"
+                                                    },
+                                                    [
+                                                      _c("input", {
+                                                        directives: [
+                                                          {
+                                                            name: "model",
+                                                            rawName: "v-model",
+                                                            value:
+                                                              _vm
+                                                                .recentOrderInfos[
+                                                                equipment.id
+                                                              ]
+                                                                .condition_received,
+                                                            expression:
+                                                              "recentOrderInfos[equipment.id].condition_received"
+                                                          }
+                                                        ],
+                                                        attrs: {
+                                                          type: "radio",
+                                                          id:
+                                                            "star5-" +
+                                                            equipment.id,
+                                                          value: "5"
+                                                        },
+                                                        domProps: {
+                                                          checked: _vm._q(
+                                                            _vm
+                                                              .recentOrderInfos[
+                                                              equipment.id
+                                                            ]
+                                                              .condition_received,
+                                                            "5"
+                                                          )
+                                                        },
+                                                        on: {
+                                                          change: function(
+                                                            $event
+                                                          ) {
+                                                            return _vm.$set(
+                                                              _vm
+                                                                .recentOrderInfos[
+                                                                equipment.id
+                                                              ],
+                                                              "condition_received",
+                                                              "5"
+                                                            )
+                                                          }
+                                                        }
+                                                      }),
+                                                      _c(
+                                                        "label",
+                                                        {
+                                                          attrs: {
+                                                            for:
+                                                              "star5-" +
+                                                              equipment.id,
+                                                            title: "5 star"
+                                                          },
+                                                          on: {
+                                                            mouseleave: function(
+                                                              $event
+                                                            ) {
+                                                              return _vm.normalText(
+                                                                equipment.id
+                                                              )
+                                                            },
+                                                            mouseover: function(
+                                                              $event
+                                                            ) {
+                                                              return _vm.changeText(
+                                                                equipment.id,
+                                                                "Hoàn hảo"
+                                                              )
+                                                            }
+                                                          }
+                                                        },
+                                                        [_vm._v("5")]
+                                                      ),
+                                                      _vm._v(" "),
+                                                      _c("input", {
+                                                        directives: [
+                                                          {
+                                                            name: "model",
+                                                            rawName: "v-model",
+                                                            value:
+                                                              _vm
+                                                                .recentOrderInfos[
+                                                                equipment.id
+                                                              ]
+                                                                .condition_received,
+                                                            expression:
+                                                              "recentOrderInfos[equipment.id].condition_received"
+                                                          }
+                                                        ],
+                                                        attrs: {
+                                                          type: "radio",
+                                                          id:
+                                                            "star4-" +
+                                                            equipment.id,
+                                                          value: "4"
+                                                        },
+                                                        domProps: {
+                                                          checked: _vm._q(
+                                                            _vm
+                                                              .recentOrderInfos[
+                                                              equipment.id
+                                                            ]
+                                                              .condition_received,
+                                                            "4"
+                                                          )
+                                                        },
+                                                        on: {
+                                                          change: function(
+                                                            $event
+                                                          ) {
+                                                            return _vm.$set(
+                                                              _vm
+                                                                .recentOrderInfos[
+                                                                equipment.id
+                                                              ],
+                                                              "condition_received",
+                                                              "4"
+                                                            )
+                                                          }
+                                                        }
+                                                      }),
+                                                      _c(
+                                                        "label",
+                                                        {
+                                                          attrs: {
+                                                            for:
+                                                              "star4-" +
+                                                              equipment.id,
+                                                            title: "4 star"
+                                                          },
+                                                          on: {
+                                                            mouseleave: function(
+                                                              $event
+                                                            ) {
+                                                              return _vm.normalText(
+                                                                equipment.id
+                                                              )
+                                                            },
+                                                            mouseover: function(
+                                                              $event
+                                                            ) {
+                                                              return _vm.changeText(
+                                                                equipment.id,
+                                                                "Tốt"
+                                                              )
+                                                            }
+                                                          }
+                                                        },
+                                                        [_vm._v("4")]
+                                                      ),
+                                                      _vm._v(" "),
+                                                      _c("input", {
+                                                        directives: [
+                                                          {
+                                                            name: "model",
+                                                            rawName: "v-model",
+                                                            value:
+                                                              _vm
+                                                                .recentOrderInfos[
+                                                                equipment.id
+                                                              ]
+                                                                .condition_received,
+                                                            expression:
+                                                              "recentOrderInfos[equipment.id].condition_received"
+                                                          }
+                                                        ],
+                                                        attrs: {
+                                                          type: "radio",
+                                                          id:
+                                                            "star3-" +
+                                                            equipment.id,
+                                                          value: "3"
+                                                        },
+                                                        domProps: {
+                                                          checked: _vm._q(
+                                                            _vm
+                                                              .recentOrderInfos[
+                                                              equipment.id
+                                                            ]
+                                                              .condition_received,
+                                                            "3"
+                                                          )
+                                                        },
+                                                        on: {
+                                                          change: function(
+                                                            $event
+                                                          ) {
+                                                            return _vm.$set(
+                                                              _vm
+                                                                .recentOrderInfos[
+                                                                equipment.id
+                                                              ],
+                                                              "condition_received",
+                                                              "3"
+                                                            )
+                                                          }
+                                                        }
+                                                      }),
+                                                      _c(
+                                                        "label",
+                                                        {
+                                                          attrs: {
+                                                            for:
+                                                              "star3-" +
+                                                              equipment.id,
+                                                            title: "3 star"
+                                                          },
+                                                          on: {
+                                                            mouseleave: function(
+                                                              $event
+                                                            ) {
+                                                              return _vm.normalText(
+                                                                equipment.id
+                                                              )
+                                                            },
+                                                            mouseover: function(
+                                                              $event
+                                                            ) {
+                                                              return _vm.changeText(
+                                                                equipment.id,
+                                                                "Bình thường"
+                                                              )
+                                                            }
+                                                          }
+                                                        },
+                                                        [_vm._v("3")]
+                                                      ),
+                                                      _vm._v(" "),
+                                                      _c("input", {
+                                                        directives: [
+                                                          {
+                                                            name: "model",
+                                                            rawName: "v-model",
+                                                            value:
+                                                              _vm
+                                                                .recentOrderInfos[
+                                                                equipment.id
+                                                              ]
+                                                                .condition_received,
+                                                            expression:
+                                                              "recentOrderInfos[equipment.id].condition_received"
+                                                          }
+                                                        ],
+                                                        attrs: {
+                                                          type: "radio",
+                                                          id:
+                                                            "star2-" +
+                                                            equipment.id,
+                                                          value: "2"
+                                                        },
+                                                        domProps: {
+                                                          checked: _vm._q(
+                                                            _vm
+                                                              .recentOrderInfos[
+                                                              equipment.id
+                                                            ]
+                                                              .condition_received,
+                                                            "2"
+                                                          )
+                                                        },
+                                                        on: {
+                                                          change: function(
+                                                            $event
+                                                          ) {
+                                                            return _vm.$set(
+                                                              _vm
+                                                                .recentOrderInfos[
+                                                                equipment.id
+                                                              ],
+                                                              "condition_received",
+                                                              "2"
+                                                            )
+                                                          }
+                                                        }
+                                                      }),
+                                                      _c(
+                                                        "label",
+                                                        {
+                                                          attrs: {
+                                                            for:
+                                                              "star2-" +
+                                                              equipment.id,
+                                                            title: "2 star"
+                                                          },
+                                                          on: {
+                                                            mouseleave: function(
+                                                              $event
+                                                            ) {
+                                                              return _vm.normalText(
+                                                                equipment.id
+                                                              )
+                                                            },
+                                                            mouseover: function(
+                                                              $event
+                                                            ) {
+                                                              return _vm.changeText(
+                                                                equipment.id,
+                                                                "Không tốt"
+                                                              )
+                                                            }
+                                                          }
+                                                        },
+                                                        [_vm._v("2")]
+                                                      ),
+                                                      _vm._v(" "),
+                                                      _c("input", {
+                                                        directives: [
+                                                          {
+                                                            name: "model",
+                                                            rawName: "v-model",
+                                                            value:
+                                                              _vm
+                                                                .recentOrderInfos[
+                                                                equipment.id
+                                                              ]
+                                                                .condition_received,
+                                                            expression:
+                                                              "recentOrderInfos[equipment.id].condition_received"
+                                                          }
+                                                        ],
+                                                        attrs: {
+                                                          type: "radio",
+                                                          id:
+                                                            "star1-" +
+                                                            equipment.id,
+                                                          value: "1"
+                                                        },
+                                                        domProps: {
+                                                          checked: _vm._q(
+                                                            _vm
+                                                              .recentOrderInfos[
+                                                              equipment.id
+                                                            ]
+                                                              .condition_received,
+                                                            "1"
+                                                          )
+                                                        },
+                                                        on: {
+                                                          change: function(
+                                                            $event
+                                                          ) {
+                                                            return _vm.$set(
+                                                              _vm
+                                                                .recentOrderInfos[
+                                                                equipment.id
+                                                              ],
+                                                              "condition_received",
+                                                              "1"
+                                                            )
+                                                          }
+                                                        }
+                                                      }),
+                                                      _c(
+                                                        "label",
+                                                        {
+                                                          attrs: {
+                                                            for:
+                                                              "star1-" +
+                                                              equipment.id,
+                                                            title: "1 star"
+                                                          },
+                                                          on: {
+                                                            mouseleave: function(
+                                                              $event
+                                                            ) {
+                                                              return _vm.normalText(
+                                                                equipment.id
+                                                              )
+                                                            },
+                                                            mouseover: function(
+                                                              $event
+                                                            ) {
+                                                              return _vm.changeText(
+                                                                equipment.id,
+                                                                "Kém"
+                                                              )
+                                                            }
+                                                          }
+                                                        },
+                                                        [_vm._v("1")]
+                                                      )
+                                                    ]
+                                                  ),
+                                                  _vm._v(" "),
+                                                  _c(
+                                                    "div",
+                                                    {
+                                                      staticClass:
+                                                        "d-flex justify-content-center"
+                                                    },
+                                                    [
+                                                      _c(
+                                                        "p",
+                                                        {
+                                                          attrs: {
+                                                            id:
+                                                              "scoreDescription-" +
+                                                              equipment.id
+                                                          }
+                                                        },
+                                                        [
+                                                          _vm._v(
+                                                            _vm._s(
+                                                              _vm
+                                                                .scoreDescriptions[
+                                                                equipment.id
+                                                              ]
+                                                            )
+                                                          )
+                                                        ]
+                                                      )
+                                                    ]
+                                                  )
+                                                ]
+                                              )
+                                            ]
+                                          ),
                                           _vm._v(" "),
                                           _vm._m(4, true)
                                         ])
@@ -62398,7 +61837,7 @@ var staticRenderFns = [
           "th",
           {
             staticClass: "text-center",
-            staticStyle: { width: "10%" },
+            staticStyle: { width: "12%" },
             attrs: { scope: "col" }
           },
           [_vm._v("Ngày mượn")]
@@ -62981,7 +62420,7 @@ var render = function() {
                     "label",
                     {
                       staticClass: "col-3 col-form-label text-left",
-                      attrs: { for: "date-borrow" }
+                      attrs: { for: "dateBorrowed" }
                     },
                     [_vm._v("Ngày mượn")]
                   ),
@@ -63020,7 +62459,7 @@ var render = function() {
                     "label",
                     {
                       staticClass: "col-3 col-form-label text-left",
-                      attrs: { for: "example-date-input" }
+                      attrs: { for: "dateReturn" }
                     },
                     [_vm._v("Ngày trả")]
                   ),
@@ -63039,7 +62478,7 @@ var render = function() {
                       attrs: {
                         required: "",
                         type: "datetime-local",
-                        id: "example-date-input"
+                        id: "dateReturn"
                       },
                       domProps: { value: _vm.dateReturn },
                       on: {
@@ -63114,6 +62553,46 @@ var render = function() {
                       )
                     ])
                   ])
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "form-group row" }, [
+                  _c(
+                    "label",
+                    {
+                      staticClass: "col-3 col-form-label text-left",
+                      attrs: { for: "reason" }
+                    },
+                    [_vm._v("Lý do mượn")]
+                  ),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "col-9" }, [
+                    _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.reason,
+                          expression: "reason"
+                        }
+                      ],
+                      staticClass: "form-control",
+                      attrs: {
+                        required: "",
+                        type: "text",
+                        id: "reason",
+                        placeholder: "Lý do mượn"
+                      },
+                      domProps: { value: _vm.reason },
+                      on: {
+                        input: function($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.reason = $event.target.value
+                        }
+                      }
+                    })
+                  ])
                 ])
               ]
             ),
@@ -63141,7 +62620,7 @@ var render = function() {
                   _c(
                     "tbody",
                     [
-                      _vm._l(_vm.selectedTemplates, function(template) {
+                      _vm._l(_vm.selectedTemplates, function(template, index) {
                         return _c("tr", { key: template.id }, [
                           _c(
                             "th",
@@ -63206,6 +62685,26 @@ var render = function() {
                                   }
                                 }
                               })
+                            ]
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "td",
+                            { staticClass: "align-middle text-center" },
+                            [
+                              _c(
+                                "button",
+                                {
+                                  staticClass: "btn btn-danger btn-sm",
+                                  attrs: { type: "button" },
+                                  on: {
+                                    click: function($event) {
+                                      return _vm.removeEquipmentCard(index)
+                                    }
+                                  }
+                                },
+                                [_c("span", { staticClass: "fa fa-trash" })]
+                              )
                             ]
                           )
                         ])
@@ -63292,8 +62791,44 @@ var render = function() {
                                                   _c(
                                                     "select",
                                                     {
+                                                      directives: [
+                                                        {
+                                                          name: "model",
+                                                          rawName: "v-model",
+                                                          value:
+                                                            _vm.category_id,
+                                                          expression:
+                                                            "category_id"
+                                                        }
+                                                      ],
                                                       staticClass:
-                                                        "custom-select mx-0"
+                                                        "custom-select mx-0",
+                                                      on: {
+                                                        change: [
+                                                          function($event) {
+                                                            var $$selectedVal = Array.prototype.filter
+                                                              .call(
+                                                                $event.target
+                                                                  .options,
+                                                                function(o) {
+                                                                  return o.selected
+                                                                }
+                                                              )
+                                                              .map(function(o) {
+                                                                var val =
+                                                                  "_value" in o
+                                                                    ? o._value
+                                                                    : o.value
+                                                                return val
+                                                              })
+                                                            _vm.category_id = $event
+                                                              .target.multiple
+                                                              ? $$selectedVal
+                                                              : $$selectedVal[0]
+                                                          },
+                                                          _vm.filterTemplate
+                                                        ]
+                                                      }
                                                     },
                                                     [
                                                       _c(
@@ -63317,7 +62852,11 @@ var render = function() {
                                                           return _c(
                                                             "option",
                                                             {
-                                                              key: category.id
+                                                              key: category.id,
+                                                              domProps: {
+                                                                value:
+                                                                  category.id
+                                                              }
                                                             },
                                                             [
                                                               _vm._v(
@@ -63380,6 +62919,8 @@ var render = function() {
                                                               value: _vm.search
                                                             },
                                                             on: {
+                                                              keyup:
+                                                                _vm.filterTemplate,
                                                               input: function(
                                                                 $event
                                                               ) {
@@ -63413,7 +62954,9 @@ var render = function() {
                                                 _c(
                                                   "tbody",
                                                   _vm._l(
-                                                    _vm.templates,
+                                                    _vm.paginate(
+                                                      _vm.displayedTemplates
+                                                    ),
                                                     function(template) {
                                                       return _c(
                                                         "tr",
@@ -63595,6 +63138,146 @@ var render = function() {
                                                   0
                                                 )
                                               ]
+                                            ),
+                                            _vm._v(" "),
+                                            _c(
+                                              "div",
+                                              {
+                                                staticClass:
+                                                  "row justify-content-center"
+                                              },
+                                              [
+                                                _c(
+                                                  "nav",
+                                                  {
+                                                    attrs: {
+                                                      "aria-label":
+                                                        "Page navigation example"
+                                                    }
+                                                  },
+                                                  [
+                                                    _c(
+                                                      "ul",
+                                                      {
+                                                        staticClass:
+                                                          "pagination"
+                                                      },
+                                                      [
+                                                        _c(
+                                                          "li",
+                                                          {
+                                                            staticClass:
+                                                              "page-item"
+                                                          },
+                                                          [
+                                                            _c(
+                                                              "button",
+                                                              {
+                                                                staticClass:
+                                                                  "page-link active",
+                                                                attrs: {
+                                                                  href: "#",
+                                                                  disabled:
+                                                                    _vm.page <=
+                                                                    1
+                                                                },
+                                                                on: {
+                                                                  click: function(
+                                                                    $event
+                                                                  ) {
+                                                                    _vm.page--
+                                                                  }
+                                                                }
+                                                              },
+                                                              [
+                                                                _vm._v(
+                                                                  "Previous"
+                                                                )
+                                                              ]
+                                                            )
+                                                          ]
+                                                        ),
+                                                        _vm._v(" "),
+                                                        _vm._l(
+                                                          _vm.pages.slice(
+                                                            _vm.page - 1,
+                                                            _vm.page + 5
+                                                          ),
+                                                          function(pageNumber) {
+                                                            return _c(
+                                                              "li",
+                                                              {
+                                                                key: pageNumber,
+                                                                staticClass:
+                                                                  "page-item"
+                                                              },
+                                                              [
+                                                                _c(
+                                                                  "a",
+                                                                  {
+                                                                    staticClass:
+                                                                      "page-link",
+                                                                    attrs: {
+                                                                      href: "#"
+                                                                    },
+                                                                    on: {
+                                                                      click: function(
+                                                                        $event
+                                                                      ) {
+                                                                        _vm.page = pageNumber
+                                                                      }
+                                                                    }
+                                                                  },
+                                                                  [
+                                                                    _vm._v(
+                                                                      _vm._s(
+                                                                        pageNumber
+                                                                      )
+                                                                    )
+                                                                  ]
+                                                                )
+                                                              ]
+                                                            )
+                                                          }
+                                                        ),
+                                                        _vm._v(" "),
+                                                        _c(
+                                                          "li",
+                                                          {
+                                                            staticClass:
+                                                              "page-item"
+                                                          },
+                                                          [
+                                                            _c(
+                                                              "button",
+                                                              {
+                                                                staticClass:
+                                                                  "page-link",
+                                                                attrs: {
+                                                                  href: "#",
+                                                                  disabled:
+                                                                    _vm.page >=
+                                                                    _vm.pages
+                                                                      .length
+                                                                },
+                                                                on: {
+                                                                  click: function(
+                                                                    $event
+                                                                  ) {
+                                                                    _vm.page++
+                                                                  }
+                                                                }
+                                                              },
+                                                              [_vm._v("Next")]
+                                                            )
+                                                          ]
+                                                        )
+                                                      ],
+                                                      2
+                                                    )
+                                                  ]
+                                                )
+                                              ]
                                             )
                                           ]
                                         ),
@@ -63678,6 +63361,16 @@ var render = function() {
                   _vm._v(" "),
                   _c("label", { staticClass: "col-9 text-left" }, [
                     _vm._v(_vm._s(_vm._f("formatBoolean")(_vm.longTerm)))
+                  ])
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "row" }, [
+                  _c("label", { staticClass: "col-3 text-left" }, [
+                    _vm._v("Lý do mượn")
+                  ]),
+                  _vm._v(" "),
+                  _c("label", { staticClass: "col-9 text-left" }, [
+                    _vm._v(_vm._s(_vm.reason))
                   ])
                 ]),
                 _vm._v(" "),
@@ -63809,7 +63502,12 @@ var render = function() {
                   }
                 ],
                 staticClass: "btn btn-success previous action-button",
-                attrs: { type: "button" }
+                attrs: { type: "button", disabled: _vm.submit },
+                on: {
+                  click: function($event) {
+                    return _vm.submitBorrowedOrder()
+                  }
+                }
               },
               [_vm._v("Hoàn tất")]
             )
@@ -63871,7 +63569,12 @@ var staticRenderFns = [
           "th",
           { staticClass: "text-center", attrs: { scope: "col", width: "15%" } },
           [_vm._v("Yêu cầu")]
-        )
+        ),
+        _vm._v(" "),
+        _c("th", {
+          staticClass: "text-center",
+          attrs: { scope: "col", width: "15%" }
+        })
       ])
     ])
   },
@@ -64036,7 +63739,7 @@ var render = function() {
               _vm._m(0),
               _vm._v(" "),
               _c("br"),
-              _vm._v(_vm._s(_vm.order.guest.name) + " ")
+              _vm._v(_vm._s(_vm.order.guest_name) + " ")
             ]),
             _vm._v(" "),
             _c("div", { staticClass: "col" }, [
@@ -64069,7 +63772,7 @@ var render = function() {
             _c("span", { staticClass: "text" }, [_vm._v("Tạo đơn hàng")]),
             _vm._v(" "),
             _c("span", { staticClass: "text-muted" }, [
-              _vm._v(_vm._s(_vm.order.created_at))
+              _vm._v(_vm._s(_vm._f("formatDate")(_vm.order.created_at)))
             ])
           ]),
           _vm._v(" "),
@@ -64079,7 +63782,7 @@ var render = function() {
             _c("span", { staticClass: "text" }, [_vm._v("Chấp nhận")]),
             _vm._v(" "),
             _c("span", { staticClass: "text-muted" }, [
-              _vm._v(_vm._s(_vm.order.date_approved))
+              _vm._v(_vm._s(_vm._f("formatDate")(_vm.order.date_approved)))
             ])
           ]),
           _vm._v(" "),
@@ -77928,93 +77631,6 @@ module.exports = function(module) {
 
 /***/ }),
 
-/***/ "./resources/components/create-order.vue":
-/*!***********************************************!*\
-  !*** ./resources/components/create-order.vue ***!
-  \***********************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _create_order_vue_vue_type_template_id_741f43e4_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./create-order.vue?vue&type=template&id=741f43e4&scoped=true& */ "./resources/components/create-order.vue?vue&type=template&id=741f43e4&scoped=true&");
-/* harmony import */ var _create_order_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./create-order.vue?vue&type=script&lang=js& */ "./resources/components/create-order.vue?vue&type=script&lang=js&");
-/* empty/unused harmony star reexport *//* harmony import */ var _create_order_vue_vue_type_style_index_0_id_741f43e4_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./create-order.vue?vue&type=style&index=0&id=741f43e4&scoped=true&lang=css& */ "./resources/components/create-order.vue?vue&type=style&index=0&id=741f43e4&scoped=true&lang=css&");
-/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
-
-
-
-
-
-
-/* normalize component */
-
-var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__["default"])(
-  _create_order_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
-  _create_order_vue_vue_type_template_id_741f43e4_scoped_true___WEBPACK_IMPORTED_MODULE_0__["render"],
-  _create_order_vue_vue_type_template_id_741f43e4_scoped_true___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
-  false,
-  null,
-  "741f43e4",
-  null
-  
-)
-
-/* hot reload */
-if (false) { var api; }
-component.options.__file = "resources/components/create-order.vue"
-/* harmony default export */ __webpack_exports__["default"] = (component.exports);
-
-/***/ }),
-
-/***/ "./resources/components/create-order.vue?vue&type=script&lang=js&":
-/*!************************************************************************!*\
-  !*** ./resources/components/create-order.vue?vue&type=script&lang=js& ***!
-  \************************************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_create_order_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../node_modules/babel-loader/lib??ref--4-0!../../node_modules/vue-loader/lib??vue-loader-options!./create-order.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/components/create-order.vue?vue&type=script&lang=js&");
-/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_create_order_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
-
-/***/ }),
-
-/***/ "./resources/components/create-order.vue?vue&type=style&index=0&id=741f43e4&scoped=true&lang=css&":
-/*!********************************************************************************************************!*\
-  !*** ./resources/components/create-order.vue?vue&type=style&index=0&id=741f43e4&scoped=true&lang=css& ***!
-  \********************************************************************************************************/
-/*! no static exports found */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_create_order_vue_vue_type_style_index_0_id_741f43e4_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../node_modules/style-loader!../../node_modules/css-loader??ref--6-1!../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../node_modules/postcss-loader/src??ref--6-2!../../node_modules/vue-loader/lib??vue-loader-options!./create-order.vue?vue&type=style&index=0&id=741f43e4&scoped=true&lang=css& */ "./node_modules/style-loader/index.js!./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/components/create-order.vue?vue&type=style&index=0&id=741f43e4&scoped=true&lang=css&");
-/* harmony import */ var _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_create_order_vue_vue_type_style_index_0_id_741f43e4_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_create_order_vue_vue_type_style_index_0_id_741f43e4_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__);
-/* harmony reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_create_order_vue_vue_type_style_index_0_id_741f43e4_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__) if(["default"].indexOf(__WEBPACK_IMPORT_KEY__) < 0) (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_create_order_vue_vue_type_style_index_0_id_741f43e4_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__[key]; }) }(__WEBPACK_IMPORT_KEY__));
- /* harmony default export */ __webpack_exports__["default"] = (_node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_create_order_vue_vue_type_style_index_0_id_741f43e4_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0___default.a); 
-
-/***/ }),
-
-/***/ "./resources/components/create-order.vue?vue&type=template&id=741f43e4&scoped=true&":
-/*!******************************************************************************************!*\
-  !*** ./resources/components/create-order.vue?vue&type=template&id=741f43e4&scoped=true& ***!
-  \******************************************************************************************/
-/*! exports provided: render, staticRenderFns */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_create_order_vue_vue_type_template_id_741f43e4_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../node_modules/vue-loader/lib??vue-loader-options!./create-order.vue?vue&type=template&id=741f43e4&scoped=true& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/components/create-order.vue?vue&type=template&id=741f43e4&scoped=true&");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_create_order_vue_vue_type_template_id_741f43e4_scoped_true___WEBPACK_IMPORTED_MODULE_0__["render"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_create_order_vue_vue_type_template_id_741f43e4_scoped_true___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
-
-
-
-/***/ }),
-
 /***/ "./resources/components/equipment-lost.vue":
 /*!*************************************************!*\
   !*** ./resources/components/equipment-lost.vue ***!
@@ -78461,7 +78077,6 @@ Vue.component('multi-step-form', __webpack_require__(/*! ../components/multi-ste
 Vue.component('equipment-templates', __webpack_require__(/*! ../components/equipment-templates.vue */ "./resources/components/equipment-templates.vue")["default"]);
 Vue.component('equipment-lost', __webpack_require__(/*! ../components/equipment-lost.vue */ "./resources/components/equipment-lost.vue")["default"]);
 Vue.component('order-detail', __webpack_require__(/*! ../components/order-detail.vue */ "./resources/components/order-detail.vue")["default"]);
-Vue.component('create-order', __webpack_require__(/*! ../components/create-order.vue */ "./resources/components/create-order.vue")["default"]);
 var app = new Vue({
   el: '#app'
 });

@@ -11,7 +11,7 @@
                     </h3>
                 <article class="card">
                     <div class="card-body row">
-                        <div class="col"> <strong><i class="fa fa-user"></i> Người mượn:</strong> <br>{{order.guest.name}} </div>
+                        <div class="col"> <strong><i class="fa fa-user"></i> Người mượn:</strong> <br>{{order.guest_name}} </div>
                         <div class="col"> <strong>Lý do:</strong> <br> {{order.reason}} </div>
                         <div class="col"> <strong><i class="fa fa-calendar"></i> Thời hạn:</strong> <br> {{order.due_date}} </div>
                         <div class="col"> <strong>Ghi chú:</strong> <br> {{order.note}} </div>
@@ -22,12 +22,12 @@
                     <div :class="{'step': true, 'active': order.status >=0}">
                         <span class="icon"> <i class="fa fa-book"></i> </span>
                         <span class="text">Tạo đơn hàng</span>
-                        <span class="text-muted">{{order.created_at}}</span>
+                        <span class="text-muted">{{order.created_at|formatDate}}</span>
                     </div>
                     <div :class="{'step': true, 'active': order.status >=1}">
                         <span class="icon"> <i class="fa fa-check"></i> </span>
                         <span class="text">Chấp nhận</span>
-                        <span class="text-muted">{{order.date_approved}}</span>
+                        <span class="text-muted">{{order.date_approved|formatDate}}</span>
                     </div>
                     <div :class="{'step': true, 'active': order.status >=2}">
                         <span class="icon"> <i class="fa fa-user"></i> </span>
@@ -591,7 +591,9 @@ export default {
         },
         acceptOrder: function(button) {
             this.disableButton();
-            axios.put(acceptUrl).then(res => {
+            axios.put(this.acceptUrl, {
+                date_approved: new Date()
+            }).then(res => {
                 console.log(res);
                 window.location.reload();
             }).catch(error => {
@@ -599,12 +601,12 @@ export default {
             });
         },
         rejectOrder: function() {
-            console.log(orderIndexUrl);
+            console.log(this.orderIndexUrl);
             this.disableButton();
-            axios.put(rejectUrl)
+            axios.put(this.rejectUrl)
                 .then(res => {
                     console.log(res);
-                    window.location.assign(orderIndexUrl);
+                    window.location.assign(this.orderIndexUrl);
                 }).catch(error => {
                     console.log("handlesubmit error: ", error);
                 });
