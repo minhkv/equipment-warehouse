@@ -127,7 +127,7 @@ class OrderController extends Controller
     }
 
     public function storeRequest(Request $request) {
-        // return $request->all();
+        // return $request->input('longTerm') ? 1 : 0;
         $order = Order::create([
             'type' => $request->input('type'),
             'stocker_id' => $request->input('stockerId'),
@@ -135,7 +135,7 @@ class OrderController extends Controller
             'department' => $request->input('department'),
             'date_borrowed' => $request->input('dateBorrowed'),
             'date_return' => $request->input('dateReturn'),
-            'longTerm' => $request->input('longTerm'),
+            'long_term' => $request->input('longTerm') ? 1 : 0,
             'reason' => $request->input('reason'),
             'status' => '0',
         ]);

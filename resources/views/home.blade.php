@@ -4,11 +4,13 @@
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-6">
-            <div class="card">
+            <div class="card shadow">
                 <div class="card-header text-center"><h2>Thiết bị</h2></div>
                 <div class="row no-gutters">
                     <div class="col-md-4">
-                        <img src="/img/equipment.jpg" class="card-img" alt="Equipment">
+                        <a href="{{ route('equipment-template.index') }}">
+                            <img src="/img/equipment.jpg" class="card-img" alt="Equipment">
+                        </a>
                     </div>
                     <div class="card-body">
                         <div>
@@ -44,11 +46,13 @@
         </div>
 
         <div class="col-md-6">
-            <div class="card">
-                <div class="card-header text-center"><h2>Đơn hàng</h2></div>
+            <div class="card shadow">
+                <div class="card-header text-center"><h2>Đơn mượn</h2></div>
                 <div class="row no-gutters">
                     <div class="col-md-4">
-                        <img src="/img/report.jpg" class="card-img" alt="Equipment">
+                        <a href="{{ route('order.index') }}">
+                            <img src="/img/report.jpg" class="card-img" alt="Equipment">
+                        </a>
                     </div>
                     <div class="card-body">
                         <div>

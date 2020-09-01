@@ -40,12 +40,13 @@
                                 <table v-if="displayedOrders.length > 0" class="table">
                                     <thead class="thead-light">
                                         <tr>
-                                            <th style="width: 10%;" class="align-middle text-center" scope="col">Mã đơn</th>
+                                            <th style="width: 5%;" class="align-middle text-center" scope="col">Mã</th>
                                             <th style="width: 18%;" class="align-middle text-center" scope="col">Người mượn</th>
+                                            <th style="width: 8%;" class="align-middle text-center" scope="col">Lâu dài</th>
                                             <th style="width: 18%;" class="align-middle text-center" scope="col">Lý do mượn</th>
                                             <th style="width: 16%;" class="align-middle text-center" scope="col">Ngày tạo</th>
                                             <th style="width: 8%;" class="align-middle text-center" scope="col">Yêu cầu</th>
-                                            <th style="width: 10%;" class="align-middle text-center" scope="col">Cho mượn</th>
+                                            <th style="width: 9%;" class="align-middle text-center" scope="col">Cho mượn</th>
                                             <th style="width: 10%;" class="align-middle text-center" scope="col">Trạng thái</th>
                                             <th style="width: 15%;" class="align-middle text-center" scope="col"></th>
                                         </tr>
@@ -54,15 +55,16 @@
                                         <tr v-for="order in paginate(displayedOrders)" :key="order.id">
                                             <th scope="row" class="align-middle text-center">{{order.id}}</th>
                                             <td class="text-center align-middle">{{order.guest_name}}</td>
+                                            <td class="text-center align-middle">{{order.long_term|formatBoolean}}</td>
                                             <td class="text-center align-middle">{{order.reason}}</td>
                                             <td class="text-center align-middle">{{order.created_at|formatDate}}</td>
                                             <td class="text-center align-middle">{{ getOrderRequestAmount(order) }}</td>
                                             <td class="text-center align-middle">{{ getOrderBorrowedAmount(order) }} </td>
                                             <td class="text-center align-middle">
                                                 <!-- <h5>{{$order->getStatus()}}</h5> -->
-                                                <h5>
+                                                <h6>
                                                     <span :class="getOrderStatusClass(order.status)">{{ getOrderStatusName(order.status) }}</span>
-                                                </h5>
+                                                </h6>
                                             </td>
                                             <td class="align-middle">
                                                 <a :href="orderDetailUrl(order.id)" class="btn btn-primary btn-sm"><span class="fa fa-pencil" /></a>

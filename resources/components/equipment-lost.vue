@@ -171,6 +171,9 @@ export default {
         },
         deleteEquipment: function(equipment, index) {
             console.log('/equipment/' + equipment.id);
+            if(!confirm('Bạn có chắc chắn muốn xóa?')) {
+                return;
+            }
             axios.delete(this.equipmentIndexUrl + '/' + equipment.id)
                 .then(res => {
                     console.log(res);

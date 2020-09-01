@@ -357,6 +357,12 @@ export default {
                     alert('Ngày trả không được để trống');
                     return false;
                 }
+                let db = new Date(this.dateBorrowed);
+                let dr = new Date(this.dateReturn);
+                if(db.getTime() > dr.getTime()) {
+                    alert('Ngày trả phải sau ngày mượn');
+                    return false;
+                }
             }
             if(this.step == 1) {
                 if(this.selectedTemplates.length == 0) {

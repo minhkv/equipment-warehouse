@@ -8,21 +8,7 @@
                 </a>
                 <h3>Đơn mượn: {{order.id}} 
                     <span :class="displayStatus()">{{getStatusName(order.status)}}</span>
-                    </h3>
-                <!-- <article class="card">
-                    <div class="card-body row">
-                        <div class="col"> <strong><i class="fa fa-user"></i> Người mượn:</strong> <br>{{order.guest_name}} </div>
-                        <div class="col"> <strong><i class="fa fa-user"></i> Phòng ban:</strong> <br>{{order.department}} </div>
-                        <div class="col"> <strong>Mượn lâu dài:</strong> <br> {{order.long_term|formatBoolean}} </div>
-                    </div>
-                    <div class="card-body row">
-                        <div class="col"> <strong><i class="fa fa-calendar"></i> Ngày mượn:</strong> <br> {{order.date_borrowed}} </div>
-                        <div class="col"> <strong><i class="fa fa-calendar"></i> Ngày hẹn trả:</strong> <br> {{order.date_return}} </div>
-                        <div class="col"> <strong>Lý do:</strong> <br> {{order.reason}} </div>
-                        <div class="col"> <strong>Ghi chú:</strong> <br> {{order.note}} </div>
-                    </div>
-                </article> -->
-
+                </h3>
                 <div class="col-8 mx-auto py-3">
                     <div class="row">
                         <label class="col-3 text-left"><strong><i class="fa fa-user"></i> Người mượn</strong></label>
@@ -81,30 +67,50 @@
                         {{ getTitle() }}
                     </h3>
                 </div>
-                <ul class="row justify-content-center">
-                    <li v-for="info in order.order_request_infos" :key="info.id" class="col-md-4">
-                        <figure class="itemside mb-3 border">
-                            <div class="aside"><img :src="info.template.image" class="img-sm border"></div>
-                            <figcaption class="info align-self-center">
-                                <h5 class="title">{{info.template.name}}</h5>
-                                <div class="form-group row" v-if="order.status <= 1">
-                                    <label :for="'borrowed-amount-' + info.template.id" class="col-sm-6 col-form-label">Yêu cầu</label>
-                                    <div class="col-sm-4">
-                                        <input class="form-control" disabled type="number" :value="info.amount">
-                                    </div>
-                                </div>
+                <div class="row mb-4">
+                    <div class="col-6 mx-auto">
+                        <form class="my-2 my-lg-0 px-2">
+                            <div class="input-group">
+                                <input v-on:keyup="filterInfo" v-model="search" class="form-control mr-sm-2" type="search" placeholder="Tìm kiếm">
+                                <button class="btn btn-outline-primary my-2 my-sm-0" type="submit"><span class="fa fa-search"></span></button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
 
-                                <div v-if="order.status >= 1">
-                                    <div class="form-group row">
-                                        <label :for="'borrowed-amount-' + info.template.id" class="col-sm-6 col-form-label">Cho mượn</label>
-                                        <div class="col-sm-4">
-                                            <input class="form-control" disabled type="number" :value="getBorrowedAmount(info.template.id)">
-                                        </div>
-                                        <button v-if="order.status < 3" type="button" class="btn btn-primary btn-sm" data-toggle="modal" :data-target="'#addEquipment-' + info.template.id">
-                                            <span class="fa fa-pencil"></span>
-                                        </button>
-                                    </div>
-                                </div>
+                <table class="table mt-2 templateTable">
+                    <thead class="thead-light">
+                        <tr>
+                            <th class="text-center" scope="col" width="10%"></th>
+                            <th class="text-center" scope="col" width="20%">Tên thiết bị</th>
+                            <th class="text-center" scope="col" width="10%">Số lượng</th>
+                            <th class="text-center" scope="col" width="10%">Yêu cầu</th>
+                            <th class="text-center" scope="col" width="10%">Cho mượn</th>
+                            <th v-if="order.status >= 2" class="text-center" scope="col" width="10%">Đã trả</th>
+                            <th v-if="order.status >= 2" class="text-center" scope="col" width="10%">Thất lạc</th>
+                            <th class="text-center" scope="col" width="10%"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="info in paginate(displayedInfos)" :key="info.id" :class="{'bg-success': getBorrowedAmount(info.template_id) > 0 && (getBorrowedAmount(info.template_id) == getReceivedAmount(info.template_id) + getLostAmount(info.template_id))}">
+                            <th class="text-center" scope="row"><img :src="info.template.image" height=40 :alt="info.template.name"></th>
+                            <td class="align-middle text-center">{{ info.template.name }}</td>
+                            <td class="align-middle text-center">{{ info.template.equipments.length }}</td>
+                            <td class="align-middle text-center">{{ info.amount }}</td>
+                            <td class="align-middle text-center">
+                                {{ getBorrowedAmount(info.template.id) }}
+                            </td>
+                            <td v-if="order.status >= 2" class="align-middle text-center font-weight-bold">
+                                {{ getReceivedAmount(info.template.id) }}
+                            </td>
+                            <td v-if="order.status >= 2" :class="{'align-middle': true, 'text-center': true, 'font-weight-bold': true, 'bg-danger': getLostAmount(info.template_id) > 0, 'text-light': getLostAmount(info.template_id) > 0}">
+                                {{ getLostAmount(info.template.id) }}
+                            </td> 
+                            <td class="align-middle text-center">
+                                <button v-if="order.status < 3 && order.status > 0" type="button" class="btn btn-primary btn-sm" data-toggle="modal" :data-target="'#addEquipment-' + info.template.id">
+                                    <span class="fa fa-pencil"></span>
+                                </button>
+
                                 <div class="modal fade" :id="'addEquipment-' + info.template.id" tabindex="-1" role="dialog" :aria-labelledby="'addEquipmentLabel-' + info.template.id" aria-hidden="true">
                                     <div class="modal-dialog modal-xl" role="document">
                                         <div class="modal-content">
@@ -221,25 +227,22 @@
                                         </div>
                                     </div>
                                 </div>
-                                
-                                <div v-if="order.status >= 2">
-                                    <div class="form-group row">
-                                        <label :for="'received-amount-' + info.template.id" class="col-sm-6 col-form-label">Đã nhận</label>
-                                        <div class="col-sm-4">
-                                            <input class="form-control" :id="'received-amount-' + info.template.id" style="width: 50px;" disabled type="number" :value="getReceivedAmount(info.template.id)">
-                                        </div>
-                                    </div>
-                                    <div class="form-group row">
-                                        <label :for="'lost-amount-' + info.template.id" class="col-sm-6 col-form-label">Thất lạc</label>
-                                        <div class="col-sm-4">
-                                            <input class="form-control" :id="'lost-amount-' + info.template.id" style="width: 50px;" disabled type="number" :value="getLostAmount(info.template.id)">
-                                        </div>
-                                    </div>
-                                </div>
-                            </figcaption>
-                        </figure>
-                    </li>
-                </ul>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <!-- Paginator -->
+                <div class="row justify-content-center">
+                    <nav aria-label="Page navigation example">
+                        <ul class="pagination">
+                            <li class="page-item"><button class="page-link active" href="#" :disabled="page <= 1" @click="page--">Previous</button></li>
+                            <li class="page-item" v-for="pageNumber in pages.slice(page-1, page+5)" :key="pageNumber"><a class="page-link" href="#"  @click="page = pageNumber">{{pageNumber}}</a></li>
+                            <li class="page-item"><button class="page-link" href="#" @click="page++" :disabled="page >= pages.length">Next</button></li>
+                        </ul>
+                    </nav>
+                </div>
+
+                
                 <hr>
 
                 <div class="row justify-content-center">
@@ -454,7 +457,12 @@ export default {
             equipmentReceived: [],
             equipmentLost: [],
             orderRequestInfos: [],
-            conditionReceived: []
+            conditionReceived: [],
+            displayedInfos: [],
+            search: '',
+            page: 1,
+            perPage: 8,
+            pages: [],
         };
     },
     created() {
@@ -492,6 +500,8 @@ export default {
         this.conditionReceived = conditionReceived;
         this.templateBorrowedAmount = templateBorrowedAmount;
         this.orderRequestInfos = orderRequestInfos;
+
+        this.filterInfo();
     },
     methods: {
         displayStatus() {
@@ -586,7 +596,7 @@ export default {
             let total = 0;
             for (let i in this.orderRequestInfos[template_id].order_infos) {
                 let orderInfo = this.orderRequestInfos[template_id].order_infos[i];
-                if (this.equipmentReceived[orderInfo.equipment.id]) {
+                if (this.equipmentReceived[orderInfo.equipment_id]) {
                     total += 1;
                 }
             }
@@ -597,7 +607,7 @@ export default {
             let total = 0;
             for (let i in this.orderRequestInfos[template_id].order_infos) {
                 let orderInfo = this.orderRequestInfos[template_id].order_infos[i];
-                if (this.equipmentLost[orderInfo.equipment.id]) {
+                if (this.equipmentLost[orderInfo.equipment_id]) {
                     total += 1;
                 }
             }
@@ -749,6 +759,36 @@ export default {
         disableButton: function() {
             this.buttonDisabled = true;
         },
+        filterInfo() {
+            this.searchInfo();
+            this.setPages();
+        },
+        setPages() {
+            var itemPerPage = this.perPage;
+            let numberOfPages = Math.ceil(this.displayedInfos.length / itemPerPage);
+            this.page = 1;
+            this.pages = [];
+            for (let index = 1; index <= numberOfPages; index++) {
+                this.pages.push(index);
+            }
+        },
+        paginate(itemList) {
+            let page = this.page;
+            let from = (page * this.perPage) - this.perPage;
+            let to = (page * this.perPage);
+            return itemList.slice(from, to);
+        },
+        searchInfo() {
+            this.displayedInfos = this.order.order_request_infos.filter(x => {
+                var name = this.normalizeSearchString(x.template.name);
+                var search = this.normalizeSearchString(this.search);
+                return name.includes(search);
+            });
+        },
+        normalizeSearchString(str) {
+            return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+        },
+        
     }
 };
 </script>
