@@ -29,7 +29,7 @@
             <nav aria-label="Page navigation example">
                 <ul class="pagination">
                     <li class="page-item"><button class="page-link active" href="#" :disabled="page <= 1" @click="page--">Previous</button></li>
-                    <li class="page-item" v-for="pageNumber in pages.slice(page-1, page+5)" :key="pageNumber"><a class="page-link" href="#"  @click="page = pageNumber">{{pageNumber}}</a></li>
+                    <li :class="pageItemClass(page, pageNumber)" v-for="pageNumber in pages.slice(page-1, page+5)" :key="pageNumber"><a class="page-link" href="#"  @click="page = pageNumber">{{pageNumber}}</a></li>
                     <li class="page-item"><button class="page-link" href="#" @click="page++" :disabled="page >= pages.length">Next</button></li>
                 </ul>
             </nav>
@@ -61,8 +61,8 @@
         <div class="row justify-content-center">
             <nav aria-label="Page navigation example">
                 <ul class="pagination">
-                    <li class="page-item"><button class="page-link active" href="#" :disabled="page <= 1" @click="page--">Previous</button></li>
-                    <li class="page-item" v-for="pageNumber in pages.slice(page-1, page+5)" :key="pageNumber"><a class="page-link" href="#"  @click="page = pageNumber">{{pageNumber}}</a></li>
+                    <li class="page-item"><button class="page-link" href="#" :disabled="page <= 1" @click="page--">Previous</button></li>
+                    <li  v-for="pageNumber in pages.slice(page-1, page+5)" :key="pageNumber" :class="pageItemClass(page, pageNumber)"><a class="page-link" href="#"  @click="page = pageNumber" >{{pageNumber}}</a></li>
                     <li class="page-item"><button class="page-link" href="#" @click="page++" :disabled="page >= pages.length">Next</button></li>
                 </ul>
             </nav>
@@ -152,6 +152,13 @@ export default {
                 this.filterTemplate();
             }
         },
+        pageItemClass(page, pageNumber) {
+            console.log(page == pageNumber);
+            return {
+                'page-item': true,
+                'active': page == pageNumber
+            };
+        }
     }
 }
 </script>

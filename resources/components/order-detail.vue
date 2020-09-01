@@ -48,17 +48,17 @@
                     <div :class="{'step': true, 'active': order.status >=2}">
                         <span class="icon"> <i class="fa fa-user"></i> </span>
                         <span class="text"> Xuất đồ</span>
-                        <span class="text-muted">{{order.date_output}}</span>
+                        <span class="text-muted">{{order.date_output|formatDate}}</span>
                     </div>
                     <div :class="{'step': true, 'active': order.status >=3}">
                         <span class="icon"> <i class="fa fa-truck"></i> </span>
                         <span class="text"> Trả đồ </span>
-                        <span class="text-muted">{{order.date_received}}</span>
+                        <span class="text-muted">{{order.date_received|formatDate}}</span>
                     </div>
                     <div :class="{'step': true, 'active': order.status >=4}">
                         <span class="icon"> <i class="fa fa-thumbs-up"></i> </span>
                         <span class="text">Hoàn tất</span>
-                        <span class="text-muted">{{order.date_completed}}</span>
+                        <span class="text-muted">{{order.date_completed|formatDate}}</span>
                     </div>
                 </div>
                 <hr>
@@ -236,7 +236,7 @@
                     <nav aria-label="Page navigation example">
                         <ul class="pagination">
                             <li class="page-item"><button class="page-link active" href="#" :disabled="page <= 1" @click="page--">Previous</button></li>
-                            <li class="page-item" v-for="pageNumber in pages.slice(page-1, page+5)" :key="pageNumber"><a class="page-link" href="#"  @click="page = pageNumber">{{pageNumber}}</a></li>
+                            <li :class="{'page-item': true, 'active': page==pageNumber}" v-for="pageNumber in pages.slice(page-1, page+5)" :key="pageNumber"><a class="page-link" href="#"  @click="page = pageNumber">{{pageNumber}}</a></li>
                             <li class="page-item"><button class="page-link" href="#" @click="page++" :disabled="page >= pages.length">Next</button></li>
                         </ul>
                     </nav>
@@ -244,7 +244,6 @@
 
                 
                 <hr>
-
                 <div class="row justify-content-center">
                     <button v-if="order.status == 2 || order.status == 3" :disabled="buttonDisabled" @click="back" class="btn btn-secondary mr-2">Quay lại</button>
                     <button v-if="order.status == 0" :disabled="buttonDisabled" @click="acceptOrder" class="btn btn-primary mx-2" data-abc="true">Chấp nhận</button>
@@ -437,6 +436,7 @@ p {
 } /* Set yellow color when star hover */
 </style>
 <script>
+import moment from 'moment';
 export default {
     props: [
         "order",
@@ -629,10 +629,14 @@ export default {
                 console.log("handlesubmit error: ", error);
             });
         },
+        getCurrentLocalTime() {
+            let currentDate = (new Date()).toISOString();
+            return moment(currentDate).format("YYYY-MM-DD HH:MM:SS")
+        },
         acceptOrder: function(button) {
             this.disableButton();
             axios.put(this.acceptUrl, {
-                date_approved: new Date()
+                dateApproved: this.getCurrentLocalTime
             }).then(res => {
                 console.log(res);
                 window.location.reload();
@@ -670,7 +674,8 @@ export default {
                     data: {
                         equipments: this.equipmentIds,
                         templateBorrowedAmount: this.templateBorrowedAmount,
-                        orderRequestInfos: this.orderRequestInfos
+                        orderRequestInfos: this.orderRequestInfos,
+                        dateOutput: this.getCurrentLocalTime
                     }
                 })
                 .then(function(response) {
@@ -727,7 +732,8 @@ export default {
                     url: this.equipmentReturnUrl,
                     method: 'put',
                     data: {
-                        orderRequestInfos: this.orderRequestInfos
+                        orderRequestInfos: this.orderRequestInfos,
+                        dateReturn: this.getCurrentLocalTime()
                     }
                 })
                 .then(function(response) {
@@ -745,7 +751,8 @@ export default {
                     url: this.completeUrl,
                     method: 'put',
                     data: {
-                        orderRequestInfos: this.orderRequestInfos
+                        orderRequestInfos: this.orderRequestInfos,
+                        dateCompleted: this.getCurrentLocalTime()
                     }
                 })
                 .then(function(response) {

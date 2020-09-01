@@ -181,10 +181,11 @@ class OrderController extends Controller
 
 
     public function acceptOrderRequest(Request $request, Order $order) {
-        // return $request->input('date_approved');
+        $dateApproved = date_create($request->input('dateApproved'));
+        
         $order->update([
             'status' => 1,
-            'date_approved' => date('Y-m-d H:i:s')
+            'date_approved' => date_format($dateApproved, 'Y-m-d H:i:s')
             ]);
         return 'accept';
     }
@@ -197,9 +198,10 @@ class OrderController extends Controller
     public function equipmentOutput(Request $request, Order $order) {
         $templateBorrowedAmount = $request->input('templateBorrowedAmount');
         $orderRequestInfos = $request->input('orderRequestInfos');
+        $dateOutput = date_create($request->input('dateOutput'));
         $order->update([
             'status' => 2, //output
-            'date_output' => date('Y-m-d H:i:s')
+            'date_output' => date_format($dateOutput, 'Y-m-d H:i:s')
             ]);
         foreach($order->orderRequestInfos as $orderRequestInfoModel) {
             $template_id = $orderRequestInfoModel->template_id;
@@ -223,9 +225,10 @@ class OrderController extends Controller
 
     public function equipmentReturn(Request $request, Order $order) {
         $orderRequestInfos = $request->input('orderRequestInfos');
+        $dateReturn = date_create($request->input('dateReturn'));
         $order->update([
             'status' => 3, //returnEquipment
-            'date_received' => date('Y-m-d H:i:s')
+            'date_received' => date_format($dateReturn, 'Y-m-d H:i:s')
             ]);
         foreach($order->orderRequestInfos as $orderRequestInfoModel) {
             $template_id = $orderRequestInfoModel->template_id;
@@ -241,8 +244,10 @@ class OrderController extends Controller
 
     public function completeOrder(Request $request, Order $order) {
         $orderRequestInfos = $request->input('orderRequestInfos');
+        $dateCompleted = date_create($request->input('dateCompleted'));
         $order->update([
             'status' => 4, //complete
+            'date_completed' => date_format($dateCompleted, 'Y-m-d H:i:s')
             ]);
             foreach($order->orderRequestInfos as $orderRequestInfoModel) {
                 $template_id = $orderRequestInfoModel->template_id;

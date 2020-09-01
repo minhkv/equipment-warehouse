@@ -2285,6 +2285,13 @@ __webpack_require__.r(__webpack_exports__);
 
         this.filterTemplate();
       }
+    },
+    pageItemClass: function pageItemClass(page, pageNumber) {
+      console.log(page == pageNumber);
+      return {
+        'page-item': true,
+        'active': page == pageNumber
+      };
     }
   }
 });
@@ -2821,6 +2828,8 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js");
+/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(moment__WEBPACK_IMPORTED_MODULE_0__);
 //
 //
 //
@@ -3258,7 +3267,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
+
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ["order", "orderIndexUrl", "acceptUrl", "rejectUrl", "equipmentOutputUrl", "equipmentReturnUrl", "completeUrl", "backUrl"],
   data: function data() {
@@ -3463,10 +3472,14 @@ __webpack_require__.r(__webpack_exports__);
         console.log("handlesubmit error: ", error);
       });
     },
+    getCurrentLocalTime: function getCurrentLocalTime() {
+      var currentDate = new Date().toISOString();
+      return moment__WEBPACK_IMPORTED_MODULE_0___default()(currentDate).format("YYYY-MM-DD HH:MM:SS");
+    },
     acceptOrder: function acceptOrder(button) {
       this.disableButton();
       axios.put(this.acceptUrl, {
-        date_approved: new Date()
+        dateApproved: this.getCurrentLocalTime
       }).then(function (res) {
         console.log(res);
         window.location.reload();
@@ -3507,7 +3520,8 @@ __webpack_require__.r(__webpack_exports__);
         data: {
           equipments: this.equipmentIds,
           templateBorrowedAmount: this.templateBorrowedAmount,
-          orderRequestInfos: this.orderRequestInfos
+          orderRequestInfos: this.orderRequestInfos,
+          dateOutput: this.getCurrentLocalTime
         }
       }).then(function (response) {
         console.log(response);
@@ -3562,7 +3576,8 @@ __webpack_require__.r(__webpack_exports__);
         url: this.equipmentReturnUrl,
         method: 'put',
         data: {
-          orderRequestInfos: this.orderRequestInfos
+          orderRequestInfos: this.orderRequestInfos,
+          dateReturn: this.getCurrentLocalTime()
         }
       }).then(function (response) {
         console.log(response);
@@ -3577,7 +3592,8 @@ __webpack_require__.r(__webpack_exports__);
         url: this.completeUrl,
         method: 'put',
         data: {
-          orderRequestInfos: this.orderRequestInfos
+          orderRequestInfos: this.orderRequestInfos,
+          dateCompleted: this.getCurrentLocalTime()
         }
       }).then(function (response) {
         console.log(response);
@@ -62455,21 +62471,28 @@ var render = function() {
             _vm._l(_vm.pages.slice(_vm.page - 1, _vm.page + 5), function(
               pageNumber
             ) {
-              return _c("li", { key: pageNumber, staticClass: "page-item" }, [
-                _c(
-                  "a",
-                  {
-                    staticClass: "page-link",
-                    attrs: { href: "#" },
-                    on: {
-                      click: function($event) {
-                        _vm.page = pageNumber
+              return _c(
+                "li",
+                {
+                  key: pageNumber,
+                  class: _vm.pageItemClass(_vm.page, pageNumber)
+                },
+                [
+                  _c(
+                    "a",
+                    {
+                      staticClass: "page-link",
+                      attrs: { href: "#" },
+                      on: {
+                        click: function($event) {
+                          _vm.page = pageNumber
+                        }
                       }
-                    }
-                  },
-                  [_vm._v(_vm._s(pageNumber))]
-                )
-              ])
+                    },
+                    [_vm._v(_vm._s(pageNumber))]
+                  )
+                ]
+              )
             }),
             _vm._v(" "),
             _c("li", { staticClass: "page-item" }, [
@@ -62569,7 +62592,7 @@ var render = function() {
               _c(
                 "button",
                 {
-                  staticClass: "page-link active",
+                  staticClass: "page-link",
                   attrs: { href: "#", disabled: _vm.page <= 1 },
                   on: {
                     click: function($event) {
@@ -62584,21 +62607,28 @@ var render = function() {
             _vm._l(_vm.pages.slice(_vm.page - 1, _vm.page + 5), function(
               pageNumber
             ) {
-              return _c("li", { key: pageNumber, staticClass: "page-item" }, [
-                _c(
-                  "a",
-                  {
-                    staticClass: "page-link",
-                    attrs: { href: "#" },
-                    on: {
-                      click: function($event) {
-                        _vm.page = pageNumber
+              return _c(
+                "li",
+                {
+                  key: pageNumber,
+                  class: _vm.pageItemClass(_vm.page, pageNumber)
+                },
+                [
+                  _c(
+                    "a",
+                    {
+                      staticClass: "page-link",
+                      attrs: { href: "#" },
+                      on: {
+                        click: function($event) {
+                          _vm.page = pageNumber
+                        }
                       }
-                    }
-                  },
-                  [_vm._v(_vm._s(pageNumber))]
-                )
-              ])
+                    },
+                    [_vm._v(_vm._s(pageNumber))]
+                  )
+                ]
+              )
             }),
             _vm._v(" "),
             _c("li", { staticClass: "page-item" }, [
@@ -63645,8 +63675,12 @@ var render = function() {
                                                               "li",
                                                               {
                                                                 key: pageNumber,
-                                                                staticClass:
-                                                                  "page-item"
+                                                                class: {
+                                                                  "page-item": true,
+                                                                  active:
+                                                                    _vm.page ==
+                                                                    pageNumber
+                                                                }
                                                               },
                                                               [
                                                                 _c(
@@ -64253,7 +64287,7 @@ var render = function() {
             _c("span", { staticClass: "text" }, [_vm._v(" Xuất đồ")]),
             _vm._v(" "),
             _c("span", { staticClass: "text-muted" }, [
-              _vm._v(_vm._s(_vm.order.date_output))
+              _vm._v(_vm._s(_vm._f("formatDate")(_vm.order.date_output)))
             ])
           ]),
           _vm._v(" "),
@@ -64263,7 +64297,7 @@ var render = function() {
             _c("span", { staticClass: "text" }, [_vm._v(" Trả đồ ")]),
             _vm._v(" "),
             _c("span", { staticClass: "text-muted" }, [
-              _vm._v(_vm._s(_vm.order.date_received))
+              _vm._v(_vm._s(_vm._f("formatDate")(_vm.order.date_received)))
             ])
           ]),
           _vm._v(" "),
@@ -64273,7 +64307,7 @@ var render = function() {
             _c("span", { staticClass: "text" }, [_vm._v("Hoàn tất")]),
             _vm._v(" "),
             _c("span", { staticClass: "text-muted" }, [
-              _vm._v(_vm._s(_vm.order.date_completed))
+              _vm._v(_vm._s(_vm._f("formatDate")(_vm.order.date_completed)))
             ])
           ])
         ]),
@@ -65670,7 +65704,13 @@ var render = function() {
                 ) {
                   return _c(
                     "li",
-                    { key: pageNumber, staticClass: "page-item" },
+                    {
+                      key: pageNumber,
+                      class: {
+                        "page-item": true,
+                        active: _vm.page == pageNumber
+                      }
+                    },
                     [
                       _c(
                         "a",
@@ -66411,7 +66451,13 @@ var render = function() {
                               function(pageNumber) {
                                 return _c(
                                   "li",
-                                  { key: pageNumber, staticClass: "page-item" },
+                                  {
+                                    key: pageNumber,
+                                    class: {
+                                      "page-item": true,
+                                      active: _vm.page == pageNumber
+                                    }
+                                  },
                                   [
                                     _c(
                                       "a",
@@ -79388,6 +79434,10 @@ window.Vue = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.
 
 moment__WEBPACK_IMPORTED_MODULE_0___default()().format();
 Vue.filter('formatDate', function (value) {
+  if (!value) return '';
+  return moment__WEBPACK_IMPORTED_MODULE_0___default()(value).format("DD/MM/YYYY, LT");
+});
+Vue.filter('formatDateDatabase', function (value) {
   if (!value) return '';
   return moment__WEBPACK_IMPORTED_MODULE_0___default()(value).format("DD/MM/YYYY, LT");
 });

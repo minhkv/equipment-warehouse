@@ -19,6 +19,8 @@ class Order extends Model
         'long_term',
         'date_created', 
         'date_approved', 
+        'date_output',
+        'date_received',
         'date_completed', 
         'due_date',
         'reason',
