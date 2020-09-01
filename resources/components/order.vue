@@ -19,11 +19,22 @@
                                 </div>
                             </div>
                             <div class="row py-4">
-                                <div class="dropdown col-3">
+                                <div class="dropdown col-2">
                                     <select v-model="longTerm" v-on:change="filterOrder" class="custom-select mx-0">
                                         <option selected value='-1'>Loại đơn</option>
                                         <option value='0'>Ngắn hạn</option>
                                         <option value='1'>Lâu dài</option>
+                                    </select>
+                                </div>
+                                <div class="dropdown col-2">
+                                    <select v-model="orderStatus" v-on:change="filterOrder" class="custom-select mx-0">
+                                        <option selected value='-2'>Trạng thái</option>
+                                        <option value='-1'>Từ chối</option>
+                                        <option value='0'>Khởi tạo</option>
+                                        <option value='1'>Chấp nhận</option>
+                                        <option value='2'>Xuất đồ</option>
+                                        <option value='3'>Trả đồ</option>
+                                        <option value='4'>Hoàn tất</option>
                                     </select>
                                 </div>
                                 <div class="col-7">
@@ -108,6 +119,7 @@ export default {
             displayedOrders: [],
             longTerm: -1,
             search: '',
+            orderStatus: -2,
             page: 1,
             perPage: 5,
             pages: [],
@@ -125,6 +137,7 @@ export default {
         },
         filterOrder() {
             this.selectedType();
+            this.filterOrderStatus();
             this.searchOrder();
             this.setPages();
         },
@@ -155,6 +168,11 @@ export default {
         },
         normalizeSearchString(str) {
             return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+        },
+        filterOrderStatus() {
+            if(this.orderStatus != -2) {
+                this.displayedOrders = this.displayedOrders.filter(x => x.status == this.orderStatus);
+            }
         },
         setPages() {
             var itemPerPage = this.perPage;
