@@ -199,10 +199,7 @@ class OrderController extends Controller
         $templateBorrowedAmount = $request->input('templateBorrowedAmount');
         $orderRequestInfos = $request->input('orderRequestInfos');
         $dateOutput = date_create($request->input('dateOutput'));
-        $order->update([
-            'status' => 2, //output
-            'date_output' => date_format($dateOutput, 'Y-m-d H:i:s')
-            ]);
+
         foreach($order->orderRequestInfos as $orderRequestInfoModel) {
             $template_id = $orderRequestInfoModel->template_id;
             $orderRequestInfoModel->update([
@@ -220,16 +217,17 @@ class OrderController extends Controller
                 ]);
             }
         }
+        $order->update([
+            'status' => 2, //output
+            'date_output' => date_format($dateOutput, 'Y-m-d H:i:s')
+            ]);
         return "equipmentOutput";
     }
 
     public function equipmentReturn(Request $request, Order $order) {
         $orderRequestInfos = $request->input('orderRequestInfos');
         $dateReturn = date_create($request->input('dateReturn'));
-        $order->update([
-            'status' => 3, //returnEquipment
-            'date_received' => date_format($dateReturn, 'Y-m-d H:i:s')
-            ]);
+        
         foreach($order->orderRequestInfos as $orderRequestInfoModel) {
             $template_id = $orderRequestInfoModel->template_id;
             foreach($orderRequestInfos[$template_id]['order_infos'] as $orderInfo){
@@ -239,25 +237,30 @@ class OrderController extends Controller
                 ]);
             }
         }
+        $order->update([
+            'status' => 3, //returnEquipment
+            'date_received' => date_format($dateReturn, 'Y-m-d H:i:s')
+            ]);
         return 'equipmentReturn';
     }
 
     public function completeOrder(Request $request, Order $order) {
         $orderRequestInfos = $request->input('orderRequestInfos');
         $dateCompleted = date_create($request->input('dateCompleted'));
+        
+        foreach($order->orderRequestInfos as $orderRequestInfoModel) {
+            $template_id = $orderRequestInfoModel->template_id;
+            foreach($orderRequestInfos[$template_id]['order_infos'] as $orderInfo){
+                Equipment::where('id', $orderInfo['equipment_id'])->update([
+                    'status' => $orderInfo['status'],
+                    'condition' => $orderInfo['condition_received']
+                ]);
+            }
+        }
         $order->update([
             'status' => 4, //complete
             'date_completed' => date_format($dateCompleted, 'Y-m-d H:i:s')
             ]);
-            foreach($order->orderRequestInfos as $orderRequestInfoModel) {
-                $template_id = $orderRequestInfoModel->template_id;
-                foreach($orderRequestInfos[$template_id]['order_infos'] as $orderInfo){
-                    Equipment::where('id', $orderInfo['equipment_id'])->update([
-                        'status' => $orderInfo['status'],
-                        'condition' => $orderInfo['condition_received']
-                    ]);
-                }
-            }
         return 'orderCompleted';
     }
 }

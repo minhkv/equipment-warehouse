@@ -631,12 +631,12 @@ export default {
         },
         getCurrentLocalTime() {
             let currentDate = (new Date()).toISOString();
-            return moment(currentDate).format("YYYY-MM-DD HH:MM:SS")
+            return moment(currentDate).format();
         },
         acceptOrder: function(button) {
             this.disableButton();
             axios.put(this.acceptUrl, {
-                dateApproved: this.getCurrentLocalTime
+                dateApproved: this.getCurrentLocalTime()
             }).then(res => {
                 console.log(res);
                 window.location.reload();
@@ -666,8 +666,9 @@ export default {
             return true;
         },
         equipmentOutput: function() {
+            console.log('equipmentOutput');
             if(!this.equipmentCheckBorrowedAmount()) return;
-            this.disableButton();
+            // this.disableButton();
             axios({
                     url: this.equipmentOutputUrl,
                     method: 'put',
@@ -675,7 +676,7 @@ export default {
                         equipments: this.equipmentIds,
                         templateBorrowedAmount: this.templateBorrowedAmount,
                         orderRequestInfos: this.orderRequestInfos,
-                        dateOutput: this.getCurrentLocalTime
+                        dateOutput: this.getCurrentLocalTime()
                     }
                 })
                 .then(function(response) {
