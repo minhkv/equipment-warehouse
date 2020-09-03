@@ -3474,12 +3474,12 @@ __webpack_require__.r(__webpack_exports__);
     },
     getCurrentLocalTime: function getCurrentLocalTime() {
       var currentDate = new Date().toISOString();
-      return moment__WEBPACK_IMPORTED_MODULE_0___default()(currentDate).format("YYYY-MM-DD HH:MM:SS");
+      return moment__WEBPACK_IMPORTED_MODULE_0___default()(currentDate).format();
     },
     acceptOrder: function acceptOrder(button) {
       this.disableButton();
       axios.put(this.acceptUrl, {
-        dateApproved: this.getCurrentLocalTime
+        dateApproved: this.getCurrentLocalTime()
       }).then(function (res) {
         console.log(res);
         window.location.reload();
@@ -3512,6 +3512,7 @@ __webpack_require__.r(__webpack_exports__);
       return true;
     },
     equipmentOutput: function equipmentOutput() {
+      console.log('equipmentOutput');
       if (!this.equipmentCheckBorrowedAmount()) return;
       this.disableButton();
       axios({
@@ -3521,7 +3522,7 @@ __webpack_require__.r(__webpack_exports__);
           equipments: this.equipmentIds,
           templateBorrowedAmount: this.templateBorrowedAmount,
           orderRequestInfos: this.orderRequestInfos,
-          dateOutput: this.getCurrentLocalTime
+          dateOutput: this.getCurrentLocalTime()
         }
       }).then(function (response) {
         console.log(response);
@@ -3751,6 +3752,15 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['orders', 'orderCreateUrl', 'orderIndexUrl'],
   data: function data() {
@@ -3758,8 +3768,9 @@ __webpack_require__.r(__webpack_exports__);
       displayedOrders: [],
       longTerm: -1,
       search: '',
+      orderStatus: -2,
       page: 1,
-      perPage: 5,
+      perPage: 8,
       pages: []
     };
   },
@@ -3775,6 +3786,7 @@ __webpack_require__.r(__webpack_exports__);
     },
     filterOrder: function filterOrder() {
       this.selectedType();
+      this.filterOrderStatus();
       this.searchOrder();
       this.setPages();
     },
@@ -3814,6 +3826,21 @@ __webpack_require__.r(__webpack_exports__);
     },
     normalizeSearchString: function normalizeSearchString(str) {
       return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+    },
+    filterOrderStatus: function filterOrderStatus() {
+      var _this3 = this;
+
+      if (this.orderStatus == -2) {
+        return;
+      } else if (this.orderStatus == -1 || this.orderStatus == 0 || this.orderStatus == 4) {
+        this.displayedOrders = this.displayedOrders.filter(function (x) {
+          return x.status == _this3.orderStatus;
+        });
+      } else {
+        this.displayedOrders = this.displayedOrders.filter(function (x) {
+          return x.status > 0 && x.status < 4;
+        });
+      }
     },
     setPages: function setPages() {
       var itemPerPage = this.perPage;
@@ -3898,23 +3925,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ['ids', 'templates'],
+  props: [],
   data: function data() {
     return {
       mess: 'Hello world',
@@ -8414,7 +8426,7 @@ exports = module.exports = __webpack_require__(/*! ../../node_modules/css-loader
 
 
 // module
-exports.push([module.i, "\n.tabplus[data-v-7ee5ac3a]{\r\n    width:500px;\r\n    margin: 100px auto;\n}\n.tabplus > ul[data-v-7ee5ac3a]{\r\n    list-style: none;\n}\n.tabplus > ul > li[data-v-7ee5ac3a] {\r\n    display:inline-block;\r\n    border:1px solid #dedede;\n}\n.tabplus > ul > li > a[data-v-7ee5ac3a] {\r\n    cursor: pointer;\r\n    display:inline-block;\r\n    padding:10px 15px;\n}\n.tabplus > div[data-v-7ee5ac3a]{\r\n    border:1px solid #dedede;\r\n    padding:15px;\n}\n.active[data-v-7ee5ac3a]{\r\n    background-color:coral;\n}\r\n", ""]);
+exports.push([module.i, "\n.overlay-button[data-v-7ee5ac3a] {\n    position:absolute;\n    top: 10px;\n    left: 10px;\n}\n", ""]);
 
 // exports
 
@@ -64208,7 +64220,7 @@ var render = function() {
           ])
         ]),
         _vm._v(" "),
-        _c("div", { staticClass: "col-8 mx-auto py-3" }, [
+        _c("div", { staticClass: "col-10 mx-auto py-3" }, [
           _c("div", { staticClass: "row" }, [
             _vm._m(0),
             _vm._v(" "),
@@ -64756,7 +64768,9 @@ var render = function() {
                                                         _vm._v(
                                                           "\n                                                                " +
                                                             _vm._s(
-                                                              _vm.getEquipmentStatusName(
+                                                              _vm._f(
+                                                                "formatEquipmentStatus"
+                                                              )(
                                                                 equipment.status
                                                               )
                                                             ) +
@@ -66184,7 +66198,7 @@ var render = function() {
                 _vm._m(0),
                 _vm._v(" "),
                 _c("div", { staticClass: "row py-4" }, [
-                  _c("div", { staticClass: "dropdown col-3" }, [
+                  _c("div", { staticClass: "dropdown col-2" }, [
                     _c(
                       "select",
                       {
@@ -66227,6 +66241,62 @@ var render = function() {
                         _vm._v(" "),
                         _c("option", { attrs: { value: "1" } }, [
                           _vm._v("Lâu dài")
+                        ])
+                      ]
+                    )
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "dropdown col-2" }, [
+                    _c(
+                      "select",
+                      {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.orderStatus,
+                            expression: "orderStatus"
+                          }
+                        ],
+                        staticClass: "custom-select mx-0",
+                        on: {
+                          change: [
+                            function($event) {
+                              var $$selectedVal = Array.prototype.filter
+                                .call($event.target.options, function(o) {
+                                  return o.selected
+                                })
+                                .map(function(o) {
+                                  var val = "_value" in o ? o._value : o.value
+                                  return val
+                                })
+                              _vm.orderStatus = $event.target.multiple
+                                ? $$selectedVal
+                                : $$selectedVal[0]
+                            },
+                            _vm.filterOrder
+                          ]
+                        }
+                      },
+                      [
+                        _c("option", { attrs: { selected: "", value: "-2" } }, [
+                          _vm._v("Trạng thái")
+                        ]),
+                        _vm._v(" "),
+                        _c("option", { attrs: { value: "-1" } }, [
+                          _vm._v("Từ chối")
+                        ]),
+                        _vm._v(" "),
+                        _c("option", { attrs: { value: "0" } }, [
+                          _vm._v("Khởi tạo")
+                        ]),
+                        _vm._v(" "),
+                        _c("option", { attrs: { value: "2" } }, [
+                          _vm._v("Đang tiến hành")
+                        ]),
+                        _vm._v(" "),
+                        _c("option", { attrs: { value: "4" } }, [
+                          _vm._v("Hoàn tất")
                         ])
                       ]
                     )
@@ -66650,119 +66720,26 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", [
-    _c("h2", [_vm._v(_vm._s(_vm.mess))]),
-    _vm._v(" "),
-    _c("div", { staticClass: "tabplus" }, [
-      _c("ul", [
-        _c("li", [
-          _c(
-            "a",
-            {
-              class: _vm.active == 1 ? "active" : "",
-              on: {
-                click: function($event) {
-                  _vm.active = 1
-                }
-              }
-            },
-            [_vm._v("Home")]
-          )
-        ]),
-        _vm._v(" "),
-        _c("li", [
-          _c(
-            "a",
-            {
-              class: _vm.active == 2 ? "active" : "",
-              on: {
-                click: function($event) {
-                  _vm.active = 2
-                }
-              }
-            },
-            [_vm._v("About")]
-          )
-        ]),
-        _vm._v(" "),
-        _c("li", [
-          _c(
-            "a",
-            {
-              class: _vm.active == 3 ? "active" : "",
-              on: {
-                click: function($event) {
-                  _vm.active = 3
-                }
-              }
-            },
-            [_vm._v("Contact")]
-          )
-        ])
-      ]),
-      _vm._v(" "),
-      _c("div", [
-        _c(
-          "div",
-          {
-            directives: [
-              {
-                name: "show",
-                rawName: "v-show",
-                value: _vm.active == 1,
-                expression: "active == 1"
-              }
-            ]
-          },
-          [_vm._v("Content 1")]
-        ),
-        _vm._v(" "),
-        _c(
-          "div",
-          {
-            directives: [
-              {
-                name: "show",
-                rawName: "v-show",
-                value: _vm.active == 2,
-                expression: "active == 2"
-              }
-            ]
-          },
-          [_vm._v("Content 2")]
-        ),
-        _vm._v(" "),
-        _c(
-          "div",
-          {
-            directives: [
-              {
-                name: "show",
-                rawName: "v-show",
-                value: _vm.active == 3,
-                expression: "active == 3"
-              }
-            ]
-          },
-          [_vm._v("Content 3")]
-        )
-      ]),
-      _vm._v(" "),
-      _vm.active == 2
-        ? _c(
-            "div",
-            _vm._l(_vm.templates, function(template) {
-              return _c("div", { key: template.id }, [
-                _vm._v(_vm._s(template.name))
-              ])
-            }),
-            0
-          )
-        : _c("div", [_vm._v("\n            noi dung thu 2\n        ")])
-    ])
-  ])
+  return _vm._m(0)
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "container border col-3" }, [
+      _c("img", {
+        attrs: { src: "img/equipment.jpg", height: "300", alt: "equipment" }
+      }),
+      _vm._v(" "),
+      _c("div", { staticClass: "overlay-button" }, [
+        _c("button", { staticClass: "btn btn-primary" }, [
+          _c("i", { staticClass: "fa fa-pencil" })
+        ])
+      ])
+    ])
+  }
+]
 render._withStripped = true
 
 
@@ -79445,12 +79422,28 @@ Vue.filter('formatBoolean', function (value) {
   if (value) return 'Có';
   return 'Không';
 });
+Vue.filter('formatPrice', function (num) {
+  return num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,') + "vnd";
+});
+Vue.filter('formatEquipmentStatus', function (status) {
+  switch (status) {
+    case 0:
+      return 'Thất lạc';
+
+    case 1:
+      return 'Sẵn sàng';
+
+    case 2:
+      return 'Đang cho mượn';
+  }
+});
 Vue.component('testcomponent', __webpack_require__(/*! ../components/test.vue */ "./resources/components/test.vue")["default"]);
 Vue.component('multi-step-form', __webpack_require__(/*! ../components/multi-step-form.vue */ "./resources/components/multi-step-form.vue")["default"]);
 Vue.component('equipment-templates', __webpack_require__(/*! ../components/equipment-templates.vue */ "./resources/components/equipment-templates.vue")["default"]);
 Vue.component('equipment-lost', __webpack_require__(/*! ../components/equipment-lost.vue */ "./resources/components/equipment-lost.vue")["default"]);
 Vue.component('order-detail', __webpack_require__(/*! ../components/order-detail.vue */ "./resources/components/order-detail.vue")["default"]);
 Vue.component('order', __webpack_require__(/*! ../components/order.vue */ "./resources/components/order.vue")["default"]);
+Vue.component('test', __webpack_require__(/*! ../components/test.vue */ "./resources/components/test.vue")["default"]);
 var app = new Vue({
   el: '#app'
 });
@@ -79520,8 +79513,8 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! C:\laragon\www\equipment-warehouse\resources\js\app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! C:\laragon\www\equipment-warehouse\resources\sass\app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! C:\Users\mrminh\Documents\equipment-warehouse\resources\js\app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! C:\Users\mrminh\Documents\equipment-warehouse\resources\sass\app.scss */"./resources/sass/app.scss");
 
 
 /***/ })

@@ -46,4 +46,7 @@ class Equipment extends Model
                 return;
         }
     }
+    public function getPriceAttribute($value) {
+        return number_format($value).' đ';
+    }
 }

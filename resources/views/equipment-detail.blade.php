@@ -7,15 +7,26 @@ input
 .checked {
   color: orange;
 }
+.overlay-button {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+}
 </style>
+<link rel="stylesheet" href="{{asset('css/star-input.css')}}">
 @section('content')
 <div class="container">
     <div class="row py-3">
-        <a href="{{ route('equipment-template.index') }}" class="btn btn-secondary mr-auto">Back</a>
+        <a href="{{ route('equipment-template.index') }}" class="btn btn-secondary mr-auto">
+            <i class="fa fa-chevron-left"></i> Quay lại
+        </a>
     </div>
     <div class="row">
         <div class="col-md-4">
             <img class="w-100" src="{{ $equipmentTemplate->image }}" alt="sony-ax700">
+            <div class="overlay-button">
+                <button class="btn btn-primary"><i class="fa fa-pencil"></i></button>
+            </div>
         </div>
         <div class="col-md-8">
             <h2><b>{{$equipmentTemplate->name}}</b></h2>
@@ -81,3 +92,4 @@ input
     </div>
 </div>
 @endsection
+<script src="{{asset('js/star-input.js')}}"></script>

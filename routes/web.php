@@ -54,13 +54,6 @@ Route::middleware('auth')->group(function() {
     Route::put('order-request/{order}/complete', 'OrderController@completeOrder')->name('order-request.complete');
     Route::put('order-request/{order}/back', 'OrderController@back')->name('order-request.back');
     Route::get('/test', function() {
-        $orders = App\Order::with([
-            'orderRequestInfos', 
-            'orderRequestInfos.orderInfos', 
-            'guest'
-            ])->orderBy('created_at', 'DESC')->get();
-        return view('test')->with([
-            'orders' => $orders
-        ]);
+        return view('test');
     });
 });

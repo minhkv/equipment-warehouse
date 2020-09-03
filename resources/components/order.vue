@@ -31,9 +31,7 @@
                                         <option selected value='-2'>Trạng thái</option>
                                         <option value='-1'>Từ chối</option>
                                         <option value='0'>Khởi tạo</option>
-                                        <option value='1'>Chấp nhận</option>
-                                        <option value='2'>Xuất đồ</option>
-                                        <option value='3'>Trả đồ</option>
+                                        <option value='2'>Đang tiến hành</option>
                                         <option value='4'>Hoàn tất</option>
                                     </select>
                                 </div>
@@ -121,7 +119,7 @@ export default {
             search: '',
             orderStatus: -2,
             page: 1,
-            perPage: 5,
+            perPage: 8,
             pages: [],
         };
     },
@@ -170,8 +168,12 @@ export default {
             return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
         },
         filterOrderStatus() {
-            if(this.orderStatus != -2) {
+            if(this.orderStatus == -2) {
+                return;
+            } else if(this.orderStatus == -1 || this.orderStatus == 0 || this.orderStatus == 4) {
                 this.displayedOrders = this.displayedOrders.filter(x => x.status == this.orderStatus);
+            } else {
+                this.displayedOrders = this.displayedOrders.filter(x => x.status > 0 && x.status < 4)
             }
         },
         setPages() {

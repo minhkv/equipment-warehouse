@@ -9,7 +9,7 @@
                 <h3>Đơn mượn: {{order.id}} 
                     <span :class="displayStatus()">{{getStatusName(order.status)}}</span>
                 </h3>
-                <div class="col-8 mx-auto py-3">
+                <div class="col-10 mx-auto py-3">
                     <div class="row">
                         <label class="col-3 text-left"><strong><i class="fa fa-user"></i> Người mượn</strong></label>
                         <label class="col-3 text-left">{{order.guest_name}}</label>
@@ -154,7 +154,7 @@
                                                             </td>
                                                             <td class="align-middle text-center">
                                                                 <span :class="displayEquipmentStatusClass(equipment.status)">
-                                                                    {{getEquipmentStatusName(equipment.status)}}
+                                                                    {{equipment.status|formatEquipmentStatus}}
                                                                 </span>
                                                             </td>
                                                             <td>{{equipment.note}}</td>
@@ -668,7 +668,7 @@ export default {
         equipmentOutput: function() {
             console.log('equipmentOutput');
             if(!this.equipmentCheckBorrowedAmount()) return;
-            // this.disableButton();
+            this.disableButton();
             axios({
                     url: this.equipmentOutputUrl,
                     method: 'put',
@@ -683,7 +683,7 @@ export default {
                     console.log(response);
                     window.location.reload();
                 })
-                .catch(function(error) {
+                .catch(function(error) { 
                     console.log(error);
                 });
         },
