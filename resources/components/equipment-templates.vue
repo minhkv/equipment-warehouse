@@ -2,27 +2,29 @@
     <div id="equipment" class="container">
 
         <div class="row">
-            <div class="col-md-12 text-center">
+            <div class="col-12 text-center">
                 <h2>Danh sách thiết bị</h2>
             </div>
         </div>
 
         <div class="row mb-4">
-            <div class="dropdown col-2">
-                <select class="custom-select mx-4 shadow" v-model="category_id" v-on:change="filterTemplate">
+            <div class="col-sm-12 col-md-3 col-lg-2 dropdown">
+                <select class="custom-select shadow" v-model="category_id" v-on:change="filterTemplate">
                     <option value="0">Loại thiết bị</option>
                     <option v-for="cate in categories" :key="cate.id" :value="cate.id">{{ cate.name }}</option>
                 </select>
             </div>
-            <div class="col-6 offset-1">
-                <form class="my-2 my-lg-0 px-2">
+            <div class="col-sm-12 col-md-5 offset-md-1">
+                <form class="my-2 my-lg-0">
                     <div class="input-group">
                         <input v-on:keyup="filterTemplate" v-model="search" class="form-control mr-sm-2" type="search" placeholder="Tìm kiếm">
                         <button class="btn btn-outline-primary my-2 my-sm-0" type="submit"><span class="fa fa-search"></span></button>
                     </div>
                 </form>
             </div>
-            <a :href="equipmentTemplateCreateUrl" class="btn btn-success ml-auto shadow">Thêm thiết bị</a>
+            <div class="col-sm-12 col-md-3 col-lg-2 ml-auto">
+                <a :href="equipmentTemplateCreateUrl" class="btn btn-success shadow">Thêm thiết bị</a>
+            </div>
         </div>
         <!-- Paginator -->
         <div class="row justify-content-center">
@@ -35,7 +37,7 @@
             </nav>
         </div>
         <div class="row justify-content-center py-4">
-            <div v-for="(template, index) in paginate(displayedTemplates)" :key="template.id" class="col-md-3 my-2">
+            <div v-for="(template, index) in paginate(displayedTemplates)" :key="template.id" class="col-sm-6 col-md-4 col-lg-3 my-2">
                 <div class="card fast-transition">
                     <a :href="equipmentTemplateShowUrl(template.id)">
                         <img :src="template.image" class="card-img-top" :alt="template.name">
@@ -46,9 +48,9 @@
                             <p class="card-text">Số lượng: {{ template.equipments.length }}</p>
                         </div>
                         <div>
-                            <a href="#" class="btn btn-warning"><span class="fa fa-plus"></span> Thêm vào giỏ</a>
-                            <a :href="equipmentTemplateShowUrl(template.id)" class="btn btn-primary"><span class="fa fa-pencil"></span></a>
-                            <button class="btn btn-danger" @click="equipmentDestroy(template.id, index)">
+                            <a href="#" class="btn btn-warning btn-sm"><span class="fa fa-plus"></span> Thêm vào giỏ</a>
+                            <a :href="equipmentTemplateShowUrl(template.id)" class="btn btn-primary btn-sm"><span class="fa fa-pencil"></span></a>
+                            <button class="btn btn-danger btn-sm" @click="equipmentDestroy(template.id, index)">
                                 <span class="fa fa-trash"></span>
                             </button>
                         </div>
@@ -190,5 +192,8 @@ export default {
     }
     .card {
         min-height: 400px;
+    }
+    .card-title {
+        font-size: 1rem;
     }
 </style>

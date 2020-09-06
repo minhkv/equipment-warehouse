@@ -52,26 +52,5 @@ class Order extends Model
         }
         return $total;
     }
-    public function getStatus() {
-        switch($this->status) {
-            case -1:
-                echo '<span class="badge badge-pill badge-danger">Từ chối</span>';
-                return;
-            case 0:
-                echo '<span class="badge badge-pill badge-warning">Khởi tạo</span>';
-                return;
-            case 1:
-                echo '<span class="badge badge-pill badge-primary">Chấp nhận</span>';
-                return;
-            case 2:
-                echo '<span class="badge badge-pill badge-primary">Xuất đồ</span>';
-                return;
-            case 3:
-                echo '<span class="badge badge-pill badge-primary">Kiểm đồ</span>';
-                return;
-            case 4:
-                echo '<span class="badge badge-pill badge-success">Hoàn tất</span>';
-                return;
-        }
-    }
+
 }

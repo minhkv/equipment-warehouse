@@ -1,7 +1,9 @@
-<nav class="navbar navbar-expand-md navbar-light sticky-top bg-white shadow-sm">
+<nav class="navbar navbar-expand-md navbar-light sticky-top bg-light shadow">
     <div class="container">
         <a class="navbar-brand" href="{{ url('/') }}">
-            <img src="/img/logo.png" width=200px alt="logo">
+            <img src="/img/logo.png" alt="logo">
+            <!-- <img src="videocam.ico" height=80px alt="logo"> -->
+            <!-- <p>QUẢN LÝ KHO</p> -->
         </a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
             <span class="navbar-toggler-icon"></span>
@@ -9,35 +11,33 @@
 
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <!-- Left Side Of Navbar -->
-            <ul class="navbar-nav mr-auto">
-                <li class="nav-item {{Route::currentRouteName() == 'home' ? 'active' : ''}}">
-                    <a class="nav-link" href="{{route('home')}}">Trang chủ</a>
+            <ul class="navbar-nav">
+                <li class="nav-item ">
+                    <a class="nav-link {{Route::currentRouteName() == 'home' ? 'active' : ''}}" href="{{route('home')}}">Trang chủ</a>
                 </li>
-                <li class="nav-item {{Route::currentRouteName() == 'equipment-template.index' ? 'active' : ''}}">
-                    <a class="nav-link" href="{{route('equipment-template.index')}}">Thiết bị</a>
+                <li class="nav-item">
+                    <a class="nav-link {{Route::currentRouteName() == 'order.index' ? 'active' : ''}}" href="{{route('order.index')}}">Đơn mượn
+                        @if($notification > 0)
+                        <span class="badge badge-warning">{{ $notification }}</span>
+                        @endif
+                    </a>
                 </li>
-                <!-- <li class="nav-item {{Route::currentRouteName() == 'combo.index' ? 'active' : ''}}">
-                    <a class="nav-link" href="{{route('combo.index')}}">Combo</a>
+                <li class="nav-item">
+                    <a class="nav-link {{Route::currentRouteName() == 'equipment-template.index' ? 'active' : ''}}" href="{{route('equipment-template.index')}}">Thiết bị</a>
+                </li>
+                <!-- <li class="nav-item">
+                    <a class="nav-link {{Route::currentRouteName() == 'combo.index' ? 'active' : ''}}" href="{{route('combo.index')}}">Combo</a>
                 </li> -->
-                <li class="nav-item {{Route::currentRouteName() == 'supplier.index' ? 'active' : ''}}">
-                    <a class="nav-link" href="{{route('supplier.index')}}">Nhà cung cấp</a>
+                <li class="nav-item">
+                    <a class="nav-link {{Route::currentRouteName() == 'supplier.index' ? 'active' : ''}}" href="{{route('supplier.index')}}">Nhà cung cấp</a>
                 </li>
-                <li class="nav-item {{Route::currentRouteName() == 'order.index' ? 'active' : ''}}">
-                    <a class="nav-link" href="{{route('order.index')}}">Đơn mượn</a>
-                </li>
-                <!-- <li class="nav-item {{Route::currentRouteName() == 'borrowing-cart.index' ? 'active' : ''}}">
-                    <a class="nav-link" href="{{route('borrowing-cart')}}">Giỏ đồ <i class="fa fa-shopping-cart"></i></a>
+                <!-- <li class="nav-item">
+                    <a class="nav-link {{Route::currentRouteName() == 'borrowing-cart.index' ? 'active' : ''}}" href="{{route('borrowing-cart')}}">Giỏ đồ <i class="fa fa-shopping-cart"></i></a>
                 </li> -->
             </ul>
 
             <!-- Right Side Of Navbar -->
             <ul class="navbar-nav ml-auto">
-                <form class="form-inline my-2 my-lg-0 px-2">
-                    <div class="input-group">
-                        <input class="form-control mr-sm-2" type="search" placeholder="Tìm kiếm" aria-label="search" aria-describedby="basic-addon2">
-                        <button class="btn btn-outline-primary my-2 my-sm-0" type="button"><span class="fa fa-search"></span></button>
-                    </div>
-                </form>
                 <!-- Authentication Links -->
                 @guest
                     <li class="nav-item">

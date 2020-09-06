@@ -2199,6 +2199,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['equipmentTemplates', 'categories', 'equipmentTemplateIndexUrl', 'equipmentTemplateCreateUrl'],
   data: function data() {
@@ -3821,7 +3823,7 @@ __webpack_require__.r(__webpack_exports__);
 
         var search = _this2.normalizeSearchString(_this2.search);
 
-        return name.includes(search);
+        return name.includes(search) || x.id.toString().includes(search);
       });
     },
     normalizeSearchString: function normalizeSearchString(str) {
@@ -8388,7 +8390,7 @@ exports = module.exports = __webpack_require__(/*! ../../node_modules/css-loader
 
 
 // module
-exports.push([module.i, "\n.fast-transition[data-v-5144e279] {\n    position: relative;\n    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.3);\n    transition: all 0.3s ease-in-out;\n}\n.fast-transition[data-v-5144e279]::before {\n    /* content: ' '; */\n    position: absolute;\n    top: 0;\n    right: 0;\n    bottom: 0;\n    left: 0;\n    /* border-radius: 50px; */\n    box-shadow: 0 10px 50px 0 rgba(0, 0, 0, 0.5);\n    opacity: 0;\n    transition: opacity 500ms;\n}\n.fast-transition[data-v-5144e279]:hover::before {\n    opacity: 1;\n}\n.fast-transition[data-v-5144e279]:hover {\n    transform: scale(1.05);\n}\n.card[data-v-5144e279] {\n    min-height: 400px;\n}\n", ""]);
+exports.push([module.i, "\n.fast-transition[data-v-5144e279] {\n    position: relative;\n    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.3);\n    transition: all 0.3s ease-in-out;\n}\n.fast-transition[data-v-5144e279]::before {\n    /* content: ' '; */\n    position: absolute;\n    top: 0;\n    right: 0;\n    bottom: 0;\n    left: 0;\n    /* border-radius: 50px; */\n    box-shadow: 0 10px 50px 0 rgba(0, 0, 0, 0.5);\n    opacity: 0;\n    transition: opacity 500ms;\n}\n.fast-transition[data-v-5144e279]:hover::before {\n    opacity: 1;\n}\n.fast-transition[data-v-5144e279]:hover {\n    transform: scale(1.05);\n}\n.card[data-v-5144e279] {\n    min-height: 400px;\n}\n.card-title[data-v-5144e279] {\n    font-size: 1rem;\n}\n", ""]);
 
 // exports
 
@@ -62370,7 +62372,7 @@ var render = function() {
     _vm._m(0),
     _vm._v(" "),
     _c("div", { staticClass: "row mb-4" }, [
-      _c("div", { staticClass: "dropdown col-2" }, [
+      _c("div", { staticClass: "col-sm-12 col-md-3 col-lg-2 dropdown" }, [
         _c(
           "select",
           {
@@ -62382,7 +62384,7 @@ var render = function() {
                 expression: "category_id"
               }
             ],
-            staticClass: "custom-select mx-4 shadow",
+            staticClass: "custom-select shadow",
             on: {
               change: [
                 function($event) {
@@ -62417,8 +62419,8 @@ var render = function() {
         )
       ]),
       _vm._v(" "),
-      _c("div", { staticClass: "col-6 offset-1" }, [
-        _c("form", { staticClass: "my-2 my-lg-0 px-2" }, [
+      _c("div", { staticClass: "col-sm-12 col-md-5 offset-md-1" }, [
+        _c("form", { staticClass: "my-2 my-lg-0" }, [
           _c("div", { staticClass: "input-group" }, [
             _c("input", {
               directives: [
@@ -62448,14 +62450,16 @@ var render = function() {
         ])
       ]),
       _vm._v(" "),
-      _c(
-        "a",
-        {
-          staticClass: "btn btn-success ml-auto shadow",
-          attrs: { href: _vm.equipmentTemplateCreateUrl }
-        },
-        [_vm._v("Thêm thiết bị")]
-      )
+      _c("div", { staticClass: "col-sm-12 col-md-3 col-lg-2 ml-auto" }, [
+        _c(
+          "a",
+          {
+            staticClass: "btn btn-success shadow",
+            attrs: { href: _vm.equipmentTemplateCreateUrl }
+          },
+          [_vm._v("Thêm thiết bị")]
+        )
+      ])
     ]),
     _vm._v(" "),
     _c("div", { staticClass: "row justify-content-center" }, [
@@ -62533,58 +62537,69 @@ var render = function() {
       { staticClass: "row justify-content-center py-4" },
       [
         _vm._l(_vm.paginate(_vm.displayedTemplates), function(template, index) {
-          return _c("div", { key: template.id, staticClass: "col-md-3 my-2" }, [
-            _c("div", { staticClass: "card fast-transition" }, [
-              _c(
-                "a",
-                { attrs: { href: _vm.equipmentTemplateShowUrl(template.id) } },
-                [
-                  _c("img", {
-                    staticClass: "card-img-top",
-                    attrs: { src: template.image, alt: template.name }
-                  })
-                ]
-              ),
-              _vm._v(" "),
-              _c("div", { staticClass: "card-body d-flex flex-column" }, [
-                _c("div", { staticClass: "card-block mt-auto my-1" }, [
-                  _c("h5", { staticClass: "card-title" }, [
-                    _vm._v(_vm._s(template.name))
+          return _c(
+            "div",
+            {
+              key: template.id,
+              staticClass: "col-sm-6 col-md-4 col-lg-3 my-2"
+            },
+            [
+              _c("div", { staticClass: "card fast-transition" }, [
+                _c(
+                  "a",
+                  {
+                    attrs: { href: _vm.equipmentTemplateShowUrl(template.id) }
+                  },
+                  [
+                    _c("img", {
+                      staticClass: "card-img-top",
+                      attrs: { src: template.image, alt: template.name }
+                    })
+                  ]
+                ),
+                _vm._v(" "),
+                _c("div", { staticClass: "card-body d-flex flex-column" }, [
+                  _c("div", { staticClass: "card-block mt-auto my-1" }, [
+                    _c("h5", { staticClass: "card-title" }, [
+                      _vm._v(_vm._s(template.name))
+                    ]),
+                    _vm._v(" "),
+                    _c("p", { staticClass: "card-text" }, [
+                      _vm._v("Số lượng: " + _vm._s(template.equipments.length))
+                    ])
                   ]),
                   _vm._v(" "),
-                  _c("p", { staticClass: "card-text" }, [
-                    _vm._v("Số lượng: " + _vm._s(template.equipments.length))
-                  ])
-                ]),
-                _vm._v(" "),
-                _c("div", [
-                  _vm._m(2, true),
-                  _vm._v(" "),
-                  _c(
-                    "a",
-                    {
-                      staticClass: "btn btn-primary",
-                      attrs: { href: _vm.equipmentTemplateShowUrl(template.id) }
-                    },
-                    [_c("span", { staticClass: "fa fa-pencil" })]
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "button",
-                    {
-                      staticClass: "btn btn-danger",
-                      on: {
-                        click: function($event) {
-                          return _vm.equipmentDestroy(template.id, index)
+                  _c("div", [
+                    _vm._m(2, true),
+                    _vm._v(" "),
+                    _c(
+                      "a",
+                      {
+                        staticClass: "btn btn-primary btn-sm",
+                        attrs: {
+                          href: _vm.equipmentTemplateShowUrl(template.id)
                         }
-                      }
-                    },
-                    [_c("span", { staticClass: "fa fa-trash" })]
-                  )
+                      },
+                      [_c("span", { staticClass: "fa fa-pencil" })]
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "button",
+                      {
+                        staticClass: "btn btn-danger btn-sm",
+                        on: {
+                          click: function($event) {
+                            return _vm.equipmentDestroy(template.id, index)
+                          }
+                        }
+                      },
+                      [_c("span", { staticClass: "fa fa-trash" })]
+                    )
+                  ])
                 ])
               ])
-            ])
-          ])
+            ]
+          )
         }),
         _vm._v(" "),
         _vm.displayedTemplates.length == 0
@@ -62671,7 +62686,7 @@ var staticRenderFns = [
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
     return _c("div", { staticClass: "row" }, [
-      _c("div", { staticClass: "col-md-12 text-center" }, [
+      _c("div", { staticClass: "col-12 text-center" }, [
         _c("h2", [_vm._v("Danh sách thiết bị")])
       ])
     ])
@@ -62693,10 +62708,11 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("a", { staticClass: "btn btn-warning", attrs: { href: "#" } }, [
-      _c("span", { staticClass: "fa fa-plus" }),
-      _vm._v(" Thêm vào giỏ")
-    ])
+    return _c(
+      "a",
+      { staticClass: "btn btn-warning btn-sm", attrs: { href: "#" } },
+      [_c("span", { staticClass: "fa fa-plus" }), _vm._v(" Thêm vào giỏ")]
+    )
   }
 ]
 render._withStripped = true
@@ -66317,7 +66333,7 @@ var render = function() {
                           staticClass: "form-control mr-sm-2",
                           attrs: {
                             type: "search",
-                            placeholder: "Tìm kiếm theo tên người mượn",
+                            placeholder: "Nhập mã hoặc tên người mượn",
                             "aria-label": "search",
                             "aria-describedby": "basic-addon2"
                           },

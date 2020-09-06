@@ -1,17 +1,18 @@
 @extends('layouts.app')
 <style>
-input 
-{
-    width: 30px;
-}
-.checked {
-  color: orange;
-}
-.overlay-button {
-    position: absolute;
-    top: 10px;
-    left: 10px;
-}
+    input {
+        width: 30px;
+    }
+
+    .checked {
+        color: orange;
+    }
+
+    .overlay-button {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+    }
 </style>
 <link rel="stylesheet" href="{{asset('css/star-input.css')}}">
 @section('content')
@@ -23,17 +24,70 @@ input
     </div>
     <div class="row">
         <div class="col-md-4">
-            <img class="w-100" src="{{ $equipmentTemplate->image }}" alt="sony-ax700">
+            <img class="w-100" src="{{ $equipmentTemplate->image }}" alt="{{ $equipmentTemplate->name }}">
             <div class="overlay-button">
-                <button class="btn btn-primary"><i class="fa fa-pencil"></i></button>
+                <button class="btn btn-primary" type="button" data-toggle="modal" data-target="#editImage">
+                    <i class="fa fa-pencil"></i>
+                </button>
+                <div class="modal fade" id="editImage" tabindex="-1" role="dialog" aria-labelledby="editImageLabel"
+                    aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal"
+                                    aria-label="Close">&times;</button>
+                            </div>
+                            <div class="modal-body">       
+                                <form id="updateImage" name="updateImage" action="{{ route('equipment-template.update', $equipmentTemplate) }}" method="POST" enctype="multipart/form-data">
+                                    @csrf
+                                    @method('PUT')
+                                    <input required type="file" name="imageFile" class="form-control-file" id="equipmentImage">
+                                </form>                    
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                                <button type="button" class="btn btn-primary" onclick="window.updateImage()">Lưu thay đổi</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
         <div class="col-md-8">
-            <h2><b>{{$equipmentTemplate->name}}</b></h2>
+            <h2><b>{{$equipmentTemplate->name}}</b>
+                <button class="btn btn-primary" type="button" data-toggle="modal" data-target="#editName">
+                    <i class="fa fa-pencil"></i></button>
+            </h2>
             <p><b>Số lượng thiết bị:</b> {{ $equipmentTemplate->equipments->count() }}</p>
             <label>Số lượng mượn:</label>
             <input type="text" value="1">
             <a href="#" class="btn btn-warning"><span class="fa fa-plus"></span> Thêm vào giỏ</a>
+
+            <div class="modal fade" id="editName" tabindex="-1" role="dialog" aria-labelledby="editNameLabel"
+                    aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal"
+                                aria-label="Close">&times;</button>
+                        </div>
+                        <div class="modal-body">            
+                            <form name="updateName" id="updateName" method="POST">
+                                @csrf
+                                @method('PUT')
+                                <div class="form-group">
+                                    <label for="equipmentName">Nhập tên mới</label>
+                                    <input type="text" class="form-control" id="equipmentName" name="name">
+                                </div>
+                            </form>            
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                            <button type="button" class="btn btn-primary" onclick="window.updateName()">Lưu thay đổi</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
     <hr />
@@ -93,3 +147,22 @@ input
 </div>
 @endsection
 <script src="{{asset('js/star-input.js')}}"></script>
+<script>
+    function updateImage() {
+        var imageFile = document.forms["updateImage"]["imageFile"].value;
+        if(!imageFile) {
+            alert("Bạn chưa chọn hình ảnh nào!");
+            return;
+        }
+        document.getElementById('updateImage').submit();
+    }
+    function updateName() {
+        var name = document.forms["updateName"]["name"].value;
+        console.log(name);
+        if(!name) {
+            alert("Tên không được để trống!");
+            return;
+        }
+        document.getElementById('updateName').submit();
+    }
+</script>
