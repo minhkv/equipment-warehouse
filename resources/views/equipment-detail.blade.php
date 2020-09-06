@@ -77,7 +77,7 @@
                                 @method('PUT')
                                 <div class="form-group">
                                     <label for="equipmentName">Nhập tên mới</label>
-                                    <input type="text" class="form-control" id="equipmentName" name="name">
+                                    <input type="text" class="form-control" id="equipmentName" name="name" value="{{ $equipmentTemplate->name }}">
                                 </div>
                             </form>            
                         </div>
@@ -109,7 +109,8 @@
                         <th class="text-center" scope="col" style="width: 10%;">Tình trạng</th>
                         <th class="text-center" scope="col" style="width: 10%;">Trạng thái</th>
                         <th class="text-center" scope="col" style="width: 15%;">Ghi chú</th>
-                        <th class="text-center" scope="col" style="width: 10%;"></th>
+                        <th class="text-center" scope="col" style="width: 2%;"></th>
+                        <th class="text-center" scope="col" style="width: 4%;"></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -131,9 +132,15 @@
                         </td>
                         <td class="align-middle text-center">{{$equipment->getStatusPretty()}}</td>
                         <td class="align-middle text-center">{{$equipment->note}}</td>
-                        <td class="align-middle">
-                            <x-edit-equipment-member e-id="{{ $equipment->id }}" />
-                            <x-delete-button id="{{ $equipment->id }}" route-name="equipment.destroy" />
+                        <td class="align-middle px-0">
+                            @if($equipment->status == 1)
+                                <x-edit-equipment-member e-id="{{ $equipment->id }}" />
+                            @endif
+                        </td>
+                        <td class="align-middle px-0">
+                            @if($equipment->status != 2)
+                                <x-delete-button id="{{ $equipment->id }}" route-name="equipment.destroy" />
+                            @endif
                         </td>
                     </tr>
                     @endforeach

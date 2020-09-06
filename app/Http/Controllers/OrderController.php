@@ -213,7 +213,8 @@ class OrderController extends Controller
                     'status' => 2
                 ]);
                 $orderRequestInfoModel->orderInfos()->create([
-                    'equipment_id' => $orderInfo['equipment_id']
+                    'equipment_id' => $orderInfo['equipment_id'],
+                    'condition_before' => $orderInfo['condition_before'],
                 ]);
             }
         }
@@ -233,8 +234,14 @@ class OrderController extends Controller
             foreach($orderRequestInfos[$template_id]['order_infos'] as $orderInfo){
                 $orderRequestInfoModel->orderInfos()->where('id', $orderInfo['id'])->update([
                     'status' => $orderInfo['status'],
-                    'condition_received' => $orderInfo['condition_received']
+                    
+                    'note' => $orderInfo['note'],
                 ]);
+                if($orderInfo['status'] != 0) {
+                    $orderRequestInfoModel->orderInfos()->where('id', $orderInfo['id'])->update([
+                        'condition_received' => $orderInfo['condition_received']
+                    ]);
+                }
             }
         }
         $order->update([

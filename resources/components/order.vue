@@ -61,7 +61,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr v-for="order in paginate(displayedOrders)" :key="order.id">
+                                        <tr v-for="order in paginate(displayedOrders)" :key="order.id" :class="rowClass(order.status)">
                                             <th scope="row" class="align-middle text-center">{{order.id}}</th>
                                             <td class="text-center align-middle">{{order.guest_name}}</td>
                                             <td class="text-center align-middle">{{order.long_term|formatBoolean}}</td>
@@ -224,6 +224,14 @@ export default {
                 case 3: return 'Trả đồ';
                 case 4: return 'Hoàn tất';
             }
+        },
+        rowClass(status) {
+            return {
+                'table-danger': status == -1,
+                'table-warning': status == 0,
+                'table-primary': status > 0 && status < 4,
+                'table-success': status == 4 
+            };
         }
     }
 }

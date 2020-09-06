@@ -3269,6 +3269,14 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ["order", "orderIndexUrl", "acceptUrl", "rejectUrl", "equipmentOutputUrl", "equipmentReturnUrl", "completeUrl", "backUrl"],
@@ -3302,6 +3310,10 @@ __webpack_require__.r(__webpack_exports__);
         equipmentSelected[equipment.id] = false;
       });
       info.order_infos.forEach(function (order_info) {
+        if (!order_info.condition_before) {
+          order_info.condition_before = order_info.equipment.condition;
+        }
+
         if (order_info.condition_received) {
           conditionReceived[order_info.equipment_id] = order_info.condition_received;
         } else {
@@ -3413,14 +3425,15 @@ __webpack_require__.r(__webpack_exports__);
     disableMinusEquipmentButton: function disableMinusEquipmentButton(equipmentId, equipmentStatus) {
       return !this.isEquipmentSelected(equipmentId);
     },
-    selectEquipment: function selectEquipment(equipment_id, template_id) {
+    selectEquipment: function selectEquipment(equipment, template_id) {
       console.log('select');
       this.orderRequestInfos[template_id].order_infos.push({
-        'equipment_id': equipment_id
+        'equipment_id': equipment.id,
+        'condition_before': equipment.condition
       });
       this.templateBorrowedAmount[template_id]++;
-      this.equipmentIds.push(equipment_id);
-      this.equipmentSelected[equipment_id] = true;
+      this.equipmentIds.push(equipment.id);
+      this.equipmentSelected[equipment.id] = true;
     },
     removeEquipment: function removeEquipment(equipment_id, template_id) {
       console.log('remove');
@@ -3904,6 +3917,14 @@ __webpack_require__.r(__webpack_exports__);
         case 4:
           return 'Hoàn tất';
       }
+    },
+    rowClass: function rowClass(status) {
+      return {
+        'table-danger': status == -1,
+        'table-warning': status == 0,
+        'table-primary': status > 0 && status < 4,
+        'table-success': status == 4
+      };
     }
   }
 });
@@ -64466,7 +64487,7 @@ var render = function() {
                 {
                   key: info.id,
                   class: {
-                    "bg-success":
+                    "table-success":
                       _vm.getBorrowedAmount(info.template_id) > 0 &&
                       _vm.getBorrowedAmount(info.template_id) ==
                         _vm.getReceivedAmount(info.template_id) +
@@ -64550,7 +64571,7 @@ var render = function() {
                     : _vm._e(),
                   _vm._v(" "),
                   _c("td", { staticClass: "align-middle text-center" }, [
-                    _vm.order.status < 3 && _vm.order.status > 0
+                    _vm.order.status > 0
                       ? _c(
                           "button",
                           {
@@ -64602,7 +64623,7 @@ var render = function() {
                                       [
                                         _vm._v(
                                           "Thêm thiết bị " +
-                                            _vm._s(info.template.id)
+                                            _vm._s(info.template.name)
                                         )
                                       ]
                                     )
@@ -64619,7 +64640,7 @@ var render = function() {
                                       [
                                         _vm._v(
                                           "Kiểm thiết bị " +
-                                            _vm._s(info.template.id)
+                                            _vm._s(info.template.name)
                                         )
                                       ]
                                     ),
@@ -64823,7 +64844,7 @@ var render = function() {
                                                             $event
                                                           ) {
                                                             return _vm.selectEquipment(
-                                                              equipment.id,
+                                                              equipment,
                                                               info.template.id
                                                             )
                                                           }
@@ -64918,8 +64939,8 @@ var render = function() {
                                                         fa: true,
                                                         "fa-star": true,
                                                         checked:
-                                                          orderInfo.equipment
-                                                            .condition >= 1
+                                                          orderInfo.condition_before >=
+                                                          1
                                                       }
                                                     }),
                                                     _vm._v(" "),
@@ -64928,8 +64949,8 @@ var render = function() {
                                                         fa: true,
                                                         "fa-star": true,
                                                         checked:
-                                                          orderInfo.equipment
-                                                            .condition >= 2
+                                                          orderInfo.condition_before >=
+                                                          2
                                                       }
                                                     }),
                                                     _vm._v(" "),
@@ -64938,8 +64959,8 @@ var render = function() {
                                                         fa: true,
                                                         "fa-star": true,
                                                         checked:
-                                                          orderInfo.equipment
-                                                            .condition >= 3
+                                                          orderInfo.condition_before >=
+                                                          3
                                                       }
                                                     }),
                                                     _vm._v(" "),
@@ -64948,8 +64969,8 @@ var render = function() {
                                                         fa: true,
                                                         "fa-star": true,
                                                         checked:
-                                                          orderInfo.equipment
-                                                            .condition >= 4
+                                                          orderInfo.condition_before >=
+                                                          4
                                                       }
                                                     }),
                                                     _vm._v(" "),
@@ -64958,8 +64979,8 @@ var render = function() {
                                                         fa: true,
                                                         "fa-star": true,
                                                         checked:
-                                                          orderInfo.equipment
-                                                            .condition >= 5
+                                                          orderInfo.condition_before >=
+                                                          5
                                                       }
                                                     })
                                                   ])
@@ -64973,452 +64994,579 @@ var render = function() {
                                                     "text-center align-middle"
                                                 },
                                                 [
-                                                  _c(
-                                                    "div",
-                                                    {
-                                                      attrs: {
-                                                        id:
-                                                          orderInfo.equipment.id
-                                                      }
-                                                    },
-                                                    [
-                                                      _c(
+                                                  _vm.order.status <= 2
+                                                    ? _c(
                                                         "div",
                                                         {
-                                                          staticClass:
-                                                            "starrating risingstar d-flex justify-content-center flex-row-reverse"
-                                                        },
-                                                        [
-                                                          _c("input", {
-                                                            directives: [
-                                                              {
-                                                                name: "model",
-                                                                rawName:
-                                                                  "v-model",
-                                                                value:
-                                                                  _vm
-                                                                    .conditionReceived[
-                                                                    orderInfo
-                                                                      .equipment
-                                                                      .id
-                                                                  ],
-                                                                expression:
-                                                                  "conditionReceived[orderInfo.equipment.id]"
-                                                              }
-                                                            ],
-                                                            class: {
-                                                              checked:
-                                                                orderInfo
-                                                                  .equipment
-                                                                  .condition ==
-                                                                5
-                                                            },
-                                                            attrs: {
-                                                              type: "radio",
-                                                              id:
-                                                                "star5-" +
-                                                                orderInfo
-                                                                  .equipment.id,
-                                                              name:
-                                                                "condition-received-" +
-                                                                orderInfo
-                                                                  .equipment.id,
-                                                              value: "5"
-                                                            },
-                                                            domProps: {
-                                                              checked: _vm._q(
-                                                                _vm
-                                                                  .conditionReceived[
-                                                                  orderInfo
-                                                                    .equipment
-                                                                    .id
-                                                                ],
-                                                                "5"
-                                                              )
-                                                            },
-                                                            on: {
-                                                              change: function(
-                                                                $event
-                                                              ) {
-                                                                return _vm.$set(
-                                                                  _vm.conditionReceived,
-                                                                  orderInfo
-                                                                    .equipment
-                                                                    .id,
-                                                                  "5"
-                                                                )
-                                                              }
-                                                            }
-                                                          }),
-                                                          _c(
-                                                            "label",
-                                                            {
-                                                              attrs: {
-                                                                for:
-                                                                  "star5-" +
-                                                                  orderInfo
-                                                                    .equipment
-                                                                    .id,
-                                                                onmouseout:
-                                                                  "normalText('scoreDescription-' + orderInfo.equipment.id')",
-                                                                onmouseover:
-                                                                  "changeText('scoreDescription-' + orderInfo.equipment.id', 'Hoàn hảo')",
-                                                                title: "5 star"
-                                                              }
-                                                            },
-                                                            [_vm._v("5")]
-                                                          ),
-                                                          _vm._v(" "),
-                                                          _c("input", {
-                                                            directives: [
-                                                              {
-                                                                name: "model",
-                                                                rawName:
-                                                                  "v-model",
-                                                                value:
-                                                                  _vm
-                                                                    .conditionReceived[
-                                                                    orderInfo
-                                                                      .equipment
-                                                                      .id
-                                                                  ],
-                                                                expression:
-                                                                  "conditionReceived[orderInfo.equipment.id]"
-                                                              }
-                                                            ],
-                                                            class: {
-                                                              checked:
-                                                                orderInfo
-                                                                  .equipment
-                                                                  .condition ==
-                                                                4
-                                                            },
-                                                            attrs: {
-                                                              type: "radio",
-                                                              id:
-                                                                "star4-" +
-                                                                orderInfo
-                                                                  .equipment.id,
-                                                              name:
-                                                                "condition-received-" +
-                                                                orderInfo
-                                                                  .equipment.id,
-                                                              value: "4"
-                                                            },
-                                                            domProps: {
-                                                              checked: _vm._q(
-                                                                _vm
-                                                                  .conditionReceived[
-                                                                  orderInfo
-                                                                    .equipment
-                                                                    .id
-                                                                ],
-                                                                "4"
-                                                              )
-                                                            },
-                                                            on: {
-                                                              change: function(
-                                                                $event
-                                                              ) {
-                                                                return _vm.$set(
-                                                                  _vm.conditionReceived,
-                                                                  orderInfo
-                                                                    .equipment
-                                                                    .id,
-                                                                  "4"
-                                                                )
-                                                              }
-                                                            }
-                                                          }),
-                                                          _c(
-                                                            "label",
-                                                            {
-                                                              attrs: {
-                                                                for:
-                                                                  "star4-" +
-                                                                  orderInfo
-                                                                    .equipment
-                                                                    .id,
-                                                                onmouseout:
-                                                                  "normalText('scoreDescription-' + orderInfo.equipment.id')",
-                                                                onmouseover:
-                                                                  "changeText('scoreDescription-' + orderInfo.equipment.id', 'Tốt')",
-                                                                title: "4 star"
-                                                              }
-                                                            },
-                                                            [_vm._v("4")]
-                                                          ),
-                                                          _vm._v(" "),
-                                                          _c("input", {
-                                                            directives: [
-                                                              {
-                                                                name: "model",
-                                                                rawName:
-                                                                  "v-model",
-                                                                value:
-                                                                  _vm
-                                                                    .conditionReceived[
-                                                                    orderInfo
-                                                                      .equipment
-                                                                      .id
-                                                                  ],
-                                                                expression:
-                                                                  "conditionReceived[orderInfo.equipment.id]"
-                                                              }
-                                                            ],
-                                                            class: {
-                                                              checked:
-                                                                orderInfo
-                                                                  .equipment
-                                                                  .condition ==
-                                                                3
-                                                            },
-                                                            attrs: {
-                                                              type: "radio",
-                                                              id:
-                                                                "star3-" +
-                                                                orderInfo
-                                                                  .equipment.id,
-                                                              name:
-                                                                "condition-received-" +
-                                                                orderInfo
-                                                                  .equipment.id,
-                                                              value: "3"
-                                                            },
-                                                            domProps: {
-                                                              checked: _vm._q(
-                                                                _vm
-                                                                  .conditionReceived[
-                                                                  orderInfo
-                                                                    .equipment
-                                                                    .id
-                                                                ],
-                                                                "3"
-                                                              )
-                                                            },
-                                                            on: {
-                                                              change: function(
-                                                                $event
-                                                              ) {
-                                                                return _vm.$set(
-                                                                  _vm.conditionReceived,
-                                                                  orderInfo
-                                                                    .equipment
-                                                                    .id,
-                                                                  "3"
-                                                                )
-                                                              }
-                                                            }
-                                                          }),
-                                                          _c(
-                                                            "label",
-                                                            {
-                                                              attrs: {
-                                                                for:
-                                                                  "star3-" +
-                                                                  orderInfo
-                                                                    .equipment
-                                                                    .id,
-                                                                onmouseout:
-                                                                  "normalText('scoreDescription-' + orderInfo.equipment.id')",
-                                                                onmouseover:
-                                                                  "changeText('scoreDescription-' + orderInfo.equipment.id', 'Bình thường')",
-                                                                title: "3 star"
-                                                              }
-                                                            },
-                                                            [_vm._v("3")]
-                                                          ),
-                                                          _vm._v(" "),
-                                                          _c("input", {
-                                                            directives: [
-                                                              {
-                                                                name: "model",
-                                                                rawName:
-                                                                  "v-model",
-                                                                value:
-                                                                  _vm
-                                                                    .conditionReceived[
-                                                                    orderInfo
-                                                                      .equipment
-                                                                      .id
-                                                                  ],
-                                                                expression:
-                                                                  "conditionReceived[orderInfo.equipment.id]"
-                                                              }
-                                                            ],
-                                                            class: {
-                                                              checked:
-                                                                orderInfo
-                                                                  .equipment
-                                                                  .condition ==
-                                                                2
-                                                            },
-                                                            attrs: {
-                                                              type: "radio",
-                                                              id:
-                                                                "star2-" +
-                                                                orderInfo
-                                                                  .equipment.id,
-                                                              name:
-                                                                "condition-received-" +
-                                                                orderInfo
-                                                                  .equipment.id,
-                                                              value: "2"
-                                                            },
-                                                            domProps: {
-                                                              checked: _vm._q(
-                                                                _vm
-                                                                  .conditionReceived[
-                                                                  orderInfo
-                                                                    .equipment
-                                                                    .id
-                                                                ],
-                                                                "2"
-                                                              )
-                                                            },
-                                                            on: {
-                                                              change: function(
-                                                                $event
-                                                              ) {
-                                                                return _vm.$set(
-                                                                  _vm.conditionReceived,
-                                                                  orderInfo
-                                                                    .equipment
-                                                                    .id,
-                                                                  "2"
-                                                                )
-                                                              }
-                                                            }
-                                                          }),
-                                                          _c(
-                                                            "label",
-                                                            {
-                                                              attrs: {
-                                                                for:
-                                                                  "star2-" +
-                                                                  orderInfo
-                                                                    .equipment
-                                                                    .id,
-                                                                onmouseout:
-                                                                  "normalText('scoreDescription-' + orderInfo.equipment.id')",
-                                                                onmouseover:
-                                                                  "changeText('scoreDescription-' + orderInfo.equipment.id', 'Không tốt')",
-                                                                title: "2 star"
-                                                              }
-                                                            },
-                                                            [_vm._v("2")]
-                                                          ),
-                                                          _vm._v(" "),
-                                                          _c("input", {
-                                                            directives: [
-                                                              {
-                                                                name: "model",
-                                                                rawName:
-                                                                  "v-model",
-                                                                value:
-                                                                  _vm
-                                                                    .conditionReceived[
-                                                                    orderInfo
-                                                                      .equipment
-                                                                      .id
-                                                                  ],
-                                                                expression:
-                                                                  "conditionReceived[orderInfo.equipment.id]"
-                                                              }
-                                                            ],
-                                                            class: {
-                                                              checked:
-                                                                orderInfo
-                                                                  .equipment
-                                                                  .condition ==
-                                                                1
-                                                            },
-                                                            attrs: {
-                                                              type: "radio",
-                                                              id:
-                                                                "star1-" +
-                                                                orderInfo
-                                                                  .equipment.id,
-                                                              name:
-                                                                "condition-received-" +
-                                                                orderInfo
-                                                                  .equipment.id,
-                                                              value: "1"
-                                                            },
-                                                            domProps: {
-                                                              checked: _vm._q(
-                                                                _vm
-                                                                  .conditionReceived[
-                                                                  orderInfo
-                                                                    .equipment
-                                                                    .id
-                                                                ],
-                                                                "1"
-                                                              )
-                                                            },
-                                                            on: {
-                                                              change: function(
-                                                                $event
-                                                              ) {
-                                                                return _vm.$set(
-                                                                  _vm.conditionReceived,
-                                                                  orderInfo
-                                                                    .equipment
-                                                                    .id,
-                                                                  "1"
-                                                                )
-                                                              }
-                                                            }
-                                                          }),
-                                                          _c(
-                                                            "label",
-                                                            {
-                                                              attrs: {
-                                                                for:
-                                                                  "star1-" +
-                                                                  orderInfo
-                                                                    .equipment
-                                                                    .id,
-                                                                onmouseout:
-                                                                  "normalText('scoreDescription-' + orderInfo.equipment.id')",
-                                                                onmouseover:
-                                                                  "changeText('scoreDescription-' + orderInfo.equipment.id', 'Kém')",
-                                                                title: "1 star"
-                                                              }
-                                                            },
-                                                            [_vm._v("1")]
-                                                          )
-                                                        ]
-                                                      ),
-                                                      _vm._v(" "),
-                                                      _c(
-                                                        "div",
-                                                        {
-                                                          staticClass:
-                                                            "d-flex justify-content-center"
+                                                          attrs: {
+                                                            id:
+                                                              orderInfo
+                                                                .equipment.id
+                                                          }
                                                         },
                                                         [
                                                           _c(
-                                                            "p",
+                                                            "div",
                                                             {
-                                                              attrs: {
-                                                                id:
-                                                                  "scoreDescription-" +
-                                                                  orderInfo
-                                                                    .equipment
-                                                                    .id
-                                                              }
+                                                              staticClass:
+                                                                "starrating risingstar d-flex justify-content-center flex-row-reverse"
                                                             },
-                                                            [_vm._v("Đánh giá")]
+                                                            [
+                                                              _c("input", {
+                                                                directives: [
+                                                                  {
+                                                                    name:
+                                                                      "model",
+                                                                    rawName:
+                                                                      "v-model",
+                                                                    value:
+                                                                      _vm
+                                                                        .conditionReceived[
+                                                                        orderInfo
+                                                                          .equipment
+                                                                          .id
+                                                                      ],
+                                                                    expression:
+                                                                      "conditionReceived[orderInfo.equipment.id]"
+                                                                  }
+                                                                ],
+                                                                class: {
+                                                                  checked:
+                                                                    orderInfo
+                                                                      .equipment
+                                                                      .condition ==
+                                                                    5
+                                                                },
+                                                                attrs: {
+                                                                  type: "radio",
+                                                                  id:
+                                                                    "star5-" +
+                                                                    orderInfo
+                                                                      .equipment
+                                                                      .id,
+                                                                  name:
+                                                                    "condition-received-" +
+                                                                    orderInfo
+                                                                      .equipment
+                                                                      .id,
+                                                                  value: "5"
+                                                                },
+                                                                domProps: {
+                                                                  checked: _vm._q(
+                                                                    _vm
+                                                                      .conditionReceived[
+                                                                      orderInfo
+                                                                        .equipment
+                                                                        .id
+                                                                    ],
+                                                                    "5"
+                                                                  )
+                                                                },
+                                                                on: {
+                                                                  change: function(
+                                                                    $event
+                                                                  ) {
+                                                                    return _vm.$set(
+                                                                      _vm.conditionReceived,
+                                                                      orderInfo
+                                                                        .equipment
+                                                                        .id,
+                                                                      "5"
+                                                                    )
+                                                                  }
+                                                                }
+                                                              }),
+                                                              _c(
+                                                                "label",
+                                                                {
+                                                                  attrs: {
+                                                                    for:
+                                                                      "star5-" +
+                                                                      orderInfo
+                                                                        .equipment
+                                                                        .id,
+                                                                    onmouseout:
+                                                                      "normalText('scoreDescription-' + orderInfo.equipment.id')",
+                                                                    onmouseover:
+                                                                      "changeText('scoreDescription-' + orderInfo.equipment.id', 'Hoàn hảo')",
+                                                                    title:
+                                                                      "5 star"
+                                                                  }
+                                                                },
+                                                                [_vm._v("5")]
+                                                              ),
+                                                              _vm._v(" "),
+                                                              _c("input", {
+                                                                directives: [
+                                                                  {
+                                                                    name:
+                                                                      "model",
+                                                                    rawName:
+                                                                      "v-model",
+                                                                    value:
+                                                                      _vm
+                                                                        .conditionReceived[
+                                                                        orderInfo
+                                                                          .equipment
+                                                                          .id
+                                                                      ],
+                                                                    expression:
+                                                                      "conditionReceived[orderInfo.equipment.id]"
+                                                                  }
+                                                                ],
+                                                                class: {
+                                                                  checked:
+                                                                    orderInfo
+                                                                      .equipment
+                                                                      .condition ==
+                                                                    4
+                                                                },
+                                                                attrs: {
+                                                                  type: "radio",
+                                                                  id:
+                                                                    "star4-" +
+                                                                    orderInfo
+                                                                      .equipment
+                                                                      .id,
+                                                                  name:
+                                                                    "condition-received-" +
+                                                                    orderInfo
+                                                                      .equipment
+                                                                      .id,
+                                                                  value: "4"
+                                                                },
+                                                                domProps: {
+                                                                  checked: _vm._q(
+                                                                    _vm
+                                                                      .conditionReceived[
+                                                                      orderInfo
+                                                                        .equipment
+                                                                        .id
+                                                                    ],
+                                                                    "4"
+                                                                  )
+                                                                },
+                                                                on: {
+                                                                  change: function(
+                                                                    $event
+                                                                  ) {
+                                                                    return _vm.$set(
+                                                                      _vm.conditionReceived,
+                                                                      orderInfo
+                                                                        .equipment
+                                                                        .id,
+                                                                      "4"
+                                                                    )
+                                                                  }
+                                                                }
+                                                              }),
+                                                              _c(
+                                                                "label",
+                                                                {
+                                                                  attrs: {
+                                                                    for:
+                                                                      "star4-" +
+                                                                      orderInfo
+                                                                        .equipment
+                                                                        .id,
+                                                                    onmouseout:
+                                                                      "normalText('scoreDescription-' + orderInfo.equipment.id')",
+                                                                    onmouseover:
+                                                                      "changeText('scoreDescription-' + orderInfo.equipment.id', 'Tốt')",
+                                                                    title:
+                                                                      "4 star"
+                                                                  }
+                                                                },
+                                                                [_vm._v("4")]
+                                                              ),
+                                                              _vm._v(" "),
+                                                              _c("input", {
+                                                                directives: [
+                                                                  {
+                                                                    name:
+                                                                      "model",
+                                                                    rawName:
+                                                                      "v-model",
+                                                                    value:
+                                                                      _vm
+                                                                        .conditionReceived[
+                                                                        orderInfo
+                                                                          .equipment
+                                                                          .id
+                                                                      ],
+                                                                    expression:
+                                                                      "conditionReceived[orderInfo.equipment.id]"
+                                                                  }
+                                                                ],
+                                                                class: {
+                                                                  checked:
+                                                                    orderInfo
+                                                                      .equipment
+                                                                      .condition ==
+                                                                    3
+                                                                },
+                                                                attrs: {
+                                                                  type: "radio",
+                                                                  id:
+                                                                    "star3-" +
+                                                                    orderInfo
+                                                                      .equipment
+                                                                      .id,
+                                                                  name:
+                                                                    "condition-received-" +
+                                                                    orderInfo
+                                                                      .equipment
+                                                                      .id,
+                                                                  value: "3"
+                                                                },
+                                                                domProps: {
+                                                                  checked: _vm._q(
+                                                                    _vm
+                                                                      .conditionReceived[
+                                                                      orderInfo
+                                                                        .equipment
+                                                                        .id
+                                                                    ],
+                                                                    "3"
+                                                                  )
+                                                                },
+                                                                on: {
+                                                                  change: function(
+                                                                    $event
+                                                                  ) {
+                                                                    return _vm.$set(
+                                                                      _vm.conditionReceived,
+                                                                      orderInfo
+                                                                        .equipment
+                                                                        .id,
+                                                                      "3"
+                                                                    )
+                                                                  }
+                                                                }
+                                                              }),
+                                                              _c(
+                                                                "label",
+                                                                {
+                                                                  attrs: {
+                                                                    for:
+                                                                      "star3-" +
+                                                                      orderInfo
+                                                                        .equipment
+                                                                        .id,
+                                                                    onmouseout:
+                                                                      "normalText('scoreDescription-' + orderInfo.equipment.id')",
+                                                                    onmouseover:
+                                                                      "changeText('scoreDescription-' + orderInfo.equipment.id', 'Bình thường')",
+                                                                    title:
+                                                                      "3 star"
+                                                                  }
+                                                                },
+                                                                [_vm._v("3")]
+                                                              ),
+                                                              _vm._v(" "),
+                                                              _c("input", {
+                                                                directives: [
+                                                                  {
+                                                                    name:
+                                                                      "model",
+                                                                    rawName:
+                                                                      "v-model",
+                                                                    value:
+                                                                      _vm
+                                                                        .conditionReceived[
+                                                                        orderInfo
+                                                                          .equipment
+                                                                          .id
+                                                                      ],
+                                                                    expression:
+                                                                      "conditionReceived[orderInfo.equipment.id]"
+                                                                  }
+                                                                ],
+                                                                class: {
+                                                                  checked:
+                                                                    orderInfo
+                                                                      .equipment
+                                                                      .condition ==
+                                                                    2
+                                                                },
+                                                                attrs: {
+                                                                  type: "radio",
+                                                                  id:
+                                                                    "star2-" +
+                                                                    orderInfo
+                                                                      .equipment
+                                                                      .id,
+                                                                  name:
+                                                                    "condition-received-" +
+                                                                    orderInfo
+                                                                      .equipment
+                                                                      .id,
+                                                                  value: "2"
+                                                                },
+                                                                domProps: {
+                                                                  checked: _vm._q(
+                                                                    _vm
+                                                                      .conditionReceived[
+                                                                      orderInfo
+                                                                        .equipment
+                                                                        .id
+                                                                    ],
+                                                                    "2"
+                                                                  )
+                                                                },
+                                                                on: {
+                                                                  change: function(
+                                                                    $event
+                                                                  ) {
+                                                                    return _vm.$set(
+                                                                      _vm.conditionReceived,
+                                                                      orderInfo
+                                                                        .equipment
+                                                                        .id,
+                                                                      "2"
+                                                                    )
+                                                                  }
+                                                                }
+                                                              }),
+                                                              _c(
+                                                                "label",
+                                                                {
+                                                                  attrs: {
+                                                                    for:
+                                                                      "star2-" +
+                                                                      orderInfo
+                                                                        .equipment
+                                                                        .id,
+                                                                    onmouseout:
+                                                                      "normalText('scoreDescription-' + orderInfo.equipment.id')",
+                                                                    onmouseover:
+                                                                      "changeText('scoreDescription-' + orderInfo.equipment.id', 'Không tốt')",
+                                                                    title:
+                                                                      "2 star"
+                                                                  }
+                                                                },
+                                                                [_vm._v("2")]
+                                                              ),
+                                                              _vm._v(" "),
+                                                              _c("input", {
+                                                                directives: [
+                                                                  {
+                                                                    name:
+                                                                      "model",
+                                                                    rawName:
+                                                                      "v-model",
+                                                                    value:
+                                                                      _vm
+                                                                        .conditionReceived[
+                                                                        orderInfo
+                                                                          .equipment
+                                                                          .id
+                                                                      ],
+                                                                    expression:
+                                                                      "conditionReceived[orderInfo.equipment.id]"
+                                                                  }
+                                                                ],
+                                                                class: {
+                                                                  checked:
+                                                                    orderInfo
+                                                                      .equipment
+                                                                      .condition ==
+                                                                    1
+                                                                },
+                                                                attrs: {
+                                                                  type: "radio",
+                                                                  id:
+                                                                    "star1-" +
+                                                                    orderInfo
+                                                                      .equipment
+                                                                      .id,
+                                                                  name:
+                                                                    "condition-received-" +
+                                                                    orderInfo
+                                                                      .equipment
+                                                                      .id,
+                                                                  value: "1"
+                                                                },
+                                                                domProps: {
+                                                                  checked: _vm._q(
+                                                                    _vm
+                                                                      .conditionReceived[
+                                                                      orderInfo
+                                                                        .equipment
+                                                                        .id
+                                                                    ],
+                                                                    "1"
+                                                                  )
+                                                                },
+                                                                on: {
+                                                                  change: function(
+                                                                    $event
+                                                                  ) {
+                                                                    return _vm.$set(
+                                                                      _vm.conditionReceived,
+                                                                      orderInfo
+                                                                        .equipment
+                                                                        .id,
+                                                                      "1"
+                                                                    )
+                                                                  }
+                                                                }
+                                                              }),
+                                                              _c(
+                                                                "label",
+                                                                {
+                                                                  attrs: {
+                                                                    for:
+                                                                      "star1-" +
+                                                                      orderInfo
+                                                                        .equipment
+                                                                        .id,
+                                                                    onmouseout:
+                                                                      "normalText('scoreDescription-' + orderInfo.equipment.id')",
+                                                                    onmouseover:
+                                                                      "changeText('scoreDescription-' + orderInfo.equipment.id', 'Kém')",
+                                                                    title:
+                                                                      "1 star"
+                                                                  }
+                                                                },
+                                                                [_vm._v("1")]
+                                                              )
+                                                            ]
+                                                          ),
+                                                          _vm._v(" "),
+                                                          _c(
+                                                            "div",
+                                                            {
+                                                              staticClass:
+                                                                "d-flex justify-content-center"
+                                                            },
+                                                            [
+                                                              _c(
+                                                                "p",
+                                                                {
+                                                                  attrs: {
+                                                                    id:
+                                                                      "scoreDescription-" +
+                                                                      orderInfo
+                                                                        .equipment
+                                                                        .id
+                                                                  }
+                                                                },
+                                                                [
+                                                                  _vm._v(
+                                                                    "Đánh giá"
+                                                                  )
+                                                                ]
+                                                              )
+                                                            ]
                                                           )
                                                         ]
                                                       )
-                                                    ]
-                                                  )
+                                                    : _c("div", [
+                                                        _c("span", {
+                                                          class: {
+                                                            fa: true,
+                                                            "fa-star": true,
+                                                            checked:
+                                                              orderInfo.condition_received >=
+                                                              1
+                                                          }
+                                                        }),
+                                                        _vm._v(" "),
+                                                        _c("span", {
+                                                          class: {
+                                                            fa: true,
+                                                            "fa-star": true,
+                                                            checked:
+                                                              orderInfo.condition_received >=
+                                                              2
+                                                          }
+                                                        }),
+                                                        _vm._v(" "),
+                                                        _c("span", {
+                                                          class: {
+                                                            fa: true,
+                                                            "fa-star": true,
+                                                            checked:
+                                                              orderInfo.condition_received >=
+                                                              3
+                                                          }
+                                                        }),
+                                                        _vm._v(" "),
+                                                        _c("span", {
+                                                          class: {
+                                                            fa: true,
+                                                            "fa-star": true,
+                                                            checked:
+                                                              orderInfo.condition_received >=
+                                                              4
+                                                          }
+                                                        }),
+                                                        _vm._v(" "),
+                                                        _c("span", {
+                                                          class: {
+                                                            fa: true,
+                                                            "fa-star": true,
+                                                            checked:
+                                                              orderInfo.condition_received >=
+                                                              5
+                                                          }
+                                                        })
+                                                      ])
                                                 ]
                                               ),
                                               _vm._v(" "),
-                                              _vm._m(16, true),
+                                              _c(
+                                                "td",
+                                                { staticClass: "text-center" },
+                                                [
+                                                  _vm.order.status <= 2
+                                                    ? _c("textarea", {
+                                                        directives: [
+                                                          {
+                                                            name: "model",
+                                                            rawName: "v-model",
+                                                            value:
+                                                              orderInfo.note,
+                                                            expression:
+                                                              "orderInfo.note"
+                                                          }
+                                                        ],
+                                                        staticClass:
+                                                          "form-control",
+                                                        attrs: {
+                                                          name: "note",
+                                                          cols: "10"
+                                                        },
+                                                        domProps: {
+                                                          value: orderInfo.note
+                                                        },
+                                                        on: {
+                                                          input: function(
+                                                            $event
+                                                          ) {
+                                                            if (
+                                                              $event.target
+                                                                .composing
+                                                            ) {
+                                                              return
+                                                            }
+                                                            _vm.$set(
+                                                              orderInfo,
+                                                              "note",
+                                                              $event.target
+                                                                .value
+                                                            )
+                                                          }
+                                                        }
+                                                      })
+                                                    : _c("div", [
+                                                        _vm._v(
+                                                          _vm._s(orderInfo.note)
+                                                        )
+                                                      ])
+                                                ]
+                                              ),
                                               _vm._v(" "),
                                               _c(
                                                 "td",
@@ -65693,7 +65841,7 @@ var render = function() {
                                     ])
                               ]),
                               _vm._v(" "),
-                              _vm._m(17, true)
+                              _vm._m(16, true)
                             ])
                           ]
                         )
@@ -66155,17 +66303,6 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("td", { staticClass: "text-center" }, [
-      _c("textarea", {
-        staticClass: "form-control",
-        attrs: { name: "note", cols: "10" }
-      })
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
     return _c("div", { staticClass: "modal-footer" }, [
       _c(
         "button",
@@ -66374,131 +66511,145 @@ var render = function() {
                           _vm._l(_vm.paginate(_vm.displayedOrders), function(
                             order
                           ) {
-                            return _c("tr", { key: order.id }, [
-                              _c(
-                                "th",
-                                {
-                                  staticClass: "align-middle text-center",
-                                  attrs: { scope: "row" }
-                                },
-                                [_vm._v(_vm._s(order.id))]
-                              ),
-                              _vm._v(" "),
-                              _c(
-                                "td",
-                                { staticClass: "text-center align-middle" },
-                                [_vm._v(_vm._s(order.guest_name))]
-                              ),
-                              _vm._v(" "),
-                              _c(
-                                "td",
-                                { staticClass: "text-center align-middle" },
-                                [
-                                  _vm._v(
-                                    _vm._s(
-                                      _vm._f("formatBoolean")(order.long_term)
-                                    )
-                                  )
-                                ]
-                              ),
-                              _vm._v(" "),
-                              _c(
-                                "td",
-                                { staticClass: "text-center align-middle" },
-                                [_vm._v(_vm._s(order.reason))]
-                              ),
-                              _vm._v(" "),
-                              _c(
-                                "td",
-                                { staticClass: "text-center align-middle" },
-                                [
-                                  _vm._v(
-                                    _vm._s(
-                                      _vm._f("formatDate")(order.created_at)
-                                    )
-                                  )
-                                ]
-                              ),
-                              _vm._v(" "),
-                              _c(
-                                "td",
-                                { staticClass: "text-center align-middle" },
-                                [
-                                  _vm._v(
-                                    _vm._s(_vm.getOrderRequestAmount(order))
-                                  )
-                                ]
-                              ),
-                              _vm._v(" "),
-                              _c(
-                                "td",
-                                { staticClass: "text-center align-middle" },
-                                [
-                                  _vm._v(
-                                    _vm._s(_vm.getOrderBorrowedAmount(order)) +
-                                      " "
-                                  )
-                                ]
-                              ),
-                              _vm._v(" "),
-                              _c(
-                                "td",
-                                { staticClass: "text-center align-middle" },
-                                [
-                                  _c("h6", [
-                                    _c(
-                                      "span",
-                                      {
-                                        class: _vm.getOrderStatusClass(
-                                          order.status
-                                        )
-                                      },
-                                      [
-                                        _vm._v(
-                                          _vm._s(
-                                            _vm.getOrderStatusName(order.status)
-                                          )
-                                        )
-                                      ]
-                                    )
-                                  ])
-                                ]
-                              ),
-                              _vm._v(" "),
-                              _c("td", { staticClass: "align-middle" }, [
+                            return _c(
+                              "tr",
+                              {
+                                key: order.id,
+                                class: _vm.rowClass(order.status)
+                              },
+                              [
                                 _c(
-                                  "a",
+                                  "th",
                                   {
-                                    staticClass: "btn btn-primary btn-sm",
-                                    attrs: {
-                                      href: _vm.orderDetailUrl(order.id)
-                                    }
+                                    staticClass: "align-middle text-center",
+                                    attrs: { scope: "row" }
                                   },
-                                  [_c("span", { staticClass: "fa fa-pencil" })]
+                                  [_vm._v(_vm._s(order.id))]
                                 ),
                                 _vm._v(" "),
-                                order.status == -1 || order.status == 4
-                                  ? _c(
-                                      "button",
-                                      {
-                                        staticClass: "btn btn-danger btn-sm",
-                                        attrs: { type: "button" },
-                                        on: {
-                                          click: function($event) {
-                                            _vm.destroyOrder(order.id)
-                                            _vm.filterOrder()
-                                          }
-                                        }
-                                      },
-                                      [
-                                        _c("span", {
-                                          staticClass: "fa fa-trash"
-                                        })
-                                      ]
+                                _c(
+                                  "td",
+                                  { staticClass: "text-center align-middle" },
+                                  [_vm._v(_vm._s(order.guest_name))]
+                                ),
+                                _vm._v(" "),
+                                _c(
+                                  "td",
+                                  { staticClass: "text-center align-middle" },
+                                  [
+                                    _vm._v(
+                                      _vm._s(
+                                        _vm._f("formatBoolean")(order.long_term)
+                                      )
                                     )
-                                  : _vm._e()
-                              ])
-                            ])
+                                  ]
+                                ),
+                                _vm._v(" "),
+                                _c(
+                                  "td",
+                                  { staticClass: "text-center align-middle" },
+                                  [_vm._v(_vm._s(order.reason))]
+                                ),
+                                _vm._v(" "),
+                                _c(
+                                  "td",
+                                  { staticClass: "text-center align-middle" },
+                                  [
+                                    _vm._v(
+                                      _vm._s(
+                                        _vm._f("formatDate")(order.created_at)
+                                      )
+                                    )
+                                  ]
+                                ),
+                                _vm._v(" "),
+                                _c(
+                                  "td",
+                                  { staticClass: "text-center align-middle" },
+                                  [
+                                    _vm._v(
+                                      _vm._s(_vm.getOrderRequestAmount(order))
+                                    )
+                                  ]
+                                ),
+                                _vm._v(" "),
+                                _c(
+                                  "td",
+                                  { staticClass: "text-center align-middle" },
+                                  [
+                                    _vm._v(
+                                      _vm._s(
+                                        _vm.getOrderBorrowedAmount(order)
+                                      ) + " "
+                                    )
+                                  ]
+                                ),
+                                _vm._v(" "),
+                                _c(
+                                  "td",
+                                  { staticClass: "text-center align-middle" },
+                                  [
+                                    _c("h6", [
+                                      _c(
+                                        "span",
+                                        {
+                                          class: _vm.getOrderStatusClass(
+                                            order.status
+                                          )
+                                        },
+                                        [
+                                          _vm._v(
+                                            _vm._s(
+                                              _vm.getOrderStatusName(
+                                                order.status
+                                              )
+                                            )
+                                          )
+                                        ]
+                                      )
+                                    ])
+                                  ]
+                                ),
+                                _vm._v(" "),
+                                _c("td", { staticClass: "align-middle" }, [
+                                  _c(
+                                    "a",
+                                    {
+                                      staticClass: "btn btn-primary btn-sm",
+                                      attrs: {
+                                        href: _vm.orderDetailUrl(order.id)
+                                      }
+                                    },
+                                    [
+                                      _c("span", {
+                                        staticClass: "fa fa-pencil"
+                                      })
+                                    ]
+                                  ),
+                                  _vm._v(" "),
+                                  order.status == -1 || order.status == 4
+                                    ? _c(
+                                        "button",
+                                        {
+                                          staticClass: "btn btn-danger btn-sm",
+                                          attrs: { type: "button" },
+                                          on: {
+                                            click: function($event) {
+                                              _vm.destroyOrder(order.id)
+                                              _vm.filterOrder()
+                                            }
+                                          }
+                                        },
+                                        [
+                                          _c("span", {
+                                            staticClass: "fa fa-trash"
+                                          })
+                                        ]
+                                      )
+                                    : _vm._e()
+                                ])
+                              ]
+                            )
                           }),
                           0
                         )

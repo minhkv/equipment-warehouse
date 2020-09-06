@@ -92,7 +92,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr v-for="info in paginate(displayedInfos)" :key="info.id" :class="{'bg-success': getBorrowedAmount(info.template_id) > 0 && (getBorrowedAmount(info.template_id) == getReceivedAmount(info.template_id) + getLostAmount(info.template_id))}">
+                        <tr v-for="info in paginate(displayedInfos)" :key="info.id" :class="{'table-success': getBorrowedAmount(info.template_id) > 0 && (getBorrowedAmount(info.template_id) == getReceivedAmount(info.template_id) + getLostAmount(info.template_id))}">
                             <th class="text-center" scope="row"><img :src="info.template.image" height=40 :alt="info.template.name"></th>
                             <td class="align-middle text-center">{{ info.template.name }}</td>
                             <td class="align-middle text-center">{{ info.template.equipments.length }}</td>
@@ -107,7 +107,7 @@
                                 {{ getLostAmount(info.template.id) }}
                             </td> 
                             <td class="align-middle text-center">
-                                <button v-if="order.status < 3 && order.status > 0" type="button" class="btn btn-primary btn-sm" data-toggle="modal" :data-target="'#addEquipment-' + info.template.id">
+                                <button v-if="order.status > 0" type="button" class="btn btn-primary btn-sm" data-toggle="modal" :data-target="'#addEquipment-' + info.template.id">
                                     <span class="fa fa-pencil"></span>
                                 </button>
 
@@ -115,8 +115,8 @@
                                     <div class="modal-dialog modal-xl" role="document">
                                         <div class="modal-content">
                                             <div class="modal-header">
-                                                <h5 v-if="order.status <= 1" class="modal-title" :id="'addEquipmentLabel-' + info.template.id">Thêm thiết bị {{info.template.id}}</h5>
-                                                <h5 v-else class="modal-title" :id="'verifyEquipmentLabel-' + info.template.id">Kiểm thiết bị {{info.template.id}}</h5>
+                                                <h5 v-if="order.status <= 1" class="modal-title" :id="'addEquipmentLabel-' + info.template.id">Thêm thiết bị {{info.template.name}}</h5>
+                                                <h5 v-else class="modal-title" :id="'verifyEquipmentLabel-' + info.template.id">Kiểm thiết bị {{info.template.name}}</h5>
                                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                                     <span aria-hidden="true">&times;</span>
                                                 </button>
@@ -159,7 +159,7 @@
                                                             </td>
                                                             <td>{{equipment.note}}</td>
                                                             <td class="align-middle">
-                                                                <button :disabled="disablePlusEquipmentButton(equipment.id, equipment.status)" @click="selectEquipment(equipment.id, info.template.id)" class="btn btn-success btn-sm"><span class="fa fa-plus"></span></button>
+                                                                <button :disabled="disablePlusEquipmentButton(equipment.id, equipment.status)" @click="selectEquipment(equipment, info.template.id)" class="btn btn-success btn-sm"><span class="fa fa-plus"></span></button>
                                                                 <button :disabled="disableMinusEquipmentButton(equipment.id, equipment.status)" @click="removeEquipment(equipment.id, info.template.id)" class="btn btn-danger btn-sm"><span class="fa fa-minus"></span></button>
                                                             </td>
                                                         </tr>
@@ -183,15 +183,15 @@
                                                             </th>
                                                             <td class="text-center align-middle">
                                                                 <div>
-                                                                    <span :class="{'fa': true, 'fa-star': true, 'checked':  orderInfo.equipment.condition >= 1}"></span>
-                                                                    <span :class="{'fa': true, 'fa-star': true, 'checked':  orderInfo.equipment.condition >= 2}"></span>
-                                                                    <span :class="{'fa': true, 'fa-star': true, 'checked':  orderInfo.equipment.condition >= 3}"></span>
-                                                                    <span :class="{'fa': true, 'fa-star': true, 'checked':  orderInfo.equipment.condition >= 4}"></span>
-                                                                    <span :class="{'fa': true, 'fa-star': true, 'checked':  orderInfo.equipment.condition >= 5}"></span>
+                                                                    <span :class="{'fa': true, 'fa-star': true, 'checked':  orderInfo.condition_before >= 1}"></span>
+                                                                    <span :class="{'fa': true, 'fa-star': true, 'checked':  orderInfo.condition_before >= 2}"></span>
+                                                                    <span :class="{'fa': true, 'fa-star': true, 'checked':  orderInfo.condition_before >= 3}"></span>
+                                                                    <span :class="{'fa': true, 'fa-star': true, 'checked':  orderInfo.condition_before >= 4}"></span>
+                                                                    <span :class="{'fa': true, 'fa-star': true, 'checked':  orderInfo.condition_before >= 5}"></span>
                                                                 </div>
                                                             </td>
                                                             <td class="text-center align-middle">
-                                                                <div :id="orderInfo.equipment.id">
+                                                                <div v-if="order.status <= 2" :id="orderInfo.equipment.id" >
                                                                     <div class="starrating risingstar d-flex justify-content-center flex-row-reverse">
                                                                         <input v-model="conditionReceived[orderInfo.equipment.id]" type="radio" :id="'star5-' + orderInfo.equipment.id" :name="'condition-received-' + orderInfo.equipment.id" value="5" :class="{'checked': orderInfo.equipment.condition == 5}"  /><label :for="'star5-' + orderInfo.equipment.id" onmouseout="normalText('scoreDescription-' + orderInfo.equipment.id')" onmouseover="changeText('scoreDescription-' + orderInfo.equipment.id', 'Hoàn hảo')" title="5 star">5</label>
                                                                         <input v-model="conditionReceived[orderInfo.equipment.id]" type="radio" :id="'star4-' + orderInfo.equipment.id" :name="'condition-received-' + orderInfo.equipment.id" value="4" :class="{'checked': orderInfo.equipment.condition == 4}"  /><label :for="'star4-' + orderInfo.equipment.id" onmouseout="normalText('scoreDescription-' + orderInfo.equipment.id')" onmouseover="changeText('scoreDescription-' + orderInfo.equipment.id', 'Tốt')" title="4 star">4</label>
@@ -203,9 +203,17 @@
                                                                         <p :id="'scoreDescription-' + orderInfo.equipment.id">Đánh giá</p>
                                                                     </div>
                                                                 </div>
+                                                                <div v-else>
+                                                                    <span :class="{'fa': true, 'fa-star': true, 'checked':  orderInfo.condition_received >= 1}"></span>
+                                                                    <span :class="{'fa': true, 'fa-star': true, 'checked':  orderInfo.condition_received >= 2}"></span>
+                                                                    <span :class="{'fa': true, 'fa-star': true, 'checked':  orderInfo.condition_received >= 3}"></span>
+                                                                    <span :class="{'fa': true, 'fa-star': true, 'checked':  orderInfo.condition_received >= 4}"></span>
+                                                                    <span :class="{'fa': true, 'fa-star': true, 'checked':  orderInfo.condition_received >= 5}"></span>
+                                                                </div>
                                                             </td>
                                                             <td class="text-center">
-                                                                <textarea class="form-control" name="note" cols="10"></textarea>
+                                                                <textarea v-if="order.status <= 2" v-model="orderInfo.note" class="form-control" name="note" cols="10"></textarea>
+                                                                <div v-else>{{ orderInfo.note }}</div>
                                                             </td>
                                                             <td class="align-middle text-center pb-5">
                                                                 <div class="form-check">
@@ -478,6 +486,9 @@ export default {
                 equipmentSelected[equipment.id] = false;
             });
             info.order_infos.forEach(function(order_info) {
+                if(!order_info.condition_before) {
+                    order_info.condition_before = order_info.equipment.condition;
+                }
                 if(order_info.condition_received) {
                     conditionReceived[order_info.equipment_id] = order_info.condition_received;
                 } else {
@@ -574,14 +585,15 @@ export default {
         disableMinusEquipmentButton: function(equipmentId, equipmentStatus) {
             return !this.isEquipmentSelected(equipmentId);
         },
-        selectEquipment: function(equipment_id, template_id) {
+        selectEquipment: function(equipment, template_id) {
             console.log('select');
             this.orderRequestInfos[template_id].order_infos.push({
-                'equipment_id': equipment_id
+                'equipment_id': equipment.id,
+                'condition_before': equipment.condition
             });
             this.templateBorrowedAmount[template_id]++;
-            this.equipmentIds.push(equipment_id);
-            this.equipmentSelected[equipment_id] = true;
+            this.equipmentIds.push(equipment.id);
+            this.equipmentSelected[equipment.id] = true;
         },
         removeEquipment: function(equipment_id, template_id) {
             console.log('remove');

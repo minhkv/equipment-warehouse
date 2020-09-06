@@ -11,6 +11,8 @@ class OrderInfo extends Model
     protected $table = 'order_info';
     protected $fillable = [
         'equipment_id',
+        'condition_before',
+        'condition_received',
         'status',
         'date_received',
         'note',
