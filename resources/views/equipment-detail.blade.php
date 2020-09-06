@@ -59,9 +59,6 @@
                     <i class="fa fa-pencil"></i></button>
             </h2>
             <p><b>Số lượng thiết bị:</b> {{ $equipmentTemplate->equipments->count() }}</p>
-            <label>Số lượng mượn:</label>
-            <input type="text" value="1">
-            <a href="#" class="btn btn-warning"><span class="fa fa-plus"></span> Thêm vào giỏ</a>
 
             <div class="modal fade" id="editName" tabindex="-1" role="dialog" aria-labelledby="editNameLabel"
                     aria-hidden="true">

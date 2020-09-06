@@ -2200,7 +2200,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['equipmentTemplates', 'categories', 'equipmentTemplateIndexUrl', 'equipmentTemplateCreateUrl'],
   data: function data() {
@@ -8411,7 +8410,7 @@ exports = module.exports = __webpack_require__(/*! ../../node_modules/css-loader
 
 
 // module
-exports.push([module.i, "\n.fast-transition[data-v-5144e279] {\n    position: relative;\n    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.3);\n    transition: all 0.3s ease-in-out;\n}\n.fast-transition[data-v-5144e279]::before {\n    /* content: ' '; */\n    position: absolute;\n    top: 0;\n    right: 0;\n    bottom: 0;\n    left: 0;\n    /* border-radius: 50px; */\n    box-shadow: 0 10px 50px 0 rgba(0, 0, 0, 0.5);\n    opacity: 0;\n    transition: opacity 500ms;\n}\n.fast-transition[data-v-5144e279]:hover::before {\n    opacity: 1;\n}\n.fast-transition[data-v-5144e279]:hover {\n    transform: scale(1.05);\n}\n.card[data-v-5144e279] {\n    min-height: 400px;\n}\n.card-title[data-v-5144e279] {\n    font-size: 1rem;\n}\n", ""]);
+exports.push([module.i, "\n.fast-transition[data-v-5144e279] {\n    position: relative;\n    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.3);\n    transition: all 0.3s ease-in-out;\n}\n.fast-transition[data-v-5144e279]::before {\n    /* content: ' '; */\n    position: absolute;\n    top: 0;\n    right: 0;\n    bottom: 0;\n    left: 0;\n    /* border-radius: 50px; */\n    box-shadow: 0 10px 50px 0 rgba(0, 0, 0, 0.5);\n    opacity: 0;\n    transition: opacity 500ms;\n}\n.fast-transition[data-v-5144e279]:hover::before {\n    opacity: 1;\n}\n.fast-transition[data-v-5144e279]:hover {\n    transform: scale(1.05);\n}\n.card[data-v-5144e279] {\n    min-height: 400px;\n}\n.card-title[data-v-5144e279] {\n    font-size: 1rem;\n}\n.overlay[data-v-5144e279] {\n    position: absolute;\n    top: 10px;\n    right: 10px;\n}\n", ""]);
 
 // exports
 
@@ -62505,32 +62504,36 @@ var render = function() {
               )
             ]),
             _vm._v(" "),
-            _vm._l(_vm.pages.slice(_vm.page - 1, _vm.page + 5), function(
-              pageNumber
-            ) {
-              return _c(
-                "li",
-                {
-                  key: pageNumber,
-                  class: _vm.pageItemClass(_vm.page, pageNumber)
-                },
-                [
-                  _c(
-                    "a",
-                    {
-                      staticClass: "page-link",
-                      attrs: { href: "#" },
-                      on: {
-                        click: function($event) {
-                          _vm.page = pageNumber
+            _vm._l(
+              _vm.pages.slice(
+                _vm.page - 3 < 0 ? 0 : _vm.page - 3,
+                _vm.page + 5
+              ),
+              function(pageNumber) {
+                return _c(
+                  "li",
+                  {
+                    key: pageNumber,
+                    class: _vm.pageItemClass(_vm.page, pageNumber)
+                  },
+                  [
+                    _c(
+                      "a",
+                      {
+                        staticClass: "page-link",
+                        attrs: { href: "#" },
+                        on: {
+                          click: function($event) {
+                            _vm.page = pageNumber
+                          }
                         }
-                      }
-                    },
-                    [_vm._v(_vm._s(pageNumber))]
-                  )
-                ]
-              )
-            }),
+                      },
+                      [_vm._v(_vm._s(pageNumber))]
+                    )
+                  ]
+                )
+              }
+            ),
             _vm._v(" "),
             _c("li", { staticClass: "page-item" }, [
               _c(
@@ -62590,9 +62593,7 @@ var render = function() {
                     ])
                   ]),
                   _vm._v(" "),
-                  _c("div", [
-                    _vm._m(2, true),
-                    _vm._v(" "),
+                  _c("div", { staticClass: "overlay" }, [
                     _c(
                       "a",
                       {
@@ -62652,32 +62653,36 @@ var render = function() {
               )
             ]),
             _vm._v(" "),
-            _vm._l(_vm.pages.slice(_vm.page - 1, _vm.page + 5), function(
-              pageNumber
-            ) {
-              return _c(
-                "li",
-                {
-                  key: pageNumber,
-                  class: _vm.pageItemClass(_vm.page, pageNumber)
-                },
-                [
-                  _c(
-                    "a",
-                    {
-                      staticClass: "page-link",
-                      attrs: { href: "#" },
-                      on: {
-                        click: function($event) {
-                          _vm.page = pageNumber
+            _vm._l(
+              _vm.pages.slice(
+                _vm.page - 3 < 0 ? 0 : _vm.page - 3,
+                _vm.page + 5
+              ),
+              function(pageNumber) {
+                return _c(
+                  "li",
+                  {
+                    key: pageNumber,
+                    class: _vm.pageItemClass(_vm.page, pageNumber)
+                  },
+                  [
+                    _c(
+                      "a",
+                      {
+                        staticClass: "page-link",
+                        attrs: { href: "#" },
+                        on: {
+                          click: function($event) {
+                            _vm.page = pageNumber
+                          }
                         }
-                      }
-                    },
-                    [_vm._v(_vm._s(pageNumber))]
-                  )
-                ]
-              )
-            }),
+                      },
+                      [_vm._v(_vm._s(pageNumber))]
+                    )
+                  ]
+                )
+              }
+            ),
             _vm._v(" "),
             _c("li", { staticClass: "page-item" }, [
               _c(
@@ -62723,16 +62728,6 @@ var staticRenderFns = [
         attrs: { type: "submit" }
       },
       [_c("span", { staticClass: "fa fa-search" })]
-    )
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c(
-      "a",
-      { staticClass: "btn btn-warning btn-sm", attrs: { href: "#" } },
-      [_c("span", { staticClass: "fa fa-plus" }), _vm._v(" Thêm vào giỏ")]
     )
   }
 ]

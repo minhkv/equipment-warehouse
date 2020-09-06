@@ -31,7 +31,7 @@
             <nav aria-label="Page navigation example">
                 <ul class="pagination">
                     <li class="page-item"><button class="page-link active" href="#" :disabled="page <= 1" @click="page--">Previous</button></li>
-                    <li :class="pageItemClass(page, pageNumber)" v-for="pageNumber in pages.slice(page-1, page+5)" :key="pageNumber"><a class="page-link" href="#"  @click="page = pageNumber">{{pageNumber}}</a></li>
+                    <li :class="pageItemClass(page, pageNumber)" v-for="pageNumber in pages.slice(page-3 < 0 ? 0: page-3, page+5)" :key="pageNumber"><a class="page-link" href="#"  @click="page = pageNumber">{{pageNumber}}</a></li>
                     <li class="page-item"><button class="page-link" href="#" @click="page++" :disabled="page >= pages.length">Next</button></li>
                 </ul>
             </nav>
@@ -47,8 +47,7 @@
                             <h5 class="card-title">{{ template.name }}</h5>
                             <p class="card-text">Số lượng: {{ template.equipments.length }}</p>
                         </div>
-                        <div>
-                            <a href="#" class="btn btn-warning btn-sm"><span class="fa fa-plus"></span> Thêm vào giỏ</a>
+                        <div class="overlay">
                             <a :href="equipmentTemplateShowUrl(template.id)" class="btn btn-primary btn-sm"><span class="fa fa-pencil"></span></a>
                             <button class="btn btn-danger btn-sm" @click="equipmentDestroy(template.id, index)">
                                 <span class="fa fa-trash"></span>
@@ -64,7 +63,7 @@
             <nav aria-label="Page navigation example">
                 <ul class="pagination">
                     <li class="page-item"><button class="page-link" href="#" :disabled="page <= 1" @click="page--">Previous</button></li>
-                    <li  v-for="pageNumber in pages.slice(page-1, page+5)" :key="pageNumber" :class="pageItemClass(page, pageNumber)"><a class="page-link" href="#"  @click="page = pageNumber" >{{pageNumber}}</a></li>
+                    <li  v-for="pageNumber in pages.slice(page-3 < 0 ? 0: page-3, page+5)" :key="pageNumber" :class="pageItemClass(page, pageNumber)"><a class="page-link" href="#"  @click="page = pageNumber" >{{pageNumber}}</a></li>
                     <li class="page-item"><button class="page-link" href="#" @click="page++" :disabled="page >= pages.length">Next</button></li>
                 </ul>
             </nav>
@@ -195,5 +194,10 @@ export default {
     }
     .card-title {
         font-size: 1rem;
+    }
+    .overlay {
+        position: absolute;
+        top: 10px;
+        right: 10px;
     }
 </style>
