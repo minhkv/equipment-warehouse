@@ -3947,11 +3947,12 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: [],
   data: function data() {
     return {
-      mess: 'Hello world',
+      mess: "Hello world",
       active: 1
     };
   }
@@ -8448,7 +8449,7 @@ exports = module.exports = __webpack_require__(/*! ../../node_modules/css-loader
 
 
 // module
-exports.push([module.i, "\n.overlay-button[data-v-7ee5ac3a] {\n    position:absolute;\n    top: 10px;\n    left: 10px;\n}\n", ""]);
+exports.push([module.i, "\n.overlay-button[data-v-7ee5ac3a] {\r\n  position: absolute;\r\n  top: 10px;\r\n  left: 10px;\n}\r\n", ""]);
 
 // exports
 
@@ -66878,31 +66879,8 @@ render._withStripped = true
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
-var render = function() {
-  var _vm = this
-  var _h = _vm.$createElement
-  var _c = _vm._self._c || _h
-  return _vm._m(0)
-}
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "container border col-3" }, [
-      _c("img", {
-        attrs: { src: "img/equipment.jpg", height: "300", alt: "equipment" }
-      }),
-      _vm._v(" "),
-      _c("div", { staticClass: "overlay-button" }, [
-        _c("button", { staticClass: "btn btn-primary" }, [
-          _c("i", { staticClass: "fa fa-pencil" })
-        ])
-      ])
-    ])
-  }
-]
-render._withStripped = true
+var render = function () {}
+var staticRenderFns = []
 
 
 
@@ -79598,6 +79576,11 @@ Vue.filter('formatEquipmentStatus', function (status) {
     case 2:
       return 'Đang cho mượn';
   }
+});
+Vue.filter('formatEquipmentCondition', function (status) {
+  if (status == 0) return "Lỗi";
+  if (status == 1) return "Bình thường";
+  if (status >= 2) return "Tốt";
 });
 Vue.component('testcomponent', __webpack_require__(/*! ../components/test.vue */ "./resources/components/test.vue")["default"]);
 Vue.component('multi-step-form', __webpack_require__(/*! ../components/multi-step-form.vue */ "./resources/components/multi-step-form.vue")["default"]);

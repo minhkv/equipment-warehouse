@@ -32,6 +32,11 @@ Vue.filter('formatEquipmentStatus', function(status){
             return 'Đang cho mượn';
     }
 });
+Vue.filter('formatEquipmentCondition', function(status){
+    if(status == 0) return "Lỗi";
+    if(status == 1) return "Bình thường";
+    if(status >= 2) return "Tốt";
+});
 
 Vue.component('testcomponent',require('../components/test.vue').default);
 Vue.component('multi-step-form',require('../components/multi-step-form.vue').default);

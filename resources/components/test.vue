@@ -1,26 +1,27 @@
 <template>
-    <div class="container border col-3">
-        <img src="img/equipment.jpg" height="300" alt="equipment" >
-        <div class="overlay-button">
-            <button class="btn btn-primary"><i class="fa fa-pencil"></i></button>
-        </div>
+  <div class="container">
+    <div class="row py-3">
+      <a href="{{ route('equipment-template.index') }}" class="btn btn-secondary mr-auto">
+        <i class="fa fa-chevron-left"></i> Quay lại
+      </a>
     </div>
+  </div>
 </template>
 <script>
 export default {
-    props:[],
-    data(){
-        return {
-            mess: 'Hello world',
-            active:1
-        }
-    }
-}
+  props: [],
+  data() {
+    return {
+      mess: "Hello world",
+      active: 1,
+    };
+  },
+};
 </script>
 <style scoped>
-    .overlay-button {
-        position:absolute;
-        top: 10px;
-        left: 10px;
-    }
+.overlay-button {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+}
 </style>
