@@ -102,14 +102,13 @@ class EquipmentTemplateController extends Controller
      */
     public function update(Request $request, EquipmentTemplate $equipmentTemplate)
     {
-        $equipmentTemplate->update($request->all());
-        
+        $equipmentTemplate->update($request->all());        
         if($request->hasFile('imageFile')) {
             $fileName = $request->imageFile->getClientOriginalName();
             $request->imageFile->storeAs('img', $fileName, 'public');
             $equipmentTemplate->update(['image' => '/storage/img/'.$fileName]);
         } 
-        return redirect()->back();
+        return $equipmentTemplate->image;
     }
 
     /**

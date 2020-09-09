@@ -1,0 +1,204 @@
+<template>
+    <div class="container">
+        <div class="row py-3">
+            <a :href="equipmentIndexUrl" class="btn btn-secondary mr-auto">
+                <i class="fa fa-chevron-left"></i> Quay lại
+            </a>
+        </div>
+        <div class="row">
+            <div class="col-md-4">
+                <img class="w-100" :src="template.image" :alt="template.name" />
+                <div class="overlay-button">
+                    <button class="btn btn-primary" type="button" data-toggle="modal" data-target="#editImage">
+                        <i class="fa fa-pencil"></i>
+                    </button>
+                    <div class="modal fade" id="editImage" tabindex="-1" role="dialog" aria-labelledby="editImageLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">&times;</button>
+                                </div>
+                                <div class="modal-body">
+                                    <input type="file" ref="imageFile" v-on:change="handleFileUpload()" />
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                                    <button type="button" class="btn btn-primary" @click="updateImage()">Lưu thay đổi</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-8">
+                <h2><b>{{template.name}}</b>
+                    <button class="btn btn-primary" type="button" data-toggle="modal" data-target="#editName">
+                        <i class="fa fa-pencil"></i></button>
+                </h2>
+                <p><b>Số lượng thiết bị:</b> {{ template.equipments.length }}</p>
+                <div class="modal fade" id="editName" tabindex="-1" role="dialog" aria-labelledby="editNameLabel"
+                        aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal"
+                                    aria-label="Close">&times;</button>
+                            </div>
+                            <div class="modal-body">            
+                                <div class="form-group">
+                                    <label for="equipmentName">Nhập tên mới</label>
+                                    <input type="text" class="form-control" id="equipmentName" name="name" :value="template.name">
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                                <button type="button" class="btn btn-primary" onclick="updateName()">Lưu thay đổi</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <hr />
+        <div class="row">
+            <div class="row py-3">
+                <div class="col-md-12 text-center">
+                    <h2>Danh sách thiết bị</h2>
+                </div>
+            </div>
+            <div class="row">
+                <table class="table">
+                    <thead class="thead-light">
+                        <tr>
+                            <th class="text-center" scope="col" style="width: 5%">Mã</th>
+                            <th class="text-center" scope="col" style="width: 10%;">Kích thước</th>
+                            <th class="text-center" scope="col" style="width: 10%;">Giá nhập</th>
+                            <th class="text-center" scope="col" style="width: 12%;">Nhà cung cấp</th>
+                            <th class="text-center" scope="col" style="width: 8%;">Vị trí</th>
+                            <th class="text-center" scope="col" style="width: 10%;">Tình trạng</th>
+                            <th class="text-center" scope="col" style="width: 10%;">Trạng thái</th>
+                            <th class="text-center" scope="col" style="width: 15%;">Ghi chú</th>
+                            <th class="text-center" scope="col" style="width: 2%;"></th>
+                            <th class="text-center" scope="col" style="width: 4%;"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="equipment in template.equipments" :key="equipment.id">
+                            <th class="align-middle text-center" scope="row">{{ equipment.id }}</th>
+                            <td class="align-middle text-center">{{ equipment.size}}</td>
+                            <td class="align-middle text-center">{{ equipment.price }}</td>
+                            <td class="align-middle text-center">{{ equipment.supplier.name }}</td>
+                            <td class="align-middle text-center">{{ equipment.location }}</td>
+                            <td class="align-middle text-center">
+                                <!-- <div>
+                                    <span class="fa fa-star {{equipment.condition >= 1 ? 'checked':''}}"></span>
+                                    <span class="fa fa-star {{equipment.condition >= 2 ? 'checked':''}}"></span>
+                                    <span class="fa fa-star {{equipment.condition >= 3 ? 'checked':''}}"></span>
+                                    <span class="fa fa-star {{equipment.condition >= 4 ? 'checked':''}}"></span>
+                                    <span class="fa fa-star {{equipment.condition >= 5 ? 'checked':''}}"></span>
+                                </div> -->
+                                {{ equipment.condition|formatEquipmentCondition }}
+                            </td>
+                            <td class="align-middle text-center">
+                                <equipment-status :status="equipment.status"></equipment-status>
+                            </td>
+                            <td class="align-middle text-center">{{equipment.note}}</td>
+                            <td class="align-middle px-0">
+                                <!-- @if(equipment.status == 1)
+                                    <x-edit-equipment-member e-id="{{ equipment.id }}" />
+                                @endif -->
+                                <button class="btn btn-primary"></button>
+                            </td>
+                            <td class="align-middle px-0">
+                                <!-- @if(equipment.status != 2)
+                                    <x-delete-button id="{{ equipment.id }}" route-name="equipment.destroy" />
+                                @endif -->
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+</template>
+<script>
+    export default {
+        props: [
+            "equipmentIndexUrl",
+            "equipmentTemplateUpdateUrl",
+            "equipmentTemplate",
+            "suppliers",
+        ],
+        data() {
+            return {
+                template: {},
+                imageFile: "",
+                file: "",
+            };
+        },
+        created() {
+            this.template = this.equipmentTemplate;
+        },
+        methods: {
+            handleFileUpload() {
+                console.log("change");
+                this.imageFile = this.$refs.imageFile.files[0];
+            },
+            isFileImage(file) {
+                return file && file["type"].split("/")[0] === "image";
+            },
+            validateImage() {
+                if (!this.imageFile) {
+                    alert("Bạn chưa chọn ảnh");
+                    return;
+                }
+                if (!this.isFileImage(this.imageFile)) {
+                    alert("File bạn chọn không phải là ảnh");
+                    return;
+                }
+                return true;
+            },
+            updateImage() {
+                console.log("submit");
+                if (!this.validateImage()) return;
+                let formData = new FormData();
+                formData.append("_method", "PUT");
+                formData.append("imageFile", this.imageFile);
+                axios
+                    .post(this.equipmentTemplateUpdateUrl, formData, {
+                        headers: {
+                            "Content-Type": "multipart/form-data",
+                        },
+                    })
+                    .then(function (res) {
+                        console.log(res);
+                    })
+                    .catch(function (err) {
+                        console.log(err);
+                    });
+                this.template.image = "/storage/img/" + this.imageFile.name;
+            },
+            updateName() {
+                console.log('updateName');
+            },
+            displayEquipmentStatusClass(status) {
+                return {
+                    'badge': true, 
+                    'badge-pill':true, 
+                    'badge-danger': status == 0,
+                    'badge-success': status == 1,
+                    'badge-primary': status == 2
+                };
+            },
+        },
+    };
+</script>
+<style scoped>
+    .overlay-button {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+    }
+</style>

@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Request;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -53,7 +54,18 @@ Route::middleware('auth')->group(function() {
     Route::put('order-request/{order}/return', 'OrderController@equipmentReturn')->name('order-request.return');
     Route::put('order-request/{order}/complete', 'OrderController@completeOrder')->name('order-request.complete');
     Route::put('order-request/{order}/back', 'OrderController@back')->name('order-request.back');
-    Route::get('/test', function() {
-        return view('test');
+    Route::get('/test/{equipmentTemplate}', function(App\EquipmentTemplate $equipmentTemplate) {
+        $suppliers = App\Supplier::all();
+        $equipmentTemplate->load([
+            'equipments',
+            'equipments.supplier'
+            ]);
+        return view('test')->with([
+            'equipmentTemplate' => $equipmentTemplate,
+            'suppliers' => $suppliers
+        ]);
+    });
+    Route::put('/single-file', function(Request $request) {
+        return $request->file->getClientOriginalName();
     });
 });
