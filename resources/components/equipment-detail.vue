@@ -1,7 +1,7 @@
 <template>
     <div class="container">
         <div class="row py-3">
-            <a :href="equipmentIndexUrl" class="btn btn-secondary mr-auto">
+            <a :href="equipmentTemplateIndexUrl" class="btn btn-secondary mr-auto">
                 <i class="fa fa-chevron-left"></i> Quay lại
             </a>
         </div>
@@ -108,7 +108,26 @@
                                 <!-- @if(equipment.status == 1)
                                     <x-edit-equipment-member e-id="{{ equipment.id }}" />
                                 @endif -->
-                                <button class="btn btn-primary"></button>
+                                <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" :data-target="'#editEquipment' + equipment.id">
+                                    <span class="fa fa-pencil"></span>
+                                </button>
+
+                                <div class="modal fade" :id="'editEquipment' + equipment.id" tabindex="-1" role="dialog" aria-labelledby="addEquipmentLabel" aria-hidden="true">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="addEquipmentLabel">Chỉnh sửa thiết bị</h5>
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <equipment-form :equipment="equipment" method="PUT" :url="equipmentIndexUrl + '/' + equipment.id"></equipment-form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
                             </td>
                             <td class="align-middle px-0">
                                 <!-- @if(equipment.status != 2)
@@ -126,8 +145,9 @@
 <script>
     export default {
         props: [
-            "equipmentIndexUrl",
+            "equipmentTemplateIndexUrl",
             "equipmentTemplateUpdateUrl",
+            "equipmentIndexUrl",
             "equipmentTemplate",
             "suppliers",
         ],
@@ -182,15 +202,6 @@
             },
             updateName() {
                 console.log('updateName');
-            },
-            displayEquipmentStatusClass(status) {
-                return {
-                    'badge': true, 
-                    'badge-pill':true, 
-                    'badge-danger': status == 0,
-                    'badge-success': status == 1,
-                    'badge-primary': status == 2
-                };
             },
         },
     };

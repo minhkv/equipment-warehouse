@@ -30,7 +30,7 @@
                                     <select v-model="orderStatus" v-on:change="filterOrder" class="custom-select mx-0">
                                         <option selected value='-2'>Trạng thái</option>
                                         <option value='-1'>Từ chối</option>
-                                        <option value='0'>Khởi tạo</option>
+                                        <option value='0'>Đang chờ</option>
                                         <option value='2'>Đang tiến hành</option>
                                         <option value='4'>Hoàn tất</option>
                                     </select>
@@ -218,7 +218,7 @@ export default {
         getOrderStatusName(status) {
             switch(status) {
                 case -1: return 'Từ chối';
-                case 0: return 'Khởi tạo';
+                case 0: return 'Đang chờ';
                 case 1: return 'Chấp nhận';
                 case 2: return 'Xuất đồ';
                 case 3: return 'Trả đồ';

@@ -46,8 +46,8 @@ Vue.component('equipment-detail', require('../components/equipment-detail.vue').
 Vue.component('order-detail',require('../components/order-detail.vue').default);
 Vue.component('order',require('../components/order.vue').default);
 Vue.component('equipment-status',require('../components/equipment-status.vue').default);
-Vue.component('equipment-modal',require('../components/equipment-modal.vue').default);
-
+Vue.component('equipment-form',require('../components/equipment-form.vue').default);
+Vue.component('equipment-condition',require('../components/equipment-condition.vue').default);
 Vue.component('test',require('../components/test.vue').default);
 
 var app = new Vue({

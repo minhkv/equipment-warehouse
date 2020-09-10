@@ -153,9 +153,7 @@
                                                                 </div>
                                                             </td>
                                                             <td class="align-middle text-center">
-                                                                <span :class="displayEquipmentStatusClass(equipment.status)">
-                                                                    {{equipment.status|formatEquipmentStatus}}
-                                                                </span>
+                                                                <equipment-status :status="equipment.status"></equipment-status>
                                                             </td>
                                                             <td>{{equipment.note}}</td>
                                                             <td class="align-middle">
@@ -530,7 +528,7 @@ export default {
                 case -1:
                     return 'Từ chối';
                 case 0:
-                    return 'Khởi tạo';
+                    return 'Đang chờ';
                 case 1:
                     return 'Chấp nhận';
                 case 2:
