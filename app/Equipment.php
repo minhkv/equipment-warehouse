@@ -13,7 +13,7 @@ class Equipment extends Model
         'template_id',
         'price', 
         'size',
-        'supplier',
+        'supplier_id',
         'location',
         'condition',
         'status',

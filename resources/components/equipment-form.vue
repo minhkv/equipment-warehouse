@@ -32,32 +32,44 @@
 export default {
     props: [
         'equipment', 
+        'template',
         'method',
         'url'
         ],
     data() {
         return {
-            eq: {}
+            eq: {
+                size: '',
+                price: '',
+                supplier_id: '',
+                location: '',
+                condition: 5,
+                note: '',
+            },
+            event: ''
         };
     },
     created() {
-        this.eq.size = this.equipment.size || '';
-        this.eq.price = this.equipment.price || '';
-        this.eq.supplier_id = this.equipment.supplier_id || '';
-        this.eq.location = this.equipment.location || '';
-        this.eq.condition = this.equipment.condition || '';
-        this.eq.note = this.equipment.note || '';
+        // if (this.equipment) {
+        //     this.eq.size = this.equipment.size;
+        //     this.eq.price = this.equipment.price;
+        //     this.eq.supplier_id = this.equipment.supplier_id;
+        //     this.eq.location = this.equipment.location;
+        //     this.eq.condition = this.equipment.condition;
+        //     this.eq.note = this.equipment.note;
+        // }
+        this.eq = this.equipment || this.eq;
+        if(this.template) {
+            this.eq['template_id'] = this.template.id;
+        }
+        if(this.method == "POST") {
+            this.event = 'store';
+        }
+        if(this.method == "PUT") {
+            this.event = 'update';
+        }
     },
     methods: {
-        displayEquipmentStatusClass(status) {
-            return {
-                'badge': true, 
-                'badge-pill':true, 
-                'badge-danger': status == 0,
-                'badge-success': status == 1,
-                'badge-primary': status == 2
-            };
-        },
         validateData() {
             if(!this.eq.size) {
                 alert('Bạn chưa nhập kích thước');
@@ -84,7 +96,7 @@ export default {
         sendRequest() {
             console.log('sendRequest');
             if(!this.validateData()) return;
-            let formData = {};
+            let formData = {}, newEq = {};
             for(const att in this.eq) {
                 formData[att] = this.eq[att];
             }
@@ -96,10 +108,18 @@ export default {
                 })
                 .then(function (res) {
                     console.log(res);
+                    newEq = res.data;
                 })
                 .catch(function (err) {
                     console.log(err);
                 });
+            this.eq = newEq;
+            this.sendEvent();
+        },
+        sendEvent() {
+            console.log('sendEvent');
+
+            this.$emit(this.event, this.eq);
         }
     }
 };

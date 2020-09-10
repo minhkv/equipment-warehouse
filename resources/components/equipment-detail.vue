@@ -52,7 +52,7 @@
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
-                                <button type="button" class="btn btn-primary" onclick="updateName()">Lưu thay đổi</button>
+                                <button type="button" class="btn btn-primary" @click="updateName()">Lưu thay đổi</button>
                             </div>
                         </div>
                     </div>
@@ -88,16 +88,11 @@
                             <th class="align-middle text-center" scope="row">{{ equipment.id }}</th>
                             <td class="align-middle text-center">{{ equipment.size}}</td>
                             <td class="align-middle text-center">{{ equipment.price }}</td>
-                            <td class="align-middle text-center">{{ equipment.supplier.name }}</td>
+                            <td class="align-middle text-center">
+                                <!-- {{ equipment.supplier.name }} -->
+                            </td>
                             <td class="align-middle text-center">{{ equipment.location }}</td>
                             <td class="align-middle text-center">
-                                <!-- <div>
-                                    <span class="fa fa-star {{equipment.condition >= 1 ? 'checked':''}}"></span>
-                                    <span class="fa fa-star {{equipment.condition >= 2 ? 'checked':''}}"></span>
-                                    <span class="fa fa-star {{equipment.condition >= 3 ? 'checked':''}}"></span>
-                                    <span class="fa fa-star {{equipment.condition >= 4 ? 'checked':''}}"></span>
-                                    <span class="fa fa-star {{equipment.condition >= 5 ? 'checked':''}}"></span>
-                                </div> -->
                                 {{ equipment.condition|formatEquipmentCondition }}
                             </td>
                             <td class="align-middle text-center">
@@ -105,9 +100,6 @@
                             </td>
                             <td class="align-middle text-center">{{equipment.note}}</td>
                             <td class="align-middle px-0">
-                                <!-- @if(equipment.status == 1)
-                                    <x-edit-equipment-member e-id="{{ equipment.id }}" />
-                                @endif -->
                                 <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" :data-target="'#editEquipment' + equipment.id">
                                     <span class="fa fa-pencil"></span>
                                 </button>
@@ -122,7 +114,7 @@
                                                 </button>
                                             </div>
                                             <div class="modal-body">
-                                                <equipment-form :equipment="equipment" method="PUT" :url="equipmentIndexUrl + '/' + equipment.id"></equipment-form>
+                                                <equipment-form :equipment="equipment" @update="updateEquipment($event)" method="PUT" :url="equipmentIndexUrl + '/' + equipment.id"></equipment-form>
                                             </div>
                                         </div>
                                     </div>
@@ -130,16 +122,36 @@
 
                             </td>
                             <td class="align-middle px-0">
-                                <!-- @if(equipment.status != 2)
-                                    <x-delete-button id="{{ equipment.id }}" route-name="equipment.destroy" />
-                                @endif -->
+
                             </td>
                         </tr>
                     </tbody>
                 </table>
+                <div class="row justify-content-center">
+                    <button type="button" class="btn btn-success btn-lg" data-toggle="modal" data-target="#addEquipment">
+                        Thêm thiết bị
+                    </button>
+
+                    <div class="modal fade" id="addEquipment" tabindex="-1" role="dialog" aria-labelledby="addEquipmentLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="addEquipmentLabel">Thêm thiết bị</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <equipment-form :template="template" :url="equipmentCreateUrl" method="POST" @store="addEquipment($event)"></equipment-form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
             </div>
         </div>
-
+        <div class="space" style="height: 10vh;"></div>
     </div>
 </template>
 <script>
@@ -148,6 +160,7 @@
             "equipmentTemplateIndexUrl",
             "equipmentTemplateUpdateUrl",
             "equipmentIndexUrl",
+            "equipmentCreateUrl",
             "equipmentTemplate",
             "suppliers",
         ],
@@ -203,6 +216,15 @@
             updateName() {
                 console.log('updateName');
             },
+            addEquipment(equipment) {
+                console.log('addEquipment');
+                console.log(equipment);
+                this.equipmentTemplate.equipments.push(equipment);
+            },
+            updateEquipment(equipment) {
+                console.log('updateEquipment');
+                console.log(equipment);
+            }
         },
     };
 </script>

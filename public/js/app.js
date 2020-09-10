@@ -1899,6 +1899,33 @@ module.exports = {
 
 /***/ }),
 
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/components/equipment-condition.vue?vue&type=script&lang=js&":
+/*!***************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/components/equipment-condition.vue?vue&type=script&lang=js& ***!
+  \***************************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+//
+//
+//
+//
+//
+/* harmony default export */ __webpack_exports__["default"] = ({
+  props: ['equipment', 'method', 'url'],
+  data: function data() {
+    return {
+      eq: {}
+    };
+  },
+  created: function created() {},
+  methods: {}
+});
+
+/***/ }),
+
 /***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/components/equipment-detail.vue?vue&type=script&lang=js&":
 /*!************************************************************************************************************************************************************************!*\
   !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/components/equipment-detail.vue?vue&type=script&lang=js& ***!
@@ -2052,8 +2079,20 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ["equipmentTemplateIndexUrl", "equipmentTemplateUpdateUrl", "equipmentIndexUrl", "equipmentTemplate", "suppliers"],
+  props: ["equipmentTemplateIndexUrl", "equipmentTemplateUpdateUrl", "equipmentIndexUrl", "equipmentCreateUrl", "equipmentTemplate", "suppliers"],
   data: function data() {
     return {
       template: {},
@@ -2104,6 +2143,15 @@ __webpack_require__.r(__webpack_exports__);
     },
     updateName: function updateName() {
       console.log('updateName');
+    },
+    addEquipment: function addEquipment(equipment) {
+      console.log('addEquipment');
+      console.log(equipment);
+      this.equipmentTemplate.equipments.push(equipment);
+    },
+    updateEquipment: function updateEquipment(equipment) {
+      console.log('updateEquipment');
+      console.log(equipment);
     }
   }
 });
@@ -2150,30 +2198,44 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ['equipment', 'method', 'url'],
+  props: ['equipment', 'template', 'method', 'url'],
   data: function data() {
     return {
-      eq: {}
+      eq: {
+        size: '',
+        price: '',
+        supplier_id: '',
+        location: '',
+        condition: 5,
+        note: ''
+      },
+      event: ''
     };
   },
   created: function created() {
-    this.eq.size = this.equipment.size || '';
-    this.eq.price = this.equipment.price || '';
-    this.eq.supplier_id = this.equipment.supplier_id || '';
-    this.eq.location = this.equipment.location || '';
-    this.eq.condition = this.equipment.condition || '';
-    this.eq.note = this.equipment.note || '';
+    // if (this.equipment) {
+    //     this.eq.size = this.equipment.size;
+    //     this.eq.price = this.equipment.price;
+    //     this.eq.supplier_id = this.equipment.supplier_id;
+    //     this.eq.location = this.equipment.location;
+    //     this.eq.condition = this.equipment.condition;
+    //     this.eq.note = this.equipment.note;
+    // }
+    this.eq = this.equipment || this.eq;
+
+    if (this.template) {
+      this.eq['template_id'] = this.template.id;
+    }
+
+    if (this.method == "POST") {
+      this.event = 'store';
+    }
+
+    if (this.method == "PUT") {
+      this.event = 'update';
+    }
   },
   methods: {
-    displayEquipmentStatusClass: function displayEquipmentStatusClass(status) {
-      return {
-        'badge': true,
-        'badge-pill': true,
-        'badge-danger': status == 0,
-        'badge-success': status == 1,
-        'badge-primary': status == 2
-      };
-    },
     validateData: function validateData() {
       if (!this.eq.size) {
         alert('Bạn chưa nhập kích thước');
@@ -2205,7 +2267,8 @@ __webpack_require__.r(__webpack_exports__);
     sendRequest: function sendRequest() {
       console.log('sendRequest');
       if (!this.validateData()) return;
-      var formData = {};
+      var formData = {},
+          newEq = {};
 
       for (var att in this.eq) {
         formData[att] = this.eq[att];
@@ -2218,9 +2281,16 @@ __webpack_require__.r(__webpack_exports__);
         data: formData
       }).then(function (res) {
         console.log(res);
+        newEq = res.data;
       })["catch"](function (err) {
         console.log(err);
       });
+      this.eq = newEq;
+      this.sendEvent();
+    },
+    sendEvent: function sendEvent() {
+      console.log('sendEvent');
+      this.$emit(this.event, this.eq);
     }
   }
 });
@@ -61943,6 +62013,30 @@ exports.clearImmediate = (typeof self !== "undefined" && self.clearImmediate) ||
 
 /***/ }),
 
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/components/equipment-condition.vue?vue&type=template&id=a678694a&scoped=true&":
+/*!*******************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/components/equipment-condition.vue?vue&type=template&id=a678694a&scoped=true& ***!
+  \*******************************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div")
+}
+var staticRenderFns = []
+render._withStripped = true
+
+
+
+/***/ }),
+
 /***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/components/equipment-detail.vue?vue&type=template&id=bdc34b7e&scoped=true&":
 /*!****************************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/components/equipment-detail.vue?vue&type=template&id=bdc34b7e&scoped=true& ***!
@@ -62103,7 +62197,30 @@ var render = function() {
                     ])
                   ]),
                   _vm._v(" "),
-                  _vm._m(4)
+                  _c("div", { staticClass: "modal-footer" }, [
+                    _c(
+                      "button",
+                      {
+                        staticClass: "btn btn-secondary",
+                        attrs: { type: "button", "data-dismiss": "modal" }
+                      },
+                      [_vm._v("Đóng")]
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "button",
+                      {
+                        staticClass: "btn btn-primary",
+                        attrs: { type: "button" },
+                        on: {
+                          click: function($event) {
+                            return _vm.updateName()
+                          }
+                        }
+                      },
+                      [_vm._v("Lưu thay đổi")]
+                    )
+                  ])
                 ])
               ]
             )
@@ -62115,11 +62232,11 @@ var render = function() {
     _c("hr"),
     _vm._v(" "),
     _c("div", { staticClass: "row" }, [
-      _vm._m(5),
+      _vm._m(4),
       _vm._v(" "),
       _c("div", { staticClass: "row" }, [
         _c("table", { staticClass: "table" }, [
-          _vm._m(6),
+          _vm._m(5),
           _vm._v(" "),
           _c(
             "tbody",
@@ -62142,9 +62259,7 @@ var render = function() {
                   _vm._v(_vm._s(equipment.price))
                 ]),
                 _vm._v(" "),
-                _c("td", { staticClass: "align-middle text-center" }, [
-                  _vm._v(_vm._s(equipment.supplier.name))
-                ]),
+                _c("td", { staticClass: "align-middle text-center" }),
                 _vm._v(" "),
                 _c("td", { staticClass: "align-middle text-center" }, [
                   _vm._v(_vm._s(equipment.location))
@@ -62210,7 +62325,7 @@ var render = function() {
                         },
                         [
                           _c("div", { staticClass: "modal-content" }, [
-                            _vm._m(7, true),
+                            _vm._m(6, true),
                             _vm._v(" "),
                             _c(
                               "div",
@@ -62222,6 +62337,11 @@ var render = function() {
                                     method: "PUT",
                                     url:
                                       _vm.equipmentIndexUrl + "/" + equipment.id
+                                  },
+                                  on: {
+                                    update: function($event) {
+                                      return _vm.updateEquipment($event)
+                                    }
                                   }
                                 })
                               ],
@@ -62239,9 +62359,71 @@ var render = function() {
             }),
             0
           )
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "row justify-content-center" }, [
+          _c(
+            "button",
+            {
+              staticClass: "btn btn-success btn-lg",
+              attrs: {
+                type: "button",
+                "data-toggle": "modal",
+                "data-target": "#addEquipment"
+              }
+            },
+            [_vm._v("\n                    Thêm thiết bị\n                ")]
+          ),
+          _vm._v(" "),
+          _c(
+            "div",
+            {
+              staticClass: "modal fade",
+              attrs: {
+                id: "addEquipment",
+                tabindex: "-1",
+                role: "dialog",
+                "aria-labelledby": "addEquipmentLabel",
+                "aria-hidden": "true"
+              }
+            },
+            [
+              _c(
+                "div",
+                { staticClass: "modal-dialog", attrs: { role: "document" } },
+                [
+                  _c("div", { staticClass: "modal-content" }, [
+                    _vm._m(7),
+                    _vm._v(" "),
+                    _c(
+                      "div",
+                      { staticClass: "modal-body" },
+                      [
+                        _c("equipment-form", {
+                          attrs: {
+                            template: _vm.template,
+                            url: _vm.equipmentCreateUrl,
+                            method: "POST"
+                          },
+                          on: {
+                            store: function($event) {
+                              return _vm.addEquipment($event)
+                            }
+                          }
+                        })
+                      ],
+                      1
+                    )
+                  ])
+                ]
+              )
+            ]
+          )
         ])
       ])
-    ])
+    ]),
+    _vm._v(" "),
+    _c("div", { staticClass: "space", staticStyle: { height: "10vh" } })
   ])
 }
 var staticRenderFns = [
@@ -62314,30 +62496,6 @@ var staticRenderFns = [
           }
         },
         [_vm._v("×")]
-      )
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "modal-footer" }, [
-      _c(
-        "button",
-        {
-          staticClass: "btn btn-secondary",
-          attrs: { type: "button", "data-dismiss": "modal" }
-        },
-        [_vm._v("Đóng")]
-      ),
-      _vm._v(" "),
-      _c(
-        "button",
-        {
-          staticClass: "btn btn-primary",
-          attrs: { type: "button", onclick: "updateName()" }
-        },
-        [_vm._v("Lưu thay đổi")]
       )
     ])
   },
@@ -62460,6 +62618,31 @@ var staticRenderFns = [
         "h5",
         { staticClass: "modal-title", attrs: { id: "addEquipmentLabel" } },
         [_vm._v("Chỉnh sửa thiết bị")]
+      ),
+      _vm._v(" "),
+      _c(
+        "button",
+        {
+          staticClass: "close",
+          attrs: {
+            type: "button",
+            "data-dismiss": "modal",
+            "aria-label": "Close"
+          }
+        },
+        [_c("span", { attrs: { "aria-hidden": "true" } }, [_vm._v("×")])]
+      )
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "modal-header" }, [
+      _c(
+        "h5",
+        { staticClass: "modal-title", attrs: { id: "addEquipmentLabel" } },
+        [_vm._v("Thêm thiết bị")]
       ),
       _vm._v(" "),
       _c(
@@ -80307,26 +80490,63 @@ module.exports = function(module) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
-var render, staticRenderFns
-var script = {}
+/* harmony import */ var _equipment_condition_vue_vue_type_template_id_a678694a_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./equipment-condition.vue?vue&type=template&id=a678694a&scoped=true& */ "./resources/components/equipment-condition.vue?vue&type=template&id=a678694a&scoped=true&");
+/* harmony import */ var _equipment_condition_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./equipment-condition.vue?vue&type=script&lang=js& */ "./resources/components/equipment-condition.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
 
 
 /* normalize component */
 
-var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_0__["default"])(
-  script,
-  render,
-  staticRenderFns,
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _equipment_condition_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _equipment_condition_vue_vue_type_template_id_a678694a_scoped_true___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _equipment_condition_vue_vue_type_template_id_a678694a_scoped_true___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
   false,
   null,
-  null,
+  "a678694a",
   null
   
 )
 
+/* hot reload */
+if (false) { var api; }
 component.options.__file = "resources/components/equipment-condition.vue"
 /* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/components/equipment-condition.vue?vue&type=script&lang=js&":
+/*!*******************************************************************************!*\
+  !*** ./resources/components/equipment-condition.vue?vue&type=script&lang=js& ***!
+  \*******************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_equipment_condition_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../node_modules/babel-loader/lib??ref--4-0!../../node_modules/vue-loader/lib??vue-loader-options!./equipment-condition.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/components/equipment-condition.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_equipment_condition_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/components/equipment-condition.vue?vue&type=template&id=a678694a&scoped=true&":
+/*!*************************************************************************************************!*\
+  !*** ./resources/components/equipment-condition.vue?vue&type=template&id=a678694a&scoped=true& ***!
+  \*************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_equipment_condition_vue_vue_type_template_id_a678694a_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../node_modules/vue-loader/lib??vue-loader-options!./equipment-condition.vue?vue&type=template&id=a678694a&scoped=true& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/components/equipment-condition.vue?vue&type=template&id=a678694a&scoped=true&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_equipment_condition_vue_vue_type_template_id_a678694a_scoped_true___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_equipment_condition_vue_vue_type_template_id_a678694a_scoped_true___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
 
 /***/ }),
 
