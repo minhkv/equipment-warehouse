@@ -100,7 +100,7 @@
                             </td>
                             <td class="align-middle text-center">{{equipment.note}}</td>
                             <td class="align-middle px-0">
-                                <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" :data-target="'#editEquipment' + equipment.id">
+                                <button :disabled="equipment.status != 1" type="button" class="btn btn-primary btn-sm" data-toggle="modal" :data-target="'#editEquipment' + equipment.id">
                                     <span class="fa fa-pencil"></span>
                                 </button>
 
@@ -122,7 +122,7 @@
 
                             </td>
                             <td class="align-middle px-0">
-                                <button @click="deleteEquipment(equipment, index)" type="button" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></button>
+                                <button :disabled="equipment.status == 2" @click="deleteEquipment(equipment, index)" type="button" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></button>
                             </td>
                         </tr>
                     </tbody>

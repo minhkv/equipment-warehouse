@@ -62366,6 +62366,7 @@ var render = function() {
                     {
                       staticClass: "btn btn-primary btn-sm",
                       attrs: {
+                        disabled: equipment.status != 1,
                         type: "button",
                         "data-toggle": "modal",
                         "data-target": "#editEquipment" + equipment.id
@@ -62434,7 +62435,10 @@ var render = function() {
                     "button",
                     {
                       staticClass: "btn btn-danger btn-sm",
-                      attrs: { type: "button" },
+                      attrs: {
+                        disabled: equipment.status == 2,
+                        type: "button"
+                      },
                       on: {
                         click: function($event) {
                           return _vm.deleteEquipment(equipment, index)
