@@ -47,7 +47,7 @@
                             <div class="modal-body">            
                                 <div class="form-group">
                                     <label for="equipmentName">Nhập tên mới</label>
-                                    <input type="text" class="form-control" id="equipmentName" name="name" :value="template.name">
+                                    <input type="text" class="form-control" id="equipmentName" name="name" v-model="template.name">
                                 </div>
                             </div>
                             <div class="modal-footer">
@@ -193,28 +193,43 @@
                 }
                 return true;
             },
-            updateImage() {
-                console.log("submit");
-                if (!this.validateImage()) return;
-                let formData = new FormData();
+            sendUpdateTemplateRequest(formData, headers, callback) {
                 formData.append("_method", "PUT");
-                formData.append("imageFile", this.imageFile);
                 axios
-                    .post(this.equipmentTemplateUpdateUrl, formData, {
-                        headers: {
-                            "Content-Type": "multipart/form-data",
-                        },
-                    })
+                    .post(this.equipmentTemplateUpdateUrl, formData, headers)
                     .then(function (res) {
                         console.log(res);
+                        callback(res);
                     })
                     .catch(function (err) {
                         console.log(err);
                     });
-                this.template.image = "/storage/img/" + this.imageFile.name;
+            },
+            updateImage() {
+                console.log("submit");
+                if (!this.validateImage()) return;
+                let formData = new FormData();
+                let app = this;
+                let headers = {
+                    headers: {
+                        "Content-Type": "multipart/form-data",
+                    },
+                };
+                formData.append("imageFile", this.imageFile);
+                this.sendUpdateTemplateRequest(formData, headers, function(res) {
+                    app.template.image = "/storage/img/" + app.imageFile.name;
+                    app.closeModal('#editImage');
+                });
             },
             updateName() {
                 console.log('updateName');
+                let formData = new FormData();
+                let app = this;
+                let headers = {};
+                formData.append("name", this.template.name);
+                this.sendUpdateTemplateRequest(formData, headers, function(res) {
+                    app.closeModal('#editName');
+                });
             },
             addEquipment(equipment) {
                 console.log('addEquipment');

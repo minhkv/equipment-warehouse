@@ -2124,25 +2124,40 @@ __webpack_require__.r(__webpack_exports__);
 
       return true;
     },
+    sendUpdateTemplateRequest: function sendUpdateTemplateRequest(formData, headers, callback) {
+      formData.append("_method", "PUT");
+      axios.post(this.equipmentTemplateUpdateUrl, formData, headers).then(function (res) {
+        console.log(res);
+        callback(res);
+      })["catch"](function (err) {
+        console.log(err);
+      });
+    },
     updateImage: function updateImage() {
       console.log("submit");
       if (!this.validateImage()) return;
       var formData = new FormData();
-      formData.append("_method", "PUT");
-      formData.append("imageFile", this.imageFile);
-      axios.post(this.equipmentTemplateUpdateUrl, formData, {
+      var app = this;
+      var headers = {
         headers: {
           "Content-Type": "multipart/form-data"
         }
-      }).then(function (res) {
-        console.log(res);
-      })["catch"](function (err) {
-        console.log(err);
+      };
+      formData.append("imageFile", this.imageFile);
+      this.sendUpdateTemplateRequest(formData, headers, function (res) {
+        app.template.image = "/storage/img/" + app.imageFile.name;
+        app.closeModal('#editImage');
       });
-      this.template.image = "/storage/img/" + this.imageFile.name;
     },
     updateName: function updateName() {
       console.log('updateName');
+      var formData = new FormData();
+      var app = this;
+      var headers = {};
+      formData.append("name", this.template.name);
+      this.sendUpdateTemplateRequest(formData, headers, function (res) {
+        app.closeModal('#editName');
+      });
     },
     addEquipment: function addEquipment(equipment) {
       console.log('addEquipment');
@@ -62197,13 +62212,29 @@ var render = function() {
                       ]),
                       _vm._v(" "),
                       _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.template.name,
+                            expression: "template.name"
+                          }
+                        ],
                         staticClass: "form-control",
                         attrs: {
                           type: "text",
                           id: "equipmentName",
                           name: "name"
                         },
-                        domProps: { value: _vm.template.name }
+                        domProps: { value: _vm.template.name },
+                        on: {
+                          input: function($event) {
+                            if ($event.target.composing) {
+                              return
+                            }
+                            _vm.$set(_vm.template, "name", $event.target.value)
+                          }
+                        }
                       })
                     ])
                   ]),
