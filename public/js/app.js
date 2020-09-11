@@ -2096,12 +2096,14 @@ __webpack_require__.r(__webpack_exports__);
   data: function data() {
     return {
       template: {},
+      templateName: '',
       imageFile: "",
       file: ""
     };
   },
   created: function created() {
     this.template = this.equipmentTemplate;
+    this.templateName = this.template.name;
   },
   methods: {
     handleFileUpload: function handleFileUpload() {
@@ -2145,17 +2147,27 @@ __webpack_require__.r(__webpack_exports__);
       };
       formData.append("imageFile", this.imageFile);
       this.sendUpdateTemplateRequest(formData, headers, function (res) {
-        app.template.image = "/storage/img/" + app.imageFile.name;
+        app.template.image = res.data.image;
         app.closeModal('#editImage');
       });
     },
+    validateName: function validateName() {
+      if (!this.template.name) {
+        alert('Tên không được để trống');
+        return false;
+      }
+
+      return true;
+    },
     updateName: function updateName() {
       console.log('updateName');
+      if (!this.validateName()) return;
       var formData = new FormData();
       var app = this;
       var headers = {};
-      formData.append("name", this.template.name);
+      formData.append("name", this.templateName);
       this.sendUpdateTemplateRequest(formData, headers, function (res) {
+        app.template.name = res.data.name;
         app.closeModal('#editName');
       });
     },
@@ -2168,6 +2180,16 @@ __webpack_require__.r(__webpack_exports__);
       console.log('updateEquipment');
       console.log(newEquipment);
       Vue.set(this.template.equipments, index, newEquipment);
+    },
+    deleteEquipment: function deleteEquipment(equipment, index) {
+      console.log("deleteEquipment " + index);
+      var app = this;
+      axios["delete"](this.equipmentIndexUrl + '/' + equipment.id).then(function (res) {
+        console.log(res);
+        app.template.equipments.splice(index, 1);
+      })["catch"](function (err) {
+        console.log(err);
+      });
     },
     closeModal: function closeModal(id) {
       console.log('closeModal ' + id);
@@ -62216,8 +62238,8 @@ var render = function() {
                           {
                             name: "model",
                             rawName: "v-model",
-                            value: _vm.template.name,
-                            expression: "template.name"
+                            value: _vm.templateName,
+                            expression: "templateName"
                           }
                         ],
                         staticClass: "form-control",
@@ -62226,13 +62248,13 @@ var render = function() {
                           id: "equipmentName",
                           name: "name"
                         },
-                        domProps: { value: _vm.template.name },
+                        domProps: { value: _vm.templateName },
                         on: {
                           input: function($event) {
                             if ($event.target.composing) {
                               return
                             }
-                            _vm.$set(_vm.template, "name", $event.target.value)
+                            _vm.templateName = $event.target.value
                           }
                         }
                       })
@@ -62407,7 +62429,21 @@ var render = function() {
                   )
                 ]),
                 _vm._v(" "),
-                _c("td", { staticClass: "align-middle px-0" })
+                _c("td", { staticClass: "align-middle px-0" }, [
+                  _c(
+                    "button",
+                    {
+                      staticClass: "btn btn-danger btn-sm",
+                      attrs: { type: "button" },
+                      on: {
+                        click: function($event) {
+                          return _vm.deleteEquipment(equipment, index)
+                        }
+                      }
+                    },
+                    [_c("i", { staticClass: "fa fa-trash" })]
+                  )
+                ])
               ])
             }),
             0

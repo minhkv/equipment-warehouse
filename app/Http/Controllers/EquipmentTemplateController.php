@@ -108,7 +108,7 @@ class EquipmentTemplateController extends Controller
             $request->imageFile->storeAs('img', $fileName, 'public');
             $equipmentTemplate->update(['image' => '/storage/img/'.$fileName]);
         } 
-        return $equipmentTemplate->image;
+        return $equipmentTemplate;
     }
 
     /**
@@ -120,6 +120,6 @@ class EquipmentTemplateController extends Controller
     public function destroy(EquipmentTemplate $equipmentTemplate)
     {
         $equipmentTemplate->delete();
-        return redirect()->back();
+        return 'delete template';
     }
 }

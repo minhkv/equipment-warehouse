@@ -47,7 +47,7 @@
                             <div class="modal-body">            
                                 <div class="form-group">
                                     <label for="equipmentName">Nhập tên mới</label>
-                                    <input type="text" class="form-control" id="equipmentName" name="name" v-model="template.name">
+                                    <input type="text" class="form-control" id="equipmentName" name="name" v-model="templateName">
                                 </div>
                             </div>
                             <div class="modal-footer">
@@ -122,7 +122,7 @@
 
                             </td>
                             <td class="align-middle px-0">
-
+                                <button @click="deleteEquipment(equipment, index)" type="button" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></button>
                             </td>
                         </tr>
                     </tbody>
@@ -167,12 +167,14 @@
         data() {
             return {
                 template: {},
+                templateName: '',
                 imageFile: "",
                 file: "",
             };
         },
         created() {
             this.template = this.equipmentTemplate;
+            this.templateName = this.template.name;
         },
         methods: {
             handleFileUpload() {
@@ -217,17 +219,26 @@
                 };
                 formData.append("imageFile", this.imageFile);
                 this.sendUpdateTemplateRequest(formData, headers, function(res) {
-                    app.template.image = "/storage/img/" + app.imageFile.name;
+                    app.template.image = res.data.image;
                     app.closeModal('#editImage');
                 });
             },
+            validateName() {
+                if(!this.template.name) {
+                    alert('Tên không được để trống');
+                    return false;
+                }
+                return true;
+            },
             updateName() {
                 console.log('updateName');
+                if(!this.validateName()) return;
                 let formData = new FormData();
                 let app = this;
                 let headers = {};
-                formData.append("name", this.template.name);
+                formData.append("name", this.templateName);
                 this.sendUpdateTemplateRequest(formData, headers, function(res) {
+                    app.template.name = res.data.name;
                     app.closeModal('#editName');
                 });
             },
@@ -240,6 +251,17 @@
                 console.log('updateEquipment');
                 console.log(newEquipment);
                 Vue.set(this.template.equipments, index, newEquipment);
+            },
+            deleteEquipment(equipment, index) {
+                console.log("deleteEquipment " + index);
+                let app = this;
+                axios.delete(this.equipmentIndexUrl + '/' + equipment.id)
+                .then(function(res) {
+                    console.log(res);
+                    app.template.equipments.splice(index, 1);
+                }).catch(function(err) {
+                    console.log(err);
+                });
             },
             closeModal(id) {
                 console.log('closeModal ' + id);
