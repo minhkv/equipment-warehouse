@@ -29,10 +29,10 @@
                                 <div class="dropdown col-2">
                                     <select v-model="orderStatus" v-on:change="filterOrder" class="custom-select mx-0">
                                         <option selected value='-2'>Trạng thái</option>
-                                        <option value='-1'>Từ chối</option>
                                         <option value='0'>Đang chờ</option>
                                         <option value='2'>Đang tiến hành</option>
                                         <option value='4'>Hoàn tất</option>
+                                        <option value='-1'>Từ chối</option>
                                     </select>
                                 </div>
                                 <div class="col-7">

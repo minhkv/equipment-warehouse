@@ -92,9 +92,9 @@ class EquipmentController extends Controller
      */
     public function update(Request $request, $id)
     {
-        // return 'update';
-        Equipment::find($id)->update($request->all());
-        return 'update';
+        $equipment = Equipment::find($id);
+        $equipment->update($request->all());
+        return $equipment->load('supplier');
     }
 
     /**

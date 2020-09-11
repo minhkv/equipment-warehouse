@@ -2149,9 +2149,15 @@ __webpack_require__.r(__webpack_exports__);
       console.log(equipment);
       this.equipmentTemplate.equipments.push(equipment);
     },
-    updateEquipment: function updateEquipment(equipment) {
+    updateEquipment: function updateEquipment(newEquipment, index) {
       console.log('updateEquipment');
-      console.log(equipment);
+      console.log(newEquipment);
+      Vue.set(this.template.equipments, index, newEquipment);
+    },
+    closeModal: function closeModal(id) {
+      console.log('closeModal ' + id);
+      $(id).modal('toggle');
+      $(".modal-backdrop").remove();
     }
   }
 });
@@ -2201,27 +2207,32 @@ __webpack_require__.r(__webpack_exports__);
   props: ['equipment', 'template', 'method', 'url'],
   data: function data() {
     return {
-      eq: {
+      eq: {},
+      event: '',
+      blankEq: {
         size: '',
         price: '',
         supplier_id: '',
         location: '',
         condition: 5,
+        status: 1,
         note: ''
-      },
-      event: ''
+      }
     };
   },
   created: function created() {
-    // if (this.equipment) {
-    //     this.eq.size = this.equipment.size;
-    //     this.eq.price = this.equipment.price;
-    //     this.eq.supplier_id = this.equipment.supplier_id;
-    //     this.eq.location = this.equipment.location;
-    //     this.eq.condition = this.equipment.condition;
-    //     this.eq.note = this.equipment.note;
-    // }
-    this.eq = this.equipment || this.eq;
+    Object.assign(this.eq, this.blankEq);
+
+    if (this.equipment) {
+      // this.eq.size = this.equipment.size;
+      // this.eq.price = this.equipment.price;
+      // this.eq.supplier_id = this.equipment.supplier_id;
+      // this.eq.location = this.equipment.location;
+      // this.eq.condition = this.equipment.condition;
+      // this.eq.note = this.equipment.note;
+      Object.assign(this.eq, this.equipment);
+    } // this.eq = this.equipment || this.blankEq;
+
 
     if (this.template) {
       this.eq['template_id'] = this.template.id;
@@ -2269,28 +2280,28 @@ __webpack_require__.r(__webpack_exports__);
       if (!this.validateData()) return;
       var formData = {},
           newEq = {};
+      var app = this;
 
       for (var att in this.eq) {
         formData[att] = this.eq[att];
       }
 
-      console.log(formData);
       axios({
         method: this.method,
         url: this.url,
         data: formData
       }).then(function (res) {
         console.log(res);
-        newEq = res.data;
+        app.eq = res.data;
+        app.sendEvent();
       })["catch"](function (err) {
         console.log(err);
       });
-      this.eq = newEq;
-      this.sendEvent();
     },
     sendEvent: function sendEvent() {
       console.log('sendEvent');
       this.$emit(this.event, this.eq);
+      this.$emit('close');
     }
   }
 });
@@ -62235,12 +62246,12 @@ var render = function() {
       _vm._m(4),
       _vm._v(" "),
       _c("div", { staticClass: "row" }, [
-        _c("table", { staticClass: "table" }, [
+        _c("table", { staticClass: "table table-hover" }, [
           _vm._m(5),
           _vm._v(" "),
           _c(
             "tbody",
-            _vm._l(_vm.template.equipments, function(equipment) {
+            _vm._l(_vm.template.equipments, function(equipment, index) {
               return _c("tr", { key: equipment.id }, [
                 _c(
                   "th",
@@ -62259,7 +62270,13 @@ var render = function() {
                   _vm._v(_vm._s(equipment.price))
                 ]),
                 _vm._v(" "),
-                _c("td", { staticClass: "align-middle text-center" }),
+                _c("td", { staticClass: "align-middle text-center" }, [
+                  _vm._v(
+                    "\n                            " +
+                      _vm._s(equipment.supplier.name) +
+                      "\n                        "
+                  )
+                ]),
                 _vm._v(" "),
                 _c("td", { staticClass: "align-middle text-center" }, [
                   _vm._v(_vm._s(equipment.location))
@@ -62340,7 +62357,12 @@ var render = function() {
                                   },
                                   on: {
                                     update: function($event) {
-                                      return _vm.updateEquipment($event)
+                                      return _vm.updateEquipment($event, index)
+                                    },
+                                    close: function($event) {
+                                      return _vm.closeModal(
+                                        "#editEquipment" + equipment.id
+                                      )
                                     }
                                   }
                                 })
@@ -62408,6 +62430,9 @@ var render = function() {
                           on: {
                             store: function($event) {
                               return _vm.addEquipment($event)
+                            },
+                            close: function($event) {
+                              return _vm.closeModal("#addEquipment")
                             }
                           }
                         })
@@ -67831,10 +67856,6 @@ var render = function() {
                           _vm._v("Trạng thái")
                         ]),
                         _vm._v(" "),
-                        _c("option", { attrs: { value: "-1" } }, [
-                          _vm._v("Từ chối")
-                        ]),
-                        _vm._v(" "),
                         _c("option", { attrs: { value: "0" } }, [
                           _vm._v("Đang chờ")
                         ]),
@@ -67845,6 +67866,10 @@ var render = function() {
                         _vm._v(" "),
                         _c("option", { attrs: { value: "4" } }, [
                           _vm._v("Hoàn tất")
+                        ]),
+                        _vm._v(" "),
+                        _c("option", { attrs: { value: "-1" } }, [
+                          _vm._v("Từ chối")
                         ])
                       ]
                     )

@@ -68,7 +68,7 @@
                 </div>
             </div>
             <div class="row">
-                <table class="table">
+                <table class="table table-hover">
                     <thead class="thead-light">
                         <tr>
                             <th class="text-center" scope="col" style="width: 5%">Mã</th>
@@ -84,12 +84,12 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr v-for="equipment in template.equipments" :key="equipment.id">
+                        <tr v-for="(equipment, index) in template.equipments" :key="equipment.id">
                             <th class="align-middle text-center" scope="row">{{ equipment.id }}</th>
                             <td class="align-middle text-center">{{ equipment.size}}</td>
                             <td class="align-middle text-center">{{ equipment.price }}</td>
                             <td class="align-middle text-center">
-                                <!-- {{ equipment.supplier.name }} -->
+                                {{ equipment.supplier.name }}
                             </td>
                             <td class="align-middle text-center">{{ equipment.location }}</td>
                             <td class="align-middle text-center">
@@ -114,7 +114,7 @@
                                                 </button>
                                             </div>
                                             <div class="modal-body">
-                                                <equipment-form :equipment="equipment" @update="updateEquipment($event)" method="PUT" :url="equipmentIndexUrl + '/' + equipment.id"></equipment-form>
+                                                <equipment-form :equipment="equipment" @update="updateEquipment($event, index)" @close="closeModal('#editEquipment' + equipment.id)" method="PUT" :url="equipmentIndexUrl + '/' + equipment.id"></equipment-form>
                                             </div>
                                         </div>
                                     </div>
@@ -142,7 +142,7 @@
                                     </button>
                                 </div>
                                 <div class="modal-body">
-                                    <equipment-form :template="template" :url="equipmentCreateUrl" method="POST" @store="addEquipment($event)"></equipment-form>
+                                    <equipment-form :template="template" :url="equipmentCreateUrl" method="POST" @store="addEquipment($event)" @close="closeModal('#addEquipment')"></equipment-form>
                                 </div>
                             </div>
                         </div>
@@ -221,10 +221,17 @@
                 console.log(equipment);
                 this.equipmentTemplate.equipments.push(equipment);
             },
-            updateEquipment(equipment) {
+            updateEquipment(newEquipment, index) {
                 console.log('updateEquipment');
-                console.log(equipment);
+                console.log(newEquipment);
+                Vue.set(this.template.equipments, index, newEquipment);
+            },
+            closeModal(id) {
+                console.log('closeModal ' + id);
+                $(id).modal('toggle');
+                $(".modal-backdrop").remove();
             }
+
         },
     };
 </script>

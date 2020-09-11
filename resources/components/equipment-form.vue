@@ -38,27 +38,32 @@ export default {
         ],
     data() {
         return {
-            eq: {
+            eq: {},
+            event: '',
+            blankEq: {
                 size: '',
                 price: '',
                 supplier_id: '',
                 location: '',
                 condition: 5,
+                status: 1,
                 note: '',
-            },
-            event: ''
+            }
         };
     },
     created() {
-        // if (this.equipment) {
-        //     this.eq.size = this.equipment.size;
-        //     this.eq.price = this.equipment.price;
-        //     this.eq.supplier_id = this.equipment.supplier_id;
-        //     this.eq.location = this.equipment.location;
-        //     this.eq.condition = this.equipment.condition;
-        //     this.eq.note = this.equipment.note;
-        // }
-        this.eq = this.equipment || this.eq;
+        Object.assign(this.eq, this.blankEq);
+        if (this.equipment) {
+            // this.eq.size = this.equipment.size;
+            // this.eq.price = this.equipment.price;
+            // this.eq.supplier_id = this.equipment.supplier_id;
+            // this.eq.location = this.equipment.location;
+            // this.eq.condition = this.equipment.condition;
+            // this.eq.note = this.equipment.note;
+            Object.assign(this.eq, this.equipment);
+        }
+
+        // this.eq = this.equipment || this.blankEq;
         if(this.template) {
             this.eq['template_id'] = this.template.id;
         }
@@ -97,10 +102,10 @@ export default {
             console.log('sendRequest');
             if(!this.validateData()) return;
             let formData = {}, newEq = {};
+            let app = this;
             for(const att in this.eq) {
                 formData[att] = this.eq[att];
             }
-            console.log(formData);
             axios({
                 method: this.method,
                 url: this.url, 
@@ -108,18 +113,17 @@ export default {
                 })
                 .then(function (res) {
                     console.log(res);
-                    newEq = res.data;
+                    app.eq = res.data;
+                    app.sendEvent();
                 })
                 .catch(function (err) {
                     console.log(err);
                 });
-            this.eq = newEq;
-            this.sendEvent();
         },
         sendEvent() {
             console.log('sendEvent');
-
             this.$emit(this.event, this.eq);
+            this.$emit('close');
         }
     }
 };
