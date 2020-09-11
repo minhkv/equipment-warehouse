@@ -126,10 +126,8 @@
                                                     <thead class="thead-light">
                                                         <tr>
                                                             <th class="text-center" scope="col" style="width: 5%">Mã</th>
-                                                            <th class="text-center" scope="col" style="width: 10%;">Kích thước</th>
                                                             <th class="text-center" scope="col" style="width: 10%;">Giá nhập</th>
                                                             <th class="text-center" scope="col" style="width: 12%;">Nhà cung cấp</th>
-                                                            <th class="text-center" scope="col" style="width: 8%;">Vị trí</th>
                                                             <th class="text-center" scope="col" style="width: 10%;">Tình trạng</th>
                                                             <th class="text-center" scope="col" style="width: 10%;">Trạng thái</th>
                                                             <th class="text-center" scope="col" style="width: 15%;">Ghi chú</th>
@@ -139,10 +137,8 @@
                                                     <tbody>
                                                         <tr v-for="equipment in info.template.equipments" :key="equipment.id">
                                                             <th class="text-center align-middle" scope="row">{{ equipment.id }}</th>
-                                                            <td class="text-center align-middle">{{ equipment.size}}</td>
                                                             <td class="text-center align-middle">{{ equipment.price }}</td>
                                                             <td class="text-center align-middle">{{ equipment.supplier.name }}</td>
-                                                            <td class="text-center align-middle">{{ equipment.location }}</td>
                                                             <td class="text-center align-middle">
                                                                 <equipment-condition :condition="equipment.condition"></equipment-condition>
                                                             </td>

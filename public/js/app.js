@@ -2095,10 +2095,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ["equipmentTemplateIndexUrl", "equipmentTemplateUpdateUrl", "equipmentIndexUrl", "equipmentCreateUrl", "equipmentTemplate", "suppliers"],
   data: function data() {
@@ -2269,15 +2265,8 @@ __webpack_require__.r(__webpack_exports__);
     Object.assign(this.eq, this.blankEq);
 
     if (this.equipment) {
-      // this.eq.size = this.equipment.size;
-      // this.eq.price = this.equipment.price;
-      // this.eq.supplier_id = this.equipment.supplier_id;
-      // this.eq.location = this.equipment.location;
-      // this.eq.condition = this.equipment.condition;
-      // this.eq.note = this.equipment.note;
       Object.assign(this.eq, this.equipment);
-    } // this.eq = this.equipment || this.blankEq;
-
+    }
 
     if (this.template) {
       this.eq['template_id'] = this.template.id;
@@ -2293,11 +2282,6 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {
     validateData: function validateData() {
-      if (!this.eq.size) {
-        alert('Bạn chưa nhập kích thước');
-        return false;
-      }
-
       if (!this.eq.price) {
         alert('Bạn chưa nhập giá');
         return false;
@@ -2305,11 +2289,6 @@ __webpack_require__.r(__webpack_exports__);
 
       if (!this.eq.supplier_id) {
         alert('Bạn chưa nhập nhà cung cấp');
-        return false;
-      }
-
-      if (!this.eq.location) {
-        alert('Bạn chưa nhập vị trí');
         return false;
       }
 
@@ -3319,10 +3298,6 @@ __webpack_require__.r(__webpack_exports__);
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js");
 /* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(moment__WEBPACK_IMPORTED_MODULE_0__);
-//
-//
-//
-//
 //
 //
 //
@@ -62297,10 +62272,6 @@ var render = function() {
                 ),
                 _vm._v(" "),
                 _c("td", { staticClass: "align-middle text-center" }, [
-                  _vm._v(_vm._s(equipment.size))
-                ]),
-                _vm._v(" "),
-                _c("td", { staticClass: "align-middle text-center" }, [
                   _vm._v(_vm._s(equipment.price))
                 ]),
                 _vm._v(" "),
@@ -62310,10 +62281,6 @@ var render = function() {
                       _vm._s(equipment.supplier.name) +
                       "\n                        "
                   )
-                ]),
-                _vm._v(" "),
-                _c("td", { staticClass: "align-middle text-center" }, [
-                  _vm._v(_vm._s(equipment.location))
                 ]),
                 _vm._v(" "),
                 _c(
@@ -62610,16 +62577,6 @@ var staticRenderFns = [
             staticStyle: { width: "10%" },
             attrs: { scope: "col" }
           },
-          [_vm._v("Kích thước")]
-        ),
-        _vm._v(" "),
-        _c(
-          "th",
-          {
-            staticClass: "text-center",
-            staticStyle: { width: "10%" },
-            attrs: { scope: "col" }
-          },
           [_vm._v("Giá nhập")]
         ),
         _vm._v(" "),
@@ -62631,16 +62588,6 @@ var staticRenderFns = [
             attrs: { scope: "col" }
           },
           [_vm._v("Nhà cung cấp")]
-        ),
-        _vm._v(" "),
-        _c(
-          "th",
-          {
-            staticClass: "text-center",
-            staticStyle: { width: "8%" },
-            attrs: { scope: "col" }
-          },
-          [_vm._v("Vị trí")]
         ),
         _vm._v(" "),
         _c(
@@ -62768,32 +62715,6 @@ var render = function() {
           {
             name: "model",
             rawName: "v-model",
-            value: _vm.eq.size,
-            expression: "eq.size"
-          }
-        ],
-        staticClass: "form-control",
-        attrs: { type: "text", name: "size", placeholder: "Kích thước" },
-        domProps: { value: _vm.eq.size },
-        on: {
-          input: function($event) {
-            if ($event.target.composing) {
-              return
-            }
-            _vm.$set(_vm.eq, "size", $event.target.value)
-          }
-        }
-      })
-    ]),
-    _vm._v(" "),
-    _c("div", { staticClass: "form-group" }, [
-      _vm._m(1),
-      _vm._v(" "),
-      _c("input", {
-        directives: [
-          {
-            name: "model",
-            rawName: "v-model",
             value: _vm.eq.price,
             expression: "eq.price"
           }
@@ -62813,7 +62734,7 @@ var render = function() {
     ]),
     _vm._v(" "),
     _c("div", { staticClass: "form-group" }, [
-      _vm._m(2),
+      _vm._m(1),
       _vm._v(" "),
       _c("input", {
         directives: [
@@ -62843,35 +62764,67 @@ var render = function() {
     ]),
     _vm._v(" "),
     _c("div", { staticClass: "form-group" }, [
-      _vm._m(3),
+      _vm._m(2),
       _vm._v(" "),
-      _c("input", {
-        directives: [
+      _c("div", { staticClass: "dropdown" }, [
+        _c(
+          "select",
           {
-            name: "model",
-            rawName: "v-model",
-            value: _vm.eq.location,
-            expression: "eq.location"
-          }
-        ],
-        staticClass: "form-control",
-        attrs: { type: "text", name: "location", placeholder: "Vị Trí" },
-        domProps: { value: _vm.eq.location },
-        on: {
-          input: function($event) {
-            if ($event.target.composing) {
-              return
+            directives: [
+              {
+                name: "model",
+                rawName: "v-model",
+                value: _vm.eq.condition,
+                expression: "eq.condition"
+              }
+            ],
+            staticClass: "custom-select mx-0",
+            on: {
+              change: function($event) {
+                var $$selectedVal = Array.prototype.filter
+                  .call($event.target.options, function(o) {
+                    return o.selected
+                  })
+                  .map(function(o) {
+                    var val = "_value" in o ? o._value : o.value
+                    return val
+                  })
+                _vm.$set(
+                  _vm.eq,
+                  "condition",
+                  $event.target.multiple ? $$selectedVal : $$selectedVal[0]
+                )
+              }
             }
-            _vm.$set(_vm.eq, "location", $event.target.value)
-          }
-        }
-      })
+          },
+          [
+            _c(
+              "option",
+              { attrs: { selected: "", value: "1" } },
+              [_c("equipment-condition", { attrs: { condition: 1 } })],
+              1
+            ),
+            _vm._v(" "),
+            _c(
+              "option",
+              { attrs: { value: "2" } },
+              [_c("equipment-condition", { attrs: { condition: 2 } })],
+              1
+            ),
+            _vm._v(" "),
+            _c(
+              "option",
+              { attrs: { value: "0" } },
+              [_c("equipment-condition", { attrs: { condition: 0 } })],
+              1
+            )
+          ]
+        )
+      ])
     ]),
     _vm._v(" "),
-    _vm._m(4),
-    _vm._v(" "),
     _c("div", { staticClass: "form-group" }, [
-      _vm._m(5),
+      _vm._m(3),
       _vm._v(" "),
       _c("textarea", {
         directives: [
@@ -62916,15 +62869,6 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("label", { attrs: { for: "equipmentName" } }, [
-      _c("i", { staticClass: "fa fa-cogs" }),
-      _vm._v(" Kích thước")
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
     return _c("label", { attrs: { for: "price" } }, [
       _c("i", { staticClass: "fa fa-money" }),
       _vm._v(" Giá nhập")
@@ -62944,19 +62888,8 @@ var staticRenderFns = [
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
     return _c("label", { attrs: { for: "price" } }, [
-      _c("i", { staticClass: "fa fa-location-arrow" }),
-      _vm._v(" Vị trí")
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "form-group" }, [
-      _c("label", { attrs: { for: "price" } }, [
-        _c("i", { staticClass: "fa fa-signal" }),
-        _vm._v(" Tình trạng")
-      ])
+      _c("i", { staticClass: "fa fa-signal" }),
+      _vm._v(" Tình trạng")
     ])
   },
   function() {
@@ -66168,19 +66101,6 @@ var render = function() {
                                                   },
                                                   [
                                                     _vm._v(
-                                                      _vm._s(equipment.size)
-                                                    )
-                                                  ]
-                                                ),
-                                                _vm._v(" "),
-                                                _c(
-                                                  "td",
-                                                  {
-                                                    staticClass:
-                                                      "text-center align-middle"
-                                                  },
-                                                  [
-                                                    _vm._v(
                                                       _vm._s(equipment.price)
                                                     )
                                                   ]
@@ -66197,19 +66117,6 @@ var render = function() {
                                                       _vm._s(
                                                         equipment.supplier.name
                                                       )
-                                                    )
-                                                  ]
-                                                ),
-                                                _vm._v(" "),
-                                                _c(
-                                                  "td",
-                                                  {
-                                                    staticClass:
-                                                      "text-center align-middle"
-                                                  },
-                                                  [
-                                                    _vm._v(
-                                                      _vm._s(equipment.location)
                                                     )
                                                   ]
                                                 ),
@@ -67198,16 +67105,6 @@ var staticRenderFns = [
             staticStyle: { width: "10%" },
             attrs: { scope: "col" }
           },
-          [_vm._v("Kích thước")]
-        ),
-        _vm._v(" "),
-        _c(
-          "th",
-          {
-            staticClass: "text-center",
-            staticStyle: { width: "10%" },
-            attrs: { scope: "col" }
-          },
           [_vm._v("Giá nhập")]
         ),
         _vm._v(" "),
@@ -67219,16 +67116,6 @@ var staticRenderFns = [
             attrs: { scope: "col" }
           },
           [_vm._v("Nhà cung cấp")]
-        ),
-        _vm._v(" "),
-        _c(
-          "th",
-          {
-            staticClass: "text-center",
-            staticStyle: { width: "8%" },
-            attrs: { scope: "col" }
-          },
-          [_vm._v("Vị trí")]
         ),
         _vm._v(" "),
         _c(
@@ -80907,7 +80794,6 @@ __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
 
 window.Vue = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.js");
 
-moment__WEBPACK_IMPORTED_MODULE_0___default()().format();
 Vue.filter('formatDate', function (value) {
   if (!value) return '';
   return moment__WEBPACK_IMPORTED_MODULE_0___default()(value).format("DD/MM/YYYY, LT");

@@ -72,10 +72,8 @@
                     <thead class="thead-light">
                         <tr>
                             <th class="text-center" scope="col" style="width: 5%">Mã</th>
-                            <th class="text-center" scope="col" style="width: 10%;">Kích thước</th>
                             <th class="text-center" scope="col" style="width: 10%;">Giá nhập</th>
                             <th class="text-center" scope="col" style="width: 12%;">Nhà cung cấp</th>
-                            <th class="text-center" scope="col" style="width: 8%;">Vị trí</th>
                             <th class="text-center" scope="col" style="width: 10%;">Tình trạng</th>
                             <th class="text-center" scope="col" style="width: 10%;">Trạng thái</th>
                             <th class="text-center" scope="col" style="width: 15%;">Ghi chú</th>
@@ -86,12 +84,10 @@
                     <tbody>
                         <tr v-for="(equipment, index) in template.equipments" :key="equipment.id">
                             <th class="align-middle text-center" scope="row">{{ equipment.id }}</th>
-                            <td class="align-middle text-center">{{ equipment.size}}</td>
                             <td class="align-middle text-center">{{ equipment.price }}</td>
                             <td class="align-middle text-center">
                                 {{ equipment.supplier.name }}
                             </td>
-                            <td class="align-middle text-center">{{ equipment.location }}</td>
                             <td class="align-middle text-center">
                                 <equipment-condition :condition="equipment.condition"></equipment-condition>
                             </td>

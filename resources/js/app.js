@@ -3,7 +3,6 @@ require('./bootstrap');
 window.Vue = require('vue');
 
 import moment from 'moment';
-moment().format();
 
 Vue.filter('formatDate', function (value) {
     if (!value) return ''
