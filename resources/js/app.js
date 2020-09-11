@@ -31,11 +31,32 @@ Vue.filter('formatEquipmentStatus', function(status){
             return 'Đang cho mượn';
     }
 });
+Vue.filter('formatOrderStatus', function(status){
+    switch(status) {
+        case -1:
+            return 'Từ chối';
+        case 0:
+            return 'Đang chờ';
+        case 1:
+            return 'Chấp nhận';
+        case 2:
+            return 'Xuất đồ';
+        case 3:
+            return 'Kiểm đồ';
+        case 4:
+            return 'Hoàn tất';
+    }
+});
 Vue.filter('formatEquipmentCondition', function(status){
     if(status == 0) return "Lỗi";
     if(status == 1) return "Bình thường";
     if(status >= 2) return "Tốt";
 });
+Vue.filter('formatEquipmentPrice', function(price){
+    return new Intl.NumberFormat().format(price) + 'đ';
+});
+
+
 
 Vue.component('testcomponent',require('../components/test.vue').default);
 Vue.component('multi-step-form',require('../components/multi-step-form.vue').default);
@@ -47,6 +68,8 @@ Vue.component('order',require('../components/order.vue').default);
 Vue.component('equipment-status',require('../components/equipment-status.vue').default);
 Vue.component('equipment-form',require('../components/equipment-form.vue').default);
 Vue.component('equipment-condition',require('../components/equipment-condition.vue').default);
+Vue.component('order-status',require('../components/order-status.vue').default);
+Vue.component('order-title',require('../components/order-title.vue').default);
 Vue.component('test',require('../components/test.vue').default);
 
 var app = new Vue({

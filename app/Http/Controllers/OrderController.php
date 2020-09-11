@@ -150,21 +150,18 @@ class OrderController extends Controller
     }
 
     public function back(Order $order) {
-        if($order->status < 2 || $order->status > 3) {
-            return 'Order status must be 2 or 3';
+        if($order->status < 1 || $order->status > 3) {
+            return 'Order status must be 1, 2 or 3';
         }
-        foreach($order->orderRequestInfos as $orderRequestInfo) {
-            foreach($orderRequestInfo->orderInfos as $orderInfo) {
-                if($order->status == 2) {
-                    $orderInfo->equipment->update([
-                        'status' => 1
-                        ]);
-                } 
-                // else {
-                //     $orderInfo->equipment->update([
-                //         'status' => 2
-                //     ]);
-                // }
+        if($order->status > 1) {
+            foreach($order->orderRequestInfos as $orderRequestInfo) {
+                foreach($orderRequestInfo->orderInfos as $orderInfo) {
+                    if($order->status == 2) {
+                        $orderInfo->equipment->update([
+                            'status' => 1
+                            ]);
+                    } 
+                }
             }
         }
         $order->update([

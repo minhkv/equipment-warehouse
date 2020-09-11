@@ -20,14 +20,14 @@
                             </div>
                             <div class="row py-4">
                                 <div class="dropdown col-2">
-                                    <select v-model="longTerm" v-on:change="filterOrder" class="custom-select mx-0">
+                                    <select v-model="longTerm" v-on:change="filterOrder" class="custom-select mx-0 cursor-pointer">
                                         <option selected value='-1'>Loại đơn</option>
                                         <option value='0'>Ngắn hạn</option>
                                         <option value='1'>Lâu dài</option>
                                     </select>
                                 </div>
                                 <div class="dropdown col-2">
-                                    <select v-model="orderStatus" v-on:change="filterOrder" class="custom-select mx-0">
+                                    <select v-model="orderStatus" v-on:change="filterOrder" class="custom-select mx-0 cursor-pointer">
                                         <option selected value='-2'>Trạng thái</option>
                                         <option value='0'>Đang chờ</option>
                                         <option value='2'>Đang tiến hành</option>
@@ -46,7 +46,7 @@
                                 <a :href="orderCreateUrl" type="button" class="btn btn-success ml-auto">Tạo đơn</a>
                             </div>
                             <div class="row">
-                                <table v-if="displayedOrders.length > 0" class="table">
+                                <table v-if="displayedOrders.length > 0" class="table table-hover">
                                     <thead class="thead-light">
                                         <tr>
                                             <th style="width: 5%;" class="align-middle text-center" scope="col">Mã</th>
@@ -61,7 +61,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr v-for="order in paginate(displayedOrders)" :key="order.id" :class="rowClass(order.status)">
+                                        <tr class="cursor-pointer" v-for="order in paginate(displayedOrders)" :key="order.id" :class="rowClass(order.status)" @click="redirect(orderDetailUrl(order.id))">
                                             <th scope="row" class="align-middle text-center">{{order.id}}</th>
                                             <td class="text-center align-middle">{{order.guest_name}}</td>
                                             <td class="text-center align-middle">{{order.long_term|formatBoolean}}</td>
@@ -70,14 +70,12 @@
                                             <td class="text-center align-middle">{{ getOrderRequestAmount(order) }}</td>
                                             <td class="text-center align-middle">{{ getOrderBorrowedAmount(order) }} </td>
                                             <td class="text-center align-middle">
-                                                <!-- <h5>{{$order->getStatus()}}</h5> -->
                                                 <h6>
-                                                    <span :class="getOrderStatusClass(order.status)">{{ getOrderStatusName(order.status) }}</span>
+                                                    <order-status :status="order.status"></order-status>
                                                 </h6>
                                             </td>
                                             <td class="align-middle">
-                                                <a :href="orderDetailUrl(order.id)" class="btn btn-primary btn-sm"><span class="fa fa-pencil" /></a>
-                                                <button v-if="order.status == -1 || order.status == 4" type="button" class="btn btn-danger btn-sm" @click="destroyOrder(order.id);filterOrder();">
+                                                <button :disabled="order.status != -1 && order.status != 4" type="button" class="btn btn-danger btn-sm" @click="destroyOrder(order.id);filterOrder();">
                                                     <span class="fa fa-trash"></span>
                                                 </button>
                                             </td>
@@ -205,26 +203,6 @@ export default {
             });
             return total;
         },
-        getOrderStatusClass(status) {
-            return {
-                'badge': true, 
-                'badge-pill': true, 
-                'badge-danger': status == -1,
-                'badge-warning': status == 0,
-                'badge-primary': status >= 1 && status <= 3,
-                'badge-success': status == 4
-            };
-        },
-        getOrderStatusName(status) {
-            switch(status) {
-                case -1: return 'Từ chối';
-                case 0: return 'Đang chờ';
-                case 1: return 'Chấp nhận';
-                case 2: return 'Xuất đồ';
-                case 3: return 'Trả đồ';
-                case 4: return 'Hoàn tất';
-            }
-        },
         rowClass(status) {
             return {
                 'table-danger': status == -1,
@@ -232,10 +210,14 @@ export default {
                 'table-primary': status > 0 && status < 4,
                 'table-success': status == 4 
             };
+        },
+        redirect(url) {
+            console.log(url);
+            window.location.href = url;
         }
     }
 }
 </script>
 <style scoped>
-
+    
 </style>

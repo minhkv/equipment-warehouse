@@ -72,6 +72,7 @@
                     <thead class="thead-light">
                         <tr>
                             <th class="text-center" scope="col" style="width: 5%">Mã</th>
+                            <th class="text-center" scope="col" style="width: 15%;">Ngày nhập</th>
                             <th class="text-center" scope="col" style="width: 10%;">Giá nhập</th>
                             <th class="text-center" scope="col" style="width: 12%;">Nhà cung cấp</th>
                             <th class="text-center" scope="col" style="width: 10%;">Tình trạng</th>
@@ -82,9 +83,10 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr v-for="(equipment, index) in template.equipments" :key="equipment.id">
+                        <tr v-for="(equipment, index) in template.equipments" :key="equipment.id" class="cursor-pointer">
                             <th class="align-middle text-center" scope="row">{{ equipment.id }}</th>
-                            <td class="align-middle text-center">{{ equipment.price }}</td>
+                            <td class="align-middle text-center">{{ equipment.input_date|formatDate }}</td>
+                            <td class="align-middle text-center">{{ equipment.price|formatEquipmentPrice }}</td>
                             <td class="align-middle text-center">
                                 {{ equipment.supplier.name }}
                             </td>

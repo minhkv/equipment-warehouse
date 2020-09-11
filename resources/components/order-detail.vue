@@ -7,7 +7,7 @@
                     <i class="fa fa-chevron-left"></i> Quay lại
                 </a>
                 <h3>Đơn mượn: {{order.id}} 
-                    <span :class="displayStatus()">{{getStatusName(order.status)}}</span>
+                    <order-status :status="order.status"></order-status>
                 </h3>
                 <div class="col-10 mx-auto py-3">
                     <div class="row">
@@ -63,9 +63,7 @@
                 </div>
                 <hr>
                 <div class="row justify-content-center">
-                    <h3>
-                        {{ getTitle() }}
-                    </h3>
+                    <order-title :status="order.status"></order-title>
                 </div>
                 <div class="row mb-4">
                     <div class="col-6 mx-auto">
@@ -137,7 +135,7 @@
                                                     <tbody>
                                                         <tr v-for="equipment in info.template.equipments" :key="equipment.id">
                                                             <th class="text-center align-middle" scope="row">{{ equipment.id }}</th>
-                                                            <td class="text-center align-middle">{{ equipment.price }}</td>
+                                                            <td class="text-center align-middle">{{ equipment.price|formatEquipmentPrice }}</td>
                                                             <td class="text-center align-middle">{{ equipment.supplier.name }}</td>
                                                             <td class="text-center align-middle">
                                                                 <equipment-condition :condition="equipment.condition"></equipment-condition>
@@ -228,7 +226,7 @@
                 
                 <hr>
                 <div class="row justify-content-center">
-                    <button v-if="order.status == 2 || order.status == 3" :disabled="buttonDisabled" @click="back" class="btn btn-secondary mr-2">Quay lại</button>
+                    <button v-if="order.status >= 1 && order.status <= 3" :disabled="buttonDisabled" @click="back" class="btn btn-secondary mr-2">Quay lại</button>
                     <button v-if="order.status == 0" :disabled="buttonDisabled" @click="acceptOrder" class="btn btn-primary mx-2" data-abc="true">Chấp nhận</button>
                     <button v-if="order.status == 0" :disabled="buttonDisabled" @click="rejectOrder" class="btn btn-danger" data-abc="true">Từ chối</button>
                     <button v-if="order.status == 1" :disabled="buttonDisabled" @click="equipmentOutput" class="btn btn-primary" data-abc="true">Xuất đồ</button>
@@ -484,49 +482,6 @@ export default {
         this.filterInfo();
     },
     methods: {
-        displayStatus() {
-            return {
-                'badge': true, 
-                'badge-pill':true, 
-                'badge-danger': this.order.status == -1,
-                'badge-warning': this.order.status == 0,
-                'badge-primary': this.order.status > 0 && this.order.status < 4,
-                'badge-success': this.order.status == 4
-            };
-        },
-        getStatusName() {
-            switch(this.order.status) {
-                case -1:
-                    return 'Từ chối';
-                case 0:
-                    return 'Đang chờ';
-                case 1:
-                    return 'Chấp nhận';
-                case 2:
-                    return 'Xuất đồ';
-                case 3:
-                    return 'Kiểm đồ';
-                case 4:
-                    return 'Hoàn tất';
-            }
-        },
-        getTitle() {
-            switch(this.order.status) {
-                case -1:
-                    return 'Từ chối';
-                case 0:
-                    return 'Duyệt đơn';
-                case 1:
-                    return 'Chọn đồ';
-                case 2:
-                    return 'Kiểm đồ';
-                case 3:
-                    return 'Hoàn tất';
-                case 4:
-                    return 'Hoàn tất';
-            }
-        },
-
         getBorrowedAmount: function(template_id) {
             return this.templateBorrowedAmount[template_id];
         },
