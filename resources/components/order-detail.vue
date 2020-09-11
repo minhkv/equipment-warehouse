@@ -76,7 +76,7 @@
                     </div>
                 </div>
 
-                <table class="table mt-2 templateTable">
+                <table class="table mt-2 table-hover">
                     <thead class="thead-light">
                         <tr>
                             <th class="text-center" scope="col" width="10%"></th>
@@ -120,7 +120,7 @@
                                                 </button>
                                             </div>
                                             <div class="modal-body">
-                                                <table v-if="order.status <= 1" class="table">
+                                                <table v-if="order.status <= 1" class="table table-hover">
                                                     <thead class="thead-light">
                                                         <tr>
                                                             <th class="text-center" scope="col" style="width: 5%">Mã</th>
@@ -151,7 +151,7 @@
                                                         </tr>
                                                     </tbody>
                                                 </table>
-                                                <table v-else class="table">
+                                                <table v-else class="table table-hover">
                                                     <thead class="thead-light">
                                                         <tr>
                                                             <th class="text-center" scope="col" style="width: 5%;">Mã</th>
