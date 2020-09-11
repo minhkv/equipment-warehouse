@@ -93,7 +93,7 @@
                             </td>
                             <td class="align-middle text-center">{{ equipment.location }}</td>
                             <td class="align-middle text-center">
-                                {{ equipment.condition|formatEquipmentCondition }}
+                                <equipment-condition :condition="equipment.condition"></equipment-condition>
                             </td>
                             <td class="align-middle text-center">
                                 <equipment-status :status="equipment.status"></equipment-status>

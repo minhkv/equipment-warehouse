@@ -144,13 +144,7 @@
                                                             <td class="text-center align-middle">{{ equipment.supplier.name }}</td>
                                                             <td class="text-center align-middle">{{ equipment.location }}</td>
                                                             <td class="text-center align-middle">
-                                                                <div>
-                                                                    <span :class="{'fa': true, 'fa-star': true, 'checked':  equipment.condition >= 1}"></span>
-                                                                    <span :class="{'fa': true, 'fa-star': true, 'checked':  equipment.condition >= 2}"></span>
-                                                                    <span :class="{'fa': true, 'fa-star': true, 'checked':  equipment.condition >= 3}"></span>
-                                                                    <span :class="{'fa': true, 'fa-star': true, 'checked':  equipment.condition >= 4}"></span>
-                                                                    <span :class="{'fa': true, 'fa-star': true, 'checked':  equipment.condition >= 5}"></span>
-                                                                </div>
+                                                                <equipment-condition :condition="equipment.condition"></equipment-condition>
                                                             </td>
                                                             <td class="align-middle text-center">
                                                                 <equipment-status :status="equipment.status"></equipment-status>
@@ -180,33 +174,20 @@
                                                                 {{ orderInfo.equipment.id }}
                                                             </th>
                                                             <td class="text-center align-middle">
-                                                                <div>
-                                                                    <span :class="{'fa': true, 'fa-star': true, 'checked':  orderInfo.condition_before >= 1}"></span>
-                                                                    <span :class="{'fa': true, 'fa-star': true, 'checked':  orderInfo.condition_before >= 2}"></span>
-                                                                    <span :class="{'fa': true, 'fa-star': true, 'checked':  orderInfo.condition_before >= 3}"></span>
-                                                                    <span :class="{'fa': true, 'fa-star': true, 'checked':  orderInfo.condition_before >= 4}"></span>
-                                                                    <span :class="{'fa': true, 'fa-star': true, 'checked':  orderInfo.condition_before >= 5}"></span>
-                                                                </div>
+                                                                <equipment-condition :condition="orderInfo.condition_before"></equipment-condition>
                                                             </td>
                                                             <td class="text-center align-middle">
                                                                 <div v-if="order.status <= 2" :id="orderInfo.equipment.id" >
-                                                                    <div class="starrating risingstar d-flex justify-content-center flex-row-reverse">
-                                                                        <input v-model="conditionReceived[orderInfo.equipment.id]" type="radio" :id="'star5-' + orderInfo.equipment.id" :name="'condition-received-' + orderInfo.equipment.id" value="5" :class="{'checked': orderInfo.equipment.condition == 5}"  /><label :for="'star5-' + orderInfo.equipment.id" onmouseout="normalText('scoreDescription-' + orderInfo.equipment.id')" onmouseover="changeText('scoreDescription-' + orderInfo.equipment.id', 'Hoàn hảo')" title="5 star">5</label>
-                                                                        <input v-model="conditionReceived[orderInfo.equipment.id]" type="radio" :id="'star4-' + orderInfo.equipment.id" :name="'condition-received-' + orderInfo.equipment.id" value="4" :class="{'checked': orderInfo.equipment.condition == 4}"  /><label :for="'star4-' + orderInfo.equipment.id" onmouseout="normalText('scoreDescription-' + orderInfo.equipment.id')" onmouseover="changeText('scoreDescription-' + orderInfo.equipment.id', 'Tốt')" title="4 star">4</label>
-                                                                        <input v-model="conditionReceived[orderInfo.equipment.id]" type="radio" :id="'star3-' + orderInfo.equipment.id" :name="'condition-received-' + orderInfo.equipment.id" value="3" :class="{'checked': orderInfo.equipment.condition == 3}"  /><label :for="'star3-' + orderInfo.equipment.id" onmouseout="normalText('scoreDescription-' + orderInfo.equipment.id')" onmouseover="changeText('scoreDescription-' + orderInfo.equipment.id', 'Bình thường')" title="3 star">3</label>
-                                                                        <input v-model="conditionReceived[orderInfo.equipment.id]" type="radio" :id="'star2-' + orderInfo.equipment.id" :name="'condition-received-' + orderInfo.equipment.id" value="2" :class="{'checked': orderInfo.equipment.condition == 2}"  /><label :for="'star2-' + orderInfo.equipment.id" onmouseout="normalText('scoreDescription-' + orderInfo.equipment.id')" onmouseover="changeText('scoreDescription-' + orderInfo.equipment.id', 'Không tốt')" title="2 star">2</label>
-                                                                        <input v-model="conditionReceived[orderInfo.equipment.id]" type="radio" :id="'star1-' + orderInfo.equipment.id" :name="'condition-received-' + orderInfo.equipment.id" value="1" :class="{'checked': orderInfo.equipment.condition == 1}"  /><label :for="'star1-' + orderInfo.equipment.id" onmouseout="normalText('scoreDescription-' + orderInfo.equipment.id')" onmouseover="changeText('scoreDescription-' + orderInfo.equipment.id', 'Kém')" title="1 star">1</label>
-                                                                    </div>
-                                                                    <div class="d-flex justify-content-center">
-                                                                        <p :id="'scoreDescription-' + orderInfo.equipment.id">Đánh giá</p>
+                                                                    <div class="dropdown">
+                                                                        <select v-model="orderInfo.condition_received" class="custom-select mx-0">
+                                                                            <option selected value='1'><equipment-condition :condition="1"></equipment-condition></option>
+                                                                            <option value='2'><equipment-condition :condition="2"></equipment-condition></option>
+                                                                            <option value='0'><equipment-condition :condition="0"></equipment-condition></option>
+                                                                        </select>
                                                                     </div>
                                                                 </div>
                                                                 <div v-else>
-                                                                    <span :class="{'fa': true, 'fa-star': true, 'checked':  orderInfo.condition_received >= 1}"></span>
-                                                                    <span :class="{'fa': true, 'fa-star': true, 'checked':  orderInfo.condition_received >= 2}"></span>
-                                                                    <span :class="{'fa': true, 'fa-star': true, 'checked':  orderInfo.condition_received >= 3}"></span>
-                                                                    <span :class="{'fa': true, 'fa-star': true, 'checked':  orderInfo.condition_received >= 4}"></span>
-                                                                    <span :class="{'fa': true, 'fa-star': true, 'checked':  orderInfo.condition_received >= 5}"></span>
+                                                                    <equipment-condition :condition="orderInfo.condition_received"></equipment-condition>
                                                                 </div>
                                                             </td>
                                                             <td class="text-center">
@@ -463,7 +444,6 @@ export default {
             equipmentReceived: [],
             equipmentLost: [],
             orderRequestInfos: [],
-            conditionReceived: [],
             displayedInfos: [],
             search: '',
             page: 1,
@@ -476,7 +456,6 @@ export default {
         let equipmentReceived = {};
         let equipmentLost = {};
         let equipmentIds = [];
-        let conditionReceived = {};
         let templateBorrowedAmount = {};
         let orderRequestInfos = {};
         this.order.order_request_infos.forEach(function(info) {
@@ -484,14 +463,11 @@ export default {
                 equipmentSelected[equipment.id] = false;
             });
             info.order_infos.forEach(function(order_info) {
-                if(!order_info.condition_before) {
+                if(order_info.condition_before == undefined) {
                     order_info.condition_before = order_info.equipment.condition;
                 }
-                if(order_info.condition_received) {
-                    conditionReceived[order_info.equipment_id] = order_info.condition_received;
-                } else {
+                if(order_info.condition_received == undefined) {
                     order_info.condition_received = order_info.equipment.condition;
-                    conditionReceived[order_info.equipment_id] = order_info.equipment.condition;
                 }
                 equipmentSelected[order_info.equipment_id] = true;
                 equipmentReceived[order_info.equipment_id] = (order_info.status == 1);
@@ -506,7 +482,6 @@ export default {
         this.equipmentReceived = equipmentReceived;
         this.equipmentLost = equipmentLost;
         this.equipmentIds = equipmentIds;
-        this.conditionReceived = conditionReceived;
         this.templateBorrowedAmount = templateBorrowedAmount;
         this.orderRequestInfos = orderRequestInfos;
 
@@ -555,22 +530,7 @@ export default {
                     return 'Hoàn tất';
             }
         },
-        getEquipmentStatusName(status) {
-            switch(status) {
-                case 0: return "Thất lạc";
-                case 1: return "Sẵn sàng";
-                case 2: return "Đang cho mượn";
-            }
-        },
-        displayEquipmentStatusClass(status) {
-            return {
-                'badge': true, 
-                'badge-pill':true, 
-                'badge-danger': status == 0,
-                'badge-success': status == 1,
-                'badge-primary': status == 2
-            };
-        },
+
         getBorrowedAmount: function(template_id) {
             return this.templateBorrowedAmount[template_id];
         },
@@ -724,21 +684,12 @@ export default {
             }
             return true;
         },
-        updateConditionReceived: function() {
-            for (let i in this.orderRequestInfos) {
-                for (let j in this.orderRequestInfos[i].order_infos) {
-                    var orderInfo = this.orderRequestInfos[i].order_infos[j];
-                    orderInfo.condition_received = parseInt(this.conditionReceived[orderInfo.equipment_id]);
-                    this.orderRequestInfos[i].order_infos[j].condition_received = orderInfo.condition_received;
-                }
-            }
-        },
         equipmentReturn: function() {
             console.log('return');
             if (!this.equipmentCheck()) return;
             this.updateOrderInfoStatus();
+            console.log(this.orderRequestInfos);
             this.disableButton();
-            this.updateConditionReceived();
             axios({
                     url: this.equipmentReturnUrl,
                     method: 'put',

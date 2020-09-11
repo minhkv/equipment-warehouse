@@ -260,7 +260,8 @@ class OrderController extends Controller
             foreach($orderRequestInfos[$template_id]['order_infos'] as $orderInfo){
                 Equipment::where('id', $orderInfo['equipment_id'])->update([
                     'status' => $orderInfo['status'],
-                    'condition' => $orderInfo['condition_received']
+                    'condition' => $orderInfo['condition_received'],
+                    'note' => $orderInfo['note']
                 ]);
             }
         }
