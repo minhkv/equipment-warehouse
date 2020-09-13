@@ -1,6 +1,9 @@
 <template>
     <div>
-
+        <div class="form-group">
+            <label for="price"><i class="fa fa-calendar"></i> Ngày nhập</label>
+            <input type="datetime-local" class="form-control" name="price" v-model="eq.input_date" placeholder="Giá nhập">
+        </div>
         <div class="form-group">
             <label for="price"><i class="fa fa-money"></i> Giá nhập</label>
             <input type="text" class="form-control" name="price" v-model="eq.price" placeholder="Giá nhập">
@@ -29,6 +32,7 @@
     </div>
 </template>
 <script>
+import moment from 'moment';
 export default {
     props: [
         'equipment', 
@@ -41,6 +45,7 @@ export default {
             eq: {},
             event: '',
             blankEq: {
+                input_date: moment().format("YYYY-MM-DDTHH:MM:SS"),
                 size: '',
                 price: '',
                 supplier_id: '',
@@ -55,6 +60,7 @@ export default {
         Object.assign(this.eq, this.blankEq);
         if (this.equipment) {
             Object.assign(this.eq, this.equipment);
+            this.eq.input_date = moment(this.eq.input_date).format("YYYY-MM-DDTHH:MM:SS");
         }
 
         if(this.template) {
@@ -69,6 +75,10 @@ export default {
     },
     methods: {
         validateData() {
+            if(!this.eq.input_date) {
+                alert('Bạn chưa nhập ngày');
+                return false;
+            }
             if(!this.eq.price) {
                 alert('Bạn chưa nhập giá');
                 return false;

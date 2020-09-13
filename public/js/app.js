@@ -2197,6 +2197,9 @@ __webpack_require__.r(__webpack_exports__);
         console.log(err);
       });
     },
+    openModal: function openModal(id) {
+      console.log('openModal ' + id); // setTimeout(function() {$(id).modal('show');}, 200);
+    },
     closeModal: function closeModal(id) {
       console.log('closeModal ' + id);
       $(id).modal('toggle');
@@ -2216,6 +2219,8 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js");
+/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(moment__WEBPACK_IMPORTED_MODULE_0__);
 //
 //
 //
@@ -2246,6 +2251,10 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['equipment', 'template', 'method', 'url'],
   data: function data() {
@@ -2253,6 +2262,7 @@ __webpack_require__.r(__webpack_exports__);
       eq: {},
       event: '',
       blankEq: {
+        input_date: moment__WEBPACK_IMPORTED_MODULE_0___default()().format("YYYY-MM-DDTHH:MM:SS"),
         size: '',
         price: '',
         supplier_id: '',
@@ -2268,6 +2278,7 @@ __webpack_require__.r(__webpack_exports__);
 
     if (this.equipment) {
       Object.assign(this.eq, this.equipment);
+      this.eq.input_date = moment__WEBPACK_IMPORTED_MODULE_0___default()(this.eq.input_date).format("YYYY-MM-DDTHH:MM:SS");
     }
 
     if (this.template) {
@@ -2284,6 +2295,11 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {
     validateData: function validateData() {
+      if (!this.eq.input_date) {
+        alert('Bạn chưa nhập ngày');
+        return false;
+      }
+
       if (!this.eq.price) {
         alert('Bạn chưa nhập giá');
         return false;
@@ -62253,7 +62269,15 @@ var render = function() {
             _vm._l(_vm.template.equipments, function(equipment, index) {
               return _c(
                 "tr",
-                { key: equipment.id, staticClass: "cursor-pointer" },
+                {
+                  key: equipment.id,
+                  staticClass: "cursor-pointer",
+                  on: {
+                    click: function($event) {
+                      return _vm.openModal("#editEquipment" + equipment.id)
+                    }
+                  }
+                },
                 [
                   _c(
                     "th",
@@ -62730,6 +62754,36 @@ var render = function() {
           {
             name: "model",
             rawName: "v-model",
+            value: _vm.eq.input_date,
+            expression: "eq.input_date"
+          }
+        ],
+        staticClass: "form-control",
+        attrs: {
+          type: "datetime-local",
+          name: "price",
+          placeholder: "Giá nhập"
+        },
+        domProps: { value: _vm.eq.input_date },
+        on: {
+          input: function($event) {
+            if ($event.target.composing) {
+              return
+            }
+            _vm.$set(_vm.eq, "input_date", $event.target.value)
+          }
+        }
+      })
+    ]),
+    _vm._v(" "),
+    _c("div", { staticClass: "form-group" }, [
+      _vm._m(1),
+      _vm._v(" "),
+      _c("input", {
+        directives: [
+          {
+            name: "model",
+            rawName: "v-model",
             value: _vm.eq.price,
             expression: "eq.price"
           }
@@ -62749,7 +62803,7 @@ var render = function() {
     ]),
     _vm._v(" "),
     _c("div", { staticClass: "form-group" }, [
-      _vm._m(1),
+      _vm._m(2),
       _vm._v(" "),
       _c("input", {
         directives: [
@@ -62779,7 +62833,7 @@ var render = function() {
     ]),
     _vm._v(" "),
     _c("div", { staticClass: "form-group" }, [
-      _vm._m(2),
+      _vm._m(3),
       _vm._v(" "),
       _c("div", { staticClass: "dropdown" }, [
         _c(
@@ -62839,7 +62893,7 @@ var render = function() {
     ]),
     _vm._v(" "),
     _c("div", { staticClass: "form-group" }, [
-      _vm._m(3),
+      _vm._m(4),
       _vm._v(" "),
       _c("textarea", {
         directives: [
@@ -62880,6 +62934,15 @@ var render = function() {
   ])
 }
 var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("label", { attrs: { for: "price" } }, [
+      _c("i", { staticClass: "fa fa-calendar" }),
+      _vm._v(" Ngày nhập")
+    ])
+  },
   function() {
     var _vm = this
     var _h = _vm.$createElement
@@ -81023,10 +81086,6 @@ __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
 window.Vue = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.js");
 
 Vue.filter('formatDate', function (value) {
-  if (!value) return '';
-  return moment__WEBPACK_IMPORTED_MODULE_0___default()(value).format("DD/MM/YYYY, LT");
-});
-Vue.filter('formatDateDatabase', function (value) {
   if (!value) return '';
   return moment__WEBPACK_IMPORTED_MODULE_0___default()(value).format("DD/MM/YYYY, LT");
 });

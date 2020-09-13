@@ -9,11 +9,6 @@ Vue.filter('formatDate', function (value) {
     return moment(value).format("DD/MM/YYYY, LT")
 });
 
-Vue.filter('formatDateDatabase', function(value) {
-    if (!value) return ''
-    return moment(value).format("DD/MM/YYYY, LT")
-});
-
 Vue.filter('formatBoolean', function (value) {
     if (value) return 'Có';
     return 'Không';

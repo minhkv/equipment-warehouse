@@ -83,7 +83,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr v-for="(equipment, index) in template.equipments" :key="equipment.id" class="cursor-pointer">
+                        <tr v-for="(equipment, index) in template.equipments" :key="equipment.id" class="cursor-pointer" @click="openModal('#editEquipment' + equipment.id)">
                             <th class="align-middle text-center" scope="row">{{ equipment.id }}</th>
                             <td class="align-middle text-center">{{ equipment.input_date|formatDate }}</td>
                             <td class="align-middle text-center">{{ equipment.price|formatEquipmentPrice }}</td>
@@ -260,6 +260,10 @@
                 }).catch(function(err) {
                     console.log(err);
                 });
+            },
+            openModal(id) {
+                console.log('openModal ' + id);
+                // setTimeout(function() {$(id).modal('show');}, 200);
             },
             closeModal(id) {
                 console.log('closeModal ' + id);
