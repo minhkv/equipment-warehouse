@@ -65,6 +65,8 @@ Vue.component('equipment-form',require('../components/equipment-form.vue').defau
 Vue.component('equipment-condition',require('../components/equipment-condition.vue').default);
 Vue.component('order-status',require('../components/order-status.vue').default);
 Vue.component('order-title',require('../components/order-title.vue').default);
+Vue.component('supplier-name',require('../components/supplier-name.vue').default);
+Vue.component('autocomplete-input',require('../components/autocomplete-input.vue').default);
 Vue.component('test',require('../components/test.vue').default);
 
 var app = new Vue({

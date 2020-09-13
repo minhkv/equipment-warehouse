@@ -83,12 +83,12 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr v-for="(equipment, index) in template.equipments" :key="equipment.id" class="cursor-pointer" @click="openModal('#editEquipment' + equipment.id)">
+                        <tr v-for="(equipment, index) in template.equipments" :key="equipment.id" class="cursor-pointer">
                             <th class="align-middle text-center" scope="row">{{ equipment.id }}</th>
                             <td class="align-middle text-center">{{ equipment.input_date|formatDate }}</td>
                             <td class="align-middle text-center">{{ equipment.price|formatEquipmentPrice }}</td>
                             <td class="align-middle text-center">
-                                {{ equipment.supplier.name }}
+                                <supplier-name :equipment="equipment"></supplier-name>
                             </td>
                             <td class="align-middle text-center">
                                 <equipment-condition :condition="equipment.condition"></equipment-condition>
@@ -112,7 +112,7 @@
                                                 </button>
                                             </div>
                                             <div class="modal-body">
-                                                <equipment-form :equipment="equipment" @update="updateEquipment($event, index)" @close="closeModal('#editEquipment' + equipment.id)" method="PUT" :url="equipmentIndexUrl + '/' + equipment.id"></equipment-form>
+                                                <equipment-form :equipment="equipment" :suppliers="suppliers" @update="updateEquipment($event, index)" @close="closeModal('#editEquipment' + equipment.id)" method="PUT" :url="equipmentIndexUrl + '/' + equipment.id"></equipment-form>
                                             </div>
                                         </div>
                                     </div>
@@ -140,7 +140,7 @@
                                     </button>
                                 </div>
                                 <div class="modal-body">
-                                    <equipment-form :template="template" :url="equipmentCreateUrl" method="POST" @store="addEquipment($event)" @close="closeModal('#addEquipment')"></equipment-form>
+                                    <equipment-form :template="template" :suppliers="suppliers" :url="equipmentCreateUrl" method="POST" @store="addEquipment($event)" @close="closeModal('#addEquipment')"></equipment-form>
                                 </div>
                             </div>
                         </div>

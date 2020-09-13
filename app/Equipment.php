@@ -14,6 +14,7 @@ class Equipment extends Model
         'price', 
         'size',
         'supplier_id',
+        'supplier_name',
         'location',
         'condition',
         'status',
@@ -33,7 +34,5 @@ class Equipment extends Model
     public function getRecentOrderInfo() {
         return $this->orderInfos()->with('orderRequestInfo', 'orderRequestInfo.order', 'orderRequestInfo.order.guest')->orderBy('created_at', 'desc')->first();
     }
-    // public function getPriceAttribute($value) {
-    //     return number_format($value).' đ';
-    // }
+
 }

@@ -54,18 +54,10 @@ Route::middleware('auth')->group(function() {
     Route::put('order-request/{order}/return', 'OrderController@equipmentReturn')->name('order-request.return');
     Route::put('order-request/{order}/complete', 'OrderController@completeOrder')->name('order-request.complete');
     Route::put('order-request/{order}/back', 'OrderController@back')->name('order-request.back');
-    Route::get('/test/{equipmentTemplate}', function(App\EquipmentTemplate $equipmentTemplate) {
+    Route::get('/test', function() {
         $suppliers = App\Supplier::all();
-        $equipmentTemplate->load([
-            'equipments',
-            'equipments.supplier'
-            ]);
         return view('test')->with([
-            'equipmentTemplate' => $equipmentTemplate,
             'suppliers' => $suppliers
         ]);
-    });
-    Route::put('/single-file', function(Request $request) {
-        return $request->file->getClientOriginalName();
     });
 });

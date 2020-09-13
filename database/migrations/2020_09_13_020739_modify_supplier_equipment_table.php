@@ -14,7 +14,8 @@ class ModifySupplierEquipmentTable extends Migration
     public function up()
     {
         Schema::table('equipments', function (Blueprint $table) {
-            //
+            $table->unsignedBigInteger('supplier_id')->nullable()->change();
+            $table->string('supplier_name')->nullable()->after('supplier_id');
         });
     }
 
@@ -26,7 +27,8 @@ class ModifySupplierEquipmentTable extends Migration
     public function down()
     {
         Schema::table('equipments', function (Blueprint $table) {
-            //
+            $table->unsignedBigInteger('supplier_id')->default('1')->change();
+            $table->dropColumn('supplier_name');
         });
     }
 }

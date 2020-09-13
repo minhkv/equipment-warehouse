@@ -2,7 +2,7 @@
     <div>
         <div class="form-group">
             <label for="price"><i class="fa fa-calendar"></i> Ngày nhập</label>
-            <input type="datetime-local" class="form-control" name="price" v-model="eq.input_date" placeholder="Giá nhập">
+            <input type="datetime-local" class="form-control" v-model="eq.input_date" placeholder="Giá nhập">
         </div>
         <div class="form-group">
             <label for="price"><i class="fa fa-money"></i> Giá nhập</label>
@@ -10,15 +10,15 @@
         </div>
         <div class="form-group">
             <label for="price"><i class="fa fa-building"></i> Nhà cung cấp</label>
-            <input type="text" class="form-control" name="supplier_id" v-model="eq.supplier_id" placeholder="Nhà cung cấp">
+            <autocomplete-input @change="changeSupplier($event)" :items="suppliers" name-attribute="name" placeholder="Nhà cung cấp" :value="eq.supplier_name"></autocomplete-input>
         </div>
 
         <div class="form-group">
             <label for="price"><i class="fa fa-signal"></i> Tình trạng</label>
             <div class="dropdown">
                 <select v-model="eq.condition" class="custom-select mx-0">
-                    <option selected value='1'><equipment-condition :condition="1"></equipment-condition></option>
                     <option value='2'><equipment-condition :condition="2"></equipment-condition></option>
+                    <option selected value='1'><equipment-condition :condition="1"></equipment-condition></option>
                     <option value='0'><equipment-condition :condition="0"></equipment-condition></option>
                 </select>
             </div>
@@ -37,6 +37,7 @@ export default {
     props: [
         'equipment', 
         'template',
+        'suppliers',
         'method',
         'url'
         ],
@@ -46,11 +47,10 @@ export default {
             event: '',
             blankEq: {
                 input_date: moment().format("YYYY-MM-DDTHH:MM:SS"),
-                size: '',
                 price: '',
                 supplier_id: '',
-                location: '',
-                condition: 5,
+                supplier_name: '',
+                condition: 2,
                 status: 1,
                 note: '',
             }
@@ -83,7 +83,7 @@ export default {
                 alert('Bạn chưa nhập giá');
                 return false;
             }
-            if(!this.eq.supplier_id) {
+            if(!this.eq.supplier_id && !this.eq.supplier_name) {
                 alert('Bạn chưa nhập nhà cung cấp');
                 return false;
             }
@@ -120,6 +120,16 @@ export default {
             console.log('sendEvent');
             this.$emit(this.event, this.eq);
             this.$emit('close');
+        },
+        changeSupplier(result){
+            console.log('changeSupplier')
+            console.log(result);
+            this.eq.supplier_name = result.value.name;
+            if(result.found) {
+                this.eq.supplier_id = result.value.id;
+            } else {
+                this.eq.supplier_id = null;
+            }
         }
     }
 };

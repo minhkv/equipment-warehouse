@@ -136,7 +136,8 @@
                                                         <tr v-for="equipment in info.template.equipments" :key="equipment.id">
                                                             <th class="text-center align-middle" scope="row">{{ equipment.id }}</th>
                                                             <td class="text-center align-middle">{{ equipment.price|formatEquipmentPrice }}</td>
-                                                            <td class="text-center align-middle">{{ equipment.supplier.name }}</td>
+                                                            <td class="text-center align-middle">
+                                                                <supplier-name :equipment="equipment"></supplier-name></td>
                                                             <td class="text-center align-middle">
                                                                 <equipment-condition :condition="equipment.condition"></equipment-condition>
                                                             </td>
