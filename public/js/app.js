@@ -4103,6 +4103,9 @@ __webpack_require__.r(__webpack_exports__);
         console.log(error);
       });
     },
+    enableButton: function enableButton() {
+      this.buttonDisabled = false;
+    },
     disableButton: function disableButton() {
       this.buttonDisabled = true;
     },

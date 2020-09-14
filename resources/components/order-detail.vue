@@ -677,6 +677,9 @@ export default {
                     console.log(error);
                 });
         },
+        enableButton: function() {
+            this.buttonDisabled = false;
+        },
         disableButton: function() {
             this.buttonDisabled = true;
         },

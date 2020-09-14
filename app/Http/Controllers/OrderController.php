@@ -160,6 +160,9 @@ class OrderController extends Controller
                         $orderInfo->equipment->update([
                             'status' => 1
                             ]);
+                        $orderInfo->update([
+                            'status' => 3   // pending
+                        ]);
                     } 
                 }
             }
@@ -198,21 +201,23 @@ class OrderController extends Controller
         $dateOutput = date_create($request->input('dateOutput'));
 
         foreach($order->orderRequestInfos as $orderRequestInfoModel) {
+            // Update Borrowed Amount
             $template_id = $orderRequestInfoModel->template_id;
             $orderRequestInfoModel->update([
                 'borrowed_amount' => $templateBorrowedAmount[$template_id]
             ]);
-            if($orderRequestInfoModel->orderInfos->count() > 0) {
-                $orderRequestInfoModel->orderInfos()->delete();
-            }
+            // Create new orderInfo
             foreach($orderRequestInfos[$template_id]['order_infos'] as $orderInfo){
-                Equipment::where('id', $orderInfo['equipment_id'])->update([
-                    'status' => 2
-                ]);
+                // Check if equipment is borrowed
+                $equipment = Equipment::where('id', $orderInfo['equipment_id'])->first();
+                // Delete orderInfo which is pending and create new orderInfo
+                $equipment->orderInfos()->where('status', 3)->delete();
                 $orderRequestInfoModel->orderInfos()->create([
                     'equipment_id' => $orderInfo['equipment_id'],
                     'condition_before' => $orderInfo['condition_before'],
                 ]);
+                // Update equipment status to working
+                $equipment->update(['status' => 2]);
             }
         }
         $order->update([
