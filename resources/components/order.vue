@@ -20,33 +20,21 @@
                             </div>
                             <div class="row py-4">
                                 <div class="dropdown col-2">
-                                    <select v-model="longTerm" v-on:change="filterOrder" class="custom-select mx-0 cursor-pointer">
-                                        <option selected value='-1'>Loại đơn</option>
-                                        <option value='0'>Ngắn hạn</option>
-                                        <option value='1'>Lâu dài</option>
-                                    </select>
+                                    <!-- filterLongTermItems -->
+                                    <selection-filter :items="orders" :values="filterLongTermConfig.values" :all="filterLongTermConfig.all" :by="filterLongTermConfig.by" @change="filterLongTerm($event)"></selection-filter>
                                 </div>
                                 <div class="dropdown col-2">
-                                    <select v-model="orderStatus" v-on:change="filterOrder" class="custom-select mx-0 cursor-pointer">
-                                        <option selected value='-2'>Trạng thái</option>
-                                        <option value='0'>Đang chờ</option>
-                                        <option value='2'>Đang tiến hành</option>
-                                        <option value='4'>Hoàn tất</option>
-                                        <option value='-1'>Từ chối</option>
-                                    </select>
+                                    <!-- filterStatusItems -->
+                                    <selection-filter :items="filterLongTermItems" :values="filterStatusConfig.values" :all="filterStatusConfig.all" :by="filterStatusConfig.by" @change="filterStatus($event)"></selection-filter>
                                 </div>
                                 <div class="col-7">
-                                    <form class="my-2 my-lg-0 px-2">
-                                        <div class="input-group">
-                                            <input v-model="search" v-on:keyup="filterOrder" class="form-control mr-sm-2" type="search" placeholder="Nhập mã hoặc tên người mượn" aria-label="search" aria-describedby="basic-addon2">
-                                            <button class="btn btn-outline-primary my-2 my-sm-0" type="button"><span class="fa fa-search"></span></button>
-                                        </div>
-                                    </form>
+                                    <!-- searchInputItems -->
+                                    <search-input :items="filterStatusItems" :by="['guest_name', 'id']" @change="searchInput($event)"></search-input>
                                 </div>
                                 <a :href="orderCreateUrl" type="button" class="btn btn-success ml-auto">Tạo đơn</a>
                             </div>
                             <div class="row">
-                                <table v-if="displayedOrders.length > 0" class="table table-hover">
+                                <table v-if="searchInputItems.length > 0" class="table table-hover">
                                     <thead class="thead-light">
                                         <tr>
                                             <th style="width: 5%;" class="align-middle text-center" scope="col">Mã</th>
@@ -61,7 +49,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr class="cursor-pointer" v-for="order in paginate(displayedOrders)" :key="order.id" :class="rowClass(order.status)" @click="redirect(orderDetailUrl(order.id))">
+                                        <tr class="cursor-pointer" v-for="order in paginationItems" :key="order.id" :class="rowClass(order.status)" @click="redirect(orderDetailUrl(order.id))">
                                             <th scope="row" class="align-middle text-center">{{order.id}}</th>
                                             <td class="text-center align-middle">{{order.guest_name}}</td>
                                             <td class="text-center align-middle">{{order.long_term|formatBoolean}}</td>
@@ -85,15 +73,9 @@
                                 <div v-else class="row justify-content-center">
                                     <h5>Không tìm thấy đơn mượn nào.</h5>
                                 </div>
-                                <!-- Paginator -->
                                 <div class="row justify-content-center">
-                                    <nav aria-label="Page navigation example">
-                                        <ul class="pagination">
-                                            <li class="page-item"><button class="page-link active" href="#" :disabled="page <= 1" @click="page--">Previous</button></li>
-                                            <li :class="{'page-item': true, 'active': page==pageNumber}" v-for="pageNumber in pages.slice(page-1, page+5)" :key="pageNumber"><a class="page-link" href="#"  @click="page = pageNumber">{{pageNumber}}</a></li>
-                                            <li class="page-item"><button class="page-link" href="#" @click="page++" :disabled="page >= pages.length">Next</button></li>
-                                        </ul>
-                                    </nav>
+                                    <!-- Paginator -->
+                                    <pagination :items="searchInputItems" @change="pagination($event)"></pagination>
                                 </div>
                             </div>
                         </div>
@@ -112,30 +94,60 @@ export default {
     ],
     data() {
         return {
+            filterLongTermConfig: {
+                values: [
+                    {name: 'Ngắn hạn', value: 0},
+                    {name: 'Lâu dài', value: 1}
+                    ],
+                all: {name: 'Loại đơn', value: -1},
+                by: 'long_term'
+            },
+            filterStatusConfig: {
+                values: [
+                    {name: 'Đang chờ', value: 0},
+                    {name: 'Chấp nhận', value: 1},
+                    {name: 'Xuất đồ', value: 2},
+                    {name: 'Trả đồ', value: 3},
+                    {name: 'Hoàn tất', value: 4},
+                    {name: 'Từ chối', value: -1}
+                    ],
+                all: {name: 'Trạng thái', value: -2},
+                by: 'status'
+            },
+            filterLongTermItems: [],
+            filterStatusItems: [],
+            searchInputItems: [],
+            paginationItems: [],
             displayedOrders: [],
-            longTerm: -1,
-            search: '',
-            orderStatus: -2,
-            page: 1,
-            perPage: 8,
-            pages: [],
         };
     },
     created() {
-        this.filterOrder();
+        this.init();
     },
     methods: {
+        init() {
+            this.initFilterOrderLongTerm();
+        },
+        initFilterOrderLongTerm() {
+            this.filterLongTermItems = this.orders;
+        },
+        filterLongTerm(items) {
+            this.filterLongTermItems = items;
+        },
+        filterStatus(items) {
+            this.filterStatusItems = items;
+        },
+        searchInput(items) {
+            this.searchInputItems = items;
+        },
+        pagination(items) {
+            this.paginationItems = items;
+        },
         orderDetailUrl(id) {
             return this.orderIndexUrl + '/' + id;
         },
         orderDestroyUrl(id) {
             return this.orderIndexUrl + '/' + id;
-        },
-        filterOrder() {
-            this.selectedType();
-            this.filterOrderStatus();
-            this.searchOrder();
-            this.setPages();
         },
         destroyOrder(id) {
             console.log('destroy');
@@ -147,47 +159,6 @@ export default {
                 }).catch(err => {
                     console.log(err);
                 });
-        },
-        selectedType() {
-            if(this.longTerm == -1) {
-                this.displayedOrders = this.orders;
-            } else {
-                this.displayedOrders = this.orders.filter(x => x.long_term == this.longTerm);
-            }
-        },
-        searchOrder() {
-            this.displayedOrders = this.displayedOrders.filter(x => {
-                var name = this.normalizeSearchString(x.guest_name);
-                var search = this.normalizeSearchString(this.search);
-                return name.includes(search) || x.id.toString().includes(search);
-            });
-        },
-        normalizeSearchString(str) {
-            return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
-        },
-        filterOrderStatus() {
-            if(this.orderStatus == -2) {
-                return;
-            } else if(this.orderStatus == -1 || this.orderStatus == 0 || this.orderStatus == 4) {
-                this.displayedOrders = this.displayedOrders.filter(x => x.status == this.orderStatus);
-            } else {
-                this.displayedOrders = this.displayedOrders.filter(x => x.status > 0 && x.status < 4)
-            }
-        },
-        setPages() {
-            var itemPerPage = this.perPage;
-            let numberOfPages = Math.ceil(this.displayedOrders.length / itemPerPage);
-            this.page = 1;
-            this.pages = [];
-            for (let index = 1; index <= numberOfPages; index++) {
-                this.pages.push(index);
-            }
-        },
-        paginate(itemList) {
-            let page = this.page;
-            let from = (page * this.perPage) - this.perPage;
-            let to = (page * this.perPage);
-            return itemList.slice(from, to);
         },
         getOrderRequestAmount(order) {
             let total = 0;

@@ -4325,52 +4325,84 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['orders', 'orderCreateUrl', 'orderIndexUrl'],
   data: function data() {
     return {
-      displayedOrders: [],
-      longTerm: -1,
-      search: '',
-      orderStatus: -2,
-      page: 1,
-      perPage: 8,
-      pages: []
+      filterLongTermConfig: {
+        values: [{
+          name: 'Ngắn hạn',
+          value: 0
+        }, {
+          name: 'Lâu dài',
+          value: 1
+        }],
+        all: {
+          name: 'Loại đơn',
+          value: -1
+        },
+        by: 'long_term'
+      },
+      filterStatusConfig: {
+        values: [{
+          name: 'Đang chờ',
+          value: 0
+        }, {
+          name: 'Chấp nhận',
+          value: 1
+        }, {
+          name: 'Xuất đồ',
+          value: 2
+        }, {
+          name: 'Trả đồ',
+          value: 3
+        }, {
+          name: 'Hoàn tất',
+          value: 4
+        }, {
+          name: 'Từ chối',
+          value: -1
+        }],
+        all: {
+          name: 'Trạng thái',
+          value: -2
+        },
+        by: 'status'
+      },
+      filterLongTermItems: [],
+      filterStatusItems: [],
+      searchInputItems: [],
+      paginationItems: [],
+      displayedOrders: []
     };
   },
   created: function created() {
-    this.filterOrder();
+    this.init();
   },
   methods: {
+    init: function init() {
+      this.initFilterOrderLongTerm();
+    },
+    initFilterOrderLongTerm: function initFilterOrderLongTerm() {
+      this.filterLongTermItems = this.orders;
+    },
+    filterLongTerm: function filterLongTerm(items) {
+      this.filterLongTermItems = items;
+    },
+    filterStatus: function filterStatus(items) {
+      this.filterStatusItems = items;
+    },
+    searchInput: function searchInput(items) {
+      this.searchInputItems = items;
+    },
+    pagination: function pagination(items) {
+      this.paginationItems = items;
+    },
     orderDetailUrl: function orderDetailUrl(id) {
       return this.orderIndexUrl + '/' + id;
     },
     orderDestroyUrl: function orderDestroyUrl(id) {
       return this.orderIndexUrl + '/' + id;
-    },
-    filterOrder: function filterOrder() {
-      this.selectedType();
-      this.filterOrderStatus();
-      this.searchOrder();
-      this.setPages();
     },
     destroyOrder: function destroyOrder(id) {
       console.log('destroy');
@@ -4383,62 +4415,6 @@ __webpack_require__.r(__webpack_exports__);
       })["catch"](function (err) {
         console.log(err);
       });
-    },
-    selectedType: function selectedType() {
-      var _this = this;
-
-      if (this.longTerm == -1) {
-        this.displayedOrders = this.orders;
-      } else {
-        this.displayedOrders = this.orders.filter(function (x) {
-          return x.long_term == _this.longTerm;
-        });
-      }
-    },
-    searchOrder: function searchOrder() {
-      var _this2 = this;
-
-      this.displayedOrders = this.displayedOrders.filter(function (x) {
-        var name = _this2.normalizeSearchString(x.guest_name);
-
-        var search = _this2.normalizeSearchString(_this2.search);
-
-        return name.includes(search) || x.id.toString().includes(search);
-      });
-    },
-    normalizeSearchString: function normalizeSearchString(str) {
-      return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
-    },
-    filterOrderStatus: function filterOrderStatus() {
-      var _this3 = this;
-
-      if (this.orderStatus == -2) {
-        return;
-      } else if (this.orderStatus == -1 || this.orderStatus == 0 || this.orderStatus == 4) {
-        this.displayedOrders = this.displayedOrders.filter(function (x) {
-          return x.status == _this3.orderStatus;
-        });
-      } else {
-        this.displayedOrders = this.displayedOrders.filter(function (x) {
-          return x.status > 0 && x.status < 4;
-        });
-      }
-    },
-    setPages: function setPages() {
-      var itemPerPage = this.perPage;
-      var numberOfPages = Math.ceil(this.displayedOrders.length / itemPerPage);
-      this.page = 1;
-      this.pages = [];
-
-      for (var index = 1; index <= numberOfPages; index++) {
-        this.pages.push(index);
-      }
-    },
-    paginate: function paginate(itemList) {
-      var page = this.page;
-      var from = page * this.perPage - this.perPage;
-      var to = page * this.perPage;
-      return itemList.slice(from, to);
     },
     getOrderRequestAmount: function getOrderRequestAmount(order) {
       var total = 0;
@@ -67775,145 +67751,66 @@ var render = function() {
                 _vm._m(0),
                 _vm._v(" "),
                 _c("div", { staticClass: "row py-4" }, [
-                  _c("div", { staticClass: "dropdown col-2" }, [
-                    _c(
-                      "select",
-                      {
-                        directives: [
-                          {
-                            name: "model",
-                            rawName: "v-model",
-                            value: _vm.longTerm,
-                            expression: "longTerm"
-                          }
-                        ],
-                        staticClass: "custom-select mx-0 cursor-pointer",
+                  _c(
+                    "div",
+                    { staticClass: "dropdown col-2" },
+                    [
+                      _c("selection-filter", {
+                        attrs: {
+                          items: _vm.orders,
+                          values: _vm.filterLongTermConfig.values,
+                          all: _vm.filterLongTermConfig.all,
+                          by: _vm.filterLongTermConfig.by
+                        },
                         on: {
-                          change: [
-                            function($event) {
-                              var $$selectedVal = Array.prototype.filter
-                                .call($event.target.options, function(o) {
-                                  return o.selected
-                                })
-                                .map(function(o) {
-                                  var val = "_value" in o ? o._value : o.value
-                                  return val
-                                })
-                              _vm.longTerm = $event.target.multiple
-                                ? $$selectedVal
-                                : $$selectedVal[0]
-                            },
-                            _vm.filterOrder
-                          ]
-                        }
-                      },
-                      [
-                        _c("option", { attrs: { selected: "", value: "-1" } }, [
-                          _vm._v("Loại đơn")
-                        ]),
-                        _vm._v(" "),
-                        _c("option", { attrs: { value: "0" } }, [
-                          _vm._v("Ngắn hạn")
-                        ]),
-                        _vm._v(" "),
-                        _c("option", { attrs: { value: "1" } }, [
-                          _vm._v("Lâu dài")
-                        ])
-                      ]
-                    )
-                  ]),
-                  _vm._v(" "),
-                  _c("div", { staticClass: "dropdown col-2" }, [
-                    _c(
-                      "select",
-                      {
-                        directives: [
-                          {
-                            name: "model",
-                            rawName: "v-model",
-                            value: _vm.orderStatus,
-                            expression: "orderStatus"
+                          change: function($event) {
+                            return _vm.filterLongTerm($event)
                           }
-                        ],
-                        staticClass: "custom-select mx-0 cursor-pointer",
+                        }
+                      })
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "div",
+                    { staticClass: "dropdown col-2" },
+                    [
+                      _c("selection-filter", {
+                        attrs: {
+                          items: _vm.filterLongTermItems,
+                          values: _vm.filterStatusConfig.values,
+                          all: _vm.filterStatusConfig.all,
+                          by: _vm.filterStatusConfig.by
+                        },
                         on: {
-                          change: [
-                            function($event) {
-                              var $$selectedVal = Array.prototype.filter
-                                .call($event.target.options, function(o) {
-                                  return o.selected
-                                })
-                                .map(function(o) {
-                                  var val = "_value" in o ? o._value : o.value
-                                  return val
-                                })
-                              _vm.orderStatus = $event.target.multiple
-                                ? $$selectedVal
-                                : $$selectedVal[0]
-                            },
-                            _vm.filterOrder
-                          ]
-                        }
-                      },
-                      [
-                        _c("option", { attrs: { selected: "", value: "-2" } }, [
-                          _vm._v("Trạng thái")
-                        ]),
-                        _vm._v(" "),
-                        _c("option", { attrs: { value: "0" } }, [
-                          _vm._v("Đang chờ")
-                        ]),
-                        _vm._v(" "),
-                        _c("option", { attrs: { value: "2" } }, [
-                          _vm._v("Đang tiến hành")
-                        ]),
-                        _vm._v(" "),
-                        _c("option", { attrs: { value: "4" } }, [
-                          _vm._v("Hoàn tất")
-                        ]),
-                        _vm._v(" "),
-                        _c("option", { attrs: { value: "-1" } }, [
-                          _vm._v("Từ chối")
-                        ])
-                      ]
-                    )
-                  ]),
-                  _vm._v(" "),
-                  _c("div", { staticClass: "col-7" }, [
-                    _c("form", { staticClass: "my-2 my-lg-0 px-2" }, [
-                      _c("div", { staticClass: "input-group" }, [
-                        _c("input", {
-                          directives: [
-                            {
-                              name: "model",
-                              rawName: "v-model",
-                              value: _vm.search,
-                              expression: "search"
-                            }
-                          ],
-                          staticClass: "form-control mr-sm-2",
-                          attrs: {
-                            type: "search",
-                            placeholder: "Nhập mã hoặc tên người mượn",
-                            "aria-label": "search",
-                            "aria-describedby": "basic-addon2"
-                          },
-                          domProps: { value: _vm.search },
-                          on: {
-                            keyup: _vm.filterOrder,
-                            input: function($event) {
-                              if ($event.target.composing) {
-                                return
-                              }
-                              _vm.search = $event.target.value
-                            }
+                          change: function($event) {
+                            return _vm.filterStatus($event)
                           }
-                        }),
-                        _vm._v(" "),
-                        _vm._m(1)
-                      ])
-                    ])
-                  ]),
+                        }
+                      })
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "div",
+                    { staticClass: "col-7" },
+                    [
+                      _c("search-input", {
+                        attrs: {
+                          items: _vm.filterStatusItems,
+                          by: ["guest_name", "id"]
+                        },
+                        on: {
+                          change: function($event) {
+                            return _vm.searchInput($event)
+                          }
+                        }
+                      })
+                    ],
+                    1
+                  ),
                   _vm._v(" "),
                   _c(
                     "a",
@@ -67926,15 +67823,13 @@ var render = function() {
                 ]),
                 _vm._v(" "),
                 _c("div", { staticClass: "row" }, [
-                  _vm.displayedOrders.length > 0
+                  _vm.searchInputItems.length > 0
                     ? _c("table", { staticClass: "table table-hover" }, [
-                        _vm._m(2),
+                        _vm._m(1),
                         _vm._v(" "),
                         _c(
                           "tbody",
-                          _vm._l(_vm.paginate(_vm.displayedOrders), function(
-                            order
-                          ) {
+                          _vm._l(_vm.paginationItems, function(order) {
                             return _c(
                               "tr",
                               {
@@ -68062,86 +67957,21 @@ var render = function() {
                         _c("h5", [_vm._v("Không tìm thấy đơn mượn nào.")])
                       ]),
                   _vm._v(" "),
-                  _c("div", { staticClass: "row justify-content-center" }, [
-                    _c(
-                      "nav",
-                      { attrs: { "aria-label": "Page navigation example" } },
-                      [
-                        _c(
-                          "ul",
-                          { staticClass: "pagination" },
-                          [
-                            _c("li", { staticClass: "page-item" }, [
-                              _c(
-                                "button",
-                                {
-                                  staticClass: "page-link active",
-                                  attrs: { href: "#", disabled: _vm.page <= 1 },
-                                  on: {
-                                    click: function($event) {
-                                      _vm.page--
-                                    }
-                                  }
-                                },
-                                [_vm._v("Previous")]
-                              )
-                            ]),
-                            _vm._v(" "),
-                            _vm._l(
-                              _vm.pages.slice(_vm.page - 1, _vm.page + 5),
-                              function(pageNumber) {
-                                return _c(
-                                  "li",
-                                  {
-                                    key: pageNumber,
-                                    class: {
-                                      "page-item": true,
-                                      active: _vm.page == pageNumber
-                                    }
-                                  },
-                                  [
-                                    _c(
-                                      "a",
-                                      {
-                                        staticClass: "page-link",
-                                        attrs: { href: "#" },
-                                        on: {
-                                          click: function($event) {
-                                            _vm.page = pageNumber
-                                          }
-                                        }
-                                      },
-                                      [_vm._v(_vm._s(pageNumber))]
-                                    )
-                                  ]
-                                )
-                              }
-                            ),
-                            _vm._v(" "),
-                            _c("li", { staticClass: "page-item" }, [
-                              _c(
-                                "button",
-                                {
-                                  staticClass: "page-link",
-                                  attrs: {
-                                    href: "#",
-                                    disabled: _vm.page >= _vm.pages.length
-                                  },
-                                  on: {
-                                    click: function($event) {
-                                      _vm.page++
-                                    }
-                                  }
-                                },
-                                [_vm._v("Next")]
-                              )
-                            ])
-                          ],
-                          2
-                        )
-                      ]
-                    )
-                  ])
+                  _c(
+                    "div",
+                    { staticClass: "row justify-content-center" },
+                    [
+                      _c("pagination", {
+                        attrs: { items: _vm.searchInputItems },
+                        on: {
+                          change: function($event) {
+                            return _vm.pagination($event)
+                          }
+                        }
+                      })
+                    ],
+                    1
+                  )
                 ])
               ]
             )
@@ -68161,19 +67991,6 @@ var staticRenderFns = [
         _c("h2", [_vm._v("Đơn mượn thiết bị")])
       ])
     ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c(
-      "button",
-      {
-        staticClass: "btn btn-outline-primary my-2 my-sm-0",
-        attrs: { type: "button" }
-      },
-      [_c("span", { staticClass: "fa fa-search" })]
-    )
   },
   function() {
     var _vm = this
