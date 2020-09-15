@@ -67,6 +67,9 @@ Vue.component('order-status',require('../components/order-status.vue').default);
 Vue.component('order-title',require('../components/order-title.vue').default);
 Vue.component('supplier-name',require('../components/supplier-name.vue').default);
 Vue.component('autocomplete-input',require('../components/autocomplete-input.vue').default);
+Vue.component('search-input',require('../components/search-input.vue').default);
+Vue.component('pagination',require('../components/pagination.vue').default);
+Vue.component('selection-filter',require('../components/selection-filter.vue').default);
 Vue.component('test',require('../components/test.vue').default);
 
 var app = new Vue({
