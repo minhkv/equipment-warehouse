@@ -171,11 +171,15 @@ class OrderController extends Controller
             'status' => $order->status - 1
             ]);
         
-        return $order->load([
-            'orderRequestInfos', 
-            'orderRequestInfos.orderInfos', 
-            'orderRequestInfos.orderInfos.equipment'
+        $order->load(['guest']);
+        $order->orderRequestInfos->load([
+            'template', 
+            'orderInfos', 
+            'orderInfos.equipment',
+            'template.equipments',
+            'template.equipments.supplier',
             ]);
+        return $order;
     }
 
 
@@ -224,7 +228,15 @@ class OrderController extends Controller
             'status' => 2, //output
             'date_output' => date_format($dateOutput, 'Y-m-d H:i:s')
             ]);
-        return "equipmentOutput";
+        $order->load(['guest']);
+        $order->orderRequestInfos->load([
+            'template', 
+            'orderInfos', 
+            'orderInfos.equipment',
+            'template.equipments',
+            'template.equipments.supplier',
+            ]);
+        return $order;
     }
 
     public function equipmentReturn(Request $request, Order $order) {
@@ -250,7 +262,15 @@ class OrderController extends Controller
             'status' => 3, //returnEquipment
             'date_received' => date_format($dateReturn, 'Y-m-d H:i:s')
             ]);
-        return 'equipmentReturn';
+        $order->load(['guest']);
+        $order->orderRequestInfos->load([
+            'template', 
+            'orderInfos', 
+            'orderInfos.equipment',
+            'template.equipments',
+            'template.equipments.supplier',
+            ]);
+        return $order;
     }
 
     public function completeOrder(Request $request, Order $order) {
@@ -271,6 +291,14 @@ class OrderController extends Controller
             'status' => 4, //complete
             'date_completed' => date_format($dateCompleted, 'Y-m-d H:i:s')
             ]);
-        return 'orderCompleted';
+        $order->load(['guest']);
+        $order->orderRequestInfos->load([
+            'template', 
+            'orderInfos', 
+            'orderInfos.equipment',
+            'template.equipments',
+            'template.equipments.supplier',
+            ]);
+        return $order;
     }
 }

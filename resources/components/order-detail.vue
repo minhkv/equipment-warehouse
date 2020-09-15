@@ -7,7 +7,7 @@
                     <i class="fa fa-chevron-left"></i> Quay lại
                 </a>
                 <h3>Đơn mượn: {{order.id}} 
-                    <order-status :status="order.status"></order-status>
+                    <order-status :status="displayedOrder.status"></order-status>
                 </h3>
                 <div class="col-10 mx-auto py-3">
                     <div class="row">
@@ -35,27 +35,27 @@
                 </div>
                 
                 <div class="track">
-                    <div :class="{'step': true, 'active': order.status >=0}">
+                    <div :class="{'step': true, 'active': displayedOrder.status >=0}">
                         <span class="icon"> <i class="fa fa-book"></i> </span>
                         <span class="text">Tạo đơn hàng</span>
                         <span class="text-muted">{{order.created_at|formatDate}}</span>
                     </div>
-                    <div :class="{'step': true, 'active': order.status >=1}">
+                    <div :class="{'step': true, 'active': displayedOrder.status >=1}">
                         <span class="icon"> <i class="fa fa-check"></i> </span>
                         <span class="text">Chấp nhận</span>
                         <span class="text-muted">{{order.date_approved|formatDate}}</span>
                     </div>
-                    <div :class="{'step': true, 'active': order.status >=2}">
+                    <div :class="{'step': true, 'active': displayedOrder.status >=2}">
                         <span class="icon"> <i class="fa fa-user"></i> </span>
                         <span class="text"> Xuất đồ</span>
                         <span class="text-muted">{{order.date_output|formatDate}}</span>
                     </div>
-                    <div :class="{'step': true, 'active': order.status >=3}">
+                    <div :class="{'step': true, 'active': displayedOrder.status >=3}">
                         <span class="icon"> <i class="fa fa-truck"></i> </span>
                         <span class="text"> Trả đồ </span>
                         <span class="text-muted">{{order.date_received|formatDate}}</span>
                     </div>
-                    <div :class="{'step': true, 'active': order.status >=4}">
+                    <div :class="{'step': true, 'active': displayedOrder.status >=4}">
                         <span class="icon"> <i class="fa fa-thumbs-up"></i> </span>
                         <span class="text">Hoàn tất</span>
                         <span class="text-muted">{{order.date_completed|formatDate}}</span>
@@ -63,7 +63,7 @@
                 </div>
                 <hr>
                 <div class="row justify-content-center">
-                    <order-title :status="order.status"></order-title>
+                    <order-title :status="displayedOrder.status"></order-title>
                 </div>
                 <div class="row mb-4">
                     <div class="col-6 mx-auto">
@@ -84,8 +84,8 @@
                             <th class="text-center" scope="col" width="10%">Số lượng</th>
                             <th class="text-center" scope="col" width="10%">Yêu cầu</th>
                             <th class="text-center" scope="col" width="10%">Cho mượn</th>
-                            <th v-if="order.status >= 2" class="text-center" scope="col" width="10%">Đã trả</th>
-                            <th v-if="order.status >= 2" class="text-center" scope="col" width="10%">Thất lạc</th>
+                            <th v-if="displayedOrder.status >= 2" class="text-center" scope="col" width="10%">Đã trả</th>
+                            <th v-if="displayedOrder.status >= 2" class="text-center" scope="col" width="10%">Thất lạc</th>
                             <th class="text-center" scope="col" width="10%"></th>
                         </tr>
                     </thead>
@@ -98,14 +98,14 @@
                             <td class="align-middle text-center">
                                 {{ getBorrowedAmount(info.template.id) }}
                             </td>
-                            <td v-if="order.status >= 2" class="align-middle text-center font-weight-bold">
+                            <td v-if="displayedOrder.status >= 2" class="align-middle text-center font-weight-bold">
                                 {{ getReceivedAmount(info.template.id) }}
                             </td>
-                            <td v-if="order.status >= 2" :class="{'align-middle': true, 'text-center': true, 'font-weight-bold': true, 'bg-danger': getLostAmount(info.template_id) > 0, 'text-light': getLostAmount(info.template_id) > 0}">
+                            <td v-if="displayedOrder.status >= 2" :class="{'align-middle': true, 'text-center': true, 'font-weight-bold': true, 'bg-danger': getLostAmount(info.template_id) > 0, 'text-light': getLostAmount(info.template_id) > 0}">
                                 {{ getLostAmount(info.template.id) }}
                             </td> 
                             <td class="align-middle text-center">
-                                <button v-if="order.status > 0" type="button" class="btn btn-primary btn-sm" data-toggle="modal" :data-target="'#addEquipment-' + info.template.id">
+                                <button v-if="displayedOrder.status > 0" type="button" class="btn btn-primary btn-sm" data-toggle="modal" :data-target="'#addEquipment-' + info.template.id">
                                     <span class="fa fa-pencil"></span>
                                 </button>
 
@@ -113,14 +113,14 @@
                                     <div class="modal-dialog modal-xl" role="document">
                                         <div class="modal-content">
                                             <div class="modal-header">
-                                                <h5 v-if="order.status <= 1" class="modal-title" :id="'addEquipmentLabel-' + info.template.id">Thêm thiết bị {{info.template.name}}</h5>
+                                                <h5 v-if="displayedOrder.status <= 1" class="modal-title" :id="'addEquipmentLabel-' + info.template.id">Thêm thiết bị {{info.template.name}}</h5>
                                                 <h5 v-else class="modal-title" :id="'verifyEquipmentLabel-' + info.template.id">Kiểm thiết bị {{info.template.name}}</h5>
                                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                                     <span aria-hidden="true">&times;</span>
                                                 </button>
                                             </div>
                                             <div class="modal-body">
-                                                <table v-if="order.status <= 1" class="table table-hover">
+                                                <table v-if="displayedOrder.status <= 1" class="table table-hover">
                                                     <thead class="thead-light">
                                                         <tr>
                                                             <th class="text-center" scope="col" style="width: 5%">Mã</th>
@@ -172,7 +172,7 @@
                                                                 <equipment-condition :condition="orderInfo.condition_before"></equipment-condition>
                                                             </td>
                                                             <td class="text-center align-middle">
-                                                                <div v-if="order.status <= 2" :id="orderInfo.equipment.id" >
+                                                                <div v-if="displayedOrder.status <= 2" :id="orderInfo.equipment.id" >
                                                                     <div class="dropdown">
                                                                         <select v-model="orderInfo.condition_received" class="custom-select mx-0">
                                                                             <option selected value='1'><equipment-condition :condition="1"></equipment-condition></option>
@@ -186,7 +186,7 @@
                                                                 </div>
                                                             </td>
                                                             <td class="text-center">
-                                                                <textarea v-if="order.status <= 2" v-model="orderInfo.note" class="form-control" name="note" cols="10"></textarea>
+                                                                <textarea v-if="displayedOrder.status <= 2" v-model="orderInfo.note" class="form-control" name="note" cols="10"></textarea>
                                                                 <div v-else>{{ orderInfo.note }}</div>
                                                             </td>
                                                             <td class="align-middle text-center pb-5">
@@ -227,12 +227,12 @@
                 
                 <hr>
                 <div class="row justify-content-center">
-                    <button v-if="order.status >= 1 && order.status <= 3" :disabled="buttonDisabled" @click="back" class="btn btn-secondary mr-2">Quay lại</button>
-                    <button v-if="order.status == 0" :disabled="buttonDisabled" @click="acceptOrder" class="btn btn-primary mx-2" data-abc="true">Chấp nhận</button>
-                    <button v-if="order.status == 0" :disabled="buttonDisabled" @click="rejectOrder" class="btn btn-danger" data-abc="true">Từ chối</button>
-                    <button v-if="order.status == 1" :disabled="buttonDisabled" @click="equipmentOutput" class="btn btn-primary" data-abc="true">Xuất đồ</button>
-                    <button v-if="order.status == 2" :disabled="buttonDisabled" @click="equipmentReturn" class="btn btn-primary" data-abc="true">Trả đồ</button>
-                    <button v-if="order.status == 3" :disabled="buttonDisabled" @click="completeOrder" class="btn btn-primary" data-abc="true">Hoàn tất</button>
+                    <button v-if="displayedOrder.status >= 1 && displayedOrder.status <= 3" :disabled="buttonDisabled" @click="back" class="btn btn-secondary mr-2">Quay lại</button>
+                    <button v-if="displayedOrder.status == 0" :disabled="buttonDisabled" @click="acceptOrder" class="btn btn-primary mx-2" data-abc="true">Chấp nhận</button>
+                    <button v-if="displayedOrder.status == 0" :disabled="buttonDisabled" @click="rejectOrder" class="btn btn-danger" data-abc="true">Từ chối</button>
+                    <button v-if="displayedOrder.status == 1" :disabled="buttonDisabled" @click="equipmentOutput" class="btn btn-primary" data-abc="true">Xuất đồ</button>
+                    <button v-if="displayedOrder.status == 2" :disabled="buttonDisabled" @click="equipmentReturn" class="btn btn-primary" data-abc="true">Trả đồ</button>
+                    <button v-if="displayedOrder.status == 3" :disabled="buttonDisabled" @click="completeOrder" class="btn btn-primary" data-abc="true">Hoàn tất</button>
                 </div>
             </div>
         </article>
@@ -432,6 +432,7 @@ export default {
         ],
     data() {
         return {
+            displayedOrder: {},
             equipmentIds: [],
             buttonDisabled: false,
             templateBorrowedAmount: [],
@@ -447,55 +448,86 @@ export default {
         };
     },
     created() {
-        let equipmentSelected = {};
-        let equipmentReceived = {};
-        let equipmentLost = {};
-        let equipmentIds = [];
-        let templateBorrowedAmount = {};
-        let orderRequestInfos = {};
-        this.order.order_request_infos.forEach(function(info) {
-            info.template.equipments.forEach(function(equipment) {
-                equipmentSelected[equipment.id] = false;
-            });
-            info.order_infos.forEach(function(order_info) {
-                if(order_info.condition_before == undefined) {
-                    order_info.condition_before = order_info.equipment.condition;
-                }
-                if(order_info.condition_received == undefined) {
-                    order_info.condition_received = order_info.equipment.condition;
-                }
-                equipmentSelected[order_info.equipment_id] = true;
-                equipmentReceived[order_info.equipment_id] = (order_info.status == 1);
-                equipmentLost[order_info.equipment_id] = (order_info.status == 0);
-                equipmentIds.push(order_info.equipment_id);
-            });
-            orderRequestInfos[info.template.id] = info;
-            orderRequestInfos[info.template.id]['order_infos'] = info.order_infos;
-            templateBorrowedAmount[info.template.id] = info.order_infos.length;
-        });
-        this.equipmentSelected = equipmentSelected;
-        this.equipmentReceived = equipmentReceived;
-        this.equipmentLost = equipmentLost;
-        this.equipmentIds = equipmentIds;
-        this.templateBorrowedAmount = templateBorrowedAmount;
-        this.orderRequestInfos = orderRequestInfos;
-
-        this.filterInfo();
+        this.initOrder();
+        this.initialize();
     },
     methods: {
-        getBorrowedAmount: function(template_id) {
+        initialize() {
+            this.initializeOrderRequestInfos();
+            this.initializeEquipmentOutput();
+            this.initializeEquipmentReturn();
+            this.filterInfo();
+        },
+        initOrder() {
+            Object.assign(this.displayedOrder, this.order);
+        },
+        setOrder(order) {
+            Object.assign(this.displayedOrder, order);
+        },
+        initializeOrderRequestInfos() {
+            let orderRequestInfos = {};
+            this.order.order_request_infos.forEach(function(info) {
+                info.order_infos.forEach(function(order_info) {
+                    if(order_info.condition_before == undefined) {
+                        order_info.condition_before = order_info.equipment.condition;
+                    }
+                    if(order_info.condition_received == undefined) {
+                        order_info.condition_received = order_info.equipment.condition;
+                    }
+                });
+                orderRequestInfos[info.template.id] = info;
+                orderRequestInfos[info.template.id]['order_infos'] = info.order_infos;
+            });
+            this.orderRequestInfos = orderRequestInfos;
+        },
+        initializeEquipmentOutput() {
+            let equipmentSelected = {};
+            let equipmentIds = [];
+            let templateBorrowedAmount = {};
+            this.order.order_request_infos.forEach(function(info) {
+                info.template.equipments.forEach(function(equipment) {
+                    equipmentSelected[equipment.id] = false;
+                });
+                info.order_infos.forEach(function(order_info) {
+                    equipmentSelected[order_info.equipment_id] = true;
+                    equipmentIds.push(order_info.equipment_id);
+                });
+                templateBorrowedAmount[info.template.id] = info.order_infos.length;
+            });
+            this.equipmentSelected = equipmentSelected;
+            this.equipmentIds = equipmentIds;
+            this.templateBorrowedAmount = templateBorrowedAmount;
+        },
+        initializeEquipmentReturn() {
+            let equipmentReceived = {};
+            let equipmentLost = {};
+            this.order.order_request_infos.forEach(function(info) {
+                info.order_infos.forEach(function(order_info) {
+                    equipmentReceived[order_info.equipment_id] = (order_info.status == 1);
+                    equipmentLost[order_info.equipment_id] = (order_info.status == 0);
+                });
+            });
+            this.equipmentReceived = equipmentReceived;
+            this.equipmentLost = equipmentLost;
+        },
+        updatePage(data) {
+            this.setOrder(data);
+            this.initialize();
+            this.enableButton();
+        },
+        getBorrowedAmount(template_id) {
             return this.templateBorrowedAmount[template_id];
         },
-        isEquipmentSelected: function(equipmentId) {
+        isEquipmentSelected(equipmentId) {
             return this.equipmentSelected[equipmentId];
         },
-        disablePlusEquipmentButton: function(equipmentId, equipmentStatus) {
+        disablePlusEquipmentButton(equipmentId, equipmentStatus) {
             return this.isEquipmentSelected(equipmentId) || equipmentStatus != 1;
         },
-        disableMinusEquipmentButton: function(equipmentId, equipmentStatus) {
+        disableMinusEquipmentButton(equipmentId, equipmentStatus) {
             return !this.isEquipmentSelected(equipmentId);
         },
-        selectEquipment: function(equipment, template_id) {
+        selectEquipment(equipment, template_id) {
             console.log('select');
             this.orderRequestInfos[template_id].order_infos.push({
                 'equipment_id': equipment.id,
@@ -505,7 +537,7 @@ export default {
             this.equipmentIds.push(equipment.id);
             this.equipmentSelected[equipment.id] = true;
         },
-        removeEquipment: function(equipment_id, template_id) {
+        removeEquipment(equipment_id, template_id) {
             console.log('remove');
             this.templateBorrowedAmount[template_id]--;
             const index = this.equipmentIds.indexOf(equipment_id);
@@ -514,7 +546,7 @@ export default {
             }
             this.equipmentSelected[equipment_id] = false;
         },
-        getReceivedAmount: function(template_id) {
+        getReceivedAmount(template_id) {
             let total = 0;
             for (let i in this.orderRequestInfos[template_id].order_infos) {
                 let orderInfo = this.orderRequestInfos[template_id].order_infos[i];
@@ -525,7 +557,7 @@ export default {
 
             return total;
         },
-        getLostAmount: function(template_id) {
+        getLostAmount(template_id) {
             let total = 0;
             for (let i in this.orderRequestInfos[template_id].order_infos) {
                 let orderInfo = this.orderRequestInfos[template_id].order_infos[i];
@@ -542,11 +574,12 @@ export default {
         changeText(id, text) {
             document.getElementById(id).innerHTML = text;
         },
-        back: function() {
+        back() {
+            let app = this;
             this.disableButton();
             axios.put(this.backUrl).then(res => {
                 console.log(res);
-                window.location.reload();
+                app.updatePage(res.data);
             }).catch(error => {
                 console.log("handlesubmit error: ", error);
             });
@@ -555,18 +588,19 @@ export default {
             let currentDate = (new Date()).toISOString();
             return moment(currentDate).format();
         },
-        acceptOrder: function(button) {
+        acceptOrder(button) {
+            let app = this;
             this.disableButton();
             axios.put(this.acceptUrl, {
                 dateApproved: this.getCurrentLocalTime()
             }).then(res => {
                 console.log(res);
-                window.location.reload();
+                app.updatePage(res.data);
             }).catch(error => {
                 console.log("handlesubmit error: ", error);
             });
         },
-        rejectOrder: function() {
+        rejectOrder() {
             console.log(this.orderIndexUrl);
             this.disableButton();
             axios.put(this.rejectUrl)
@@ -577,7 +611,7 @@ export default {
                     console.log("handlesubmit error: ", error);
                 });
         },
-        equipmentCheckBorrowedAmount: function() {
+        equipmentCheckBorrowedAmount() {
             for(let key in this.templateBorrowedAmount) {
                 console.log(this.templateBorrowedAmount[key]);
                 if(this.templateBorrowedAmount[key] == 0) {
@@ -587,8 +621,9 @@ export default {
             }
             return true;
         },
-        equipmentOutput: function() {
+        equipmentOutput() {
             console.log('equipmentOutput');
+            let app = this;
             if(!this.equipmentCheckBorrowedAmount()) return;
             this.disableButton();
             axios({
@@ -601,22 +636,22 @@ export default {
                         dateOutput: this.getCurrentLocalTime()
                     }
                 })
-                .then(function(response) {
-                    console.log(response);
-                    window.location.reload();
+                .then(function(res) {
+                    console.log(res);
+                    app.updatePage(res.data);
                 })
                 .catch(function(error) { 
                     console.log(error);
                 });
         },
-        getEquipmentStatus: function(equipmentId) {
+        getEquipmentStatus(equipmentId) {
             if (this.equipmentReceived[equipmentId])
                 return 1;
             if (this.equipmentLost[equipmentId])
                 return 0;
             return 2;
         },
-        updateOrderInfoStatus: function() {
+        updateOrderInfoStatus() {
             for (let i in this.orderRequestInfos) {
                 for (let j in this.orderRequestInfos[i].order_infos) {
                     var orderInfo = this.orderRequestInfos[i].order_infos[j];
@@ -624,7 +659,7 @@ export default {
                 }
             }
         },
-        equipmentCheck: function() {
+        equipmentCheck() {
             for (let i in this.orderRequestInfos) {
                 for (let j in this.orderRequestInfos[i].order_infos) {
                     let orderInfo = this.orderRequestInfos[i].order_infos[j];
@@ -636,8 +671,9 @@ export default {
             }
             return true;
         },
-        equipmentReturn: function() {
+        equipmentReturn() {
             console.log('return');
+            let app = this;
             if (!this.equipmentCheck()) return;
             this.updateOrderInfoStatus();
             console.log(this.orderRequestInfos);
@@ -650,15 +686,16 @@ export default {
                         dateReturn: this.getCurrentLocalTime()
                     }
                 })
-                .then(function(response) {
-                    console.log(response);
-                    window.location.reload();
+                .then(function(res) {
+                    console.log(res);
+                    app.updatePage(res.data);
                 })
                 .catch(function(error) {
                     console.log(error);
                 });
         },
-        completeOrder: function() {
+        completeOrder() {
+            let app = this;
             this.disableButton();
 
             axios({
@@ -669,18 +706,18 @@ export default {
                         dateCompleted: this.getCurrentLocalTime()
                     }
                 })
-                .then(function(response) {
-                    console.log(response);
-                    window.location.reload();
+                .then(function(res) {
+                    console.log(res);
+                    app.updatePage(res.data);
                 })
                 .catch(function(error) {
                     console.log(error);
                 });
         },
-        enableButton: function() {
+        enableButton() {
             this.buttonDisabled = false;
         },
-        disableButton: function() {
+        disableButton() {
             this.buttonDisabled = true;
         },
         filterInfo() {

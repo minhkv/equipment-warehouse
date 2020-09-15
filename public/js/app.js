@@ -3855,6 +3855,7 @@ __webpack_require__.r(__webpack_exports__);
   props: ["order", "orderIndexUrl", "acceptUrl", "rejectUrl", "equipmentOutputUrl", "equipmentReturnUrl", "completeUrl", "backUrl"],
   data: function data() {
     return {
+      displayedOrder: {},
       equipmentIds: [],
       buttonDisabled: false,
       templateBorrowedAmount: [],
@@ -3870,43 +3871,74 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   created: function created() {
-    var equipmentSelected = {};
-    var equipmentReceived = {};
-    var equipmentLost = {};
-    var equipmentIds = [];
-    var templateBorrowedAmount = {};
-    var orderRequestInfos = {};
-    this.order.order_request_infos.forEach(function (info) {
-      info.template.equipments.forEach(function (equipment) {
-        equipmentSelected[equipment.id] = false;
-      });
-      info.order_infos.forEach(function (order_info) {
-        if (order_info.condition_before == undefined) {
-          order_info.condition_before = order_info.equipment.condition;
-        }
-
-        if (order_info.condition_received == undefined) {
-          order_info.condition_received = order_info.equipment.condition;
-        }
-
-        equipmentSelected[order_info.equipment_id] = true;
-        equipmentReceived[order_info.equipment_id] = order_info.status == 1;
-        equipmentLost[order_info.equipment_id] = order_info.status == 0;
-        equipmentIds.push(order_info.equipment_id);
-      });
-      orderRequestInfos[info.template.id] = info;
-      orderRequestInfos[info.template.id]['order_infos'] = info.order_infos;
-      templateBorrowedAmount[info.template.id] = info.order_infos.length;
-    });
-    this.equipmentSelected = equipmentSelected;
-    this.equipmentReceived = equipmentReceived;
-    this.equipmentLost = equipmentLost;
-    this.equipmentIds = equipmentIds;
-    this.templateBorrowedAmount = templateBorrowedAmount;
-    this.orderRequestInfos = orderRequestInfos;
-    this.filterInfo();
+    this.initOrder();
+    this.initialize();
   },
   methods: {
+    initialize: function initialize() {
+      this.initializeOrderRequestInfos();
+      this.initializeEquipmentOutput();
+      this.initializeEquipmentReturn();
+      this.filterInfo();
+    },
+    initOrder: function initOrder() {
+      Object.assign(this.displayedOrder, this.order);
+    },
+    setOrder: function setOrder(order) {
+      Object.assign(this.displayedOrder, order);
+    },
+    initializeOrderRequestInfos: function initializeOrderRequestInfos() {
+      var orderRequestInfos = {};
+      this.order.order_request_infos.forEach(function (info) {
+        info.order_infos.forEach(function (order_info) {
+          if (order_info.condition_before == undefined) {
+            order_info.condition_before = order_info.equipment.condition;
+          }
+
+          if (order_info.condition_received == undefined) {
+            order_info.condition_received = order_info.equipment.condition;
+          }
+        });
+        orderRequestInfos[info.template.id] = info;
+        orderRequestInfos[info.template.id]['order_infos'] = info.order_infos;
+      });
+      this.orderRequestInfos = orderRequestInfos;
+    },
+    initializeEquipmentOutput: function initializeEquipmentOutput() {
+      var equipmentSelected = {};
+      var equipmentIds = [];
+      var templateBorrowedAmount = {};
+      this.order.order_request_infos.forEach(function (info) {
+        info.template.equipments.forEach(function (equipment) {
+          equipmentSelected[equipment.id] = false;
+        });
+        info.order_infos.forEach(function (order_info) {
+          equipmentSelected[order_info.equipment_id] = true;
+          equipmentIds.push(order_info.equipment_id);
+        });
+        templateBorrowedAmount[info.template.id] = info.order_infos.length;
+      });
+      this.equipmentSelected = equipmentSelected;
+      this.equipmentIds = equipmentIds;
+      this.templateBorrowedAmount = templateBorrowedAmount;
+    },
+    initializeEquipmentReturn: function initializeEquipmentReturn() {
+      var equipmentReceived = {};
+      var equipmentLost = {};
+      this.order.order_request_infos.forEach(function (info) {
+        info.order_infos.forEach(function (order_info) {
+          equipmentReceived[order_info.equipment_id] = order_info.status == 1;
+          equipmentLost[order_info.equipment_id] = order_info.status == 0;
+        });
+      });
+      this.equipmentReceived = equipmentReceived;
+      this.equipmentLost = equipmentLost;
+    },
+    updatePage: function updatePage(data) {
+      this.setOrder(data);
+      this.initialize();
+      this.enableButton();
+    },
     getBorrowedAmount: function getBorrowedAmount(template_id) {
       return this.templateBorrowedAmount[template_id];
     },
@@ -3973,10 +4005,11 @@ __webpack_require__.r(__webpack_exports__);
       document.getElementById(id).innerHTML = text;
     },
     back: function back() {
+      var app = this;
       this.disableButton();
       axios.put(this.backUrl).then(function (res) {
         console.log(res);
-        window.location.reload();
+        app.updatePage(res.data);
       })["catch"](function (error) {
         console.log("handlesubmit error: ", error);
       });
@@ -3986,12 +4019,13 @@ __webpack_require__.r(__webpack_exports__);
       return moment__WEBPACK_IMPORTED_MODULE_0___default()(currentDate).format();
     },
     acceptOrder: function acceptOrder(button) {
+      var app = this;
       this.disableButton();
       axios.put(this.acceptUrl, {
         dateApproved: this.getCurrentLocalTime()
       }).then(function (res) {
         console.log(res);
-        window.location.reload();
+        app.updatePage(res.data);
       })["catch"](function (error) {
         console.log("handlesubmit error: ", error);
       });
@@ -4022,6 +4056,7 @@ __webpack_require__.r(__webpack_exports__);
     },
     equipmentOutput: function equipmentOutput() {
       console.log('equipmentOutput');
+      var app = this;
       if (!this.equipmentCheckBorrowedAmount()) return;
       this.disableButton();
       axios({
@@ -4033,9 +4068,9 @@ __webpack_require__.r(__webpack_exports__);
           orderRequestInfos: this.orderRequestInfos,
           dateOutput: this.getCurrentLocalTime()
         }
-      }).then(function (response) {
-        console.log(response);
-        window.location.reload();
+      }).then(function (res) {
+        console.log(res);
+        app.updatePage(res.data);
       })["catch"](function (error) {
         console.log(error);
       });
@@ -4069,6 +4104,7 @@ __webpack_require__.r(__webpack_exports__);
     },
     equipmentReturn: function equipmentReturn() {
       console.log('return');
+      var app = this;
       if (!this.equipmentCheck()) return;
       this.updateOrderInfoStatus();
       console.log(this.orderRequestInfos);
@@ -4080,14 +4116,15 @@ __webpack_require__.r(__webpack_exports__);
           orderRequestInfos: this.orderRequestInfos,
           dateReturn: this.getCurrentLocalTime()
         }
-      }).then(function (response) {
-        console.log(response);
-        window.location.reload();
+      }).then(function (res) {
+        console.log(res);
+        app.updatePage(res.data);
       })["catch"](function (error) {
         console.log(error);
       });
     },
     completeOrder: function completeOrder() {
+      var app = this;
       this.disableButton();
       axios({
         url: this.completeUrl,
@@ -4096,9 +4133,9 @@ __webpack_require__.r(__webpack_exports__);
           orderRequestInfos: this.orderRequestInfos,
           dateCompleted: this.getCurrentLocalTime()
         }
-      }).then(function (response) {
-        console.log(response);
-        window.location.reload();
+      }).then(function (res) {
+        console.log(res);
+        app.updatePage(res.data);
       })["catch"](function (error) {
         console.log(error);
       });
@@ -65979,7 +66016,7 @@ var render = function() {
           "h3",
           [
             _vm._v("Đơn mượn: " + _vm._s(_vm.order.id) + " \n                "),
-            _c("order-status", { attrs: { status: _vm.order.status } })
+            _c("order-status", { attrs: { status: _vm.displayedOrder.status } })
           ],
           1
         ),
@@ -66037,55 +66074,75 @@ var render = function() {
         ]),
         _vm._v(" "),
         _c("div", { staticClass: "track" }, [
-          _c("div", { class: { step: true, active: _vm.order.status >= 0 } }, [
-            _vm._m(7),
-            _vm._v(" "),
-            _c("span", { staticClass: "text" }, [_vm._v("Tạo đơn hàng")]),
-            _vm._v(" "),
-            _c("span", { staticClass: "text-muted" }, [
-              _vm._v(_vm._s(_vm._f("formatDate")(_vm.order.created_at)))
-            ])
-          ]),
+          _c(
+            "div",
+            { class: { step: true, active: _vm.displayedOrder.status >= 0 } },
+            [
+              _vm._m(7),
+              _vm._v(" "),
+              _c("span", { staticClass: "text" }, [_vm._v("Tạo đơn hàng")]),
+              _vm._v(" "),
+              _c("span", { staticClass: "text-muted" }, [
+                _vm._v(_vm._s(_vm._f("formatDate")(_vm.order.created_at)))
+              ])
+            ]
+          ),
           _vm._v(" "),
-          _c("div", { class: { step: true, active: _vm.order.status >= 1 } }, [
-            _vm._m(8),
-            _vm._v(" "),
-            _c("span", { staticClass: "text" }, [_vm._v("Chấp nhận")]),
-            _vm._v(" "),
-            _c("span", { staticClass: "text-muted" }, [
-              _vm._v(_vm._s(_vm._f("formatDate")(_vm.order.date_approved)))
-            ])
-          ]),
+          _c(
+            "div",
+            { class: { step: true, active: _vm.displayedOrder.status >= 1 } },
+            [
+              _vm._m(8),
+              _vm._v(" "),
+              _c("span", { staticClass: "text" }, [_vm._v("Chấp nhận")]),
+              _vm._v(" "),
+              _c("span", { staticClass: "text-muted" }, [
+                _vm._v(_vm._s(_vm._f("formatDate")(_vm.order.date_approved)))
+              ])
+            ]
+          ),
           _vm._v(" "),
-          _c("div", { class: { step: true, active: _vm.order.status >= 2 } }, [
-            _vm._m(9),
-            _vm._v(" "),
-            _c("span", { staticClass: "text" }, [_vm._v(" Xuất đồ")]),
-            _vm._v(" "),
-            _c("span", { staticClass: "text-muted" }, [
-              _vm._v(_vm._s(_vm._f("formatDate")(_vm.order.date_output)))
-            ])
-          ]),
+          _c(
+            "div",
+            { class: { step: true, active: _vm.displayedOrder.status >= 2 } },
+            [
+              _vm._m(9),
+              _vm._v(" "),
+              _c("span", { staticClass: "text" }, [_vm._v(" Xuất đồ")]),
+              _vm._v(" "),
+              _c("span", { staticClass: "text-muted" }, [
+                _vm._v(_vm._s(_vm._f("formatDate")(_vm.order.date_output)))
+              ])
+            ]
+          ),
           _vm._v(" "),
-          _c("div", { class: { step: true, active: _vm.order.status >= 3 } }, [
-            _vm._m(10),
-            _vm._v(" "),
-            _c("span", { staticClass: "text" }, [_vm._v(" Trả đồ ")]),
-            _vm._v(" "),
-            _c("span", { staticClass: "text-muted" }, [
-              _vm._v(_vm._s(_vm._f("formatDate")(_vm.order.date_received)))
-            ])
-          ]),
+          _c(
+            "div",
+            { class: { step: true, active: _vm.displayedOrder.status >= 3 } },
+            [
+              _vm._m(10),
+              _vm._v(" "),
+              _c("span", { staticClass: "text" }, [_vm._v(" Trả đồ ")]),
+              _vm._v(" "),
+              _c("span", { staticClass: "text-muted" }, [
+                _vm._v(_vm._s(_vm._f("formatDate")(_vm.order.date_received)))
+              ])
+            ]
+          ),
           _vm._v(" "),
-          _c("div", { class: { step: true, active: _vm.order.status >= 4 } }, [
-            _vm._m(11),
-            _vm._v(" "),
-            _c("span", { staticClass: "text" }, [_vm._v("Hoàn tất")]),
-            _vm._v(" "),
-            _c("span", { staticClass: "text-muted" }, [
-              _vm._v(_vm._s(_vm._f("formatDate")(_vm.order.date_completed)))
-            ])
-          ])
+          _c(
+            "div",
+            { class: { step: true, active: _vm.displayedOrder.status >= 4 } },
+            [
+              _vm._m(11),
+              _vm._v(" "),
+              _c("span", { staticClass: "text" }, [_vm._v("Hoàn tất")]),
+              _vm._v(" "),
+              _c("span", { staticClass: "text-muted" }, [
+                _vm._v(_vm._s(_vm._f("formatDate")(_vm.order.date_completed)))
+              ])
+            ]
+          )
         ]),
         _vm._v(" "),
         _c("hr"),
@@ -66093,7 +66150,7 @@ var render = function() {
         _c(
           "div",
           { staticClass: "row justify-content-center" },
-          [_c("order-title", { attrs: { status: _vm.order.status } })],
+          [_c("order-title", { attrs: { status: _vm.displayedOrder.status } })],
           1
         ),
         _vm._v(" "),
@@ -66174,7 +66231,7 @@ var render = function() {
                 [_vm._v("Cho mượn")]
               ),
               _vm._v(" "),
-              _vm.order.status >= 2
+              _vm.displayedOrder.status >= 2
                 ? _c(
                     "th",
                     {
@@ -66185,7 +66242,7 @@ var render = function() {
                   )
                 : _vm._e(),
               _vm._v(" "),
-              _vm.order.status >= 2
+              _vm.displayedOrder.status >= 2
                 ? _c(
                     "th",
                     {
@@ -66253,7 +66310,7 @@ var render = function() {
                     )
                   ]),
                   _vm._v(" "),
-                  _vm.order.status >= 2
+                  _vm.displayedOrder.status >= 2
                     ? _c(
                         "td",
                         {
@@ -66270,7 +66327,7 @@ var render = function() {
                       )
                     : _vm._e(),
                   _vm._v(" "),
-                  _vm.order.status >= 2
+                  _vm.displayedOrder.status >= 2
                     ? _c(
                         "td",
                         {
@@ -66295,7 +66352,7 @@ var render = function() {
                     : _vm._e(),
                   _vm._v(" "),
                   _c("td", { staticClass: "align-middle text-center" }, [
-                    _vm.order.status > 0
+                    _vm.displayedOrder.status > 0
                       ? _c(
                           "button",
                           {
@@ -66333,7 +66390,7 @@ var render = function() {
                           [
                             _c("div", { staticClass: "modal-content" }, [
                               _c("div", { staticClass: "modal-header" }, [
-                                _vm.order.status <= 1
+                                _vm.displayedOrder.status <= 1
                                   ? _c(
                                       "h5",
                                       {
@@ -66373,7 +66430,7 @@ var render = function() {
                               ]),
                               _vm._v(" "),
                               _c("div", { staticClass: "modal-body" }, [
-                                _vm.order.status <= 1
+                                _vm.displayedOrder.status <= 1
                                   ? _c(
                                       "table",
                                       { staticClass: "table table-hover" },
@@ -66612,7 +66669,8 @@ var render = function() {
                                                       "text-center align-middle"
                                                   },
                                                   [
-                                                    _vm.order.status <= 2
+                                                    _vm.displayedOrder.status <=
+                                                    2
                                                       ? _c(
                                                           "div",
                                                           {
@@ -66781,7 +66839,8 @@ var render = function() {
                                                     staticClass: "text-center"
                                                   },
                                                   [
-                                                    _vm.order.status <= 2
+                                                    _vm.displayedOrder.status <=
+                                                    2
                                                       ? _c("textarea", {
                                                           directives: [
                                                             {
@@ -67216,7 +67275,7 @@ var render = function() {
         _c("hr"),
         _vm._v(" "),
         _c("div", { staticClass: "row justify-content-center" }, [
-          _vm.order.status >= 1 && _vm.order.status <= 3
+          _vm.displayedOrder.status >= 1 && _vm.displayedOrder.status <= 3
             ? _c(
                 "button",
                 {
@@ -67228,7 +67287,7 @@ var render = function() {
               )
             : _vm._e(),
           _vm._v(" "),
-          _vm.order.status == 0
+          _vm.displayedOrder.status == 0
             ? _c(
                 "button",
                 {
@@ -67240,7 +67299,7 @@ var render = function() {
               )
             : _vm._e(),
           _vm._v(" "),
-          _vm.order.status == 0
+          _vm.displayedOrder.status == 0
             ? _c(
                 "button",
                 {
@@ -67252,7 +67311,7 @@ var render = function() {
               )
             : _vm._e(),
           _vm._v(" "),
-          _vm.order.status == 1
+          _vm.displayedOrder.status == 1
             ? _c(
                 "button",
                 {
@@ -67264,7 +67323,7 @@ var render = function() {
               )
             : _vm._e(),
           _vm._v(" "),
-          _vm.order.status == 2
+          _vm.displayedOrder.status == 2
             ? _c(
                 "button",
                 {
@@ -67276,7 +67335,7 @@ var render = function() {
               )
             : _vm._e(),
           _vm._v(" "),
-          _vm.order.status == 3
+          _vm.displayedOrder.status == 3
             ? _c(
                 "button",
                 {
