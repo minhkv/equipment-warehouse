@@ -72,7 +72,9 @@ class EquipmentTemplateController extends Controller
         $suppliers = Supplier::all();
         $equipmentTemplate->load([
             'equipments',
-            'equipments.supplier'
+            'equipments.supplier',
+            'equipments.orderInfos',
+            'equipments.orderInfos.orderRequestInfo.order'
             ]);
         return view('equipment-detail')->with([
             'equipmentTemplate' => $equipmentTemplate,

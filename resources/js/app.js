@@ -26,6 +26,16 @@ Vue.filter('formatEquipmentStatus', function(status){
             return 'Đang cho mượn';
     }
 });
+Vue.filter('formatInfoStatus', function(status){
+    switch(status) {
+        case 0:
+            return 'Thất lạc';
+        case 1:
+            return 'Đã nhận';
+        case 2:
+            return 'Đang cho mượn';
+    }
+});
 Vue.filter('formatOrderStatus', function(status){
     switch(status) {
         case -1:
@@ -71,6 +81,7 @@ Vue.component('pagination',require('./components/pagination.vue').default);
 Vue.component('selection-filter',require('./components/selection-filter.vue').default);
 Vue.component('select-condition',require('./components/select-condition.vue').default);
 Vue.component('modal-component',require('./components/modal-component.vue').default);
+Vue.component('info-status',require('./components/info-status.vue').default);
 Vue.component('test',require('./components/test.vue').default);
 
 var app = new Vue({

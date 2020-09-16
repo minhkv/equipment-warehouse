@@ -102,8 +102,27 @@
         <modal-component id="addEquipment" title="Thêm thiết bị">
             <equipment-form :template="template" :suppliers="suppliers" :url="equipmentCreateUrl" method="POST" @store="addEquipment($event)" @close="closeModal('#addEquipment')"></equipment-form>
         </modal-component>
-        <modal-component v-for="(equipment, index) in template.equipments" :key="'h' + equipment.id" :id="'detail' + equipment.id" :title="'Chi tiết thiết bị: ' + equipment.id">
-            Test
+        <modal-component v-for="(equipment) in template.equipments" :key="'h' + equipment.id" :id="'detail' + equipment.id" :title="'Lịch sử thiết bị: ' + equipment.id" size="lg">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Mã đơn</th>
+                        <th>Người mượn</th>
+                        <th>Tình trạng</th>
+                        <th>Trạng thái</th>
+                        <th>Ngày mượn</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="info in equipment.order_infos" :key="info.id">
+                        <td scope="row">{{ getOrder(info).id }}</td>
+                        <td>{{ getOrder(info).guest_name }}</td>
+                        <td><equipment-condition :condition="info.condition_received"></equipment-condition></td>
+                        <td><info-status :status="info.status"></info-status></td>
+                        <td>{{ getOrder(info).date_output }}</td>
+                    </tr>
+                </tbody>
+            </table>
         </modal-component>
         <modal-component v-for="(equipment, index) in template.equipments" :key="'e' + equipment.id" :id="'editEquipment' + equipment.id" :title="'Chỉnh sửa thiết bị: ' + equipment.id">
             <equipment-form :equipment="equipment" :suppliers="suppliers" @update="updateEquipment($event, index)" @close="closeModal('#editEquipment' + equipment.id)" method="PUT" :url="equipmentIndexUrl + '/' + equipment.id"></equipment-form>
@@ -134,6 +153,9 @@
             this.templateName = this.template.name;
         },
         methods: {
+            getOrder(orderInfo) {
+                return orderInfo.order_request_info.order;
+            },
             handleFileUpload() {
                 console.log("change");
                 this.imageFile = this.$refs.imageFile.files[0];
