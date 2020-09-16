@@ -12,22 +12,7 @@
                     <button class="btn btn-primary" type="button" data-toggle="modal" data-target="#editImage">
                         <i class="fa fa-pencil"></i>
                     </button>
-                    <div class="modal fade" id="editImage" tabindex="-1" role="dialog" aria-labelledby="editImageLabel" aria-hidden="true">
-                        <div class="modal-dialog modal-dialog-centered" role="document">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">&times;</button>
-                                </div>
-                                <div class="modal-body">
-                                    <input type="file" ref="imageFile" v-on:change="handleFileUpload()" />
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
-                                    <button type="button" class="btn btn-primary" @click="updateImage()">Lưu thay đổi</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    
                 </div>
             </div>
             <div class="col-md-8">
@@ -36,27 +21,6 @@
                         <i class="fa fa-pencil"></i></button>
                 </h2>
                 <p><b>Số lượng thiết bị:</b> {{ template.equipments.length }}</p>
-                <div class="modal fade" id="editName" tabindex="-1" role="dialog" aria-labelledby="editNameLabel"
-                        aria-hidden="true">
-                    <div class="modal-dialog modal-dialog-centered" role="document">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <button type="button" class="close" data-dismiss="modal"
-                                    aria-label="Close">&times;</button>
-                            </div>
-                            <div class="modal-body">            
-                                <div class="form-group">
-                                    <label for="equipmentName">Nhập tên mới</label>
-                                    <input type="text" class="form-control" id="equipmentName" name="name" v-model="templateName">
-                                </div>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
-                                <button type="button" class="btn btn-primary" @click="updateName()">Lưu thay đổi</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
             </div>
         </div>
 
@@ -83,8 +47,8 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr v-for="(equipment, index) in template.equipments" :key="equipment.id" class="cursor-pointer">
-                            <th class="align-middle text-center" scope="row">{{ equipment.id }}</th>
+                        <tr v-for="(equipment, index) in template.equipments" :key="equipment.id" class="cursor-pointer" >
+                            <th data-toggle="modal" :data-target="'#detail' + equipment.id" class="align-middle text-center" scope="row">{{ equipment.id }}</th>
                             <td class="align-middle text-center">{{ equipment.input_date|formatDate }}</td>
                             <td class="align-middle text-center">{{ equipment.price|formatEquipmentPrice }}</td>
                             <td class="align-middle text-center">
@@ -102,26 +66,11 @@
                                     <span class="fa fa-pencil"></span>
                                 </button>
 
-                                <div class="modal fade" :id="'editEquipment' + equipment.id" tabindex="-1" role="dialog" aria-labelledby="addEquipmentLabel" aria-hidden="true">
-                                    <div class="modal-dialog" role="document">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h5 class="modal-title" id="addEquipmentLabel">Chỉnh sửa thiết bị</h5>
-                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                    <span aria-hidden="true">&times;</span>
-                                                </button>
-                                            </div>
-                                            <div class="modal-body">
-                                                <equipment-form :equipment="equipment" :suppliers="suppliers" @update="updateEquipment($event, index)" @close="closeModal('#editEquipment' + equipment.id)" method="PUT" :url="equipmentIndexUrl + '/' + equipment.id"></equipment-form>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
                             </td>
                             <td class="align-middle px-0">
                                 <button :disabled="equipment.status == 2" @click="deleteEquipment(equipment, index)" type="button" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></button>
                             </td>
+                            
                         </tr>
                     </tbody>
                 </table>
@@ -129,26 +78,36 @@
                     <button type="button" class="btn btn-success btn-lg" data-toggle="modal" data-target="#addEquipment">
                         Thêm thiết bị
                     </button>
-
-                    <div class="modal fade" id="addEquipment" tabindex="-1" role="dialog" aria-labelledby="addEquipmentLabel" aria-hidden="true">
-                        <div class="modal-dialog" role="document">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="addEquipmentLabel">Thêm thiết bị</h5>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
-                                </div>
-                                <div class="modal-body">
-                                    <equipment-form :template="template" :suppliers="suppliers" :url="equipmentCreateUrl" method="POST" @store="addEquipment($event)" @close="closeModal('#addEquipment')"></equipment-form>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
                 </div>
             </div>
         </div>
+
+        <modal-component id="editName" title="Chỉnh sửa tên">
+            <div class="form-group">
+                <label for="equipmentName">Nhập tên mới</label>
+                <input type="text" class="form-control" id="equipmentName" name="name" v-model="templateName">
+            </div>
+            <template v-slot:footer>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                <button type="button" class="btn btn-primary" @click="updateName()">Lưu thay đổi</button>
+            </template>
+        </modal-component>
+        <modal-component id="editImage" title="Chọn ảnh">
+            <input type="file" ref="imageFile" v-on:change="handleFileUpload()" class="form-control-file"/>
+            <template v-slot:footer>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                <button type="button" class="btn btn-primary" @click="updateImage()">Lưu thay đổi</button>
+            </template>
+        </modal-component>
+        <modal-component id="addEquipment" title="Thêm thiết bị">
+            <equipment-form :template="template" :suppliers="suppliers" :url="equipmentCreateUrl" method="POST" @store="addEquipment($event)" @close="closeModal('#addEquipment')"></equipment-form>
+        </modal-component>
+        <modal-component v-for="(equipment, index) in template.equipments" :key="'h' + equipment.id" :id="'detail' + equipment.id" :title="'Chi tiết thiết bị: ' + equipment.id">
+            Test
+        </modal-component>
+        <modal-component v-for="(equipment, index) in template.equipments" :key="'e' + equipment.id" :id="'editEquipment' + equipment.id" :title="'Chỉnh sửa thiết bị: ' + equipment.id">
+            <equipment-form :equipment="equipment" :suppliers="suppliers" @update="updateEquipment($event, index)" @close="closeModal('#editEquipment' + equipment.id)" method="PUT" :url="equipmentIndexUrl + '/' + equipment.id"></equipment-form>
+        </modal-component>
         <div class="space" style="height: 10vh;"></div>
     </div>
 </template>
@@ -261,9 +220,13 @@
                     console.log(err);
                 });
             },
+            displayHistory(equipment) {
+                console.log(equipment.id);
+                this.openModal('#newModal');
+            },
             openModal(id) {
                 console.log('openModal ' + id);
-                // setTimeout(function() {$(id).modal('show');}, 200);
+                setTimeout(function() {$(id).modal('show');}, 200);
             },
             closeModal(id) {
                 console.log('closeModal ' + id);
