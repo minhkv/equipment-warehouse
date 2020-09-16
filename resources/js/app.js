@@ -53,25 +53,24 @@ Vue.filter('formatEquipmentPrice', function(price){
 
 
 
-Vue.component('testcomponent',require('../components/test.vue').default);
-Vue.component('multi-step-form',require('../components/multi-step-form.vue').default);
-Vue.component('equipment-templates',require('../components/equipment-templates.vue').default);
-Vue.component('equipment-lost',require('../components/equipment-lost.vue').default);
-Vue.component('equipment-detail', require('../components/equipment-detail.vue').default);
-Vue.component('order-detail',require('../components/order-detail.vue').default);
-Vue.component('order',require('../components/order.vue').default);
-Vue.component('equipment-status',require('../components/equipment-status.vue').default);
-Vue.component('equipment-form',require('../components/equipment-form.vue').default);
-Vue.component('equipment-condition',require('../components/equipment-condition.vue').default);
-Vue.component('order-status',require('../components/order-status.vue').default);
-Vue.component('order-title',require('../components/order-title.vue').default);
-Vue.component('supplier-name',require('../components/supplier-name.vue').default);
-Vue.component('autocomplete-input',require('../components/autocomplete-input.vue').default);
-Vue.component('search-input',require('../components/search-input.vue').default);
-Vue.component('pagination',require('../components/pagination.vue').default);
-Vue.component('selection-filter',require('../components/selection-filter.vue').default);
-Vue.component('select-condition',require('../components/select-condition.vue').default);
-Vue.component('test',require('../components/test.vue').default);
+Vue.component('multi-step-form',require('./components/multi-step-form.vue').default);
+Vue.component('equipment-templates',require('./components/equipment-templates.vue').default);
+Vue.component('equipment-lost',require('./components/equipment-lost.vue').default);
+Vue.component('equipment-detail', require('./components/equipment-detail.vue').default);
+Vue.component('order-detail',require('./components/order-detail.vue').default);
+Vue.component('order',require('./components/order.vue').default);
+Vue.component('equipment-status',require('./components/equipment-status.vue').default);
+Vue.component('equipment-form',require('./components/equipment-form.vue').default);
+Vue.component('equipment-condition',require('./components/equipment-condition.vue').default);
+Vue.component('order-status',require('./components/order-status.vue').default);
+Vue.component('order-title',require('./components/order-title.vue').default);
+Vue.component('supplier-name',require('./components/supplier-name.vue').default);
+Vue.component('autocomplete-input',require('./components/autocomplete-input.vue').default);
+Vue.component('search-input',require('./components/search-input.vue').default);
+Vue.component('pagination',require('./components/pagination.vue').default);
+Vue.component('selection-filter',require('./components/selection-filter.vue').default);
+Vue.component('select-condition',require('./components/select-condition.vue').default);
+Vue.component('test',require('./components/test.vue').default);
 
 var app = new Vue({
     el: '#app'
