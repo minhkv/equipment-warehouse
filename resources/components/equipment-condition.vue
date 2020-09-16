@@ -10,9 +10,7 @@
 </template>
 <script>
 export default {
-    props: [
-        'condition', 
-        ],
+    props: ['condition', ],
     methods: {
         equipmentConditionClass() {
             return {

@@ -32,9 +32,11 @@ class EquipmentController extends Controller
     }
     public function receivedLostEquipment(Request $request, Equipment $equipment) {
         $recentOrderInfos = $request->input('recentOrderInfos');
+        $equipmentInfo = $request->input('equipment');
         $equipment->update([
             'status' => 1,
-            'condition' => $recentOrderInfos['condition_received']
+            'condition' => $recentOrderInfos['condition_received'],
+            'note' => $equipmentInfo['note']
         ]);
         return $equipment;
     }

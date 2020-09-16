@@ -59,30 +59,13 @@
                                                         <tr>
                                                             <th class="text-center align-middle" scope="row">{{ equipment.id }}</th>
                                                             <td class="text-center align-middle">
-                                                                <div>
-                                                                    <span v-bind:class="starClass(1, equipment.condition)"></span>
-                                                                    <span v-bind:class="starClass(2, equipment.condition)"></span>
-                                                                    <span v-bind:class="starClass(3, equipment.condition)"></span>
-                                                                    <span v-bind:class="starClass(4, equipment.condition)"></span>
-                                                                    <span v-bind:class="starClass(5, equipment.condition)"></span>
-                                                                </div>
+                                                                <equipment-condition :condition="equipment.condition"></equipment-condition>
                                                             </td>
                                                             <td class="text-center align-middle">
-                                                                <div v-bind:id="'condition-' + equipment.id">
-                                                                    <div class="starrating risingstar d-flex justify-content-center flex-row-reverse">
-                                                                        <input type="radio" v-bind:id="'star5-' + equipment.id" value="5"  v-model="recentOrderInfos[equipment.id].condition_received" /><label :for="'star5-' + equipment.id" @mouseleave="normalText(equipment.id)" @mouseover="changeText(equipment.id, 'Hoàn hảo')" title="5 star">5</label>
-                                                                        <input type="radio" v-bind:id="'star4-' + equipment.id" value="4"  v-model="recentOrderInfos[equipment.id].condition_received" /><label :for="'star4-' + equipment.id" @mouseleave="normalText(equipment.id)" @mouseover="changeText(equipment.id, 'Tốt')" title="4 star">4</label>
-                                                                        <input type="radio" v-bind:id="'star3-' + equipment.id" value="3"  v-model="recentOrderInfos[equipment.id].condition_received" /><label :for="'star3-' + equipment.id" @mouseleave="normalText(equipment.id)" @mouseover="changeText(equipment.id, 'Bình thường')" title="3 star">3</label>
-                                                                        <input type="radio" v-bind:id="'star2-' + equipment.id" value="2"  v-model="recentOrderInfos[equipment.id].condition_received" /><label :for="'star2-' + equipment.id" @mouseleave="normalText(equipment.id)" @mouseover="changeText(equipment.id, 'Không tốt')" title="2 star">2</label>
-                                                                        <input type="radio" v-bind:id="'star1-' + equipment.id" value="1"  v-model="recentOrderInfos[equipment.id].condition_received" /><label :for="'star1-' + equipment.id" @mouseleave="normalText(equipment.id)" @mouseover="changeText(equipment.id, 'Kém')" title="1 star">1</label>
-                                                                    </div>
-                                                                    <div class="d-flex justify-content-center">
-                                                                        <p v-bind:id="'scoreDescription-' + equipment.id">{{ scoreDescriptions[equipment.id] }}</p>
-                                                                    </div>
-                                                                </div>
+                                                                <select-condition :initValue="recentOrderInfos[equipment.id].condition_received" @change="setConditionReceived($event, equipment.id)"></select-condition>
                                                             </td>
                                                             <td class="text-center">
-                                                                <textarea class="form-control" name="note" cols="10"></textarea>
+                                                                <textarea v-model="equipment.note" class="form-control" name="note" cols="10"></textarea>
                                                             </td>
                                                         </tr>
                                                     </tbody>
@@ -145,18 +128,17 @@ export default {
         }
     },
     created() {
-        let scoreDescriptions = {};
         let recentOrderInfos = this.recentOrderInfos;
         this.displayedEquipments = this.lostEquipments;
         this.lostEquipments.forEach(function(equipment) {
             recentOrderInfos[equipment.id].condition_received = equipment.condition;
         });
-        this.lostEquipments.forEach(function(equipment) {
-            scoreDescriptions[equipment.id] = 'Đánh giá';
-        });
-        this.scoreDescriptions = scoreDescriptions;
+
     },
     methods: {
+        setConditionReceived(condition, equipment_id) {
+            this.recentOrderInfos[equipment_id].condition_received = condition;
+        },
         getRecentOrder: function(equipment) {
             if (this.recentOrderInfos[equipment.id])
                 return this.recentOrderInfos[equipment.id].order_request_info.order;
@@ -189,7 +171,8 @@ export default {
                     url: equipmentReceivedUrl,
                     method: 'put',
                     data: {
-                        recentOrderInfos: this.recentOrderInfos[equipment.id]
+                        recentOrderInfos: this.recentOrderInfos[equipment.id],
+                        equipment: equipment
                     }
                 })
                 .then(function(response) {
@@ -201,19 +184,7 @@ export default {
                 });
             this.displayedEquipments.splice(index, 1);
         },
-        starClass: function(index, value) {
-            return {
-                'checked': index <= value,
-                'fa': true,
-                'fa-star': true
-            } 
-        },
-        normalText: function(id) {
-            this.scoreDescriptions[id] = 'Đánh giá'
-        },
-        changeText: function(id, text) {
-            this.scoreDescriptions[id] = text;
-        }
+
     }
 }
 </script>

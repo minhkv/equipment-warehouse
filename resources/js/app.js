@@ -70,6 +70,7 @@ Vue.component('autocomplete-input',require('../components/autocomplete-input.vue
 Vue.component('search-input',require('../components/search-input.vue').default);
 Vue.component('pagination',require('../components/pagination.vue').default);
 Vue.component('selection-filter',require('../components/selection-filter.vue').default);
+Vue.component('select-condition',require('../components/select-condition.vue').default);
 Vue.component('test',require('../components/test.vue').default);
 
 var app = new Vue({
