@@ -47,7 +47,7 @@ export default {
                 let search = app.normalizeSearchString(this.search);
                 let found = false;
                 app.by.forEach(att => {
-                    let value = app.normalizeSearchString(x[att]);
+                    let value = app.normalizeSearchString(this.getAtt(x, att));
                     if(value.includes(search)) {
                         found = true;
                         return;
@@ -55,6 +55,25 @@ export default {
                 });
                 return found;
             });
+        },
+        getAtt(item, att) {
+            let splitAtt = att.split('.');
+            if(splitAtt.length > 1) {
+                return this.getNestedAtt(item, splitAtt);
+            }
+            return item[att];
+        },
+        getNestedAtt(item, atts) {
+            let value, i = 0;
+            atts.forEach(att => {
+                if(i == 0) {
+                    value = item[att];
+                } else {
+                    value = value[att];
+                }
+                i++;
+            });
+            return value;
         },
         sendEvent() {
             console.log('search');

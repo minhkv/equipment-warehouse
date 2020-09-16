@@ -67,12 +67,8 @@
                 </div>
                 <div class="row mb-4">
                     <div class="col-6 mx-auto">
-                        <form class="my-2 my-lg-0 px-2">
-                            <div class="input-group">
-                                <input v-on:keyup="filterInfo" v-model="search" class="form-control mr-sm-2" type="search" placeholder="Tìm kiếm">
-                                <button class="btn btn-outline-primary my-2 my-sm-0" type="submit"><span class="fa fa-search"></span></button>
-                            </div>
-                        </form>
+                        <!-- Search -->
+                        <search-input :items="this.displayedOrder.order_request_infos" :by="['template.name']" @change="searchInput($event)"></search-input>
                     </div>
                 </div>
 
@@ -90,7 +86,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr v-for="info in paginate(displayedInfos)" :key="info.id" :class="{'table-success': getBorrowedAmount(info.template_id) > 0 && (getBorrowedAmount(info.template_id) == getReceivedAmount(info.template_id) + getLostAmount(info.template_id))}">
+                        <tr v-for="info in paginationItems" :key="info.id" :class="rowClass(info)">
                             <th class="text-center" scope="row"><img :src="info.template.image" height=40 :alt="info.template.name"></th>
                             <td class="align-middle text-center">{{ info.template.name }}</td>
                             <td class="align-middle text-center">{{ info.template.equipments.length }}</td>
@@ -166,13 +162,13 @@
                                                     <tbody>
                                                         <tr v-for="orderInfo in info.order_infos" :key="orderInfo.id">
                                                             <th class="text-center align-middle" scope="row">
-                                                                {{ orderInfo.equipment.id }}
+                                                                {{ orderInfo.equipment_id }}
                                                             </th>
                                                             <td class="text-center align-middle">
                                                                 <equipment-condition :condition="orderInfo.condition_before"></equipment-condition>
                                                             </td>
                                                             <td class="text-center align-middle">
-                                                                <div v-if="displayedOrder.status <= 2" :id="orderInfo.equipment.id" >
+                                                                <div v-if="displayedOrder.status <= 2" :id="orderInfo.equipment_id" >
                                                                     <div class="dropdown">
                                                                         <select v-model="orderInfo.condition_received" class="custom-select mx-0">
                                                                             <option selected value='1'><equipment-condition :condition="1"></equipment-condition></option>
@@ -191,12 +187,12 @@
                                                             </td>
                                                             <td class="align-middle text-center pb-5">
                                                                 <div class="form-check">
-                                                                    <input :disabled="equipmentLost[orderInfo.equipment.id]" type="checkbox" class="form-check-input" v-model="equipmentReceived[orderInfo.equipment.id]">
+                                                                    <input :disabled="equipmentLost[orderInfo.equipment_id]" type="checkbox" class="form-check-input" v-model="equipmentReceived[orderInfo.equipment_id]">
                                                                 </div>
                                                             </td>
                                                             <td class="align-middle text-center pb-5">
                                                                 <div class="form-check">
-                                                                    <input :disabled="equipmentReceived[orderInfo.equipment.id]" type="checkbox" class="form-check-input" v-model="equipmentLost[orderInfo.equipment.id]">
+                                                                    <input :disabled="equipmentReceived[orderInfo.equipment_id]" type="checkbox" class="form-check-input" v-model="equipmentLost[orderInfo.equipment_id]">
                                                                 </div>
                                                             </td>
                                                         </tr>
@@ -213,18 +209,10 @@
                         </tr>
                     </tbody>
                 </table>
-                <!-- Paginator -->
                 <div class="row justify-content-center">
-                    <nav aria-label="Page navigation example">
-                        <ul class="pagination">
-                            <li class="page-item"><button class="page-link active" href="#" :disabled="page <= 1" @click="page--">Previous</button></li>
-                            <li :class="{'page-item': true, 'active': page==pageNumber}" v-for="pageNumber in pages.slice(page-1, page+5)" :key="pageNumber"><a class="page-link" href="#"  @click="page = pageNumber">{{pageNumber}}</a></li>
-                            <li class="page-item"><button class="page-link" href="#" @click="page++" :disabled="page >= pages.length">Next</button></li>
-                        </ul>
-                    </nav>
+                    <!-- Paginator -->
+                    <pagination :items="searchInputItems" @change="pagination($event)"></pagination>
                 </div>
-
-                
                 <hr>
                 <div class="row justify-content-center">
                     <button v-if="displayedOrder.status >= 1 && displayedOrder.status <= 3" :disabled="buttonDisabled" @click="back" class="btn btn-secondary mr-2">Quay lại</button>
@@ -442,9 +430,8 @@ export default {
             orderRequestInfos: [],
             displayedInfos: [],
             search: '',
-            page: 1,
-            perPage: 8,
-            pages: [],
+            searchInputItems: [],
+            paginationItems: []
         };
     },
     created() {
@@ -456,17 +443,18 @@ export default {
             this.initializeOrderRequestInfos();
             this.initializeEquipmentOutput();
             this.initializeEquipmentReturn();
-            this.filterInfo();
+            this.initSearchInput();
         },
         initOrder() {
             Object.assign(this.displayedOrder, this.order);
         },
         setOrder(order) {
-            Object.assign(this.displayedOrder, order);
+            // Object.assign(this.displayedOrder, order);
+            this.displayedOrder = order;
         },
         initializeOrderRequestInfos() {
             let orderRequestInfos = {};
-            this.order.order_request_infos.forEach(function(info) {
+            this.displayedOrder.order_request_infos.forEach(function(info) {
                 info.order_infos.forEach(function(order_info) {
                     if(order_info.condition_before == undefined) {
                         order_info.condition_before = order_info.equipment.condition;
@@ -484,7 +472,7 @@ export default {
             let equipmentSelected = {};
             let equipmentIds = [];
             let templateBorrowedAmount = {};
-            this.order.order_request_infos.forEach(function(info) {
+            this.displayedOrder.order_request_infos.forEach(function(info) {
                 info.template.equipments.forEach(function(equipment) {
                     equipmentSelected[equipment.id] = false;
                 });
@@ -501,7 +489,7 @@ export default {
         initializeEquipmentReturn() {
             let equipmentReceived = {};
             let equipmentLost = {};
-            this.order.order_request_infos.forEach(function(info) {
+            this.displayedOrder.order_request_infos.forEach(function(info) {
                 info.order_infos.forEach(function(order_info) {
                     equipmentReceived[order_info.equipment_id] = (order_info.status == 1);
                     equipmentLost[order_info.equipment_id] = (order_info.status == 0);
@@ -510,10 +498,28 @@ export default {
             this.equipmentReceived = equipmentReceived;
             this.equipmentLost = equipmentLost;
         },
+        initSearchInput() {
+            this.searchInputItems = this.order.order_request_infos;
+        },
+        searchInput(items) {
+            this.searchInputItems = items;
+        },
+        pagination(items) {
+            this.paginationItems = items;
+        },
         updatePage(data) {
             this.setOrder(data);
             this.initialize();
             this.enableButton();
+        },
+        rowClass(info) {
+            return {
+                'table-success': 
+                    this.getBorrowedAmount(info.template_id) > 0 &&
+                    (this.getBorrowedAmount(info.template_id) == 
+                    this.getReceivedAmount(info.template_id) + 
+                    this.getLostAmount(info.template_id))
+            }
         },
         getBorrowedAmount(template_id) {
             return this.templateBorrowedAmount[template_id];
@@ -568,12 +574,6 @@ export default {
 
             return total;
         },
-        normalText(id, selected) {
-            document.getElementById(id).innerHTML = "Đánh giá";
-        },
-        changeText(id, text) {
-            document.getElementById(id).innerHTML = text;
-        },
         back() {
             let app = this;
             this.disableButton();
@@ -602,11 +602,12 @@ export default {
         },
         rejectOrder() {
             console.log(this.orderIndexUrl);
+            let app = this;
             this.disableButton();
             axios.put(this.rejectUrl)
                 .then(res => {
                     console.log(res);
-                    window.location.assign(this.orderIndexUrl);
+                    app.updatePage(res.data);
                 }).catch(error => {
                     console.log("handlesubmit error: ", error);
                 });
@@ -663,8 +664,8 @@ export default {
             for (let i in this.orderRequestInfos) {
                 for (let j in this.orderRequestInfos[i].order_infos) {
                     let orderInfo = this.orderRequestInfos[i].order_infos[j];
-                    if (!this.equipmentLost[orderInfo.equipment.id] && !this.equipmentReceived[orderInfo.equipment.id]) {
-                        alert('Bạn chưa chọn trạng thái thiết bị ' + this.orderRequestInfos[i].template.name + ' có mã: ' + orderInfo.equipment.id);
+                    if (!this.equipmentLost[orderInfo.equipment_id] && !this.equipmentReceived[orderInfo.equipment_id]) {
+                        alert('Bạn chưa chọn trạng thái thiết bị ' + this.orderRequestInfos[i].template.name + ' có mã: ' + orderInfo.equipment_id);
                         return false;
                     }
                 }
@@ -720,35 +721,7 @@ export default {
         disableButton() {
             this.buttonDisabled = true;
         },
-        filterInfo() {
-            this.searchInfo();
-            this.setPages();
-        },
-        setPages() {
-            var itemPerPage = this.perPage;
-            let numberOfPages = Math.ceil(this.displayedInfos.length / itemPerPage);
-            this.page = 1;
-            this.pages = [];
-            for (let index = 1; index <= numberOfPages; index++) {
-                this.pages.push(index);
-            }
-        },
-        paginate(itemList) {
-            let page = this.page;
-            let from = (page * this.perPage) - this.perPage;
-            let to = (page * this.perPage);
-            return itemList.slice(from, to);
-        },
-        searchInfo() {
-            this.displayedInfos = this.order.order_request_infos.filter(x => {
-                var name = this.normalizeSearchString(x.template.name);
-                var search = this.normalizeSearchString(this.search);
-                return name.includes(search);
-            });
-        },
-        normalizeSearchString(str) {
-            return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
-        },
+
         
     }
 };

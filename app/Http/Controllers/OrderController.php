@@ -149,6 +149,18 @@ class OrderController extends Controller
         return (route('order.show', $order));
     }
 
+    public function loadOrder(Order $order) {
+        $order->load(['guest']);
+        $order->orderRequestInfos->load([
+            'template', 
+            'orderInfos', 
+            'orderInfos.equipment',
+            'template.equipments',
+            'template.equipments.supplier',
+            ]);
+        return $order;
+    }
+
     public function back(Order $order) {
         if($order->status < 1 || $order->status > 3) {
             return 'Order status must be 1, 2 or 3';
@@ -191,12 +203,15 @@ class OrderController extends Controller
             'status' => 1,
             'date_approved' => date_format($dateApproved, 'Y-m-d H:i:s')
             ]);
-        return 'accept';
+        $order->load(['guest']);
+        
+        return $this->loadOrder($order);
     }
     
     public function rejectOrderRequest(Order $order) {
         $order->update(['status' => -1]); //reject
-        return 'reject';
+        $order->load(['guest']);
+        return $this->loadOrder($order);
     }
 
     public function equipmentOutput(Request $request, Order $order) {
@@ -228,15 +243,7 @@ class OrderController extends Controller
             'status' => 2, //output
             'date_output' => date_format($dateOutput, 'Y-m-d H:i:s')
             ]);
-        $order->load(['guest']);
-        $order->orderRequestInfos->load([
-            'template', 
-            'orderInfos', 
-            'orderInfos.equipment',
-            'template.equipments',
-            'template.equipments.supplier',
-            ]);
-        return $order;
+        return $this->loadOrder($order);
     }
 
     public function equipmentReturn(Request $request, Order $order) {
@@ -263,14 +270,8 @@ class OrderController extends Controller
             'date_received' => date_format($dateReturn, 'Y-m-d H:i:s')
             ]);
         $order->load(['guest']);
-        $order->orderRequestInfos->load([
-            'template', 
-            'orderInfos', 
-            'orderInfos.equipment',
-            'template.equipments',
-            'template.equipments.supplier',
-            ]);
-        return $order;
+
+        return $this->loadOrder($order);
     }
 
     public function completeOrder(Request $request, Order $order) {
@@ -291,14 +292,7 @@ class OrderController extends Controller
             'status' => 4, //complete
             'date_completed' => date_format($dateCompleted, 'Y-m-d H:i:s')
             ]);
-        $order->load(['guest']);
-        $order->orderRequestInfos->load([
-            'template', 
-            'orderInfos', 
-            'orderInfos.equipment',
-            'template.equipments',
-            'template.equipments.supplier',
-            ]);
-        return $order;
+
+        return $this->loadOrder($order);
     }
 }

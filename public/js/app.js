@@ -3811,18 +3811,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ["order", "orderIndexUrl", "acceptUrl", "rejectUrl", "equipmentOutputUrl", "equipmentReturnUrl", "completeUrl", "backUrl"],
@@ -3838,9 +3826,8 @@ __webpack_require__.r(__webpack_exports__);
       orderRequestInfos: [],
       displayedInfos: [],
       search: '',
-      page: 1,
-      perPage: 8,
-      pages: []
+      searchInputItems: [],
+      paginationItems: []
     };
   },
   created: function created() {
@@ -3852,17 +3839,18 @@ __webpack_require__.r(__webpack_exports__);
       this.initializeOrderRequestInfos();
       this.initializeEquipmentOutput();
       this.initializeEquipmentReturn();
-      this.filterInfo();
+      this.initSearchInput();
     },
     initOrder: function initOrder() {
       Object.assign(this.displayedOrder, this.order);
     },
     setOrder: function setOrder(order) {
-      Object.assign(this.displayedOrder, order);
+      // Object.assign(this.displayedOrder, order);
+      this.displayedOrder = order;
     },
     initializeOrderRequestInfos: function initializeOrderRequestInfos() {
       var orderRequestInfos = {};
-      this.order.order_request_infos.forEach(function (info) {
+      this.displayedOrder.order_request_infos.forEach(function (info) {
         info.order_infos.forEach(function (order_info) {
           if (order_info.condition_before == undefined) {
             order_info.condition_before = order_info.equipment.condition;
@@ -3881,7 +3869,7 @@ __webpack_require__.r(__webpack_exports__);
       var equipmentSelected = {};
       var equipmentIds = [];
       var templateBorrowedAmount = {};
-      this.order.order_request_infos.forEach(function (info) {
+      this.displayedOrder.order_request_infos.forEach(function (info) {
         info.template.equipments.forEach(function (equipment) {
           equipmentSelected[equipment.id] = false;
         });
@@ -3898,7 +3886,7 @@ __webpack_require__.r(__webpack_exports__);
     initializeEquipmentReturn: function initializeEquipmentReturn() {
       var equipmentReceived = {};
       var equipmentLost = {};
-      this.order.order_request_infos.forEach(function (info) {
+      this.displayedOrder.order_request_infos.forEach(function (info) {
         info.order_infos.forEach(function (order_info) {
           equipmentReceived[order_info.equipment_id] = order_info.status == 1;
           equipmentLost[order_info.equipment_id] = order_info.status == 0;
@@ -3907,10 +3895,24 @@ __webpack_require__.r(__webpack_exports__);
       this.equipmentReceived = equipmentReceived;
       this.equipmentLost = equipmentLost;
     },
+    initSearchInput: function initSearchInput() {
+      this.searchInputItems = this.order.order_request_infos;
+    },
+    searchInput: function searchInput(items) {
+      this.searchInputItems = items;
+    },
+    pagination: function pagination(items) {
+      this.paginationItems = items;
+    },
     updatePage: function updatePage(data) {
       this.setOrder(data);
       this.initialize();
       this.enableButton();
+    },
+    rowClass: function rowClass(info) {
+      return {
+        'table-success': this.getBorrowedAmount(info.template_id) > 0 && this.getBorrowedAmount(info.template_id) == this.getReceivedAmount(info.template_id) + this.getLostAmount(info.template_id)
+      };
     },
     getBorrowedAmount: function getBorrowedAmount(template_id) {
       return this.templateBorrowedAmount[template_id];
@@ -3971,12 +3973,6 @@ __webpack_require__.r(__webpack_exports__);
 
       return total;
     },
-    normalText: function normalText(id, selected) {
-      document.getElementById(id).innerHTML = "Đánh giá";
-    },
-    changeText: function changeText(id, text) {
-      document.getElementById(id).innerHTML = text;
-    },
     back: function back() {
       var app = this;
       this.disableButton();
@@ -4004,13 +4000,12 @@ __webpack_require__.r(__webpack_exports__);
       });
     },
     rejectOrder: function rejectOrder() {
-      var _this = this;
-
       console.log(this.orderIndexUrl);
+      var app = this;
       this.disableButton();
       axios.put(this.rejectUrl).then(function (res) {
         console.log(res);
-        window.location.assign(_this.orderIndexUrl);
+        app.updatePage(res.data);
       })["catch"](function (error) {
         console.log("handlesubmit error: ", error);
       });
@@ -4066,8 +4061,8 @@ __webpack_require__.r(__webpack_exports__);
         for (var j in this.orderRequestInfos[i].order_infos) {
           var orderInfo = this.orderRequestInfos[i].order_infos[j];
 
-          if (!this.equipmentLost[orderInfo.equipment.id] && !this.equipmentReceived[orderInfo.equipment.id]) {
-            alert('Bạn chưa chọn trạng thái thiết bị ' + this.orderRequestInfos[i].template.name + ' có mã: ' + orderInfo.equipment.id);
+          if (!this.equipmentLost[orderInfo.equipment_id] && !this.equipmentReceived[orderInfo.equipment_id]) {
+            alert('Bạn chưa chọn trạng thái thiết bị ' + this.orderRequestInfos[i].template.name + ' có mã: ' + orderInfo.equipment_id);
             return false;
           }
         }
@@ -4118,40 +4113,6 @@ __webpack_require__.r(__webpack_exports__);
     },
     disableButton: function disableButton() {
       this.buttonDisabled = true;
-    },
-    filterInfo: function filterInfo() {
-      this.searchInfo();
-      this.setPages();
-    },
-    setPages: function setPages() {
-      var itemPerPage = this.perPage;
-      var numberOfPages = Math.ceil(this.displayedInfos.length / itemPerPage);
-      this.page = 1;
-      this.pages = [];
-
-      for (var index = 1; index <= numberOfPages; index++) {
-        this.pages.push(index);
-      }
-    },
-    paginate: function paginate(itemList) {
-      var page = this.page;
-      var from = page * this.perPage - this.perPage;
-      var to = page * this.perPage;
-      return itemList.slice(from, to);
-    },
-    searchInfo: function searchInfo() {
-      var _this2 = this;
-
-      this.displayedInfos = this.order.order_request_infos.filter(function (x) {
-        var name = _this2.normalizeSearchString(x.template.name);
-
-        var search = _this2.normalizeSearchString(_this2.search);
-
-        return name.includes(search);
-      });
-    },
-    normalizeSearchString: function normalizeSearchString(str) {
-      return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
     }
   }
 });
@@ -4372,8 +4333,7 @@ __webpack_require__.r(__webpack_exports__);
       filterLongTermItems: [],
       filterStatusItems: [],
       searchInputItems: [],
-      paginationItems: [],
-      displayedOrders: []
+      paginationItems: []
     };
   },
   created: function created() {
@@ -4624,7 +4584,7 @@ __webpack_require__.r(__webpack_exports__);
         var search = app.normalizeSearchString(_this.search);
         var found = false;
         app.by.forEach(function (att) {
-          var value = app.normalizeSearchString(x[att]);
+          var value = app.normalizeSearchString(_this.getAtt(x, att));
 
           if (value.includes(search)) {
             found = true;
@@ -4633,6 +4593,29 @@ __webpack_require__.r(__webpack_exports__);
         });
         return found;
       });
+    },
+    getAtt: function getAtt(item, att) {
+      var splitAtt = att.split('.');
+
+      if (splitAtt.length > 1) {
+        return this.getNestedAtt(item, splitAtt);
+      }
+
+      return item[att];
+    },
+    getNestedAtt: function getNestedAtt(item, atts) {
+      var value,
+          i = 0;
+      atts.forEach(function (att) {
+        if (i == 0) {
+          value = item[att];
+        } else {
+          value = value[att];
+        }
+
+        i++;
+      });
+      return value;
     },
     sendEvent: function sendEvent() {
       console.log('search');
@@ -66184,36 +66167,24 @@ var render = function() {
         ),
         _vm._v(" "),
         _c("div", { staticClass: "row mb-4" }, [
-          _c("div", { staticClass: "col-6 mx-auto" }, [
-            _c("form", { staticClass: "my-2 my-lg-0 px-2" }, [
-              _c("div", { staticClass: "input-group" }, [
-                _c("input", {
-                  directives: [
-                    {
-                      name: "model",
-                      rawName: "v-model",
-                      value: _vm.search,
-                      expression: "search"
-                    }
-                  ],
-                  staticClass: "form-control mr-sm-2",
-                  attrs: { type: "search", placeholder: "Tìm kiếm" },
-                  domProps: { value: _vm.search },
-                  on: {
-                    keyup: _vm.filterInfo,
-                    input: function($event) {
-                      if ($event.target.composing) {
-                        return
-                      }
-                      _vm.search = $event.target.value
-                    }
+          _c(
+            "div",
+            { staticClass: "col-6 mx-auto" },
+            [
+              _c("search-input", {
+                attrs: {
+                  items: this.displayedOrder.order_request_infos,
+                  by: ["template.name"]
+                },
+                on: {
+                  change: function($event) {
+                    return _vm.searchInput($event)
                   }
-                }),
-                _vm._v(" "),
-                _vm._m(12)
-              ])
-            ])
-          ])
+                }
+              })
+            ],
+            1
+          )
         ]),
         _vm._v(" "),
         _c("table", { staticClass: "table mt-2 table-hover" }, [
@@ -66291,370 +66262,174 @@ var render = function() {
           _vm._v(" "),
           _c(
             "tbody",
-            _vm._l(_vm.paginate(_vm.displayedInfos), function(info) {
-              return _c(
-                "tr",
-                {
-                  key: info.id,
-                  class: {
-                    "table-success":
-                      _vm.getBorrowedAmount(info.template_id) > 0 &&
-                      _vm.getBorrowedAmount(info.template_id) ==
-                        _vm.getReceivedAmount(info.template_id) +
-                          _vm.getLostAmount(info.template_id)
-                  }
-                },
-                [
-                  _c(
-                    "th",
-                    { staticClass: "text-center", attrs: { scope: "row" } },
-                    [
-                      _c("img", {
-                        attrs: {
-                          src: info.template.image,
-                          height: "40",
-                          alt: info.template.name
-                        }
-                      })
-                    ]
-                  ),
-                  _vm._v(" "),
-                  _c("td", { staticClass: "align-middle text-center" }, [
-                    _vm._v(_vm._s(info.template.name))
-                  ]),
-                  _vm._v(" "),
-                  _c("td", { staticClass: "align-middle text-center" }, [
-                    _vm._v(_vm._s(info.template.equipments.length))
-                  ]),
-                  _vm._v(" "),
-                  _c("td", { staticClass: "align-middle text-center" }, [
-                    _vm._v(_vm._s(info.amount))
-                  ]),
-                  _vm._v(" "),
-                  _c("td", { staticClass: "align-middle text-center" }, [
-                    _vm._v(
-                      "\n                            " +
-                        _vm._s(_vm.getBorrowedAmount(info.template.id)) +
-                        "\n                        "
-                    )
-                  ]),
-                  _vm._v(" "),
-                  _vm.displayedOrder.status >= 2
-                    ? _c(
-                        "td",
-                        {
-                          staticClass:
-                            "align-middle text-center font-weight-bold"
-                        },
-                        [
-                          _vm._v(
-                            "\n                            " +
-                              _vm._s(_vm.getReceivedAmount(info.template.id)) +
-                              "\n                        "
-                          )
-                        ]
-                      )
-                    : _vm._e(),
-                  _vm._v(" "),
-                  _vm.displayedOrder.status >= 2
-                    ? _c(
-                        "td",
-                        {
-                          class: {
-                            "align-middle": true,
-                            "text-center": true,
-                            "font-weight-bold": true,
-                            "bg-danger":
-                              _vm.getLostAmount(info.template_id) > 0,
-                            "text-light":
-                              _vm.getLostAmount(info.template_id) > 0
-                          }
-                        },
-                        [
-                          _vm._v(
-                            "\n                            " +
-                              _vm._s(_vm.getLostAmount(info.template.id)) +
-                              "\n                        "
-                          )
-                        ]
-                      )
-                    : _vm._e(),
-                  _vm._v(" "),
-                  _c("td", { staticClass: "align-middle text-center" }, [
-                    _vm.displayedOrder.status > 0
-                      ? _c(
-                          "button",
-                          {
-                            staticClass: "btn btn-primary btn-sm",
-                            attrs: {
-                              type: "button",
-                              "data-toggle": "modal",
-                              "data-target": "#addEquipment-" + info.template.id
-                            }
-                          },
-                          [_c("span", { staticClass: "fa fa-pencil" })]
-                        )
-                      : _vm._e(),
-                    _vm._v(" "),
-                    _c(
-                      "div",
+            _vm._l(_vm.paginationItems, function(info) {
+              return _c("tr", { key: info.id, class: _vm.rowClass(info) }, [
+                _c(
+                  "th",
+                  { staticClass: "text-center", attrs: { scope: "row" } },
+                  [
+                    _c("img", {
+                      attrs: {
+                        src: info.template.image,
+                        height: "40",
+                        alt: info.template.name
+                      }
+                    })
+                  ]
+                ),
+                _vm._v(" "),
+                _c("td", { staticClass: "align-middle text-center" }, [
+                  _vm._v(_vm._s(info.template.name))
+                ]),
+                _vm._v(" "),
+                _c("td", { staticClass: "align-middle text-center" }, [
+                  _vm._v(_vm._s(info.template.equipments.length))
+                ]),
+                _vm._v(" "),
+                _c("td", { staticClass: "align-middle text-center" }, [
+                  _vm._v(_vm._s(info.amount))
+                ]),
+                _vm._v(" "),
+                _c("td", { staticClass: "align-middle text-center" }, [
+                  _vm._v(
+                    "\n                            " +
+                      _vm._s(_vm.getBorrowedAmount(info.template.id)) +
+                      "\n                        "
+                  )
+                ]),
+                _vm._v(" "),
+                _vm.displayedOrder.status >= 2
+                  ? _c(
+                      "td",
                       {
-                        staticClass: "modal fade",
-                        attrs: {
-                          id: "addEquipment-" + info.template.id,
-                          tabindex: "-1",
-                          role: "dialog",
-                          "aria-labelledby":
-                            "addEquipmentLabel-" + info.template.id,
-                          "aria-hidden": "true"
+                        staticClass: "align-middle text-center font-weight-bold"
+                      },
+                      [
+                        _vm._v(
+                          "\n                            " +
+                            _vm._s(_vm.getReceivedAmount(info.template.id)) +
+                            "\n                        "
+                        )
+                      ]
+                    )
+                  : _vm._e(),
+                _vm._v(" "),
+                _vm.displayedOrder.status >= 2
+                  ? _c(
+                      "td",
+                      {
+                        class: {
+                          "align-middle": true,
+                          "text-center": true,
+                          "font-weight-bold": true,
+                          "bg-danger": _vm.getLostAmount(info.template_id) > 0,
+                          "text-light": _vm.getLostAmount(info.template_id) > 0
                         }
                       },
                       [
-                        _c(
-                          "div",
-                          {
-                            staticClass: "modal-dialog modal-xl",
-                            attrs: { role: "document" }
-                          },
-                          [
-                            _c("div", { staticClass: "modal-content" }, [
-                              _c("div", { staticClass: "modal-header" }, [
-                                _vm.displayedOrder.status <= 1
-                                  ? _c(
-                                      "h5",
-                                      {
-                                        staticClass: "modal-title",
-                                        attrs: {
-                                          id:
-                                            "addEquipmentLabel-" +
-                                            info.template.id
-                                        }
-                                      },
-                                      [
-                                        _vm._v(
-                                          "Thêm thiết bị " +
-                                            _vm._s(info.template.name)
-                                        )
-                                      ]
-                                    )
-                                  : _c(
-                                      "h5",
-                                      {
-                                        staticClass: "modal-title",
-                                        attrs: {
-                                          id:
-                                            "verifyEquipmentLabel-" +
-                                            info.template.id
-                                        }
-                                      },
-                                      [
-                                        _vm._v(
-                                          "Kiểm thiết bị " +
-                                            _vm._s(info.template.name)
-                                        )
-                                      ]
-                                    ),
-                                _vm._v(" "),
-                                _vm._m(13, true)
-                              ]),
+                        _vm._v(
+                          "\n                            " +
+                            _vm._s(_vm.getLostAmount(info.template.id)) +
+                            "\n                        "
+                        )
+                      ]
+                    )
+                  : _vm._e(),
+                _vm._v(" "),
+                _c("td", { staticClass: "align-middle text-center" }, [
+                  _vm.displayedOrder.status > 0
+                    ? _c(
+                        "button",
+                        {
+                          staticClass: "btn btn-primary btn-sm",
+                          attrs: {
+                            type: "button",
+                            "data-toggle": "modal",
+                            "data-target": "#addEquipment-" + info.template.id
+                          }
+                        },
+                        [_c("span", { staticClass: "fa fa-pencil" })]
+                      )
+                    : _vm._e(),
+                  _vm._v(" "),
+                  _c(
+                    "div",
+                    {
+                      staticClass: "modal fade",
+                      attrs: {
+                        id: "addEquipment-" + info.template.id,
+                        tabindex: "-1",
+                        role: "dialog",
+                        "aria-labelledby":
+                          "addEquipmentLabel-" + info.template.id,
+                        "aria-hidden": "true"
+                      }
+                    },
+                    [
+                      _c(
+                        "div",
+                        {
+                          staticClass: "modal-dialog modal-xl",
+                          attrs: { role: "document" }
+                        },
+                        [
+                          _c("div", { staticClass: "modal-content" }, [
+                            _c("div", { staticClass: "modal-header" }, [
+                              _vm.displayedOrder.status <= 1
+                                ? _c(
+                                    "h5",
+                                    {
+                                      staticClass: "modal-title",
+                                      attrs: {
+                                        id:
+                                          "addEquipmentLabel-" +
+                                          info.template.id
+                                      }
+                                    },
+                                    [
+                                      _vm._v(
+                                        "Thêm thiết bị " +
+                                          _vm._s(info.template.name)
+                                      )
+                                    ]
+                                  )
+                                : _c(
+                                    "h5",
+                                    {
+                                      staticClass: "modal-title",
+                                      attrs: {
+                                        id:
+                                          "verifyEquipmentLabel-" +
+                                          info.template.id
+                                      }
+                                    },
+                                    [
+                                      _vm._v(
+                                        "Kiểm thiết bị " +
+                                          _vm._s(info.template.name)
+                                      )
+                                    ]
+                                  ),
                               _vm._v(" "),
-                              _c("div", { staticClass: "modal-body" }, [
-                                _vm.displayedOrder.status <= 1
-                                  ? _c(
-                                      "table",
-                                      { staticClass: "table table-hover" },
-                                      [
-                                        _vm._m(14, true),
-                                        _vm._v(" "),
-                                        _c(
-                                          "tbody",
-                                          _vm._l(
-                                            info.template.equipments,
-                                            function(equipment) {
-                                              return _c(
-                                                "tr",
-                                                { key: equipment.id },
-                                                [
-                                                  _c(
-                                                    "th",
-                                                    {
-                                                      staticClass:
-                                                        "text-center align-middle",
-                                                      attrs: { scope: "row" }
-                                                    },
-                                                    [
-                                                      _vm._v(
-                                                        _vm._s(equipment.id)
-                                                      )
-                                                    ]
-                                                  ),
-                                                  _vm._v(" "),
-                                                  _c(
-                                                    "td",
-                                                    {
-                                                      staticClass:
-                                                        "text-center align-middle"
-                                                    },
-                                                    [
-                                                      _vm._v(
-                                                        _vm._s(
-                                                          _vm._f(
-                                                            "formatEquipmentPrice"
-                                                          )(equipment.price)
-                                                        )
-                                                      )
-                                                    ]
-                                                  ),
-                                                  _vm._v(" "),
-                                                  _c(
-                                                    "td",
-                                                    {
-                                                      staticClass:
-                                                        "text-center align-middle"
-                                                    },
-                                                    [
-                                                      _c("supplier-name", {
-                                                        attrs: {
-                                                          equipment: equipment
-                                                        }
-                                                      })
-                                                    ],
-                                                    1
-                                                  ),
-                                                  _vm._v(" "),
-                                                  _c(
-                                                    "td",
-                                                    {
-                                                      staticClass:
-                                                        "text-center align-middle"
-                                                    },
-                                                    [
-                                                      _c(
-                                                        "equipment-condition",
-                                                        {
-                                                          attrs: {
-                                                            condition:
-                                                              equipment.condition
-                                                          }
-                                                        }
-                                                      )
-                                                    ],
-                                                    1
-                                                  ),
-                                                  _vm._v(" "),
-                                                  _c(
-                                                    "td",
-                                                    {
-                                                      staticClass:
-                                                        "align-middle text-center"
-                                                    },
-                                                    [
-                                                      _c("equipment-status", {
-                                                        attrs: {
-                                                          status:
-                                                            equipment.status
-                                                        }
-                                                      })
-                                                    ],
-                                                    1
-                                                  ),
-                                                  _vm._v(" "),
-                                                  _c("td", [
-                                                    _vm._v(
-                                                      _vm._s(equipment.note)
-                                                    )
-                                                  ]),
-                                                  _vm._v(" "),
-                                                  _c(
-                                                    "td",
-                                                    {
-                                                      staticClass:
-                                                        "align-middle"
-                                                    },
-                                                    [
-                                                      _c(
-                                                        "button",
-                                                        {
-                                                          staticClass:
-                                                            "btn btn-success btn-sm",
-                                                          attrs: {
-                                                            disabled: _vm.disablePlusEquipmentButton(
-                                                              equipment.id,
-                                                              equipment.status
-                                                            )
-                                                          },
-                                                          on: {
-                                                            click: function(
-                                                              $event
-                                                            ) {
-                                                              return _vm.selectEquipment(
-                                                                equipment,
-                                                                info.template.id
-                                                              )
-                                                            }
-                                                          }
-                                                        },
-                                                        [
-                                                          _c("span", {
-                                                            staticClass:
-                                                              "fa fa-plus"
-                                                          })
-                                                        ]
-                                                      ),
-                                                      _vm._v(" "),
-                                                      _c(
-                                                        "button",
-                                                        {
-                                                          staticClass:
-                                                            "btn btn-danger btn-sm",
-                                                          attrs: {
-                                                            disabled: _vm.disableMinusEquipmentButton(
-                                                              equipment.id,
-                                                              equipment.status
-                                                            )
-                                                          },
-                                                          on: {
-                                                            click: function(
-                                                              $event
-                                                            ) {
-                                                              return _vm.removeEquipment(
-                                                                equipment.id,
-                                                                info.template.id
-                                                              )
-                                                            }
-                                                          }
-                                                        },
-                                                        [
-                                                          _c("span", {
-                                                            staticClass:
-                                                              "fa fa-minus"
-                                                          })
-                                                        ]
-                                                      )
-                                                    ]
-                                                  )
-                                                ]
-                                              )
-                                            }
-                                          ),
-                                          0
-                                        )
-                                      ]
-                                    )
-                                  : _c(
-                                      "table",
-                                      { staticClass: "table table-hover" },
-                                      [
-                                        _vm._m(15, true),
-                                        _vm._v(" "),
-                                        _c(
-                                          "tbody",
-                                          _vm._l(info.order_infos, function(
-                                            orderInfo
-                                          ) {
+                              _vm._m(12, true)
+                            ]),
+                            _vm._v(" "),
+                            _c("div", { staticClass: "modal-body" }, [
+                              _vm.displayedOrder.status <= 1
+                                ? _c(
+                                    "table",
+                                    { staticClass: "table table-hover" },
+                                    [
+                                      _vm._m(13, true),
+                                      _vm._v(" "),
+                                      _c(
+                                        "tbody",
+                                        _vm._l(
+                                          info.template.equipments,
+                                          function(equipment) {
                                             return _c(
                                               "tr",
-                                              { key: orderInfo.id },
+                                              { key: equipment.id },
                                               [
                                                 _c(
                                                   "th",
@@ -66663,13 +66438,22 @@ var render = function() {
                                                       "text-center align-middle",
                                                     attrs: { scope: "row" }
                                                   },
+                                                  [_vm._v(_vm._s(equipment.id))]
+                                                ),
+                                                _vm._v(" "),
+                                                _c(
+                                                  "td",
+                                                  {
+                                                    staticClass:
+                                                      "text-center align-middle"
+                                                  },
                                                   [
                                                     _vm._v(
-                                                      "\n                                                            " +
-                                                        _vm._s(
-                                                          orderInfo.equipment.id
-                                                        ) +
-                                                        "\n                                                        "
+                                                      _vm._s(
+                                                        _vm._f(
+                                                          "formatEquipmentPrice"
+                                                        )(equipment.price)
+                                                      )
                                                     )
                                                   ]
                                                 ),
@@ -66681,10 +66465,9 @@ var render = function() {
                                                       "text-center align-middle"
                                                   },
                                                   [
-                                                    _c("equipment-condition", {
+                                                    _c("supplier-name", {
                                                       attrs: {
-                                                        condition:
-                                                          orderInfo.condition_before
+                                                        equipment: equipment
                                                       }
                                                     })
                                                   ],
@@ -66698,505 +66481,98 @@ var render = function() {
                                                       "text-center align-middle"
                                                   },
                                                   [
-                                                    _vm.displayedOrder.status <=
-                                                    2
-                                                      ? _c(
-                                                          "div",
-                                                          {
-                                                            attrs: {
-                                                              id:
-                                                                orderInfo
-                                                                  .equipment.id
-                                                            }
-                                                          },
-                                                          [
-                                                            _c(
-                                                              "div",
-                                                              {
-                                                                staticClass:
-                                                                  "dropdown"
-                                                              },
-                                                              [
-                                                                _c(
-                                                                  "select",
-                                                                  {
-                                                                    directives: [
-                                                                      {
-                                                                        name:
-                                                                          "model",
-                                                                        rawName:
-                                                                          "v-model",
-                                                                        value:
-                                                                          orderInfo.condition_received,
-                                                                        expression:
-                                                                          "orderInfo.condition_received"
-                                                                      }
-                                                                    ],
-                                                                    staticClass:
-                                                                      "custom-select mx-0",
-                                                                    on: {
-                                                                      change: function(
-                                                                        $event
-                                                                      ) {
-                                                                        var $$selectedVal = Array.prototype.filter
-                                                                          .call(
-                                                                            $event
-                                                                              .target
-                                                                              .options,
-                                                                            function(
-                                                                              o
-                                                                            ) {
-                                                                              return o.selected
-                                                                            }
-                                                                          )
-                                                                          .map(
-                                                                            function(
-                                                                              o
-                                                                            ) {
-                                                                              var val =
-                                                                                "_value" in
-                                                                                o
-                                                                                  ? o._value
-                                                                                  : o.value
-                                                                              return val
-                                                                            }
-                                                                          )
-                                                                        _vm.$set(
-                                                                          orderInfo,
-                                                                          "condition_received",
-                                                                          $event
-                                                                            .target
-                                                                            .multiple
-                                                                            ? $$selectedVal
-                                                                            : $$selectedVal[0]
-                                                                        )
-                                                                      }
-                                                                    }
-                                                                  },
-                                                                  [
-                                                                    _c(
-                                                                      "option",
-                                                                      {
-                                                                        attrs: {
-                                                                          selected:
-                                                                            "",
-                                                                          value:
-                                                                            "1"
-                                                                        }
-                                                                      },
-                                                                      [
-                                                                        _c(
-                                                                          "equipment-condition",
-                                                                          {
-                                                                            attrs: {
-                                                                              condition: 1
-                                                                            }
-                                                                          }
-                                                                        )
-                                                                      ],
-                                                                      1
-                                                                    ),
-                                                                    _vm._v(" "),
-                                                                    _c(
-                                                                      "option",
-                                                                      {
-                                                                        attrs: {
-                                                                          value:
-                                                                            "2"
-                                                                        }
-                                                                      },
-                                                                      [
-                                                                        _c(
-                                                                          "equipment-condition",
-                                                                          {
-                                                                            attrs: {
-                                                                              condition: 2
-                                                                            }
-                                                                          }
-                                                                        )
-                                                                      ],
-                                                                      1
-                                                                    ),
-                                                                    _vm._v(" "),
-                                                                    _c(
-                                                                      "option",
-                                                                      {
-                                                                        attrs: {
-                                                                          value:
-                                                                            "0"
-                                                                        }
-                                                                      },
-                                                                      [
-                                                                        _c(
-                                                                          "equipment-condition",
-                                                                          {
-                                                                            attrs: {
-                                                                              condition: 0
-                                                                            }
-                                                                          }
-                                                                        )
-                                                                      ],
-                                                                      1
-                                                                    )
-                                                                  ]
-                                                                )
-                                                              ]
-                                                            )
-                                                          ]
-                                                        )
-                                                      : _c(
-                                                          "div",
-                                                          [
-                                                            _c(
-                                                              "equipment-condition",
-                                                              {
-                                                                attrs: {
-                                                                  condition:
-                                                                    orderInfo.condition_received
-                                                                }
-                                                              }
-                                                            )
-                                                          ],
-                                                          1
-                                                        )
-                                                  ]
-                                                ),
-                                                _vm._v(" "),
-                                                _c(
-                                                  "td",
-                                                  {
-                                                    staticClass: "text-center"
-                                                  },
-                                                  [
-                                                    _vm.displayedOrder.status <=
-                                                    2
-                                                      ? _c("textarea", {
-                                                          directives: [
-                                                            {
-                                                              name: "model",
-                                                              rawName:
-                                                                "v-model",
-                                                              value:
-                                                                orderInfo.note,
-                                                              expression:
-                                                                "orderInfo.note"
-                                                            }
-                                                          ],
-                                                          staticClass:
-                                                            "form-control",
-                                                          attrs: {
-                                                            name: "note",
-                                                            cols: "10"
-                                                          },
-                                                          domProps: {
-                                                            value:
-                                                              orderInfo.note
-                                                          },
-                                                          on: {
-                                                            input: function(
-                                                              $event
-                                                            ) {
-                                                              if (
-                                                                $event.target
-                                                                  .composing
-                                                              ) {
-                                                                return
-                                                              }
-                                                              _vm.$set(
-                                                                orderInfo,
-                                                                "note",
-                                                                $event.target
-                                                                  .value
-                                                              )
-                                                            }
-                                                          }
-                                                        })
-                                                      : _c("div", [
-                                                          _vm._v(
-                                                            _vm._s(
-                                                              orderInfo.note
-                                                            )
-                                                          )
-                                                        ])
-                                                  ]
+                                                    _c("equipment-condition", {
+                                                      attrs: {
+                                                        condition:
+                                                          equipment.condition
+                                                      }
+                                                    })
+                                                  ],
+                                                  1
                                                 ),
                                                 _vm._v(" "),
                                                 _c(
                                                   "td",
                                                   {
                                                     staticClass:
-                                                      "align-middle text-center pb-5"
+                                                      "align-middle text-center"
+                                                  },
+                                                  [
+                                                    _c("equipment-status", {
+                                                      attrs: {
+                                                        status: equipment.status
+                                                      }
+                                                    })
+                                                  ],
+                                                  1
+                                                ),
+                                                _vm._v(" "),
+                                                _c("td", [
+                                                  _vm._v(_vm._s(equipment.note))
+                                                ]),
+                                                _vm._v(" "),
+                                                _c(
+                                                  "td",
+                                                  {
+                                                    staticClass: "align-middle"
                                                   },
                                                   [
                                                     _c(
-                                                      "div",
+                                                      "button",
                                                       {
                                                         staticClass:
-                                                          "form-check"
+                                                          "btn btn-success btn-sm",
+                                                        attrs: {
+                                                          disabled: _vm.disablePlusEquipmentButton(
+                                                            equipment.id,
+                                                            equipment.status
+                                                          )
+                                                        },
+                                                        on: {
+                                                          click: function(
+                                                            $event
+                                                          ) {
+                                                            return _vm.selectEquipment(
+                                                              equipment,
+                                                              info.template.id
+                                                            )
+                                                          }
+                                                        }
                                                       },
                                                       [
-                                                        _c("input", {
-                                                          directives: [
-                                                            {
-                                                              name: "model",
-                                                              rawName:
-                                                                "v-model",
-                                                              value:
-                                                                _vm
-                                                                  .equipmentReceived[
-                                                                  orderInfo
-                                                                    .equipment
-                                                                    .id
-                                                                ],
-                                                              expression:
-                                                                "equipmentReceived[orderInfo.equipment.id]"
-                                                            }
-                                                          ],
+                                                        _c("span", {
                                                           staticClass:
-                                                            "form-check-input",
-                                                          attrs: {
-                                                            disabled:
-                                                              _vm.equipmentLost[
-                                                                orderInfo
-                                                                  .equipment.id
-                                                              ],
-                                                            type: "checkbox"
-                                                          },
-                                                          domProps: {
-                                                            checked: Array.isArray(
-                                                              _vm
-                                                                .equipmentReceived[
-                                                                orderInfo
-                                                                  .equipment.id
-                                                              ]
-                                                            )
-                                                              ? _vm._i(
-                                                                  _vm
-                                                                    .equipmentReceived[
-                                                                    orderInfo
-                                                                      .equipment
-                                                                      .id
-                                                                  ],
-                                                                  null
-                                                                ) > -1
-                                                              : _vm
-                                                                  .equipmentReceived[
-                                                                  orderInfo
-                                                                    .equipment
-                                                                    .id
-                                                                ]
-                                                          },
-                                                          on: {
-                                                            change: function(
-                                                              $event
-                                                            ) {
-                                                              var $$a =
-                                                                  _vm
-                                                                    .equipmentReceived[
-                                                                    orderInfo
-                                                                      .equipment
-                                                                      .id
-                                                                  ],
-                                                                $$el =
-                                                                  $event.target,
-                                                                $$c = $$el.checked
-                                                                  ? true
-                                                                  : false
-                                                              if (
-                                                                Array.isArray(
-                                                                  $$a
-                                                                )
-                                                              ) {
-                                                                var $$v = null,
-                                                                  $$i = _vm._i(
-                                                                    $$a,
-                                                                    $$v
-                                                                  )
-                                                                if (
-                                                                  $$el.checked
-                                                                ) {
-                                                                  $$i < 0 &&
-                                                                    _vm.$set(
-                                                                      _vm.equipmentReceived,
-                                                                      orderInfo
-                                                                        .equipment
-                                                                        .id,
-                                                                      $$a.concat(
-                                                                        [$$v]
-                                                                      )
-                                                                    )
-                                                                } else {
-                                                                  $$i > -1 &&
-                                                                    _vm.$set(
-                                                                      _vm.equipmentReceived,
-                                                                      orderInfo
-                                                                        .equipment
-                                                                        .id,
-                                                                      $$a
-                                                                        .slice(
-                                                                          0,
-                                                                          $$i
-                                                                        )
-                                                                        .concat(
-                                                                          $$a.slice(
-                                                                            $$i +
-                                                                              1
-                                                                          )
-                                                                        )
-                                                                    )
-                                                                }
-                                                              } else {
-                                                                _vm.$set(
-                                                                  _vm.equipmentReceived,
-                                                                  orderInfo
-                                                                    .equipment
-                                                                    .id,
-                                                                  $$c
-                                                                )
-                                                              }
-                                                            }
-                                                          }
+                                                            "fa fa-plus"
                                                         })
                                                       ]
-                                                    )
-                                                  ]
-                                                ),
-                                                _vm._v(" "),
-                                                _c(
-                                                  "td",
-                                                  {
-                                                    staticClass:
-                                                      "align-middle text-center pb-5"
-                                                  },
-                                                  [
+                                                    ),
+                                                    _vm._v(" "),
                                                     _c(
-                                                      "div",
+                                                      "button",
                                                       {
                                                         staticClass:
-                                                          "form-check"
+                                                          "btn btn-danger btn-sm",
+                                                        attrs: {
+                                                          disabled: _vm.disableMinusEquipmentButton(
+                                                            equipment.id,
+                                                            equipment.status
+                                                          )
+                                                        },
+                                                        on: {
+                                                          click: function(
+                                                            $event
+                                                          ) {
+                                                            return _vm.removeEquipment(
+                                                              equipment.id,
+                                                              info.template.id
+                                                            )
+                                                          }
+                                                        }
                                                       },
                                                       [
-                                                        _c("input", {
-                                                          directives: [
-                                                            {
-                                                              name: "model",
-                                                              rawName:
-                                                                "v-model",
-                                                              value:
-                                                                _vm
-                                                                  .equipmentLost[
-                                                                  orderInfo
-                                                                    .equipment
-                                                                    .id
-                                                                ],
-                                                              expression:
-                                                                "equipmentLost[orderInfo.equipment.id]"
-                                                            }
-                                                          ],
+                                                        _c("span", {
                                                           staticClass:
-                                                            "form-check-input",
-                                                          attrs: {
-                                                            disabled:
-                                                              _vm
-                                                                .equipmentReceived[
-                                                                orderInfo
-                                                                  .equipment.id
-                                                              ],
-                                                            type: "checkbox"
-                                                          },
-                                                          domProps: {
-                                                            checked: Array.isArray(
-                                                              _vm.equipmentLost[
-                                                                orderInfo
-                                                                  .equipment.id
-                                                              ]
-                                                            )
-                                                              ? _vm._i(
-                                                                  _vm
-                                                                    .equipmentLost[
-                                                                    orderInfo
-                                                                      .equipment
-                                                                      .id
-                                                                  ],
-                                                                  null
-                                                                ) > -1
-                                                              : _vm
-                                                                  .equipmentLost[
-                                                                  orderInfo
-                                                                    .equipment
-                                                                    .id
-                                                                ]
-                                                          },
-                                                          on: {
-                                                            change: function(
-                                                              $event
-                                                            ) {
-                                                              var $$a =
-                                                                  _vm
-                                                                    .equipmentLost[
-                                                                    orderInfo
-                                                                      .equipment
-                                                                      .id
-                                                                  ],
-                                                                $$el =
-                                                                  $event.target,
-                                                                $$c = $$el.checked
-                                                                  ? true
-                                                                  : false
-                                                              if (
-                                                                Array.isArray(
-                                                                  $$a
-                                                                )
-                                                              ) {
-                                                                var $$v = null,
-                                                                  $$i = _vm._i(
-                                                                    $$a,
-                                                                    $$v
-                                                                  )
-                                                                if (
-                                                                  $$el.checked
-                                                                ) {
-                                                                  $$i < 0 &&
-                                                                    _vm.$set(
-                                                                      _vm.equipmentLost,
-                                                                      orderInfo
-                                                                        .equipment
-                                                                        .id,
-                                                                      $$a.concat(
-                                                                        [$$v]
-                                                                      )
-                                                                    )
-                                                                } else {
-                                                                  $$i > -1 &&
-                                                                    _vm.$set(
-                                                                      _vm.equipmentLost,
-                                                                      orderInfo
-                                                                        .equipment
-                                                                        .id,
-                                                                      $$a
-                                                                        .slice(
-                                                                          0,
-                                                                          $$i
-                                                                        )
-                                                                        .concat(
-                                                                          $$a.slice(
-                                                                            $$i +
-                                                                              1
-                                                                          )
-                                                                        )
-                                                                    )
-                                                                }
-                                                              } else {
-                                                                _vm.$set(
-                                                                  _vm.equipmentLost,
-                                                                  orderInfo
-                                                                    .equipment
-                                                                    .id,
-                                                                  $$c
-                                                                )
-                                                              }
-                                                            }
-                                                          }
+                                                            "fa fa-minus"
                                                         })
                                                       ]
                                                     )
@@ -67204,102 +66580,571 @@ var render = function() {
                                                 )
                                               ]
                                             )
-                                          }),
-                                          0
-                                        )
-                                      ]
-                                    )
-                              ]),
-                              _vm._v(" "),
-                              _vm._m(16, true)
-                            ])
-                          ]
-                        )
-                      ]
-                    )
-                  ])
-                ]
-              )
+                                          }
+                                        ),
+                                        0
+                                      )
+                                    ]
+                                  )
+                                : _c(
+                                    "table",
+                                    { staticClass: "table table-hover" },
+                                    [
+                                      _vm._m(14, true),
+                                      _vm._v(" "),
+                                      _c(
+                                        "tbody",
+                                        _vm._l(info.order_infos, function(
+                                          orderInfo
+                                        ) {
+                                          return _c(
+                                            "tr",
+                                            { key: orderInfo.id },
+                                            [
+                                              _c(
+                                                "th",
+                                                {
+                                                  staticClass:
+                                                    "text-center align-middle",
+                                                  attrs: { scope: "row" }
+                                                },
+                                                [
+                                                  _vm._v(
+                                                    "\n                                                            " +
+                                                      _vm._s(
+                                                        orderInfo.equipment_id
+                                                      ) +
+                                                      "\n                                                        "
+                                                  )
+                                                ]
+                                              ),
+                                              _vm._v(" "),
+                                              _c(
+                                                "td",
+                                                {
+                                                  staticClass:
+                                                    "text-center align-middle"
+                                                },
+                                                [
+                                                  _c("equipment-condition", {
+                                                    attrs: {
+                                                      condition:
+                                                        orderInfo.condition_before
+                                                    }
+                                                  })
+                                                ],
+                                                1
+                                              ),
+                                              _vm._v(" "),
+                                              _c(
+                                                "td",
+                                                {
+                                                  staticClass:
+                                                    "text-center align-middle"
+                                                },
+                                                [
+                                                  _vm.displayedOrder.status <= 2
+                                                    ? _c(
+                                                        "div",
+                                                        {
+                                                          attrs: {
+                                                            id:
+                                                              orderInfo.equipment_id
+                                                          }
+                                                        },
+                                                        [
+                                                          _c(
+                                                            "div",
+                                                            {
+                                                              staticClass:
+                                                                "dropdown"
+                                                            },
+                                                            [
+                                                              _c(
+                                                                "select",
+                                                                {
+                                                                  directives: [
+                                                                    {
+                                                                      name:
+                                                                        "model",
+                                                                      rawName:
+                                                                        "v-model",
+                                                                      value:
+                                                                        orderInfo.condition_received,
+                                                                      expression:
+                                                                        "orderInfo.condition_received"
+                                                                    }
+                                                                  ],
+                                                                  staticClass:
+                                                                    "custom-select mx-0",
+                                                                  on: {
+                                                                    change: function(
+                                                                      $event
+                                                                    ) {
+                                                                      var $$selectedVal = Array.prototype.filter
+                                                                        .call(
+                                                                          $event
+                                                                            .target
+                                                                            .options,
+                                                                          function(
+                                                                            o
+                                                                          ) {
+                                                                            return o.selected
+                                                                          }
+                                                                        )
+                                                                        .map(
+                                                                          function(
+                                                                            o
+                                                                          ) {
+                                                                            var val =
+                                                                              "_value" in
+                                                                              o
+                                                                                ? o._value
+                                                                                : o.value
+                                                                            return val
+                                                                          }
+                                                                        )
+                                                                      _vm.$set(
+                                                                        orderInfo,
+                                                                        "condition_received",
+                                                                        $event
+                                                                          .target
+                                                                          .multiple
+                                                                          ? $$selectedVal
+                                                                          : $$selectedVal[0]
+                                                                      )
+                                                                    }
+                                                                  }
+                                                                },
+                                                                [
+                                                                  _c(
+                                                                    "option",
+                                                                    {
+                                                                      attrs: {
+                                                                        selected:
+                                                                          "",
+                                                                        value:
+                                                                          "1"
+                                                                      }
+                                                                    },
+                                                                    [
+                                                                      _c(
+                                                                        "equipment-condition",
+                                                                        {
+                                                                          attrs: {
+                                                                            condition: 1
+                                                                          }
+                                                                        }
+                                                                      )
+                                                                    ],
+                                                                    1
+                                                                  ),
+                                                                  _vm._v(" "),
+                                                                  _c(
+                                                                    "option",
+                                                                    {
+                                                                      attrs: {
+                                                                        value:
+                                                                          "2"
+                                                                      }
+                                                                    },
+                                                                    [
+                                                                      _c(
+                                                                        "equipment-condition",
+                                                                        {
+                                                                          attrs: {
+                                                                            condition: 2
+                                                                          }
+                                                                        }
+                                                                      )
+                                                                    ],
+                                                                    1
+                                                                  ),
+                                                                  _vm._v(" "),
+                                                                  _c(
+                                                                    "option",
+                                                                    {
+                                                                      attrs: {
+                                                                        value:
+                                                                          "0"
+                                                                      }
+                                                                    },
+                                                                    [
+                                                                      _c(
+                                                                        "equipment-condition",
+                                                                        {
+                                                                          attrs: {
+                                                                            condition: 0
+                                                                          }
+                                                                        }
+                                                                      )
+                                                                    ],
+                                                                    1
+                                                                  )
+                                                                ]
+                                                              )
+                                                            ]
+                                                          )
+                                                        ]
+                                                      )
+                                                    : _c(
+                                                        "div",
+                                                        [
+                                                          _c(
+                                                            "equipment-condition",
+                                                            {
+                                                              attrs: {
+                                                                condition:
+                                                                  orderInfo.condition_received
+                                                              }
+                                                            }
+                                                          )
+                                                        ],
+                                                        1
+                                                      )
+                                                ]
+                                              ),
+                                              _vm._v(" "),
+                                              _c(
+                                                "td",
+                                                { staticClass: "text-center" },
+                                                [
+                                                  _vm.displayedOrder.status <= 2
+                                                    ? _c("textarea", {
+                                                        directives: [
+                                                          {
+                                                            name: "model",
+                                                            rawName: "v-model",
+                                                            value:
+                                                              orderInfo.note,
+                                                            expression:
+                                                              "orderInfo.note"
+                                                          }
+                                                        ],
+                                                        staticClass:
+                                                          "form-control",
+                                                        attrs: {
+                                                          name: "note",
+                                                          cols: "10"
+                                                        },
+                                                        domProps: {
+                                                          value: orderInfo.note
+                                                        },
+                                                        on: {
+                                                          input: function(
+                                                            $event
+                                                          ) {
+                                                            if (
+                                                              $event.target
+                                                                .composing
+                                                            ) {
+                                                              return
+                                                            }
+                                                            _vm.$set(
+                                                              orderInfo,
+                                                              "note",
+                                                              $event.target
+                                                                .value
+                                                            )
+                                                          }
+                                                        }
+                                                      })
+                                                    : _c("div", [
+                                                        _vm._v(
+                                                          _vm._s(orderInfo.note)
+                                                        )
+                                                      ])
+                                                ]
+                                              ),
+                                              _vm._v(" "),
+                                              _c(
+                                                "td",
+                                                {
+                                                  staticClass:
+                                                    "align-middle text-center pb-5"
+                                                },
+                                                [
+                                                  _c(
+                                                    "div",
+                                                    {
+                                                      staticClass: "form-check"
+                                                    },
+                                                    [
+                                                      _c("input", {
+                                                        directives: [
+                                                          {
+                                                            name: "model",
+                                                            rawName: "v-model",
+                                                            value:
+                                                              _vm
+                                                                .equipmentReceived[
+                                                                orderInfo
+                                                                  .equipment_id
+                                                              ],
+                                                            expression:
+                                                              "equipmentReceived[orderInfo.equipment_id]"
+                                                          }
+                                                        ],
+                                                        staticClass:
+                                                          "form-check-input",
+                                                        attrs: {
+                                                          disabled:
+                                                            _vm.equipmentLost[
+                                                              orderInfo
+                                                                .equipment_id
+                                                            ],
+                                                          type: "checkbox"
+                                                        },
+                                                        domProps: {
+                                                          checked: Array.isArray(
+                                                            _vm
+                                                              .equipmentReceived[
+                                                              orderInfo
+                                                                .equipment_id
+                                                            ]
+                                                          )
+                                                            ? _vm._i(
+                                                                _vm
+                                                                  .equipmentReceived[
+                                                                  orderInfo
+                                                                    .equipment_id
+                                                                ],
+                                                                null
+                                                              ) > -1
+                                                            : _vm
+                                                                .equipmentReceived[
+                                                                orderInfo
+                                                                  .equipment_id
+                                                              ]
+                                                        },
+                                                        on: {
+                                                          change: function(
+                                                            $event
+                                                          ) {
+                                                            var $$a =
+                                                                _vm
+                                                                  .equipmentReceived[
+                                                                  orderInfo
+                                                                    .equipment_id
+                                                                ],
+                                                              $$el =
+                                                                $event.target,
+                                                              $$c = $$el.checked
+                                                                ? true
+                                                                : false
+                                                            if (
+                                                              Array.isArray($$a)
+                                                            ) {
+                                                              var $$v = null,
+                                                                $$i = _vm._i(
+                                                                  $$a,
+                                                                  $$v
+                                                                )
+                                                              if (
+                                                                $$el.checked
+                                                              ) {
+                                                                $$i < 0 &&
+                                                                  _vm.$set(
+                                                                    _vm.equipmentReceived,
+                                                                    orderInfo.equipment_id,
+                                                                    $$a.concat([
+                                                                      $$v
+                                                                    ])
+                                                                  )
+                                                              } else {
+                                                                $$i > -1 &&
+                                                                  _vm.$set(
+                                                                    _vm.equipmentReceived,
+                                                                    orderInfo.equipment_id,
+                                                                    $$a
+                                                                      .slice(
+                                                                        0,
+                                                                        $$i
+                                                                      )
+                                                                      .concat(
+                                                                        $$a.slice(
+                                                                          $$i +
+                                                                            1
+                                                                        )
+                                                                      )
+                                                                  )
+                                                              }
+                                                            } else {
+                                                              _vm.$set(
+                                                                _vm.equipmentReceived,
+                                                                orderInfo.equipment_id,
+                                                                $$c
+                                                              )
+                                                            }
+                                                          }
+                                                        }
+                                                      })
+                                                    ]
+                                                  )
+                                                ]
+                                              ),
+                                              _vm._v(" "),
+                                              _c(
+                                                "td",
+                                                {
+                                                  staticClass:
+                                                    "align-middle text-center pb-5"
+                                                },
+                                                [
+                                                  _c(
+                                                    "div",
+                                                    {
+                                                      staticClass: "form-check"
+                                                    },
+                                                    [
+                                                      _c("input", {
+                                                        directives: [
+                                                          {
+                                                            name: "model",
+                                                            rawName: "v-model",
+                                                            value:
+                                                              _vm.equipmentLost[
+                                                                orderInfo
+                                                                  .equipment_id
+                                                              ],
+                                                            expression:
+                                                              "equipmentLost[orderInfo.equipment_id]"
+                                                          }
+                                                        ],
+                                                        staticClass:
+                                                          "form-check-input",
+                                                        attrs: {
+                                                          disabled:
+                                                            _vm
+                                                              .equipmentReceived[
+                                                              orderInfo
+                                                                .equipment_id
+                                                            ],
+                                                          type: "checkbox"
+                                                        },
+                                                        domProps: {
+                                                          checked: Array.isArray(
+                                                            _vm.equipmentLost[
+                                                              orderInfo
+                                                                .equipment_id
+                                                            ]
+                                                          )
+                                                            ? _vm._i(
+                                                                _vm
+                                                                  .equipmentLost[
+                                                                  orderInfo
+                                                                    .equipment_id
+                                                                ],
+                                                                null
+                                                              ) > -1
+                                                            : _vm.equipmentLost[
+                                                                orderInfo
+                                                                  .equipment_id
+                                                              ]
+                                                        },
+                                                        on: {
+                                                          change: function(
+                                                            $event
+                                                          ) {
+                                                            var $$a =
+                                                                _vm
+                                                                  .equipmentLost[
+                                                                  orderInfo
+                                                                    .equipment_id
+                                                                ],
+                                                              $$el =
+                                                                $event.target,
+                                                              $$c = $$el.checked
+                                                                ? true
+                                                                : false
+                                                            if (
+                                                              Array.isArray($$a)
+                                                            ) {
+                                                              var $$v = null,
+                                                                $$i = _vm._i(
+                                                                  $$a,
+                                                                  $$v
+                                                                )
+                                                              if (
+                                                                $$el.checked
+                                                              ) {
+                                                                $$i < 0 &&
+                                                                  _vm.$set(
+                                                                    _vm.equipmentLost,
+                                                                    orderInfo.equipment_id,
+                                                                    $$a.concat([
+                                                                      $$v
+                                                                    ])
+                                                                  )
+                                                              } else {
+                                                                $$i > -1 &&
+                                                                  _vm.$set(
+                                                                    _vm.equipmentLost,
+                                                                    orderInfo.equipment_id,
+                                                                    $$a
+                                                                      .slice(
+                                                                        0,
+                                                                        $$i
+                                                                      )
+                                                                      .concat(
+                                                                        $$a.slice(
+                                                                          $$i +
+                                                                            1
+                                                                        )
+                                                                      )
+                                                                  )
+                                                              }
+                                                            } else {
+                                                              _vm.$set(
+                                                                _vm.equipmentLost,
+                                                                orderInfo.equipment_id,
+                                                                $$c
+                                                              )
+                                                            }
+                                                          }
+                                                        }
+                                                      })
+                                                    ]
+                                                  )
+                                                ]
+                                              )
+                                            ]
+                                          )
+                                        }),
+                                        0
+                                      )
+                                    ]
+                                  )
+                            ]),
+                            _vm._v(" "),
+                            _vm._m(15, true)
+                          ])
+                        ]
+                      )
+                    ]
+                  )
+                ])
+              ])
             }),
             0
           )
         ]),
         _vm._v(" "),
-        _c("div", { staticClass: "row justify-content-center" }, [
-          _c("nav", { attrs: { "aria-label": "Page navigation example" } }, [
-            _c(
-              "ul",
-              { staticClass: "pagination" },
-              [
-                _c("li", { staticClass: "page-item" }, [
-                  _c(
-                    "button",
-                    {
-                      staticClass: "page-link active",
-                      attrs: { href: "#", disabled: _vm.page <= 1 },
-                      on: {
-                        click: function($event) {
-                          _vm.page--
-                        }
-                      }
-                    },
-                    [_vm._v("Previous")]
-                  )
-                ]),
-                _vm._v(" "),
-                _vm._l(_vm.pages.slice(_vm.page - 1, _vm.page + 5), function(
-                  pageNumber
-                ) {
-                  return _c(
-                    "li",
-                    {
-                      key: pageNumber,
-                      class: {
-                        "page-item": true,
-                        active: _vm.page == pageNumber
-                      }
-                    },
-                    [
-                      _c(
-                        "a",
-                        {
-                          staticClass: "page-link",
-                          attrs: { href: "#" },
-                          on: {
-                            click: function($event) {
-                              _vm.page = pageNumber
-                            }
-                          }
-                        },
-                        [_vm._v(_vm._s(pageNumber))]
-                      )
-                    ]
-                  )
-                }),
-                _vm._v(" "),
-                _c("li", { staticClass: "page-item" }, [
-                  _c(
-                    "button",
-                    {
-                      staticClass: "page-link",
-                      attrs: {
-                        href: "#",
-                        disabled: _vm.page >= _vm.pages.length
-                      },
-                      on: {
-                        click: function($event) {
-                          _vm.page++
-                        }
-                      }
-                    },
-                    [_vm._v("Next")]
-                  )
-                ])
-              ],
-              2
-            )
-          ])
-        ]),
+        _c(
+          "div",
+          { staticClass: "row justify-content-center" },
+          [
+            _c("pagination", {
+              attrs: { items: _vm.searchInputItems },
+              on: {
+                change: function($event) {
+                  return _vm.pagination($event)
+                }
+              }
+            })
+          ],
+          1
+        ),
         _vm._v(" "),
         _c("hr"),
         _vm._v(" "),
@@ -67488,19 +67333,6 @@ var staticRenderFns = [
     return _c("span", { staticClass: "icon" }, [
       _c("i", { staticClass: "fa fa-thumbs-up" })
     ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c(
-      "button",
-      {
-        staticClass: "btn btn-outline-primary my-2 my-sm-0",
-        attrs: { type: "submit" }
-      },
-      [_c("span", { staticClass: "fa fa-search" })]
-    )
   },
   function() {
     var _vm = this

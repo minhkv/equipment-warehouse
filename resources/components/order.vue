@@ -118,7 +118,6 @@ export default {
             filterStatusItems: [],
             searchInputItems: [],
             paginationItems: [],
-            displayedOrders: [],
         };
     },
     created() {
