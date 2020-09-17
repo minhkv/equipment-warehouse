@@ -208,33 +208,12 @@ class OrderController extends Controller
     }
 
     public function equipmentOutput(Request $request, Order $order) {
-        $templateBorrowedAmount = $request->input('templateBorrowedAmount');
         $orderRequestInfos = $request->input('orderRequestInfos');
         $dateOutput = date_create($request->input('dateOutput'));
         try {
-            foreach($order->orderRequestInfos as $orderRequestInfoModel) {
-                // Update Borrowed Amount
-                $template_id = $orderRequestInfoModel->template_id;
-                $orderRequestInfoModel->update([
-                    'borrowed_amount' => $templateBorrowedAmount[$template_id]
-                ]);
-                // Create new orderInfo
-                foreach($orderRequestInfos[$template_id]['order_infos'] as $orderInfo){
-                    // Check if equipment is borrowed
-                    $equipment = Equipment::where('id', $orderInfo['equipment_id'])->first();
-                    if(!$this->checkEquipmentAvailable($equipment)){
-                        throw new Exception('Thiết bị '. $equipment->template->name . ' có mã ' . $equipment->id .' đã cho mượn');
-                    }
-                    // Delete orderInfo which is pending and create new orderInfo
-                    $equipment->orderInfos()->where('status', 3)->delete();
-                    $orderRequestInfoModel->orderInfos()->create([
-                        'equipment_id' => $orderInfo['equipment_id'],
-                        'condition_before' => $orderInfo['condition_before'],
-                    ]);
-                    // Update equipment status to working
-                    $equipment->update(['status' => 2]);
-                }
-            }
+            $this->checkEquipmentsAvailable($request, $order);
+            $this->createOrUpdateOrderInfo($request, $order);
+            $this->updateEquipmentStatus($request, $order);
             $order->update([
                 'status' => 2, //output
                 'date_output' => date_format($dateOutput, 'Y-m-d H:i:s')
@@ -250,6 +229,43 @@ class OrderController extends Controller
         return $equipment->orderInfos()->where('status', 2)->count() == 0 &&
             $equipment->status == 1;
     }
+    public function checkEquipmentsAvailable(Request $request, Order $order) {
+        $orderRequestInfos = $request->input('orderRequestInfos');
+        foreach($order->orderRequestInfos as $orderRequestInfoModel) {
+            $template_id = $orderRequestInfoModel->template_id;
+            foreach($orderRequestInfos[$template_id]['order_infos'] as $orderInfo){
+                $equipment = Equipment::where('id', $orderInfo['equipment_id'])->first();
+                if(!$this->checkEquipmentAvailable($equipment)){
+                    throw new Exception('[error] Thiết bị '. $equipment->template->name . ' có mã ' . $equipment->id .' đã cho mượn');
+                }
+            }
+        }
+    }
+    public function createOrUpdateOrderInfo(Request $request, Order $order) {
+        $orderRequestInfos = $request->input('orderRequestInfos');
+        foreach($order->orderRequestInfos as $orderRequestInfoModel) {
+            $template_id = $orderRequestInfoModel->template_id;
+            // Create new orderInfo
+            foreach($orderRequestInfos[$template_id]['order_infos'] as $orderInfo){
+                $equipment = Equipment::where('id', $orderInfo['equipment_id'])->first();
+                $equipment->orderInfos()->where('status', 3)->delete();
+                $orderRequestInfoModel->orderInfos()->create([
+                    'equipment_id' => $orderInfo['equipment_id'],
+                    'condition_before' => $orderInfo['condition_before'],
+                ]);
+            }
+        }
+    }
+    public function updateEquipmentStatus(Request $request, Order $order) {
+        $orderRequestInfos = $request->input('orderRequestInfos');
+        foreach($order->orderRequestInfos as $orderRequestInfoModel) {
+            $template_id = $orderRequestInfoModel->template_id;
+            foreach($orderRequestInfos[$template_id]['order_infos'] as $orderInfo){
+                $equipment = Equipment::where('id', $orderInfo['equipment_id'])->first();
+                $equipment->update(['status' => 2]);
+            }
+        }
+    }
 
     public function equipmentReturn(Request $request, Order $order) {
         $orderRequestInfos = $request->input('orderRequestInfos');
@@ -260,7 +276,6 @@ class OrderController extends Controller
             foreach($orderRequestInfos[$template_id]['order_infos'] as $orderInfo){
                 $orderRequestInfoModel->orderInfos()->where('id', $orderInfo['id'])->update([
                     'status' => $orderInfo['status'],
-                    
                     'note' => $orderInfo['note'],
                 ]);
                 if($orderInfo['status'] != 0) {
