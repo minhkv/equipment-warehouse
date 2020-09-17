@@ -2180,6 +2180,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ["equipmentTemplateIndexUrl", "equipmentTemplateUpdateUrl", "equipmentIndexUrl", "equipmentCreateUrl", "equipmentTemplate", "suppliers"],
   data: function data() {
@@ -2197,6 +2200,11 @@ __webpack_require__.r(__webpack_exports__);
   methods: {
     getOrder: function getOrder(orderInfo) {
       return orderInfo.order_request_info.order;
+    },
+    sortOrder: function sortOrder(a, b) {
+      var dateA = new Date(this.getOrder(a).date_output);
+      var dateB = new Date(this.getOrder(b).date_output);
+      return dateB.getTime() - dateA.getTime();
     },
     handleFileUpload: function handleFileUpload() {
       console.log("change");
@@ -62949,7 +62957,29 @@ var render = function() {
               id: "detail" + equipment.id,
               title: "Lịch sử thiết bị: " + equipment.id,
               size: "lg"
-            }
+            },
+            scopedSlots: _vm._u(
+              [
+                {
+                  key: "footer",
+                  fn: function() {
+                    return [
+                      _c(
+                        "button",
+                        {
+                          staticClass: "btn btn-secondary",
+                          attrs: { type: "button", "data-dismiss": "modal" }
+                        },
+                        [_vm._v("Đóng")]
+                      )
+                    ]
+                  },
+                  proxy: true
+                }
+              ],
+              null,
+              true
+            )
           },
           [
             _c("table", { staticClass: "table" }, [
@@ -62969,7 +62999,9 @@ var render = function() {
               _vm._v(" "),
               _c(
                 "tbody",
-                _vm._l(equipment.order_infos, function(info) {
+                _vm._l(equipment.order_infos.sort(_vm.sortOrder), function(
+                  info
+                ) {
                   return _c("tr", { key: info.id }, [
                     _c("td", { attrs: { scope: "row" } }, [
                       _vm._v(_vm._s(_vm.getOrder(info).id))
@@ -62993,7 +63025,13 @@ var render = function() {
                       1
                     ),
                     _vm._v(" "),
-                    _c("td", [_vm._v(_vm._s(_vm.getOrder(info).date_output))])
+                    _c("td", [
+                      _vm._v(
+                        _vm._s(
+                          _vm._f("formatDate")(_vm.getOrder(info).date_output)
+                        )
+                      )
+                    ])
                   ])
                 }),
                 0

@@ -114,15 +114,18 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="info in equipment.order_infos" :key="info.id">
+                    <tr v-for="info in equipment.order_infos.sort(sortOrder)" :key="info.id">
                         <td scope="row">{{ getOrder(info).id }}</td>
                         <td>{{ getOrder(info).guest_name }}</td>
                         <td><equipment-condition :condition="info.condition_received"></equipment-condition></td>
                         <td><info-status :status="info.status"></info-status></td>
-                        <td>{{ getOrder(info).date_output }}</td>
+                        <td>{{ getOrder(info).date_output|formatDate }}</td>
                     </tr>
                 </tbody>
             </table>
+            <template v-slot:footer>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+            </template>
         </modal-component>
         <modal-component v-for="(equipment, index) in template.equipments" :key="'e' + equipment.id" :id="'editEquipment' + equipment.id" :title="'Chỉnh sửa thiết bị: ' + equipment.id">
             <equipment-form :equipment="equipment" :suppliers="suppliers" @update="updateEquipment($event, index)" @close="closeModal('#editEquipment' + equipment.id)" method="PUT" :url="equipmentIndexUrl + '/' + equipment.id"></equipment-form>
@@ -155,6 +158,11 @@
         methods: {
             getOrder(orderInfo) {
                 return orderInfo.order_request_info.order;
+            },
+            sortOrder(a, b) {
+                let dateA = new Date(this.getOrder(a).date_output);
+                let dateB = new Date(this.getOrder(b).date_output);
+                return dateB.getTime() - dateA.getTime();
             },
             handleFileUpload() {
                 console.log("change");
