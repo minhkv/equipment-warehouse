@@ -103,100 +103,6 @@
                                                 <button class="btn btn-success" type="button" data-toggle="modal" data-target="#addEquipment">
                                                     Chọn thiết bị
                                                 </button>
-                                                
-                                                <div class="modal fade" id="addEquipment" tabindex="-1" role="dialog" aria-labelledby="addEquipmentLabel" aria-hidden="true">
-                                                    <div class="modal-dialog modal-lg" role="document">
-                                                        <div class="modal-content">
-                                                            <div class="modal-header">
-                                                                <h5 class="modal-title" id="addEquipmentLabel">Thêm thiết bị</h5>
-                                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                                    <span aria-hidden="true">&times;</span>
-                                                                </button>
-                                                            </div>
-                                                            <div class="modal-body">
-                                                                <div class="row">
-                                                                    <div class="dropdown col-3">
-                                                                        <select v-model="category_id" v-on:change="filterTemplate" class="custom-select mx-0">
-                                                                            <option selected value='0'>Loại thiết bị</option>
-                                                                            <!-- <option selected value='0'>Tất cả</option> -->
-                                                                            <option v-for="category in categories" :key="category.id" :value="category.id">{{ category.name }}</option>
-                                                                        </select>
-                                                                    </div>
-                                                                    <div class="col-8">
-                                                                        <form class="my-2 my-lg-0 px-2">
-                                                                            <div class="input-group">
-                                                                                <input v-model="search" v-on:keyup="filterTemplate" class="form-control mr-sm-2" type="search" placeholder="Tìm kiếm" aria-label="search" aria-describedby="basic-addon2">
-                                                                                <button class="btn btn-outline-primary my-2 my-sm-0" type="button"><span class="fa fa-search"></span></button>
-                                                                            </div>
-                                                                        </form>
-                                                                    </div>
-                                                                </div>
-                                                                <table class="table mt-2">
-                                                                    <thead class="thead-light">
-                                                                        <tr>
-                                                                            <th class="text-center" scope="col" width="10%"></th>
-                                                                            <th class="text-center" scope="col" width="45%">Tên thiết bị</th>
-                                                                            <th class="text-center" scope="col" width="15%">Trong kho</th>
-                                                                            <th class="text-center" scope="col" width="15%">Yêu cầu</th>
-                                                                            <th class="text-center" scope="col" width="15%"></th>
-                                                                        </tr>
-                                                                    </thead>
-                                                                    <tbody>
-                                                                        <tr v-for="template in paginate(displayedTemplates)" :key="template.id">
-                                                                            <th class="text-center" scope="row"><img :src="template.image" height=40 :alt="template.name"></th>
-                                                                            <td class="align-middle text-center">{{ template.name }}</td>
-                                                                            <td class="align-middle text-center">{{ template.equipments.length }}</td>
-                                                                            <td class="align-middle text-center">
-                                                                                <input 
-                                                                                @change="storeStorageValue();"
-                                                                                class="form-control" 
-                                                                                v-if="buttonDisabled[template.id]" 
-                                                                                type="number" 
-                                                                                name="amount" 
-                                                                                min='0' 
-                                                                                :max='template.equipments.length' 
-                                                                                v-model="getSelectedTemplate(template.id).amount"
-                                                                                >
-                                                                            </td>
-
-                                                                            <td class="align-middle text-center">
-                                                                                <button 
-                                                                                :disabled="buttonDisabled[template.id]" 
-                                                                                v-on:click="addEquipment(template);storeStorageValue();" 
-                                                                                type="button" 
-                                                                                class="btn btn-success btn-sm" 
-                                                                                >
-                                                                                    <span class="fa fa-plus"></span>
-                                                                                </button>
-                                                                                <button 
-                                                                                :disabled="!buttonDisabled[template.id]" 
-                                                                                @click="removeEquipmentCardById(template.id);storeStorageValue();" 
-                                                                                type="button" 
-                                                                                class="btn btn-danger btn-sm">
-                                                                                    <span class="fa fa-minus"></span>
-                                                                                </button>
-                                                                            </td>
-                                                                        </tr>
-                                                                    </tbody>
-                                                                </table>
-                                                                <!-- Paginator -->
-                                                                <div class="row justify-content-center">
-                                                                    <nav aria-label="Page navigation example">
-                                                                        <ul class="pagination">
-                                                                            <li class="page-item"><button class="page-link active" href="#" :disabled="page <= 1" @click="page--">Previous</button></li>
-                                                                            <li :class="{'page-item': true, 'active': page==pageNumber}" v-for="pageNumber in pages.slice(page-1, page+5)" :key="pageNumber"><a class="page-link" href="#"  @click="page = pageNumber">{{pageNumber}}</a></li>
-                                                                            <li class="page-item"><button class="page-link" href="#" @click="page++" :disabled="page >= pages.length">Next</button></li>
-                                                                        </ul>
-                                                                    </nav>
-                                                                </div>
-                                                            </div>
-                                                            <div class="modal-footer">
-                                                                <button type="button" class="btn btn-primary" data-dismiss="modal">Xong</button>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
                                             </div>
                                         </td>
                                     </tr>
@@ -259,6 +165,79 @@
                 </form>
             </div>
         </div>
+        <modal-component id="addEquipment" title="Thêm thiết bị" size="lg">
+            <div class="row">
+                <div class="dropdown col-3">
+                    <!-- Select -->
+                    <selection-filter
+                        :items="templates"
+                        :values="filterConfig.values"
+                        :all="filterConfig.all"
+                        :by="filterConfig.by"
+                        @change="selectionFilter($event)"
+                    ></selection-filter>
+                </div>
+                <div class="col-8">
+                    <!-- Search -->
+                    <search-input :items="filterItems" :by="['name']" @change="searchInput($event)"></search-input>
+                </div>
+            </div>
+            <table class="table mt-2">
+                <thead class="thead-light">
+                    <tr>
+                        <th class="text-center" scope="col" width="10%"></th>
+                        <th class="text-center" scope="col" width="45%">Tên thiết bị</th>
+                        <th class="text-center" scope="col" width="15%">Trong kho</th>
+                        <th class="text-center" scope="col" width="15%">Yêu cầu</th>
+                        <th class="text-center" scope="col" width="15%"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="template in paginateItems" :key="template.id">
+                        <th class="text-center" scope="row"><img :src="template.image" height=40 :alt="template.name"></th>
+                        <td class="align-middle text-center">{{ template.name }}</td>
+                        <td class="align-middle text-center">{{ template.equipments.length }}</td>
+                        <td class="align-middle text-center">
+                            <input 
+                            @change="storeStorageValue();"
+                            class="form-control" 
+                            v-if="buttonDisabled[template.id]" 
+                            type="number" 
+                            name="amount" 
+                            min='0' 
+                            :max='template.equipments.length' 
+                            v-model="getSelectedTemplate(template.id).amount"
+                            >
+                        </td>
+
+                        <td class="align-middle text-center">
+                            <button 
+                            :disabled="buttonDisabled[template.id]" 
+                            v-on:click="addEquipment(template);storeStorageValue();" 
+                            type="button" 
+                            class="btn btn-success btn-sm" 
+                            >
+                                <span class="fa fa-plus"></span>
+                            </button>
+                            <button 
+                            :disabled="!buttonDisabled[template.id]" 
+                            @click="removeEquipmentCardById(template.id);storeStorageValue();" 
+                            type="button" 
+                            class="btn btn-danger btn-sm">
+                                <span class="fa fa-minus"></span>
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <!-- Paginator -->
+            <div class="row justify-content-center">
+                <pagination :items="searchItems" :per="6" @change="pagination($event)"></pagination>
+            </div>
+            <template v-slot:footer>
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Xong</button>
+            </template>
+        </modal-component>
     </div>
 </template>
 
@@ -283,22 +262,42 @@ export default {
             reason: '',
             selectedTemplates: [],
             buttonDisabled: {},
+            filterConfig: {
+                values: [],
+                all: { name: "Loại thiết bị", value: 0 },
+                by: "category_id",
+            },
+            filterItems: [],
+            searchItems: [],
+            paginateItems: [],
             displayedTemplates: [],
-            category_id: 0,
-            search: '',
-            page: 1,
-            perPage: 5,
-            pages: [],
             submit: false
         };
     },
     created() {
-        this.filterTemplate();
-        this.loadStorageValue();
+        this.init();
     },
     methods: {
-        hide() {
-            console.log('hide');
+        init() {
+            this.loadStorageValue();
+            this.initFilter();
+        },
+        initFilter() {
+            this.categories.forEach((cate) => {
+                this.filterConfig.values.push({
+                    name: cate.name,
+                    value: cate.id,
+                });
+            });
+        },
+        selectionFilter(items) {
+            this.filterItems = items;
+        },
+        searchInput(items) {
+            this.searchItems = items;
+        },
+        pagination(items) {
+            this.paginateItems = items;
         },
         loadStorageValue() {
             if(localStorage.guestName) {
@@ -449,43 +448,6 @@ export default {
                 console.log(err);
             });
 
-        },
-        filterTemplate() {
-            this.selectedType();
-            this.searchTemplate();
-            this.setPages();
-        },
-        selectedType(){
-            if(this.category_id == 0) {
-                this.displayedTemplates = this.templates;
-            } else {
-                this.displayedTemplates = this.templates.filter(x => x.category_id == this.category_id);
-            }
-        },
-        searchTemplate() {
-            this.displayedTemplates = this.displayedTemplates.filter(x => {
-                var name = this.normalizeSearchString(x.name);
-                var search = this.normalizeSearchString(this.search);
-                return name.includes(search);
-            });
-        },
-        normalizeSearchString(str) {
-            return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
-        },
-        setPages() {
-            var itemPerPage = this.perPage;
-            let numberOfPages = Math.ceil(this.displayedTemplates.length / itemPerPage);
-            this.page = 1;
-            this.pages = [];
-            for (let index = 1; index <= numberOfPages; index++) {
-                this.pages.push(index);
-            }
-        },
-        paginate(itemList) {
-            let page = this.page;
-            let from = (page * this.perPage) - this.perPage;
-            let to = (page * this.perPage);
-            return itemList.slice(from, to);
         },
     }
 };

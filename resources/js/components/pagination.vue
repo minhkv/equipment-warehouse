@@ -29,7 +29,7 @@
 </template>
 <script>
 export default {
-    props: ["items"],
+    props: ["items", "per"],
     data() {
         return {
             page: 1,
@@ -47,6 +47,7 @@ export default {
     },
     methods: {
         init() {
+            if(this.per) this.perPage = this.per;
             this.setPages();
             this.sendEvent();
         },
