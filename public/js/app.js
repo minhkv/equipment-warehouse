@@ -3943,13 +3943,27 @@ __webpack_require__.r(__webpack_exports__);
       this.paginationItems = items;
     },
     updatePage: function updatePage(data) {
-      this.setOrder(data);
-      this.initialize();
+      if (data.error) {
+        alert(data.error);
+      } else {
+        this.setOrder(data);
+        this.initialize();
+      }
+
       this.enableButton();
     },
     rowClass: function rowClass(info) {
       return {
         'table-success': this.getBorrowedAmount(info.template_id) > 0 && this.getBorrowedAmount(info.template_id) == this.getReceivedAmount(info.template_id) + this.getLostAmount(info.template_id)
+      };
+    },
+    cellLostClass: function cellLostClass(info) {
+      return {
+        'align-middle': true,
+        'text-center': true,
+        'font-weight-bold': true,
+        'bg-danger': this.getLostAmount(info.template_id) > 0,
+        'text-light': this.getLostAmount(info.template_id) > 0
       };
     },
     getBorrowedAmount: function getBorrowedAmount(template_id) {
@@ -66004,27 +66018,13 @@ var render = function() {
                     : _vm._e(),
                   _vm._v(" "),
                   _vm.displayedOrder.status >= 2
-                    ? _c(
-                        "td",
-                        {
-                          class: {
-                            "align-middle": true,
-                            "text-center": true,
-                            "font-weight-bold": true,
-                            "bg-danger":
-                              _vm.getLostAmount(info.template_id) > 0,
-                            "text-light":
-                              _vm.getLostAmount(info.template_id) > 0
-                          }
-                        },
-                        [
-                          _vm._v(
-                            "\n                            " +
-                              _vm._s(_vm.getLostAmount(info.template.id)) +
-                              "\n                        "
-                          )
-                        ]
-                      )
+                    ? _c("td", { class: _vm.cellLostClass(info) }, [
+                        _vm._v(
+                          "\n                            " +
+                            _vm._s(_vm.getLostAmount(info.template.id)) +
+                            "\n                        "
+                        )
+                      ])
                     : _vm._e(),
                   _vm._v(" "),
                   _c("td", { staticClass: "align-middle text-center" }, [

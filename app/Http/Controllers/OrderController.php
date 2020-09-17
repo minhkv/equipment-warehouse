@@ -10,6 +10,7 @@ use App\Equipment;
 use App\Category;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+use Exception;
 
 class OrderController extends Controller
 {
@@ -183,15 +184,7 @@ class OrderController extends Controller
             'status' => $order->status - 1
             ]);
         
-        $order->load(['guest']);
-        $order->orderRequestInfos->load([
-            'template', 
-            'orderInfos', 
-            'orderInfos.equipment',
-            'template.equipments',
-            'template.equipments.supplier',
-            ]);
-        return $order;
+        return $this->loadOrder($order);
     }
 
 
@@ -218,32 +211,44 @@ class OrderController extends Controller
         $templateBorrowedAmount = $request->input('templateBorrowedAmount');
         $orderRequestInfos = $request->input('orderRequestInfos');
         $dateOutput = date_create($request->input('dateOutput'));
-
-        foreach($order->orderRequestInfos as $orderRequestInfoModel) {
-            // Update Borrowed Amount
-            $template_id = $orderRequestInfoModel->template_id;
-            $orderRequestInfoModel->update([
-                'borrowed_amount' => $templateBorrowedAmount[$template_id]
-            ]);
-            // Create new orderInfo
-            foreach($orderRequestInfos[$template_id]['order_infos'] as $orderInfo){
-                // Check if equipment is borrowed
-                $equipment = Equipment::where('id', $orderInfo['equipment_id'])->first();
-                // Delete orderInfo which is pending and create new orderInfo
-                $equipment->orderInfos()->where('status', 3)->delete();
-                $orderRequestInfoModel->orderInfos()->create([
-                    'equipment_id' => $orderInfo['equipment_id'],
-                    'condition_before' => $orderInfo['condition_before'],
+        try {
+            foreach($order->orderRequestInfos as $orderRequestInfoModel) {
+                // Update Borrowed Amount
+                $template_id = $orderRequestInfoModel->template_id;
+                $orderRequestInfoModel->update([
+                    'borrowed_amount' => $templateBorrowedAmount[$template_id]
                 ]);
-                // Update equipment status to working
-                $equipment->update(['status' => 2]);
+                // Create new orderInfo
+                foreach($orderRequestInfos[$template_id]['order_infos'] as $orderInfo){
+                    // Check if equipment is borrowed
+                    $equipment = Equipment::where('id', $orderInfo['equipment_id'])->first();
+                    if(!$this->checkEquipmentAvailable($equipment)){
+                        throw new Exception('Thiết bị '. $equipment->template->name . ' có mã ' . $equipment->id .' đã cho mượn');
+                    }
+                    // Delete orderInfo which is pending and create new orderInfo
+                    $equipment->orderInfos()->where('status', 3)->delete();
+                    $orderRequestInfoModel->orderInfos()->create([
+                        'equipment_id' => $orderInfo['equipment_id'],
+                        'condition_before' => $orderInfo['condition_before'],
+                    ]);
+                    // Update equipment status to working
+                    $equipment->update(['status' => 2]);
+                }
             }
-        }
-        $order->update([
-            'status' => 2, //output
-            'date_output' => date_format($dateOutput, 'Y-m-d H:i:s')
+            $order->update([
+                'status' => 2, //output
+                'date_output' => date_format($dateOutput, 'Y-m-d H:i:s')
             ]);
+        } catch(Exception $e) {
+            return json_encode((object) [
+                'error' => $e->getMessage()
+            ]);
+        }
         return $this->loadOrder($order);
+    }
+    public function checkEquipmentAvailable(Equipment $equipment) {
+        return $equipment->orderInfos()->where('status', 2)->count() == 0 &&
+            $equipment->status == 1;
     }
 
     public function equipmentReturn(Request $request, Order $order) {

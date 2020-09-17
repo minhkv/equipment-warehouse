@@ -97,7 +97,7 @@
                             <td v-if="displayedOrder.status >= 2" class="align-middle text-center font-weight-bold">
                                 {{ getReceivedAmount(info.template.id) }}
                             </td>
-                            <td v-if="displayedOrder.status >= 2" :class="{'align-middle': true, 'text-center': true, 'font-weight-bold': true, 'bg-danger': getLostAmount(info.template_id) > 0, 'text-light': getLostAmount(info.template_id) > 0}">
+                            <td v-if="displayedOrder.status >= 2" :class="cellLostClass(info)">
                                 {{ getLostAmount(info.template.id) }}
                             </td> 
                             <td class="align-middle text-center">
@@ -504,8 +504,12 @@ export default {
             this.paginationItems = items;
         },
         updatePage(data) {
-            this.setOrder(data);
-            this.initialize();
+            if(data.error) {
+                alert(data.error);
+            } else {
+                this.setOrder(data);
+                this.initialize();
+            }
             this.enableButton();
         },
         rowClass(info) {
@@ -515,7 +519,16 @@ export default {
                     (this.getBorrowedAmount(info.template_id) == 
                     this.getReceivedAmount(info.template_id) + 
                     this.getLostAmount(info.template_id))
-            }
+            };
+        },
+        cellLostClass(info) {
+            return {
+                'align-middle': true, 
+                'text-center': true, 
+                'font-weight-bold': true, 
+                'bg-danger': this.getLostAmount(info.template_id) > 0, 
+                'text-light': this.getLostAmount(info.template_id) > 0
+                };
         },
         getBorrowedAmount(template_id) {
             return this.templateBorrowedAmount[template_id];
