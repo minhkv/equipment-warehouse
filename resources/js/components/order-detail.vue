@@ -101,109 +101,13 @@
                                 {{ getLostAmount(info.template.id) }}
                             </td> 
                             <td class="align-middle text-center">
-                                <button v-if="displayedOrder.status > 0" type="button" class="btn btn-primary btn-sm" data-toggle="modal" :data-target="'#addEquipment-' + info.template.id">
-                                    <span class="fa fa-pencil"></span>
-                                </button>
-
-                                <div class="modal fade" :id="'addEquipment-' + info.template.id" tabindex="-1" role="dialog" :aria-labelledby="'addEquipmentLabel-' + info.template.id" aria-hidden="true">
-                                    <div class="modal-dialog modal-xl" role="document">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h5 v-if="displayedOrder.status <= 1" class="modal-title" :id="'addEquipmentLabel-' + info.template.id">Thêm thiết bị {{info.template.name}}</h5>
-                                                <h5 v-else class="modal-title" :id="'verifyEquipmentLabel-' + info.template.id">Kiểm thiết bị {{info.template.name}}</h5>
-                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                    <span aria-hidden="true">&times;</span>
-                                                </button>
-                                            </div>
-                                            <div class="modal-body">
-                                                <table v-if="displayedOrder.status <= 1" class="table table-hover">
-                                                    <thead class="thead-light">
-                                                        <tr>
-                                                            <th class="text-center" scope="col" style="width: 5%">Mã</th>
-                                                            <th class="text-center" scope="col" style="width: 10%;">Giá nhập</th>
-                                                            <th class="text-center" scope="col" style="width: 12%;">Nhà cung cấp</th>
-                                                            <th class="text-center" scope="col" style="width: 10%;">Tình trạng</th>
-                                                            <th class="text-center" scope="col" style="width: 10%;">Trạng thái</th>
-                                                            <th class="text-center" scope="col" style="width: 15%;">Ghi chú</th>
-                                                            <th class="text-center" scope="col" style="width: 10%;"></th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        <tr v-for="equipment in info.template.equipments" :key="equipment.id">
-                                                            <th class="text-center align-middle" scope="row">{{ equipment.id }}</th>
-                                                            <td class="text-center align-middle">{{ equipment.price|formatEquipmentPrice }}</td>
-                                                            <td class="text-center align-middle">
-                                                                <supplier-name :equipment="equipment"></supplier-name></td>
-                                                            <td class="text-center align-middle">
-                                                                <equipment-condition :condition="equipment.condition"></equipment-condition>
-                                                            </td>
-                                                            <td class="align-middle text-center">
-                                                                <equipment-status :status="equipment.status"></equipment-status>
-                                                            </td>
-                                                            <td>{{equipment.note}}</td>
-                                                            <td class="align-middle">
-                                                                <button :disabled="disablePlusEquipmentButton(equipment.id, equipment.status)" @click="selectEquipment(equipment, info.template.id)" class="btn btn-success btn-sm"><span class="fa fa-plus"></span></button>
-                                                                <button :disabled="disableMinusEquipmentButton(equipment.id, equipment.status)" @click="removeEquipment(equipment.id, info.template.id)" class="btn btn-danger btn-sm"><span class="fa fa-minus"></span></button>
-                                                            </td>
-                                                        </tr>
-                                                    </tbody>
-                                                </table>
-                                                <table v-else class="table table-hover">
-                                                    <thead class="thead-light">
-                                                        <tr>
-                                                            <th class="text-center" scope="col" style="width: 5%;">Mã</th>
-                                                            <th class="text-center" scope="col" style="width: 20%;">Tình trạng trước khi mượn</th>
-                                                            <th class="text-center" scope="col" style="width: 25%;">Tình trạng sau khi mượn</th>
-                                                            <th class="text-center" scope="col" style="width: 25%;">Ghi chú</th>
-                                                            <th class="text-center" scope="col">Đã nhận</th>
-                                                            <th class="text-center" scope="col">Thất lạc</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        <tr v-for="orderInfo in info.order_infos" :key="orderInfo.id">
-                                                            <th class="text-center align-middle" scope="row">
-                                                                {{ orderInfo.equipment_id }}
-                                                            </th>
-                                                            <td class="text-center align-middle">
-                                                                <equipment-condition :condition="orderInfo.condition_before"></equipment-condition>
-                                                            </td>
-                                                            <td class="text-center align-middle">
-                                                                <div v-if="displayedOrder.status <= 2" :id="orderInfo.equipment_id" >
-                                                                    <div class="dropdown">
-                                                                        <select v-model="orderInfo.condition_received" class="custom-select mx-0">
-                                                                            <option selected value='1'><equipment-condition :condition="1"></equipment-condition></option>
-                                                                            <option value='2'><equipment-condition :condition="2"></equipment-condition></option>
-                                                                            <option value='0'><equipment-condition :condition="0"></equipment-condition></option>
-                                                                        </select>
-                                                                    </div>
-                                                                </div>
-                                                                <div v-else>
-                                                                    <equipment-condition :condition="orderInfo.condition_received"></equipment-condition>
-                                                                </div>
-                                                            </td>
-                                                            <td class="text-center">
-                                                                <textarea v-if="displayedOrder.status <= 2" v-model="orderInfo.note" class="form-control" name="note" cols="10"></textarea>
-                                                                <div v-else>{{ orderInfo.note }}</div>
-                                                            </td>
-                                                            <td class="align-middle text-center pb-5">
-                                                                <div class="form-check">
-                                                                    <input :disabled="equipmentLost[orderInfo.equipment_id]" type="checkbox" class="form-check-input" v-model="equipmentReceived[orderInfo.equipment_id]">
-                                                                </div>
-                                                            </td>
-                                                            <td class="align-middle text-center pb-5">
-                                                                <div class="form-check">
-                                                                    <input :disabled="equipmentReceived[orderInfo.equipment_id]" type="checkbox" class="form-check-input" v-model="equipmentLost[orderInfo.equipment_id]">
-                                                                </div>
-                                                            </td>
-                                                        </tr>
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-primary" data-dismiss="modal">Xong</button>
-                                            </div>
-                                        </div>
-                                    </div>
+                                <div v-if="displayedOrder.status > 0" >
+                                    <button v-if="displayedOrder.status <= 1" type="button" class="btn btn-primary btn-sm" data-toggle="modal" :data-target="'#addEquipment-' + info.template.id">
+                                        <span class="fa fa-pencil"></span>
+                                    </button>
+                                    <button v-else type="button" class="btn btn-primary btn-sm" data-toggle="modal" :data-target="'#verifyEquipment-' + info.template.id">
+                                        <span class="fa fa-pencil"></span>
+                                    </button>
                                 </div>
                             </td>
                         </tr>
@@ -224,6 +128,98 @@
                 </div>
             </div>
         </article>
+        <modal-component v-for="info in paginationItems" :key="'a' + info.id" :id="'addEquipment-' + info.template.id" :title="'Thêm thiết bị ' + info.template.name" size="xl">
+            <table class="table table-hover">
+                <thead class="thead-light">
+                    <tr>
+                        <th class="text-center" scope="col" style="width: 5%">Mã</th>
+                        <th class="text-center" scope="col" style="width: 10%;">Giá nhập</th>
+                        <th class="text-center" scope="col" style="width: 12%;">Nhà cung cấp</th>
+                        <th class="text-center" scope="col" style="width: 10%;">Tình trạng</th>
+                        <th class="text-center" scope="col" style="width: 10%;">Trạng thái</th>
+                        <th class="text-center" scope="col" style="width: 15%;">Ghi chú</th>
+                        <th class="text-center" scope="col" style="width: 10%;"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="equipment in info.template.equipments" :key="equipment.id">
+                        <th class="text-center align-middle" scope="row">{{ equipment.id }}</th>
+                        <td class="text-center align-middle">{{ equipment.price|formatEquipmentPrice }}</td>
+                        <td class="text-center align-middle">
+                            <supplier-name :equipment="equipment"></supplier-name></td>
+                        <td class="text-center align-middle">
+                            <equipment-condition :condition="equipment.condition"></equipment-condition>
+                        </td>
+                        <td class="align-middle text-center">
+                            <equipment-status :status="equipment.status"></equipment-status>
+                        </td>
+                        <td>{{equipment.note}}</td>
+                        <td class="align-middle">
+                            <button :disabled="disablePlusEquipmentButton(equipment.id, equipment.status)" @click="selectEquipment(equipment, info.template.id)" class="btn btn-success btn-sm"><span class="fa fa-plus"></span></button>
+                            <button :disabled="disableMinusEquipmentButton(equipment.id, equipment.status)" @click="removeEquipment(equipment.id, info.template.id)" class="btn btn-danger btn-sm"><span class="fa fa-minus"></span></button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <template v-slot:footer>
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Xong</button>
+            </template>
+        </modal-component>
+        <modal-component v-for="info in paginationItems" :key="'v' + info.id" :id="'verifyEquipment-' + info.template.id" :title="'Kiểm thiết bị ' + info.template.name" size="xl">
+            <table class="table table-hover">
+                <thead class="thead-light">
+                    <tr>
+                        <th class="text-center" scope="col" style="width: 5%;">Mã</th>
+                        <th class="text-center" scope="col" style="width: 20%;">Tình trạng trước khi mượn</th>
+                        <th class="text-center" scope="col" style="width: 25%;">Tình trạng sau khi mượn</th>
+                        <th class="text-center" scope="col" style="width: 25%;">Ghi chú</th>
+                        <th class="text-center" scope="col">Đã nhận</th>
+                        <th class="text-center" scope="col">Thất lạc</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="orderInfo in info.order_infos" :key="orderInfo.id">
+                        <th class="text-center align-middle" scope="row">
+                            {{ orderInfo.equipment_id }}
+                        </th>
+                        <td class="text-center align-middle">
+                            <equipment-condition :condition="orderInfo.condition_before"></equipment-condition>
+                        </td>
+                        <td class="text-center align-middle">
+                            <div v-if="displayedOrder.status <= 2" :id="orderInfo.equipment_id" >
+                                <div class="dropdown">
+                                    <select v-model="orderInfo.condition_received" class="custom-select mx-0">
+                                        <option selected value='1'><equipment-condition :condition="1"></equipment-condition></option>
+                                        <option value='2'><equipment-condition :condition="2"></equipment-condition></option>
+                                        <option value='0'><equipment-condition :condition="0"></equipment-condition></option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div v-else>
+                                <equipment-condition :condition="orderInfo.condition_received"></equipment-condition>
+                            </div>
+                        </td>
+                        <td class="text-center">
+                            <textarea v-if="displayedOrder.status <= 2" v-model="orderInfo.note" class="form-control" name="note" cols="10"></textarea>
+                            <div v-else>{{ orderInfo.note }}</div>
+                        </td>
+                        <td class="align-middle text-center pb-5">
+                            <div class="form-check">
+                                <input :disabled="equipmentLost[orderInfo.equipment_id]" type="checkbox" class="form-check-input" v-model="equipmentReceived[orderInfo.equipment_id]">
+                            </div>
+                        </td>
+                        <td class="align-middle text-center pb-5">
+                            <div class="form-check">
+                                <input :disabled="equipmentReceived[orderInfo.equipment_id]" type="checkbox" class="form-check-input" v-model="equipmentLost[orderInfo.equipment_id]">
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <template v-slot:footer>
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Xong</button>
+            </template>
+        </modal-component>
     </div>
 </template>
 <style scoped>

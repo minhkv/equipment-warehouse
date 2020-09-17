@@ -3849,10 +3849,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ["order", "orderIndexUrl", "acceptUrl", "rejectUrl", "equipmentOutputUrl", "equipmentReturnUrl", "completeUrl", "backUrl"],
@@ -65688,1221 +65684,1073 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "container" }, [
-    _c("article", { staticClass: "card" }, [
-      _c("div", { staticClass: "card-body" }, [
-        _c(
-          "a",
-          {
-            staticClass: "btn btn-light mb-3",
-            attrs: { href: _vm.orderIndexUrl, "data-abc": "true" }
-          },
-          [
-            _c("i", { staticClass: "fa fa-chevron-left" }),
-            _vm._v(" Quay lại\n            ")
-          ]
-        ),
-        _vm._v(" "),
-        _c(
-          "h3",
-          [
-            _vm._v("Đơn mượn: " + _vm._s(_vm.order.id) + " \n                "),
-            _c("order-status", { attrs: { status: _vm.displayedOrder.status } })
-          ],
-          1
-        ),
-        _vm._v(" "),
-        _c("div", { staticClass: "col-10 mx-auto py-3" }, [
-          _c("div", { staticClass: "row" }, [
-            _vm._m(0),
-            _vm._v(" "),
-            _c("label", { staticClass: "col-3 text-left" }, [
-              _vm._v(_vm._s(_vm.order.guest_name))
+  return _c(
+    "div",
+    { staticClass: "container" },
+    [
+      _c("article", { staticClass: "card" }, [
+        _c("div", { staticClass: "card-body" }, [
+          _c(
+            "a",
+            {
+              staticClass: "btn btn-light mb-3",
+              attrs: { href: _vm.orderIndexUrl, "data-abc": "true" }
+            },
+            [
+              _c("i", { staticClass: "fa fa-chevron-left" }),
+              _vm._v(" Quay lại\n            ")
+            ]
+          ),
+          _vm._v(" "),
+          _c(
+            "h3",
+            [
+              _vm._v(
+                "Đơn mượn: " + _vm._s(_vm.order.id) + " \n                "
+              ),
+              _c("order-status", {
+                attrs: { status: _vm.displayedOrder.status }
+              })
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c("div", { staticClass: "col-10 mx-auto py-3" }, [
+            _c("div", { staticClass: "row" }, [
+              _vm._m(0),
+              _vm._v(" "),
+              _c("label", { staticClass: "col-3 text-left" }, [
+                _vm._v(_vm._s(_vm.order.guest_name))
+              ]),
+              _vm._v(" "),
+              _vm._m(1),
+              _vm._v(" "),
+              _c("label", { staticClass: "col-3 text-left" }, [
+                _vm._v(_vm._s(_vm._f("formatDate")(_vm.order.date_borrowed)))
+              ])
             ]),
             _vm._v(" "),
-            _vm._m(1),
+            _c("div", { staticClass: "row" }, [
+              _vm._m(2),
+              _vm._v(" "),
+              _c("label", { staticClass: "col-3 text-left" }, [
+                _vm._v(_vm._s(_vm.order.department))
+              ]),
+              _vm._v(" "),
+              _vm._m(3),
+              _vm._v(" "),
+              _c("label", { staticClass: "col-3 text-left" }, [
+                _vm._v(_vm._s(_vm._f("formatDate")(_vm.order.date_return)))
+              ])
+            ]),
             _vm._v(" "),
-            _c("label", { staticClass: "col-3 text-left" }, [
-              _vm._v(_vm._s(_vm._f("formatDate")(_vm.order.date_borrowed)))
+            _c("div", { staticClass: "row" }, [
+              _vm._m(4),
+              _vm._v(" "),
+              _c("label", { staticClass: "col-3 text-left" }, [
+                _vm._v(
+                  " " + _vm._s(_vm._f("formatBoolean")(_vm.order.long_term))
+                )
+              ]),
+              _vm._v(" "),
+              _vm._m(5),
+              _vm._v(" "),
+              _c("label", { staticClass: "col-3 text-left" }, [
+                _vm._v(_vm._s(_vm.order.reason))
+              ])
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "row" }, [
+              _vm._m(6),
+              _vm._v(" "),
+              _c("label", { staticClass: "col-6 text-left" }, [
+                _vm._v(_vm._s(_vm.order.note))
+              ])
             ])
           ]),
           _vm._v(" "),
-          _c("div", { staticClass: "row" }, [
-            _vm._m(2),
+          _c("div", { staticClass: "track" }, [
+            _c(
+              "div",
+              { class: { step: true, active: _vm.displayedOrder.status >= 0 } },
+              [
+                _vm._m(7),
+                _vm._v(" "),
+                _c("span", { staticClass: "text" }, [_vm._v("Tạo đơn hàng")]),
+                _vm._v(" "),
+                _c("span", { staticClass: "text-muted" }, [
+                  _vm._v(_vm._s(_vm._f("formatDate")(_vm.order.created_at)))
+                ])
+              ]
+            ),
             _vm._v(" "),
-            _c("label", { staticClass: "col-3 text-left" }, [
-              _vm._v(_vm._s(_vm.order.department))
-            ]),
+            _c(
+              "div",
+              { class: { step: true, active: _vm.displayedOrder.status >= 1 } },
+              [
+                _vm._m(8),
+                _vm._v(" "),
+                _c("span", { staticClass: "text" }, [_vm._v("Chấp nhận")]),
+                _vm._v(" "),
+                _c("span", { staticClass: "text-muted" }, [
+                  _vm._v(_vm._s(_vm._f("formatDate")(_vm.order.date_approved)))
+                ])
+              ]
+            ),
             _vm._v(" "),
-            _vm._m(3),
+            _c(
+              "div",
+              { class: { step: true, active: _vm.displayedOrder.status >= 2 } },
+              [
+                _vm._m(9),
+                _vm._v(" "),
+                _c("span", { staticClass: "text" }, [_vm._v(" Xuất đồ")]),
+                _vm._v(" "),
+                _c("span", { staticClass: "text-muted" }, [
+                  _vm._v(_vm._s(_vm._f("formatDate")(_vm.order.date_output)))
+                ])
+              ]
+            ),
             _vm._v(" "),
-            _c("label", { staticClass: "col-3 text-left" }, [
-              _vm._v(_vm._s(_vm._f("formatDate")(_vm.order.date_return)))
-            ])
+            _c(
+              "div",
+              { class: { step: true, active: _vm.displayedOrder.status >= 3 } },
+              [
+                _vm._m(10),
+                _vm._v(" "),
+                _c("span", { staticClass: "text" }, [_vm._v(" Trả đồ ")]),
+                _vm._v(" "),
+                _c("span", { staticClass: "text-muted" }, [
+                  _vm._v(_vm._s(_vm._f("formatDate")(_vm.order.date_received)))
+                ])
+              ]
+            ),
+            _vm._v(" "),
+            _c(
+              "div",
+              { class: { step: true, active: _vm.displayedOrder.status >= 4 } },
+              [
+                _vm._m(11),
+                _vm._v(" "),
+                _c("span", { staticClass: "text" }, [_vm._v("Hoàn tất")]),
+                _vm._v(" "),
+                _c("span", { staticClass: "text-muted" }, [
+                  _vm._v(_vm._s(_vm._f("formatDate")(_vm.order.date_completed)))
+                ])
+              ]
+            )
           ]),
           _vm._v(" "),
-          _c("div", { staticClass: "row" }, [
-            _vm._m(4),
-            _vm._v(" "),
-            _c("label", { staticClass: "col-3 text-left" }, [
-              _vm._v(" " + _vm._s(_vm._f("formatBoolean")(_vm.order.long_term)))
-            ]),
-            _vm._v(" "),
-            _vm._m(5),
-            _vm._v(" "),
-            _c("label", { staticClass: "col-3 text-left" }, [
-              _vm._v(_vm._s(_vm.order.reason))
-            ])
+          _c("hr"),
+          _vm._v(" "),
+          _c(
+            "div",
+            { staticClass: "row justify-content-center" },
+            [
+              _c("order-title", {
+                attrs: { status: _vm.displayedOrder.status }
+              })
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c("div", { staticClass: "row mb-4" }, [
+            _c(
+              "div",
+              { staticClass: "col-6 mx-auto" },
+              [
+                _c("search-input", {
+                  attrs: {
+                    items: this.displayedOrder.order_request_infos,
+                    by: ["template.name"]
+                  },
+                  on: {
+                    change: function($event) {
+                      return _vm.searchInput($event)
+                    }
+                  }
+                })
+              ],
+              1
+            )
           ]),
           _vm._v(" "),
-          _c("div", { staticClass: "row" }, [
-            _vm._m(6),
+          _c("table", { staticClass: "table mt-2 table-hover" }, [
+            _c("thead", { staticClass: "thead-light" }, [
+              _c("tr", [
+                _c("th", {
+                  staticClass: "text-center",
+                  attrs: { scope: "col", width: "10%" }
+                }),
+                _vm._v(" "),
+                _c(
+                  "th",
+                  {
+                    staticClass: "text-center",
+                    attrs: { scope: "col", width: "20%" }
+                  },
+                  [_vm._v("Tên thiết bị")]
+                ),
+                _vm._v(" "),
+                _c(
+                  "th",
+                  {
+                    staticClass: "text-center",
+                    attrs: { scope: "col", width: "10%" }
+                  },
+                  [_vm._v("Số lượng")]
+                ),
+                _vm._v(" "),
+                _c(
+                  "th",
+                  {
+                    staticClass: "text-center",
+                    attrs: { scope: "col", width: "10%" }
+                  },
+                  [_vm._v("Yêu cầu")]
+                ),
+                _vm._v(" "),
+                _c(
+                  "th",
+                  {
+                    staticClass: "text-center",
+                    attrs: { scope: "col", width: "10%" }
+                  },
+                  [_vm._v("Cho mượn")]
+                ),
+                _vm._v(" "),
+                _vm.displayedOrder.status >= 2
+                  ? _c(
+                      "th",
+                      {
+                        staticClass: "text-center",
+                        attrs: { scope: "col", width: "10%" }
+                      },
+                      [_vm._v("Đã trả")]
+                    )
+                  : _vm._e(),
+                _vm._v(" "),
+                _vm.displayedOrder.status >= 2
+                  ? _c(
+                      "th",
+                      {
+                        staticClass: "text-center",
+                        attrs: { scope: "col", width: "10%" }
+                      },
+                      [_vm._v("Thất lạc")]
+                    )
+                  : _vm._e(),
+                _vm._v(" "),
+                _c("th", {
+                  staticClass: "text-center",
+                  attrs: { scope: "col", width: "10%" }
+                })
+              ])
+            ]),
             _vm._v(" "),
-            _c("label", { staticClass: "col-6 text-left" }, [
-              _vm._v(_vm._s(_vm.order.note))
-            ])
-          ])
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "track" }, [
-          _c(
-            "div",
-            { class: { step: true, active: _vm.displayedOrder.status >= 0 } },
-            [
-              _vm._m(7),
-              _vm._v(" "),
-              _c("span", { staticClass: "text" }, [_vm._v("Tạo đơn hàng")]),
-              _vm._v(" "),
-              _c("span", { staticClass: "text-muted" }, [
-                _vm._v(_vm._s(_vm._f("formatDate")(_vm.order.created_at)))
-              ])
-            ]
-          ),
+            _c(
+              "tbody",
+              _vm._l(_vm.paginationItems, function(info) {
+                return _c("tr", { key: info.id, class: _vm.rowClass(info) }, [
+                  _c(
+                    "th",
+                    { staticClass: "text-center", attrs: { scope: "row" } },
+                    [
+                      _c("img", {
+                        attrs: {
+                          src: info.template.image,
+                          height: "40",
+                          alt: info.template.name
+                        }
+                      })
+                    ]
+                  ),
+                  _vm._v(" "),
+                  _c("td", { staticClass: "align-middle text-center" }, [
+                    _vm._v(_vm._s(info.template.name))
+                  ]),
+                  _vm._v(" "),
+                  _c("td", { staticClass: "align-middle text-center" }, [
+                    _vm._v(_vm._s(info.template.equipments.length))
+                  ]),
+                  _vm._v(" "),
+                  _c("td", { staticClass: "align-middle text-center" }, [
+                    _vm._v(_vm._s(info.amount))
+                  ]),
+                  _vm._v(" "),
+                  _c("td", { staticClass: "align-middle text-center" }, [
+                    _vm._v(
+                      "\n                            " +
+                        _vm._s(_vm.getBorrowedAmount(info.template.id)) +
+                        "\n                        "
+                    )
+                  ]),
+                  _vm._v(" "),
+                  _vm.displayedOrder.status >= 2
+                    ? _c(
+                        "td",
+                        {
+                          staticClass:
+                            "align-middle text-center font-weight-bold"
+                        },
+                        [
+                          _vm._v(
+                            "\n                            " +
+                              _vm._s(_vm.getReceivedAmount(info.template.id)) +
+                              "\n                        "
+                          )
+                        ]
+                      )
+                    : _vm._e(),
+                  _vm._v(" "),
+                  _vm.displayedOrder.status >= 2
+                    ? _c(
+                        "td",
+                        {
+                          class: {
+                            "align-middle": true,
+                            "text-center": true,
+                            "font-weight-bold": true,
+                            "bg-danger":
+                              _vm.getLostAmount(info.template_id) > 0,
+                            "text-light":
+                              _vm.getLostAmount(info.template_id) > 0
+                          }
+                        },
+                        [
+                          _vm._v(
+                            "\n                            " +
+                              _vm._s(_vm.getLostAmount(info.template.id)) +
+                              "\n                        "
+                          )
+                        ]
+                      )
+                    : _vm._e(),
+                  _vm._v(" "),
+                  _c("td", { staticClass: "align-middle text-center" }, [
+                    _vm.displayedOrder.status > 0
+                      ? _c("div", [
+                          _vm.displayedOrder.status <= 1
+                            ? _c(
+                                "button",
+                                {
+                                  staticClass: "btn btn-primary btn-sm",
+                                  attrs: {
+                                    type: "button",
+                                    "data-toggle": "modal",
+                                    "data-target":
+                                      "#addEquipment-" + info.template.id
+                                  }
+                                },
+                                [_c("span", { staticClass: "fa fa-pencil" })]
+                              )
+                            : _c(
+                                "button",
+                                {
+                                  staticClass: "btn btn-primary btn-sm",
+                                  attrs: {
+                                    type: "button",
+                                    "data-toggle": "modal",
+                                    "data-target":
+                                      "#verifyEquipment-" + info.template.id
+                                  }
+                                },
+                                [_c("span", { staticClass: "fa fa-pencil" })]
+                              )
+                        ])
+                      : _vm._e()
+                  ])
+                ])
+              }),
+              0
+            )
+          ]),
           _vm._v(" "),
           _c(
             "div",
-            { class: { step: true, active: _vm.displayedOrder.status >= 1 } },
+            { staticClass: "row justify-content-center" },
             [
-              _vm._m(8),
-              _vm._v(" "),
-              _c("span", { staticClass: "text" }, [_vm._v("Chấp nhận")]),
-              _vm._v(" "),
-              _c("span", { staticClass: "text-muted" }, [
-                _vm._v(_vm._s(_vm._f("formatDate")(_vm.order.date_approved)))
-              ])
-            ]
-          ),
-          _vm._v(" "),
-          _c(
-            "div",
-            { class: { step: true, active: _vm.displayedOrder.status >= 2 } },
-            [
-              _vm._m(9),
-              _vm._v(" "),
-              _c("span", { staticClass: "text" }, [_vm._v(" Xuất đồ")]),
-              _vm._v(" "),
-              _c("span", { staticClass: "text-muted" }, [
-                _vm._v(_vm._s(_vm._f("formatDate")(_vm.order.date_output)))
-              ])
-            ]
-          ),
-          _vm._v(" "),
-          _c(
-            "div",
-            { class: { step: true, active: _vm.displayedOrder.status >= 3 } },
-            [
-              _vm._m(10),
-              _vm._v(" "),
-              _c("span", { staticClass: "text" }, [_vm._v(" Trả đồ ")]),
-              _vm._v(" "),
-              _c("span", { staticClass: "text-muted" }, [
-                _vm._v(_vm._s(_vm._f("formatDate")(_vm.order.date_received)))
-              ])
-            ]
-          ),
-          _vm._v(" "),
-          _c(
-            "div",
-            { class: { step: true, active: _vm.displayedOrder.status >= 4 } },
-            [
-              _vm._m(11),
-              _vm._v(" "),
-              _c("span", { staticClass: "text" }, [_vm._v("Hoàn tất")]),
-              _vm._v(" "),
-              _c("span", { staticClass: "text-muted" }, [
-                _vm._v(_vm._s(_vm._f("formatDate")(_vm.order.date_completed)))
-              ])
-            ]
-          )
-        ]),
-        _vm._v(" "),
-        _c("hr"),
-        _vm._v(" "),
-        _c(
-          "div",
-          { staticClass: "row justify-content-center" },
-          [_c("order-title", { attrs: { status: _vm.displayedOrder.status } })],
-          1
-        ),
-        _vm._v(" "),
-        _c("div", { staticClass: "row mb-4" }, [
-          _c(
-            "div",
-            { staticClass: "col-6 mx-auto" },
-            [
-              _c("search-input", {
-                attrs: {
-                  items: this.displayedOrder.order_request_infos,
-                  by: ["template.name"]
-                },
+              _c("pagination", {
+                attrs: { items: _vm.searchInputItems },
                 on: {
                   change: function($event) {
-                    return _vm.searchInput($event)
+                    return _vm.pagination($event)
                   }
                 }
               })
             ],
             1
-          )
-        ]),
-        _vm._v(" "),
-        _c("table", { staticClass: "table mt-2 table-hover" }, [
-          _c("thead", { staticClass: "thead-light" }, [
-            _c("tr", [
-              _c("th", {
-                staticClass: "text-center",
-                attrs: { scope: "col", width: "10%" }
-              }),
-              _vm._v(" "),
-              _c(
-                "th",
-                {
-                  staticClass: "text-center",
-                  attrs: { scope: "col", width: "20%" }
-                },
-                [_vm._v("Tên thiết bị")]
-              ),
-              _vm._v(" "),
-              _c(
-                "th",
-                {
-                  staticClass: "text-center",
-                  attrs: { scope: "col", width: "10%" }
-                },
-                [_vm._v("Số lượng")]
-              ),
-              _vm._v(" "),
-              _c(
-                "th",
-                {
-                  staticClass: "text-center",
-                  attrs: { scope: "col", width: "10%" }
-                },
-                [_vm._v("Yêu cầu")]
-              ),
-              _vm._v(" "),
-              _c(
-                "th",
-                {
-                  staticClass: "text-center",
-                  attrs: { scope: "col", width: "10%" }
-                },
-                [_vm._v("Cho mượn")]
-              ),
-              _vm._v(" "),
-              _vm.displayedOrder.status >= 2
-                ? _c(
-                    "th",
-                    {
-                      staticClass: "text-center",
-                      attrs: { scope: "col", width: "10%" }
-                    },
-                    [_vm._v("Đã trả")]
-                  )
-                : _vm._e(),
-              _vm._v(" "),
-              _vm.displayedOrder.status >= 2
-                ? _c(
-                    "th",
-                    {
-                      staticClass: "text-center",
-                      attrs: { scope: "col", width: "10%" }
-                    },
-                    [_vm._v("Thất lạc")]
-                  )
-                : _vm._e(),
-              _vm._v(" "),
-              _c("th", {
-                staticClass: "text-center",
-                attrs: { scope: "col", width: "10%" }
-              })
-            ])
-          ]),
+          ),
           _vm._v(" "),
-          _c(
-            "tbody",
-            _vm._l(_vm.paginationItems, function(info) {
-              return _c("tr", { key: info.id, class: _vm.rowClass(info) }, [
-                _c(
-                  "th",
-                  { staticClass: "text-center", attrs: { scope: "row" } },
-                  [
-                    _c("img", {
-                      attrs: {
-                        src: info.template.image,
-                        height: "40",
-                        alt: info.template.name
-                      }
-                    })
-                  ]
-                ),
-                _vm._v(" "),
-                _c("td", { staticClass: "align-middle text-center" }, [
-                  _vm._v(_vm._s(info.template.name))
-                ]),
-                _vm._v(" "),
-                _c("td", { staticClass: "align-middle text-center" }, [
-                  _vm._v(_vm._s(info.template.equipments.length))
-                ]),
-                _vm._v(" "),
-                _c("td", { staticClass: "align-middle text-center" }, [
-                  _vm._v(_vm._s(info.amount))
-                ]),
-                _vm._v(" "),
-                _c("td", { staticClass: "align-middle text-center" }, [
-                  _vm._v(
-                    "\n                            " +
-                      _vm._s(_vm.getBorrowedAmount(info.template.id)) +
-                      "\n                        "
-                  )
-                ]),
-                _vm._v(" "),
-                _vm.displayedOrder.status >= 2
-                  ? _c(
-                      "td",
-                      {
-                        staticClass: "align-middle text-center font-weight-bold"
-                      },
-                      [
-                        _vm._v(
-                          "\n                            " +
-                            _vm._s(_vm.getReceivedAmount(info.template.id)) +
-                            "\n                        "
-                        )
-                      ]
-                    )
-                  : _vm._e(),
-                _vm._v(" "),
-                _vm.displayedOrder.status >= 2
-                  ? _c(
-                      "td",
-                      {
-                        class: {
-                          "align-middle": true,
-                          "text-center": true,
-                          "font-weight-bold": true,
-                          "bg-danger": _vm.getLostAmount(info.template_id) > 0,
-                          "text-light": _vm.getLostAmount(info.template_id) > 0
-                        }
-                      },
-                      [
-                        _vm._v(
-                          "\n                            " +
-                            _vm._s(_vm.getLostAmount(info.template.id)) +
-                            "\n                        "
-                        )
-                      ]
-                    )
-                  : _vm._e(),
-                _vm._v(" "),
-                _c("td", { staticClass: "align-middle text-center" }, [
-                  _vm.displayedOrder.status > 0
-                    ? _c(
+          _c("hr"),
+          _vm._v(" "),
+          _c("div", { staticClass: "row justify-content-center" }, [
+            _vm.displayedOrder.status >= 1 && _vm.displayedOrder.status <= 3
+              ? _c(
+                  "button",
+                  {
+                    staticClass: "btn btn-secondary mr-2",
+                    attrs: { disabled: _vm.buttonDisabled },
+                    on: { click: _vm.back }
+                  },
+                  [_vm._v("Quay lại")]
+                )
+              : _vm._e(),
+            _vm._v(" "),
+            _vm.displayedOrder.status == 0
+              ? _c(
+                  "button",
+                  {
+                    staticClass: "btn btn-primary mx-2",
+                    attrs: { disabled: _vm.buttonDisabled, "data-abc": "true" },
+                    on: { click: _vm.acceptOrder }
+                  },
+                  [_vm._v("Chấp nhận")]
+                )
+              : _vm._e(),
+            _vm._v(" "),
+            _vm.displayedOrder.status == 0
+              ? _c(
+                  "button",
+                  {
+                    staticClass: "btn btn-danger",
+                    attrs: { disabled: _vm.buttonDisabled, "data-abc": "true" },
+                    on: { click: _vm.rejectOrder }
+                  },
+                  [_vm._v("Từ chối")]
+                )
+              : _vm._e(),
+            _vm._v(" "),
+            _vm.displayedOrder.status == 1
+              ? _c(
+                  "button",
+                  {
+                    staticClass: "btn btn-primary",
+                    attrs: { disabled: _vm.buttonDisabled, "data-abc": "true" },
+                    on: { click: _vm.equipmentOutput }
+                  },
+                  [_vm._v("Xuất đồ")]
+                )
+              : _vm._e(),
+            _vm._v(" "),
+            _vm.displayedOrder.status == 2
+              ? _c(
+                  "button",
+                  {
+                    staticClass: "btn btn-primary",
+                    attrs: { disabled: _vm.buttonDisabled, "data-abc": "true" },
+                    on: { click: _vm.equipmentReturn }
+                  },
+                  [_vm._v("Trả đồ")]
+                )
+              : _vm._e(),
+            _vm._v(" "),
+            _vm.displayedOrder.status == 3
+              ? _c(
+                  "button",
+                  {
+                    staticClass: "btn btn-primary",
+                    attrs: { disabled: _vm.buttonDisabled, "data-abc": "true" },
+                    on: { click: _vm.completeOrder }
+                  },
+                  [_vm._v("Hoàn tất")]
+                )
+              : _vm._e()
+          ])
+        ])
+      ]),
+      _vm._v(" "),
+      _vm._l(_vm.paginationItems, function(info) {
+        return _c(
+          "modal-component",
+          {
+            key: "a" + info.id,
+            attrs: {
+              id: "addEquipment-" + info.template.id,
+              title: "Thêm thiết bị " + info.template.name,
+              size: "xl"
+            },
+            scopedSlots: _vm._u(
+              [
+                {
+                  key: "footer",
+                  fn: function() {
+                    return [
+                      _c(
                         "button",
                         {
-                          staticClass: "btn btn-primary btn-sm",
-                          attrs: {
-                            type: "button",
-                            "data-toggle": "modal",
-                            "data-target": "#addEquipment-" + info.template.id
-                          }
+                          staticClass: "btn btn-primary",
+                          attrs: { type: "button", "data-dismiss": "modal" }
                         },
-                        [_c("span", { staticClass: "fa fa-pencil" })]
-                      )
-                    : _vm._e(),
-                  _vm._v(" "),
-                  _c(
-                    "div",
-                    {
-                      staticClass: "modal fade",
-                      attrs: {
-                        id: "addEquipment-" + info.template.id,
-                        tabindex: "-1",
-                        role: "dialog",
-                        "aria-labelledby":
-                          "addEquipmentLabel-" + info.template.id,
-                        "aria-hidden": "true"
-                      }
-                    },
-                    [
-                      _c(
-                        "div",
-                        {
-                          staticClass: "modal-dialog modal-xl",
-                          attrs: { role: "document" }
-                        },
-                        [
-                          _c("div", { staticClass: "modal-content" }, [
-                            _c("div", { staticClass: "modal-header" }, [
-                              _vm.displayedOrder.status <= 1
-                                ? _c(
-                                    "h5",
-                                    {
-                                      staticClass: "modal-title",
-                                      attrs: {
-                                        id:
-                                          "addEquipmentLabel-" +
-                                          info.template.id
-                                      }
-                                    },
-                                    [
-                                      _vm._v(
-                                        "Thêm thiết bị " +
-                                          _vm._s(info.template.name)
-                                      )
-                                    ]
-                                  )
-                                : _c(
-                                    "h5",
-                                    {
-                                      staticClass: "modal-title",
-                                      attrs: {
-                                        id:
-                                          "verifyEquipmentLabel-" +
-                                          info.template.id
-                                      }
-                                    },
-                                    [
-                                      _vm._v(
-                                        "Kiểm thiết bị " +
-                                          _vm._s(info.template.name)
-                                      )
-                                    ]
-                                  ),
-                              _vm._v(" "),
-                              _vm._m(12, true)
-                            ]),
-                            _vm._v(" "),
-                            _c("div", { staticClass: "modal-body" }, [
-                              _vm.displayedOrder.status <= 1
-                                ? _c(
-                                    "table",
-                                    { staticClass: "table table-hover" },
-                                    [
-                                      _vm._m(13, true),
-                                      _vm._v(" "),
-                                      _c(
-                                        "tbody",
-                                        _vm._l(
-                                          info.template.equipments,
-                                          function(equipment) {
-                                            return _c(
-                                              "tr",
-                                              { key: equipment.id },
-                                              [
-                                                _c(
-                                                  "th",
-                                                  {
-                                                    staticClass:
-                                                      "text-center align-middle",
-                                                    attrs: { scope: "row" }
-                                                  },
-                                                  [_vm._v(_vm._s(equipment.id))]
-                                                ),
-                                                _vm._v(" "),
-                                                _c(
-                                                  "td",
-                                                  {
-                                                    staticClass:
-                                                      "text-center align-middle"
-                                                  },
-                                                  [
-                                                    _vm._v(
-                                                      _vm._s(
-                                                        _vm._f(
-                                                          "formatEquipmentPrice"
-                                                        )(equipment.price)
-                                                      )
-                                                    )
-                                                  ]
-                                                ),
-                                                _vm._v(" "),
-                                                _c(
-                                                  "td",
-                                                  {
-                                                    staticClass:
-                                                      "text-center align-middle"
-                                                  },
-                                                  [
-                                                    _c("supplier-name", {
-                                                      attrs: {
-                                                        equipment: equipment
-                                                      }
-                                                    })
-                                                  ],
-                                                  1
-                                                ),
-                                                _vm._v(" "),
-                                                _c(
-                                                  "td",
-                                                  {
-                                                    staticClass:
-                                                      "text-center align-middle"
-                                                  },
-                                                  [
-                                                    _c("equipment-condition", {
-                                                      attrs: {
-                                                        condition:
-                                                          equipment.condition
-                                                      }
-                                                    })
-                                                  ],
-                                                  1
-                                                ),
-                                                _vm._v(" "),
-                                                _c(
-                                                  "td",
-                                                  {
-                                                    staticClass:
-                                                      "align-middle text-center"
-                                                  },
-                                                  [
-                                                    _c("equipment-status", {
-                                                      attrs: {
-                                                        status: equipment.status
-                                                      }
-                                                    })
-                                                  ],
-                                                  1
-                                                ),
-                                                _vm._v(" "),
-                                                _c("td", [
-                                                  _vm._v(_vm._s(equipment.note))
-                                                ]),
-                                                _vm._v(" "),
-                                                _c(
-                                                  "td",
-                                                  {
-                                                    staticClass: "align-middle"
-                                                  },
-                                                  [
-                                                    _c(
-                                                      "button",
-                                                      {
-                                                        staticClass:
-                                                          "btn btn-success btn-sm",
-                                                        attrs: {
-                                                          disabled: _vm.disablePlusEquipmentButton(
-                                                            equipment.id,
-                                                            equipment.status
-                                                          )
-                                                        },
-                                                        on: {
-                                                          click: function(
-                                                            $event
-                                                          ) {
-                                                            return _vm.selectEquipment(
-                                                              equipment,
-                                                              info.template.id
-                                                            )
-                                                          }
-                                                        }
-                                                      },
-                                                      [
-                                                        _c("span", {
-                                                          staticClass:
-                                                            "fa fa-plus"
-                                                        })
-                                                      ]
-                                                    ),
-                                                    _vm._v(" "),
-                                                    _c(
-                                                      "button",
-                                                      {
-                                                        staticClass:
-                                                          "btn btn-danger btn-sm",
-                                                        attrs: {
-                                                          disabled: _vm.disableMinusEquipmentButton(
-                                                            equipment.id,
-                                                            equipment.status
-                                                          )
-                                                        },
-                                                        on: {
-                                                          click: function(
-                                                            $event
-                                                          ) {
-                                                            return _vm.removeEquipment(
-                                                              equipment.id,
-                                                              info.template.id
-                                                            )
-                                                          }
-                                                        }
-                                                      },
-                                                      [
-                                                        _c("span", {
-                                                          staticClass:
-                                                            "fa fa-minus"
-                                                        })
-                                                      ]
-                                                    )
-                                                  ]
-                                                )
-                                              ]
-                                            )
-                                          }
-                                        ),
-                                        0
-                                      )
-                                    ]
-                                  )
-                                : _c(
-                                    "table",
-                                    { staticClass: "table table-hover" },
-                                    [
-                                      _vm._m(14, true),
-                                      _vm._v(" "),
-                                      _c(
-                                        "tbody",
-                                        _vm._l(info.order_infos, function(
-                                          orderInfo
-                                        ) {
-                                          return _c(
-                                            "tr",
-                                            { key: orderInfo.id },
-                                            [
-                                              _c(
-                                                "th",
-                                                {
-                                                  staticClass:
-                                                    "text-center align-middle",
-                                                  attrs: { scope: "row" }
-                                                },
-                                                [
-                                                  _vm._v(
-                                                    "\n                                                            " +
-                                                      _vm._s(
-                                                        orderInfo.equipment_id
-                                                      ) +
-                                                      "\n                                                        "
-                                                  )
-                                                ]
-                                              ),
-                                              _vm._v(" "),
-                                              _c(
-                                                "td",
-                                                {
-                                                  staticClass:
-                                                    "text-center align-middle"
-                                                },
-                                                [
-                                                  _c("equipment-condition", {
-                                                    attrs: {
-                                                      condition:
-                                                        orderInfo.condition_before
-                                                    }
-                                                  })
-                                                ],
-                                                1
-                                              ),
-                                              _vm._v(" "),
-                                              _c(
-                                                "td",
-                                                {
-                                                  staticClass:
-                                                    "text-center align-middle"
-                                                },
-                                                [
-                                                  _vm.displayedOrder.status <= 2
-                                                    ? _c(
-                                                        "div",
-                                                        {
-                                                          attrs: {
-                                                            id:
-                                                              orderInfo.equipment_id
-                                                          }
-                                                        },
-                                                        [
-                                                          _c(
-                                                            "div",
-                                                            {
-                                                              staticClass:
-                                                                "dropdown"
-                                                            },
-                                                            [
-                                                              _c(
-                                                                "select",
-                                                                {
-                                                                  directives: [
-                                                                    {
-                                                                      name:
-                                                                        "model",
-                                                                      rawName:
-                                                                        "v-model",
-                                                                      value:
-                                                                        orderInfo.condition_received,
-                                                                      expression:
-                                                                        "orderInfo.condition_received"
-                                                                    }
-                                                                  ],
-                                                                  staticClass:
-                                                                    "custom-select mx-0",
-                                                                  on: {
-                                                                    change: function(
-                                                                      $event
-                                                                    ) {
-                                                                      var $$selectedVal = Array.prototype.filter
-                                                                        .call(
-                                                                          $event
-                                                                            .target
-                                                                            .options,
-                                                                          function(
-                                                                            o
-                                                                          ) {
-                                                                            return o.selected
-                                                                          }
-                                                                        )
-                                                                        .map(
-                                                                          function(
-                                                                            o
-                                                                          ) {
-                                                                            var val =
-                                                                              "_value" in
-                                                                              o
-                                                                                ? o._value
-                                                                                : o.value
-                                                                            return val
-                                                                          }
-                                                                        )
-                                                                      _vm.$set(
-                                                                        orderInfo,
-                                                                        "condition_received",
-                                                                        $event
-                                                                          .target
-                                                                          .multiple
-                                                                          ? $$selectedVal
-                                                                          : $$selectedVal[0]
-                                                                      )
-                                                                    }
-                                                                  }
-                                                                },
-                                                                [
-                                                                  _c(
-                                                                    "option",
-                                                                    {
-                                                                      attrs: {
-                                                                        selected:
-                                                                          "",
-                                                                        value:
-                                                                          "1"
-                                                                      }
-                                                                    },
-                                                                    [
-                                                                      _c(
-                                                                        "equipment-condition",
-                                                                        {
-                                                                          attrs: {
-                                                                            condition: 1
-                                                                          }
-                                                                        }
-                                                                      )
-                                                                    ],
-                                                                    1
-                                                                  ),
-                                                                  _vm._v(" "),
-                                                                  _c(
-                                                                    "option",
-                                                                    {
-                                                                      attrs: {
-                                                                        value:
-                                                                          "2"
-                                                                      }
-                                                                    },
-                                                                    [
-                                                                      _c(
-                                                                        "equipment-condition",
-                                                                        {
-                                                                          attrs: {
-                                                                            condition: 2
-                                                                          }
-                                                                        }
-                                                                      )
-                                                                    ],
-                                                                    1
-                                                                  ),
-                                                                  _vm._v(" "),
-                                                                  _c(
-                                                                    "option",
-                                                                    {
-                                                                      attrs: {
-                                                                        value:
-                                                                          "0"
-                                                                      }
-                                                                    },
-                                                                    [
-                                                                      _c(
-                                                                        "equipment-condition",
-                                                                        {
-                                                                          attrs: {
-                                                                            condition: 0
-                                                                          }
-                                                                        }
-                                                                      )
-                                                                    ],
-                                                                    1
-                                                                  )
-                                                                ]
-                                                              )
-                                                            ]
-                                                          )
-                                                        ]
-                                                      )
-                                                    : _c(
-                                                        "div",
-                                                        [
-                                                          _c(
-                                                            "equipment-condition",
-                                                            {
-                                                              attrs: {
-                                                                condition:
-                                                                  orderInfo.condition_received
-                                                              }
-                                                            }
-                                                          )
-                                                        ],
-                                                        1
-                                                      )
-                                                ]
-                                              ),
-                                              _vm._v(" "),
-                                              _c(
-                                                "td",
-                                                { staticClass: "text-center" },
-                                                [
-                                                  _vm.displayedOrder.status <= 2
-                                                    ? _c("textarea", {
-                                                        directives: [
-                                                          {
-                                                            name: "model",
-                                                            rawName: "v-model",
-                                                            value:
-                                                              orderInfo.note,
-                                                            expression:
-                                                              "orderInfo.note"
-                                                          }
-                                                        ],
-                                                        staticClass:
-                                                          "form-control",
-                                                        attrs: {
-                                                          name: "note",
-                                                          cols: "10"
-                                                        },
-                                                        domProps: {
-                                                          value: orderInfo.note
-                                                        },
-                                                        on: {
-                                                          input: function(
-                                                            $event
-                                                          ) {
-                                                            if (
-                                                              $event.target
-                                                                .composing
-                                                            ) {
-                                                              return
-                                                            }
-                                                            _vm.$set(
-                                                              orderInfo,
-                                                              "note",
-                                                              $event.target
-                                                                .value
-                                                            )
-                                                          }
-                                                        }
-                                                      })
-                                                    : _c("div", [
-                                                        _vm._v(
-                                                          _vm._s(orderInfo.note)
-                                                        )
-                                                      ])
-                                                ]
-                                              ),
-                                              _vm._v(" "),
-                                              _c(
-                                                "td",
-                                                {
-                                                  staticClass:
-                                                    "align-middle text-center pb-5"
-                                                },
-                                                [
-                                                  _c(
-                                                    "div",
-                                                    {
-                                                      staticClass: "form-check"
-                                                    },
-                                                    [
-                                                      _c("input", {
-                                                        directives: [
-                                                          {
-                                                            name: "model",
-                                                            rawName: "v-model",
-                                                            value:
-                                                              _vm
-                                                                .equipmentReceived[
-                                                                orderInfo
-                                                                  .equipment_id
-                                                              ],
-                                                            expression:
-                                                              "equipmentReceived[orderInfo.equipment_id]"
-                                                          }
-                                                        ],
-                                                        staticClass:
-                                                          "form-check-input",
-                                                        attrs: {
-                                                          disabled:
-                                                            _vm.equipmentLost[
-                                                              orderInfo
-                                                                .equipment_id
-                                                            ],
-                                                          type: "checkbox"
-                                                        },
-                                                        domProps: {
-                                                          checked: Array.isArray(
-                                                            _vm
-                                                              .equipmentReceived[
-                                                              orderInfo
-                                                                .equipment_id
-                                                            ]
-                                                          )
-                                                            ? _vm._i(
-                                                                _vm
-                                                                  .equipmentReceived[
-                                                                  orderInfo
-                                                                    .equipment_id
-                                                                ],
-                                                                null
-                                                              ) > -1
-                                                            : _vm
-                                                                .equipmentReceived[
-                                                                orderInfo
-                                                                  .equipment_id
-                                                              ]
-                                                        },
-                                                        on: {
-                                                          change: function(
-                                                            $event
-                                                          ) {
-                                                            var $$a =
-                                                                _vm
-                                                                  .equipmentReceived[
-                                                                  orderInfo
-                                                                    .equipment_id
-                                                                ],
-                                                              $$el =
-                                                                $event.target,
-                                                              $$c = $$el.checked
-                                                                ? true
-                                                                : false
-                                                            if (
-                                                              Array.isArray($$a)
-                                                            ) {
-                                                              var $$v = null,
-                                                                $$i = _vm._i(
-                                                                  $$a,
-                                                                  $$v
-                                                                )
-                                                              if (
-                                                                $$el.checked
-                                                              ) {
-                                                                $$i < 0 &&
-                                                                  _vm.$set(
-                                                                    _vm.equipmentReceived,
-                                                                    orderInfo.equipment_id,
-                                                                    $$a.concat([
-                                                                      $$v
-                                                                    ])
-                                                                  )
-                                                              } else {
-                                                                $$i > -1 &&
-                                                                  _vm.$set(
-                                                                    _vm.equipmentReceived,
-                                                                    orderInfo.equipment_id,
-                                                                    $$a
-                                                                      .slice(
-                                                                        0,
-                                                                        $$i
-                                                                      )
-                                                                      .concat(
-                                                                        $$a.slice(
-                                                                          $$i +
-                                                                            1
-                                                                        )
-                                                                      )
-                                                                  )
-                                                              }
-                                                            } else {
-                                                              _vm.$set(
-                                                                _vm.equipmentReceived,
-                                                                orderInfo.equipment_id,
-                                                                $$c
-                                                              )
-                                                            }
-                                                          }
-                                                        }
-                                                      })
-                                                    ]
-                                                  )
-                                                ]
-                                              ),
-                                              _vm._v(" "),
-                                              _c(
-                                                "td",
-                                                {
-                                                  staticClass:
-                                                    "align-middle text-center pb-5"
-                                                },
-                                                [
-                                                  _c(
-                                                    "div",
-                                                    {
-                                                      staticClass: "form-check"
-                                                    },
-                                                    [
-                                                      _c("input", {
-                                                        directives: [
-                                                          {
-                                                            name: "model",
-                                                            rawName: "v-model",
-                                                            value:
-                                                              _vm.equipmentLost[
-                                                                orderInfo
-                                                                  .equipment_id
-                                                              ],
-                                                            expression:
-                                                              "equipmentLost[orderInfo.equipment_id]"
-                                                          }
-                                                        ],
-                                                        staticClass:
-                                                          "form-check-input",
-                                                        attrs: {
-                                                          disabled:
-                                                            _vm
-                                                              .equipmentReceived[
-                                                              orderInfo
-                                                                .equipment_id
-                                                            ],
-                                                          type: "checkbox"
-                                                        },
-                                                        domProps: {
-                                                          checked: Array.isArray(
-                                                            _vm.equipmentLost[
-                                                              orderInfo
-                                                                .equipment_id
-                                                            ]
-                                                          )
-                                                            ? _vm._i(
-                                                                _vm
-                                                                  .equipmentLost[
-                                                                  orderInfo
-                                                                    .equipment_id
-                                                                ],
-                                                                null
-                                                              ) > -1
-                                                            : _vm.equipmentLost[
-                                                                orderInfo
-                                                                  .equipment_id
-                                                              ]
-                                                        },
-                                                        on: {
-                                                          change: function(
-                                                            $event
-                                                          ) {
-                                                            var $$a =
-                                                                _vm
-                                                                  .equipmentLost[
-                                                                  orderInfo
-                                                                    .equipment_id
-                                                                ],
-                                                              $$el =
-                                                                $event.target,
-                                                              $$c = $$el.checked
-                                                                ? true
-                                                                : false
-                                                            if (
-                                                              Array.isArray($$a)
-                                                            ) {
-                                                              var $$v = null,
-                                                                $$i = _vm._i(
-                                                                  $$a,
-                                                                  $$v
-                                                                )
-                                                              if (
-                                                                $$el.checked
-                                                              ) {
-                                                                $$i < 0 &&
-                                                                  _vm.$set(
-                                                                    _vm.equipmentLost,
-                                                                    orderInfo.equipment_id,
-                                                                    $$a.concat([
-                                                                      $$v
-                                                                    ])
-                                                                  )
-                                                              } else {
-                                                                $$i > -1 &&
-                                                                  _vm.$set(
-                                                                    _vm.equipmentLost,
-                                                                    orderInfo.equipment_id,
-                                                                    $$a
-                                                                      .slice(
-                                                                        0,
-                                                                        $$i
-                                                                      )
-                                                                      .concat(
-                                                                        $$a.slice(
-                                                                          $$i +
-                                                                            1
-                                                                        )
-                                                                      )
-                                                                  )
-                                                              }
-                                                            } else {
-                                                              _vm.$set(
-                                                                _vm.equipmentLost,
-                                                                orderInfo.equipment_id,
-                                                                $$c
-                                                              )
-                                                            }
-                                                          }
-                                                        }
-                                                      })
-                                                    ]
-                                                  )
-                                                ]
-                                              )
-                                            ]
-                                          )
-                                        }),
-                                        0
-                                      )
-                                    ]
-                                  )
-                            ]),
-                            _vm._v(" "),
-                            _vm._m(15, true)
-                          ])
-                        ]
+                        [_vm._v("Xong")]
                       )
                     ]
+                  },
+                  proxy: true
+                }
+              ],
+              null,
+              true
+            )
+          },
+          [
+            _c("table", { staticClass: "table table-hover" }, [
+              _c("thead", { staticClass: "thead-light" }, [
+                _c("tr", [
+                  _c(
+                    "th",
+                    {
+                      staticClass: "text-center",
+                      staticStyle: { width: "5%" },
+                      attrs: { scope: "col" }
+                    },
+                    [_vm._v("Mã")]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "th",
+                    {
+                      staticClass: "text-center",
+                      staticStyle: { width: "10%" },
+                      attrs: { scope: "col" }
+                    },
+                    [_vm._v("Giá nhập")]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "th",
+                    {
+                      staticClass: "text-center",
+                      staticStyle: { width: "12%" },
+                      attrs: { scope: "col" }
+                    },
+                    [_vm._v("Nhà cung cấp")]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "th",
+                    {
+                      staticClass: "text-center",
+                      staticStyle: { width: "10%" },
+                      attrs: { scope: "col" }
+                    },
+                    [_vm._v("Tình trạng")]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "th",
+                    {
+                      staticClass: "text-center",
+                      staticStyle: { width: "10%" },
+                      attrs: { scope: "col" }
+                    },
+                    [_vm._v("Trạng thái")]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "th",
+                    {
+                      staticClass: "text-center",
+                      staticStyle: { width: "15%" },
+                      attrs: { scope: "col" }
+                    },
+                    [_vm._v("Ghi chú")]
+                  ),
+                  _vm._v(" "),
+                  _c("th", {
+                    staticClass: "text-center",
+                    staticStyle: { width: "10%" },
+                    attrs: { scope: "col" }
+                  })
+                ])
+              ]),
+              _vm._v(" "),
+              _c(
+                "tbody",
+                _vm._l(info.template.equipments, function(equipment) {
+                  return _c("tr", { key: equipment.id }, [
+                    _c(
+                      "th",
+                      {
+                        staticClass: "text-center align-middle",
+                        attrs: { scope: "row" }
+                      },
+                      [_vm._v(_vm._s(equipment.id))]
+                    ),
+                    _vm._v(" "),
+                    _c("td", { staticClass: "text-center align-middle" }, [
+                      _vm._v(
+                        _vm._s(_vm._f("formatEquipmentPrice")(equipment.price))
+                      )
+                    ]),
+                    _vm._v(" "),
+                    _c(
+                      "td",
+                      { staticClass: "text-center align-middle" },
+                      [
+                        _c("supplier-name", { attrs: { equipment: equipment } })
+                      ],
+                      1
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "td",
+                      { staticClass: "text-center align-middle" },
+                      [
+                        _c("equipment-condition", {
+                          attrs: { condition: equipment.condition }
+                        })
+                      ],
+                      1
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "td",
+                      { staticClass: "align-middle text-center" },
+                      [
+                        _c("equipment-status", {
+                          attrs: { status: equipment.status }
+                        })
+                      ],
+                      1
+                    ),
+                    _vm._v(" "),
+                    _c("td", [_vm._v(_vm._s(equipment.note))]),
+                    _vm._v(" "),
+                    _c("td", { staticClass: "align-middle" }, [
+                      _c(
+                        "button",
+                        {
+                          staticClass: "btn btn-success btn-sm",
+                          attrs: {
+                            disabled: _vm.disablePlusEquipmentButton(
+                              equipment.id,
+                              equipment.status
+                            )
+                          },
+                          on: {
+                            click: function($event) {
+                              return _vm.selectEquipment(
+                                equipment,
+                                info.template.id
+                              )
+                            }
+                          }
+                        },
+                        [_c("span", { staticClass: "fa fa-plus" })]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "button",
+                        {
+                          staticClass: "btn btn-danger btn-sm",
+                          attrs: {
+                            disabled: _vm.disableMinusEquipmentButton(
+                              equipment.id,
+                              equipment.status
+                            )
+                          },
+                          on: {
+                            click: function($event) {
+                              return _vm.removeEquipment(
+                                equipment.id,
+                                info.template.id
+                              )
+                            }
+                          }
+                        },
+                        [_c("span", { staticClass: "fa fa-minus" })]
+                      )
+                    ])
+                  ])
+                }),
+                0
+              )
+            ])
+          ]
+        )
+      }),
+      _vm._v(" "),
+      _vm._l(_vm.paginationItems, function(info) {
+        return _c(
+          "modal-component",
+          {
+            key: "v" + info.id,
+            attrs: {
+              id: "verifyEquipment-" + info.template.id,
+              title: "Kiểm thiết bị " + info.template.name,
+              size: "xl"
+            },
+            scopedSlots: _vm._u(
+              [
+                {
+                  key: "footer",
+                  fn: function() {
+                    return [
+                      _c(
+                        "button",
+                        {
+                          staticClass: "btn btn-primary",
+                          attrs: { type: "button", "data-dismiss": "modal" }
+                        },
+                        [_vm._v("Xong")]
+                      )
+                    ]
+                  },
+                  proxy: true
+                }
+              ],
+              null,
+              true
+            )
+          },
+          [
+            _c("table", { staticClass: "table table-hover" }, [
+              _c("thead", { staticClass: "thead-light" }, [
+                _c("tr", [
+                  _c(
+                    "th",
+                    {
+                      staticClass: "text-center",
+                      staticStyle: { width: "5%" },
+                      attrs: { scope: "col" }
+                    },
+                    [_vm._v("Mã")]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "th",
+                    {
+                      staticClass: "text-center",
+                      staticStyle: { width: "20%" },
+                      attrs: { scope: "col" }
+                    },
+                    [_vm._v("Tình trạng trước khi mượn")]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "th",
+                    {
+                      staticClass: "text-center",
+                      staticStyle: { width: "25%" },
+                      attrs: { scope: "col" }
+                    },
+                    [_vm._v("Tình trạng sau khi mượn")]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "th",
+                    {
+                      staticClass: "text-center",
+                      staticStyle: { width: "25%" },
+                      attrs: { scope: "col" }
+                    },
+                    [_vm._v("Ghi chú")]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "th",
+                    { staticClass: "text-center", attrs: { scope: "col" } },
+                    [_vm._v("Đã nhận")]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "th",
+                    { staticClass: "text-center", attrs: { scope: "col" } },
+                    [_vm._v("Thất lạc")]
                   )
                 ])
-              ])
-            }),
-            0
-          )
-        ]),
-        _vm._v(" "),
-        _c(
-          "div",
-          { staticClass: "row justify-content-center" },
-          [
-            _c("pagination", {
-              attrs: { items: _vm.searchInputItems },
-              on: {
-                change: function($event) {
-                  return _vm.pagination($event)
-                }
-              }
-            })
-          ],
-          1
-        ),
-        _vm._v(" "),
-        _c("hr"),
-        _vm._v(" "),
-        _c("div", { staticClass: "row justify-content-center" }, [
-          _vm.displayedOrder.status >= 1 && _vm.displayedOrder.status <= 3
-            ? _c(
-                "button",
-                {
-                  staticClass: "btn btn-secondary mr-2",
-                  attrs: { disabled: _vm.buttonDisabled },
-                  on: { click: _vm.back }
-                },
-                [_vm._v("Quay lại")]
+              ]),
+              _vm._v(" "),
+              _c(
+                "tbody",
+                _vm._l(info.order_infos, function(orderInfo) {
+                  return _c("tr", { key: orderInfo.id }, [
+                    _c(
+                      "th",
+                      {
+                        staticClass: "text-center align-middle",
+                        attrs: { scope: "row" }
+                      },
+                      [
+                        _vm._v(
+                          "\n                        " +
+                            _vm._s(orderInfo.equipment_id) +
+                            "\n                    "
+                        )
+                      ]
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "td",
+                      { staticClass: "text-center align-middle" },
+                      [
+                        _c("equipment-condition", {
+                          attrs: { condition: orderInfo.condition_before }
+                        })
+                      ],
+                      1
+                    ),
+                    _vm._v(" "),
+                    _c("td", { staticClass: "text-center align-middle" }, [
+                      _vm.displayedOrder.status <= 2
+                        ? _c("div", { attrs: { id: orderInfo.equipment_id } }, [
+                            _c("div", { staticClass: "dropdown" }, [
+                              _c(
+                                "select",
+                                {
+                                  directives: [
+                                    {
+                                      name: "model",
+                                      rawName: "v-model",
+                                      value: orderInfo.condition_received,
+                                      expression: "orderInfo.condition_received"
+                                    }
+                                  ],
+                                  staticClass: "custom-select mx-0",
+                                  on: {
+                                    change: function($event) {
+                                      var $$selectedVal = Array.prototype.filter
+                                        .call($event.target.options, function(
+                                          o
+                                        ) {
+                                          return o.selected
+                                        })
+                                        .map(function(o) {
+                                          var val =
+                                            "_value" in o ? o._value : o.value
+                                          return val
+                                        })
+                                      _vm.$set(
+                                        orderInfo,
+                                        "condition_received",
+                                        $event.target.multiple
+                                          ? $$selectedVal
+                                          : $$selectedVal[0]
+                                      )
+                                    }
+                                  }
+                                },
+                                [
+                                  _c(
+                                    "option",
+                                    { attrs: { selected: "", value: "1" } },
+                                    [
+                                      _c("equipment-condition", {
+                                        attrs: { condition: 1 }
+                                      })
+                                    ],
+                                    1
+                                  ),
+                                  _vm._v(" "),
+                                  _c(
+                                    "option",
+                                    { attrs: { value: "2" } },
+                                    [
+                                      _c("equipment-condition", {
+                                        attrs: { condition: 2 }
+                                      })
+                                    ],
+                                    1
+                                  ),
+                                  _vm._v(" "),
+                                  _c(
+                                    "option",
+                                    { attrs: { value: "0" } },
+                                    [
+                                      _c("equipment-condition", {
+                                        attrs: { condition: 0 }
+                                      })
+                                    ],
+                                    1
+                                  )
+                                ]
+                              )
+                            ])
+                          ])
+                        : _c(
+                            "div",
+                            [
+                              _c("equipment-condition", {
+                                attrs: {
+                                  condition: orderInfo.condition_received
+                                }
+                              })
+                            ],
+                            1
+                          )
+                    ]),
+                    _vm._v(" "),
+                    _c("td", { staticClass: "text-center" }, [
+                      _vm.displayedOrder.status <= 2
+                        ? _c("textarea", {
+                            directives: [
+                              {
+                                name: "model",
+                                rawName: "v-model",
+                                value: orderInfo.note,
+                                expression: "orderInfo.note"
+                              }
+                            ],
+                            staticClass: "form-control",
+                            attrs: { name: "note", cols: "10" },
+                            domProps: { value: orderInfo.note },
+                            on: {
+                              input: function($event) {
+                                if ($event.target.composing) {
+                                  return
+                                }
+                                _vm.$set(orderInfo, "note", $event.target.value)
+                              }
+                            }
+                          })
+                        : _c("div", [_vm._v(_vm._s(orderInfo.note))])
+                    ]),
+                    _vm._v(" "),
+                    _c("td", { staticClass: "align-middle text-center pb-5" }, [
+                      _c("div", { staticClass: "form-check" }, [
+                        _c("input", {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value:
+                                _vm.equipmentReceived[orderInfo.equipment_id],
+                              expression:
+                                "equipmentReceived[orderInfo.equipment_id]"
+                            }
+                          ],
+                          staticClass: "form-check-input",
+                          attrs: {
+                            disabled: _vm.equipmentLost[orderInfo.equipment_id],
+                            type: "checkbox"
+                          },
+                          domProps: {
+                            checked: Array.isArray(
+                              _vm.equipmentReceived[orderInfo.equipment_id]
+                            )
+                              ? _vm._i(
+                                  _vm.equipmentReceived[orderInfo.equipment_id],
+                                  null
+                                ) > -1
+                              : _vm.equipmentReceived[orderInfo.equipment_id]
+                          },
+                          on: {
+                            change: function($event) {
+                              var $$a =
+                                  _vm.equipmentReceived[orderInfo.equipment_id],
+                                $$el = $event.target,
+                                $$c = $$el.checked ? true : false
+                              if (Array.isArray($$a)) {
+                                var $$v = null,
+                                  $$i = _vm._i($$a, $$v)
+                                if ($$el.checked) {
+                                  $$i < 0 &&
+                                    _vm.$set(
+                                      _vm.equipmentReceived,
+                                      orderInfo.equipment_id,
+                                      $$a.concat([$$v])
+                                    )
+                                } else {
+                                  $$i > -1 &&
+                                    _vm.$set(
+                                      _vm.equipmentReceived,
+                                      orderInfo.equipment_id,
+                                      $$a
+                                        .slice(0, $$i)
+                                        .concat($$a.slice($$i + 1))
+                                    )
+                                }
+                              } else {
+                                _vm.$set(
+                                  _vm.equipmentReceived,
+                                  orderInfo.equipment_id,
+                                  $$c
+                                )
+                              }
+                            }
+                          }
+                        })
+                      ])
+                    ]),
+                    _vm._v(" "),
+                    _c("td", { staticClass: "align-middle text-center pb-5" }, [
+                      _c("div", { staticClass: "form-check" }, [
+                        _c("input", {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.equipmentLost[orderInfo.equipment_id],
+                              expression:
+                                "equipmentLost[orderInfo.equipment_id]"
+                            }
+                          ],
+                          staticClass: "form-check-input",
+                          attrs: {
+                            disabled:
+                              _vm.equipmentReceived[orderInfo.equipment_id],
+                            type: "checkbox"
+                          },
+                          domProps: {
+                            checked: Array.isArray(
+                              _vm.equipmentLost[orderInfo.equipment_id]
+                            )
+                              ? _vm._i(
+                                  _vm.equipmentLost[orderInfo.equipment_id],
+                                  null
+                                ) > -1
+                              : _vm.equipmentLost[orderInfo.equipment_id]
+                          },
+                          on: {
+                            change: function($event) {
+                              var $$a =
+                                  _vm.equipmentLost[orderInfo.equipment_id],
+                                $$el = $event.target,
+                                $$c = $$el.checked ? true : false
+                              if (Array.isArray($$a)) {
+                                var $$v = null,
+                                  $$i = _vm._i($$a, $$v)
+                                if ($$el.checked) {
+                                  $$i < 0 &&
+                                    _vm.$set(
+                                      _vm.equipmentLost,
+                                      orderInfo.equipment_id,
+                                      $$a.concat([$$v])
+                                    )
+                                } else {
+                                  $$i > -1 &&
+                                    _vm.$set(
+                                      _vm.equipmentLost,
+                                      orderInfo.equipment_id,
+                                      $$a
+                                        .slice(0, $$i)
+                                        .concat($$a.slice($$i + 1))
+                                    )
+                                }
+                              } else {
+                                _vm.$set(
+                                  _vm.equipmentLost,
+                                  orderInfo.equipment_id,
+                                  $$c
+                                )
+                              }
+                            }
+                          }
+                        })
+                      ])
+                    ])
+                  ])
+                }),
+                0
               )
-            : _vm._e(),
-          _vm._v(" "),
-          _vm.displayedOrder.status == 0
-            ? _c(
-                "button",
-                {
-                  staticClass: "btn btn-primary mx-2",
-                  attrs: { disabled: _vm.buttonDisabled, "data-abc": "true" },
-                  on: { click: _vm.acceptOrder }
-                },
-                [_vm._v("Chấp nhận")]
-              )
-            : _vm._e(),
-          _vm._v(" "),
-          _vm.displayedOrder.status == 0
-            ? _c(
-                "button",
-                {
-                  staticClass: "btn btn-danger",
-                  attrs: { disabled: _vm.buttonDisabled, "data-abc": "true" },
-                  on: { click: _vm.rejectOrder }
-                },
-                [_vm._v("Từ chối")]
-              )
-            : _vm._e(),
-          _vm._v(" "),
-          _vm.displayedOrder.status == 1
-            ? _c(
-                "button",
-                {
-                  staticClass: "btn btn-primary",
-                  attrs: { disabled: _vm.buttonDisabled, "data-abc": "true" },
-                  on: { click: _vm.equipmentOutput }
-                },
-                [_vm._v("Xuất đồ")]
-              )
-            : _vm._e(),
-          _vm._v(" "),
-          _vm.displayedOrder.status == 2
-            ? _c(
-                "button",
-                {
-                  staticClass: "btn btn-primary",
-                  attrs: { disabled: _vm.buttonDisabled, "data-abc": "true" },
-                  on: { click: _vm.equipmentReturn }
-                },
-                [_vm._v("Trả đồ")]
-              )
-            : _vm._e(),
-          _vm._v(" "),
-          _vm.displayedOrder.status == 3
-            ? _c(
-                "button",
-                {
-                  staticClass: "btn btn-primary",
-                  attrs: { disabled: _vm.buttonDisabled, "data-abc": "true" },
-                  on: { click: _vm.completeOrder }
-                },
-                [_vm._v("Hoàn tất")]
-              )
-            : _vm._e()
-        ])
-      ])
-    ])
-  ])
+            ])
+          ]
+        )
+      })
+    ],
+    2
+  )
 }
 var staticRenderFns = [
   function() {
@@ -67011,168 +66859,6 @@ var staticRenderFns = [
     var _c = _vm._self._c || _h
     return _c("span", { staticClass: "icon" }, [
       _c("i", { staticClass: "fa fa-thumbs-up" })
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c(
-      "button",
-      {
-        staticClass: "close",
-        attrs: {
-          type: "button",
-          "data-dismiss": "modal",
-          "aria-label": "Close"
-        }
-      },
-      [_c("span", { attrs: { "aria-hidden": "true" } }, [_vm._v("×")])]
-    )
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("thead", { staticClass: "thead-light" }, [
-      _c("tr", [
-        _c(
-          "th",
-          {
-            staticClass: "text-center",
-            staticStyle: { width: "5%" },
-            attrs: { scope: "col" }
-          },
-          [_vm._v("Mã")]
-        ),
-        _vm._v(" "),
-        _c(
-          "th",
-          {
-            staticClass: "text-center",
-            staticStyle: { width: "10%" },
-            attrs: { scope: "col" }
-          },
-          [_vm._v("Giá nhập")]
-        ),
-        _vm._v(" "),
-        _c(
-          "th",
-          {
-            staticClass: "text-center",
-            staticStyle: { width: "12%" },
-            attrs: { scope: "col" }
-          },
-          [_vm._v("Nhà cung cấp")]
-        ),
-        _vm._v(" "),
-        _c(
-          "th",
-          {
-            staticClass: "text-center",
-            staticStyle: { width: "10%" },
-            attrs: { scope: "col" }
-          },
-          [_vm._v("Tình trạng")]
-        ),
-        _vm._v(" "),
-        _c(
-          "th",
-          {
-            staticClass: "text-center",
-            staticStyle: { width: "10%" },
-            attrs: { scope: "col" }
-          },
-          [_vm._v("Trạng thái")]
-        ),
-        _vm._v(" "),
-        _c(
-          "th",
-          {
-            staticClass: "text-center",
-            staticStyle: { width: "15%" },
-            attrs: { scope: "col" }
-          },
-          [_vm._v("Ghi chú")]
-        ),
-        _vm._v(" "),
-        _c("th", {
-          staticClass: "text-center",
-          staticStyle: { width: "10%" },
-          attrs: { scope: "col" }
-        })
-      ])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("thead", { staticClass: "thead-light" }, [
-      _c("tr", [
-        _c(
-          "th",
-          {
-            staticClass: "text-center",
-            staticStyle: { width: "5%" },
-            attrs: { scope: "col" }
-          },
-          [_vm._v("Mã")]
-        ),
-        _vm._v(" "),
-        _c(
-          "th",
-          {
-            staticClass: "text-center",
-            staticStyle: { width: "20%" },
-            attrs: { scope: "col" }
-          },
-          [_vm._v("Tình trạng trước khi mượn")]
-        ),
-        _vm._v(" "),
-        _c(
-          "th",
-          {
-            staticClass: "text-center",
-            staticStyle: { width: "25%" },
-            attrs: { scope: "col" }
-          },
-          [_vm._v("Tình trạng sau khi mượn")]
-        ),
-        _vm._v(" "),
-        _c(
-          "th",
-          {
-            staticClass: "text-center",
-            staticStyle: { width: "25%" },
-            attrs: { scope: "col" }
-          },
-          [_vm._v("Ghi chú")]
-        ),
-        _vm._v(" "),
-        _c("th", { staticClass: "text-center", attrs: { scope: "col" } }, [
-          _vm._v("Đã nhận")
-        ]),
-        _vm._v(" "),
-        _c("th", { staticClass: "text-center", attrs: { scope: "col" } }, [
-          _vm._v("Thất lạc")
-        ])
-      ])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "modal-footer" }, [
-      _c(
-        "button",
-        {
-          staticClass: "btn btn-primary",
-          attrs: { type: "button", "data-dismiss": "modal" }
-        },
-        [_vm._v("Xong")]
-      )
     ])
   }
 ]
