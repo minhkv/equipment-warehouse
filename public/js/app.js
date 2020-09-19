@@ -66988,32 +66988,52 @@ var render = function() {
                               {
                                 key: order.id,
                                 staticClass: "cursor-pointer",
-                                class: _vm.rowClass(order.status),
-                                on: {
-                                  click: function($event) {
-                                    _vm.redirect(_vm.orderDetailUrl(order.id))
-                                  }
-                                }
+                                class: _vm.rowClass(order.status)
                               },
                               [
                                 _c(
                                   "th",
                                   {
                                     staticClass: "align-middle text-center",
-                                    attrs: { scope: "row" }
+                                    attrs: { scope: "row" },
+                                    on: {
+                                      click: function($event) {
+                                        _vm.redirect(
+                                          _vm.orderDetailUrl(order.id)
+                                        )
+                                      }
+                                    }
                                   },
                                   [_vm._v(_vm._s(order.id))]
                                 ),
                                 _vm._v(" "),
                                 _c(
                                   "td",
-                                  { staticClass: "text-center align-middle" },
+                                  {
+                                    staticClass: "text-center align-middle",
+                                    on: {
+                                      click: function($event) {
+                                        _vm.redirect(
+                                          _vm.orderDetailUrl(order.id)
+                                        )
+                                      }
+                                    }
+                                  },
                                   [_vm._v(_vm._s(order.guest_name))]
                                 ),
                                 _vm._v(" "),
                                 _c(
                                   "td",
-                                  { staticClass: "text-center align-middle" },
+                                  {
+                                    staticClass: "text-center align-middle",
+                                    on: {
+                                      click: function($event) {
+                                        _vm.redirect(
+                                          _vm.orderDetailUrl(order.id)
+                                        )
+                                      }
+                                    }
+                                  },
                                   [
                                     _vm._v(
                                       _vm._s(
@@ -67025,13 +67045,31 @@ var render = function() {
                                 _vm._v(" "),
                                 _c(
                                   "td",
-                                  { staticClass: "text-center align-middle" },
+                                  {
+                                    staticClass: "text-center align-middle",
+                                    on: {
+                                      click: function($event) {
+                                        _vm.redirect(
+                                          _vm.orderDetailUrl(order.id)
+                                        )
+                                      }
+                                    }
+                                  },
                                   [_vm._v(_vm._s(order.reason))]
                                 ),
                                 _vm._v(" "),
                                 _c(
                                   "td",
-                                  { staticClass: "text-center align-middle" },
+                                  {
+                                    staticClass: "text-center align-middle",
+                                    on: {
+                                      click: function($event) {
+                                        _vm.redirect(
+                                          _vm.orderDetailUrl(order.id)
+                                        )
+                                      }
+                                    }
+                                  },
                                   [
                                     _vm._v(
                                       _vm._s(
@@ -67043,7 +67081,16 @@ var render = function() {
                                 _vm._v(" "),
                                 _c(
                                   "td",
-                                  { staticClass: "text-center align-middle" },
+                                  {
+                                    staticClass: "text-center align-middle",
+                                    on: {
+                                      click: function($event) {
+                                        _vm.redirect(
+                                          _vm.orderDetailUrl(order.id)
+                                        )
+                                      }
+                                    }
+                                  },
                                   [
                                     _vm._v(
                                       _vm._s(_vm.getOrderRequestAmount(order))
@@ -67053,7 +67100,16 @@ var render = function() {
                                 _vm._v(" "),
                                 _c(
                                   "td",
-                                  { staticClass: "text-center align-middle" },
+                                  {
+                                    staticClass: "text-center align-middle",
+                                    on: {
+                                      click: function($event) {
+                                        _vm.redirect(
+                                          _vm.orderDetailUrl(order.id)
+                                        )
+                                      }
+                                    }
+                                  },
                                   [
                                     _vm._v(
                                       _vm._s(
@@ -67065,7 +67121,16 @@ var render = function() {
                                 _vm._v(" "),
                                 _c(
                                   "td",
-                                  { staticClass: "text-center align-middle" },
+                                  {
+                                    staticClass: "text-center align-middle",
+                                    on: {
+                                      click: function($event) {
+                                        _vm.redirect(
+                                          _vm.orderDetailUrl(order.id)
+                                        )
+                                      }
+                                    }
+                                  },
                                   [
                                     _c(
                                       "h6",

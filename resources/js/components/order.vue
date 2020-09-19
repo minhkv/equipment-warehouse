@@ -49,15 +49,15 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr class="cursor-pointer" v-for="order in paginationItems" :key="order.id" :class="rowClass(order.status)" @click="redirect(orderDetailUrl(order.id))">
-                                            <th scope="row" class="align-middle text-center">{{order.id}}</th>
-                                            <td class="text-center align-middle">{{order.guest_name}}</td>
-                                            <td class="text-center align-middle">{{order.long_term|formatBoolean}}</td>
-                                            <td class="text-center align-middle">{{order.reason}}</td>
-                                            <td class="text-center align-middle">{{order.created_at|formatDate}}</td>
-                                            <td class="text-center align-middle">{{ getOrderRequestAmount(order) }}</td>
-                                            <td class="text-center align-middle">{{ getOrderBorrowedAmount(order) }} </td>
-                                            <td class="text-center align-middle">
+                                        <tr class="cursor-pointer" v-for="order in paginationItems" :key="order.id" :class="rowClass(order.status)" >
+                                            <th @click="redirect(orderDetailUrl(order.id))" scope="row" class="align-middle text-center">{{order.id}}</th>
+                                            <td @click="redirect(orderDetailUrl(order.id))" class="text-center align-middle">{{order.guest_name}}</td>
+                                            <td @click="redirect(orderDetailUrl(order.id))" class="text-center align-middle">{{order.long_term|formatBoolean}}</td>
+                                            <td @click="redirect(orderDetailUrl(order.id))" class="text-center align-middle">{{order.reason}}</td>
+                                            <td @click="redirect(orderDetailUrl(order.id))" class="text-center align-middle">{{order.created_at|formatDate}}</td>
+                                            <td @click="redirect(orderDetailUrl(order.id))" class="text-center align-middle">{{ getOrderRequestAmount(order) }}</td>
+                                            <td @click="redirect(orderDetailUrl(order.id))" class="text-center align-middle">{{ getOrderBorrowedAmount(order) }} </td>
+                                            <td @click="redirect(orderDetailUrl(order.id))" class="text-center align-middle">
                                                 <h6>
                                                     <order-status :status="order.status"></order-status>
                                                 </h6>
