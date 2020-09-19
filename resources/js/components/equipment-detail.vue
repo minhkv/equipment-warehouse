@@ -27,21 +27,20 @@
         <hr />
         <div class="row">
             <div class="row py-3">
-                <div class="col-md-12 text-center">
+                <div class="col-12 text-center">
                     <h2>Danh sách thiết bị</h2>
                 </div>
             </div>
             <div class="row">
-                <table class="table table-hover">
+                <table class="table table-hover col-8 mx-auto">
                     <thead class="thead-light">
                         <tr>
                             <th class="text-center" scope="col" style="width: 5%">Mã</th>
-                            <th class="text-center" scope="col" style="width: 15%;">Ngày nhập</th>
-                            <th class="text-center" scope="col" style="width: 10%;">Giá nhập</th>
-                            <th class="text-center" scope="col" style="width: 12%;">Nhà cung cấp</th>
+                            
                             <th class="text-center" scope="col" style="width: 10%;">Tình trạng</th>
                             <th class="text-center" scope="col" style="width: 10%;">Trạng thái</th>
                             <th class="text-center" scope="col" style="width: 15%;">Ghi chú</th>
+                            <th class="text-center" scope="col" style="width: 4%;"></th>
                             <th class="text-center" scope="col" style="width: 2%;"></th>
                             <th class="text-center" scope="col" style="width: 4%;"></th>
                         </tr>
@@ -49,23 +48,20 @@
                     <tbody>
                         <tr v-for="(equipment, index) in template.equipments" :key="equipment.id" class="cursor-pointer" >
                             <th data-toggle="modal" :data-target="'#detail' + equipment.id" class="align-middle text-center" scope="row">{{ equipment.id }}</th>
-                            <td class="align-middle text-center">{{ equipment.input_date|formatDate }}</td>
-                            <td class="align-middle text-center">{{ equipment.price|formatEquipmentPrice }}</td>
-                            <td class="align-middle text-center">
-                                <supplier-name :equipment="equipment"></supplier-name>
-                            </td>
-                            <td class="align-middle text-center">
+                            <td data-toggle="modal" :data-target="'#detail' + equipment.id" class="align-middle text-center">
                                 <equipment-condition :condition="equipment.condition"></equipment-condition>
                             </td>
-                            <td class="align-middle text-center">
+                            <td data-toggle="modal" :data-target="'#detail' + equipment.id" class="align-middle text-center">
                                 <equipment-status :status="equipment.status"></equipment-status>
                             </td>
-                            <td class="align-middle text-center">{{equipment.note}}</td>
+                            <td data-toggle="modal" :data-target="'#detail' + equipment.id" class="align-middle text-center">{{equipment.note}}</td>
+                            <td class="align-middle text-center">
+                                <button class="btn btn-primary btn-sm" data-toggle="modal" :data-target="'#detail' + equipment.id" >Chi tiết</button>
+                            </td>
                             <td class="align-middle px-0">
                                 <button :disabled="equipment.status != 1" type="button" class="btn btn-primary btn-sm" data-toggle="modal" :data-target="'#editEquipment' + equipment.id">
                                     <span class="fa fa-pencil"></span>
                                 </button>
-
                             </td>
                             <td class="align-middle px-0">
                                 <button :disabled="equipment.status == 2" @click="deleteEquipment(equipment, index)" type="button" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></button>
@@ -103,6 +99,7 @@
             <equipment-form :template="template" :suppliers="suppliers" :url="equipmentCreateUrl" method="POST" @store="addEquipment($event)" @close="closeModal('#addEquipment')"></equipment-form>
         </modal-component>
         <modal-component v-for="(equipment) in template.equipments" :key="'h' + equipment.id" :id="'detail' + equipment.id" :title="'Lịch sử thiết bị: ' + equipment.id" size="lg">
+            <equipment-info :equipment="equipment"></equipment-info>
             <table-history :items="equipment.order_infos"></table-history>
             <template v-slot:footer>
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>

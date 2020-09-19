@@ -2161,9 +2161,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ["equipmentTemplateIndexUrl", "equipmentTemplateUpdateUrl", "equipmentIndexUrl", "equipmentCreateUrl", "equipmentTemplate", "suppliers"],
   data: function data() {
@@ -2441,6 +2438,81 @@ __webpack_require__.r(__webpack_exports__);
       }
     }
   }
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/equipment-info.vue?vue&type=script&lang=js&":
+/*!*************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/equipment-info.vue?vue&type=script&lang=js& ***!
+  \*************************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+/* harmony default export */ __webpack_exports__["default"] = ({
+  props: ['equipment']
 });
 
 /***/ }),
@@ -3904,7 +3976,13 @@ __webpack_require__.r(__webpack_exports__);
     },
     rowClass: function rowClass(info) {
       return {
+        'cursor-pointer': true,
         'table-success': this.getBorrowedAmount(info.template_id) > 0 && this.getBorrowedAmount(info.template_id) == this.getReceivedAmount(info.template_id) + this.getLostAmount(info.template_id)
+      };
+    },
+    addEquipmentRowClass: function addEquipmentRowClass(equipment) {
+      return {
+        'table-success': this.isEquipmentSelected(equipment.id)
       };
     },
     cellLostClass: function cellLostClass(info) {
@@ -4870,6 +4948,8 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+//
+//
 //
 //
 //
@@ -62825,7 +62905,7 @@ var render = function() {
         _vm._m(2),
         _vm._v(" "),
         _c("div", { staticClass: "row" }, [
-          _c("table", { staticClass: "table table-hover" }, [
+          _c("table", { staticClass: "table table-hover col-8 mx-auto" }, [
             _vm._m(3),
             _vm._v(" "),
             _c(
@@ -62848,28 +62928,15 @@ var render = function() {
                       [_vm._v(_vm._s(equipment.id))]
                     ),
                     _vm._v(" "),
-                    _c("td", { staticClass: "align-middle text-center" }, [
-                      _vm._v(_vm._s(_vm._f("formatDate")(equipment.input_date)))
-                    ]),
-                    _vm._v(" "),
-                    _c("td", { staticClass: "align-middle text-center" }, [
-                      _vm._v(
-                        _vm._s(_vm._f("formatEquipmentPrice")(equipment.price))
-                      )
-                    ]),
-                    _vm._v(" "),
                     _c(
                       "td",
-                      { staticClass: "align-middle text-center" },
-                      [
-                        _c("supplier-name", { attrs: { equipment: equipment } })
-                      ],
-                      1
-                    ),
-                    _vm._v(" "),
-                    _c(
-                      "td",
-                      { staticClass: "align-middle text-center" },
+                      {
+                        staticClass: "align-middle text-center",
+                        attrs: {
+                          "data-toggle": "modal",
+                          "data-target": "#detail" + equipment.id
+                        }
+                      },
                       [
                         _c("equipment-condition", {
                           attrs: { condition: equipment.condition }
@@ -62880,7 +62947,13 @@ var render = function() {
                     _vm._v(" "),
                     _c(
                       "td",
-                      { staticClass: "align-middle text-center" },
+                      {
+                        staticClass: "align-middle text-center",
+                        attrs: {
+                          "data-toggle": "modal",
+                          "data-target": "#detail" + equipment.id
+                        }
+                      },
                       [
                         _c("equipment-status", {
                           attrs: { status: equipment.status }
@@ -62889,8 +62962,30 @@ var render = function() {
                       1
                     ),
                     _vm._v(" "),
+                    _c(
+                      "td",
+                      {
+                        staticClass: "align-middle text-center",
+                        attrs: {
+                          "data-toggle": "modal",
+                          "data-target": "#detail" + equipment.id
+                        }
+                      },
+                      [_vm._v(_vm._s(equipment.note))]
+                    ),
+                    _vm._v(" "),
                     _c("td", { staticClass: "align-middle text-center" }, [
-                      _vm._v(_vm._s(equipment.note))
+                      _c(
+                        "button",
+                        {
+                          staticClass: "btn btn-primary btn-sm",
+                          attrs: {
+                            "data-toggle": "modal",
+                            "data-target": "#detail" + equipment.id
+                          }
+                        },
+                        [_vm._v("Chi tiết")]
+                      )
                     ]),
                     _vm._v(" "),
                     _c("td", { staticClass: "align-middle px-0" }, [
@@ -63114,7 +63209,11 @@ var render = function() {
               true
             )
           },
-          [_c("table-history", { attrs: { items: equipment.order_infos } })],
+          [
+            _c("equipment-info", { attrs: { equipment: equipment } }),
+            _vm._v(" "),
+            _c("table-history", { attrs: { items: equipment.order_infos } })
+          ],
           1
         )
       }),
@@ -63198,7 +63297,7 @@ var staticRenderFns = [
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
     return _c("div", { staticClass: "row py-3" }, [
-      _c("div", { staticClass: "col-md-12 text-center" }, [
+      _c("div", { staticClass: "col-12 text-center" }, [
         _c("h2", [_vm._v("Danh sách thiết bị")])
       ])
     ])
@@ -63217,36 +63316,6 @@ var staticRenderFns = [
             attrs: { scope: "col" }
           },
           [_vm._v("Mã")]
-        ),
-        _vm._v(" "),
-        _c(
-          "th",
-          {
-            staticClass: "text-center",
-            staticStyle: { width: "15%" },
-            attrs: { scope: "col" }
-          },
-          [_vm._v("Ngày nhập")]
-        ),
-        _vm._v(" "),
-        _c(
-          "th",
-          {
-            staticClass: "text-center",
-            staticStyle: { width: "10%" },
-            attrs: { scope: "col" }
-          },
-          [_vm._v("Giá nhập")]
-        ),
-        _vm._v(" "),
-        _c(
-          "th",
-          {
-            staticClass: "text-center",
-            staticStyle: { width: "12%" },
-            attrs: { scope: "col" }
-          },
-          [_vm._v("Nhà cung cấp")]
         ),
         _vm._v(" "),
         _c(
@@ -63278,6 +63347,12 @@ var staticRenderFns = [
           },
           [_vm._v("Ghi chú")]
         ),
+        _vm._v(" "),
+        _c("th", {
+          staticClass: "text-center",
+          staticStyle: { width: "4%" },
+          attrs: { scope: "col" }
+        }),
         _vm._v(" "),
         _c("th", {
           staticClass: "text-center",
@@ -63555,6 +63630,180 @@ var staticRenderFns = [
     return _c("label", { attrs: { for: "price" } }, [
       _c("i", { staticClass: "fa fa-clipboard" }),
       _vm._v(" Ghi chú")
+    ])
+  }
+]
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/equipment-info.vue?vue&type=template&id=02260a18&scoped=true&":
+/*!*****************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/equipment-info.vue?vue&type=template&id=02260a18&scoped=true& ***!
+  \*****************************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", { staticClass: "col-12 mx-auto" }, [
+    _c("div", { staticClass: "row" }, [
+      _vm._m(0),
+      _vm._v(" "),
+      _c("label", { staticClass: "col-3 text-left" }, [
+        _vm._v(
+          "\n            " +
+            _vm._s(_vm._f("formatDate")(_vm.equipment.input_date)) +
+            "\n        "
+        )
+      ])
+    ]),
+    _vm._v(" "),
+    _c("div", { staticClass: "row" }, [
+      _vm._m(1),
+      _vm._v(" "),
+      _c("label", { staticClass: "col-3 text-left" }, [
+        _vm._v(
+          "\n            " +
+            _vm._s(_vm._f("formatDate")(_vm.equipment.input_date)) +
+            "\n        "
+        )
+      ])
+    ]),
+    _vm._v(" "),
+    _c("div", { staticClass: "row" }, [
+      _vm._m(2),
+      _vm._v(" "),
+      _c("label", { staticClass: "col-3 text-left" }, [
+        _vm._v(
+          "\n            " +
+            _vm._s(_vm._f("formatEquipmentPrice")(_vm.equipment.price)) +
+            "\n        "
+        )
+      ])
+    ]),
+    _vm._v(" "),
+    _c("div", { staticClass: "row" }, [
+      _vm._m(3),
+      _vm._v(" "),
+      _c(
+        "label",
+        { staticClass: "col-3 text-left" },
+        [_c("supplier-name", { attrs: { equipment: _vm.equipment } })],
+        1
+      )
+    ]),
+    _vm._v(" "),
+    _c("div", { staticClass: "row" }, [
+      _vm._m(4),
+      _vm._v(" "),
+      _c(
+        "label",
+        { staticClass: "col-3 text-left" },
+        [
+          _c("equipment-condition", {
+            attrs: { condition: _vm.equipment.condition }
+          })
+        ],
+        1
+      )
+    ]),
+    _vm._v(" "),
+    _c("div", { staticClass: "row" }, [
+      _vm._m(5),
+      _vm._v(" "),
+      _c(
+        "label",
+        { staticClass: "col-3 text-left" },
+        [_c("equipment-status", { attrs: { status: _vm.equipment.status } })],
+        1
+      )
+    ]),
+    _vm._v(" "),
+    _c("div", { staticClass: "row" }, [
+      _vm._m(6),
+      _vm._v(" "),
+      _c("label", { staticClass: "col-3 text-left" }, [
+        _vm._v("\n            " + _vm._s(_vm.equipment.note) + "\n        ")
+      ])
+    ])
+  ])
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("label", { staticClass: "col-3 text-left" }, [
+      _c("strong", [_c("i", { staticClass: "fa fa-barcode" }), _vm._v(" Mã")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("label", { staticClass: "col-3 text-left" }, [
+      _c("strong", [
+        _c("i", { staticClass: "fa fa-calendar" }),
+        _vm._v(" Ngày nhập")
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("label", { staticClass: "col-3 text-left" }, [
+      _c("strong", [
+        _c("i", {
+          staticClass: "fa fa-money",
+          attrs: { "aria-hidden": "true" }
+        }),
+        _vm._v(" Giá nhập")
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("label", { staticClass: "col-3 text-left" }, [
+      _c("strong", [
+        _c("i", { staticClass: "fa fa-building" }),
+        _vm._v(" Nhà cung cấp")
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("label", { staticClass: "col-3 text-left" }, [
+      _c("strong", [_vm._v("Tình trạng")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("label", { staticClass: "col-3 text-left" }, [
+      _c("strong", [_vm._v("Trạng thái")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("label", { staticClass: "col-3 text-left" }, [
+      _c("strong", [_vm._v("Ghi chú")])
     ])
   }
 ]
@@ -65964,101 +66213,112 @@ var render = function() {
               _c(
                 "tbody",
                 _vm._l(info.template.equipments, function(equipment) {
-                  return _c("tr", { key: equipment.id }, [
-                    _c(
-                      "th",
-                      {
-                        staticClass: "text-center align-middle",
-                        attrs: { scope: "row" }
-                      },
-                      [_vm._v(_vm._s(equipment.id))]
-                    ),
-                    _vm._v(" "),
-                    _c("td", { staticClass: "text-center align-middle" }, [
-                      _vm._v(
-                        _vm._s(_vm._f("formatEquipmentPrice")(equipment.price))
-                      )
-                    ]),
-                    _vm._v(" "),
-                    _c(
-                      "td",
-                      { staticClass: "text-center align-middle" },
-                      [
-                        _c("supplier-name", { attrs: { equipment: equipment } })
-                      ],
-                      1
-                    ),
-                    _vm._v(" "),
-                    _c(
-                      "td",
-                      { staticClass: "text-center align-middle" },
-                      [
-                        _c("equipment-condition", {
-                          attrs: { condition: equipment.condition }
-                        })
-                      ],
-                      1
-                    ),
-                    _vm._v(" "),
-                    _c(
-                      "td",
-                      { staticClass: "align-middle text-center" },
-                      [
-                        _c("equipment-status", {
-                          attrs: { status: equipment.status }
-                        })
-                      ],
-                      1
-                    ),
-                    _vm._v(" "),
-                    _c("td", [_vm._v(_vm._s(equipment.note))]),
-                    _vm._v(" "),
-                    _c("td", { staticClass: "align-middle" }, [
+                  return _c(
+                    "tr",
+                    {
+                      key: equipment.id,
+                      class: _vm.addEquipmentRowClass(equipment)
+                    },
+                    [
                       _c(
-                        "button",
+                        "th",
                         {
-                          staticClass: "btn btn-success btn-sm",
-                          attrs: {
-                            disabled: _vm.disablePlusEquipmentButton(
-                              equipment.id,
-                              equipment.status
-                            )
-                          },
-                          on: {
-                            click: function($event) {
-                              return _vm.selectEquipment(
-                                equipment,
-                                info.template.id
-                              )
-                            }
-                          }
+                          staticClass: "text-center align-middle",
+                          attrs: { scope: "row" }
                         },
-                        [_c("span", { staticClass: "fa fa-plus" })]
+                        [_vm._v(_vm._s(equipment.id))]
+                      ),
+                      _vm._v(" "),
+                      _c("td", { staticClass: "text-center align-middle" }, [
+                        _vm._v(
+                          _vm._s(
+                            _vm._f("formatEquipmentPrice")(equipment.price)
+                          )
+                        )
+                      ]),
+                      _vm._v(" "),
+                      _c(
+                        "td",
+                        { staticClass: "text-center align-middle" },
+                        [
+                          _c("supplier-name", {
+                            attrs: { equipment: equipment }
+                          })
+                        ],
+                        1
                       ),
                       _vm._v(" "),
                       _c(
-                        "button",
-                        {
-                          staticClass: "btn btn-danger btn-sm",
-                          attrs: {
-                            disabled: _vm.disableMinusEquipmentButton(
-                              equipment.id,
-                              equipment.status
-                            )
-                          },
-                          on: {
-                            click: function($event) {
-                              return _vm.removeEquipment(
+                        "td",
+                        { staticClass: "text-center align-middle" },
+                        [
+                          _c("equipment-condition", {
+                            attrs: { condition: equipment.condition }
+                          })
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "td",
+                        { staticClass: "align-middle text-center" },
+                        [
+                          _c("equipment-status", {
+                            attrs: { status: equipment.status }
+                          })
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c("td", [_vm._v(_vm._s(equipment.note))]),
+                      _vm._v(" "),
+                      _c("td", { staticClass: "align-middle" }, [
+                        _c(
+                          "button",
+                          {
+                            staticClass: "btn btn-success btn-sm",
+                            attrs: {
+                              disabled: _vm.disablePlusEquipmentButton(
                                 equipment.id,
-                                info.template.id
+                                equipment.status
                               )
+                            },
+                            on: {
+                              click: function($event) {
+                                return _vm.selectEquipment(
+                                  equipment,
+                                  info.template.id
+                                )
+                              }
                             }
-                          }
-                        },
-                        [_c("span", { staticClass: "fa fa-minus" })]
-                      )
-                    ])
-                  ])
+                          },
+                          [_c("span", { staticClass: "fa fa-plus" })]
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "button",
+                          {
+                            staticClass: "btn btn-danger btn-sm",
+                            attrs: {
+                              disabled: _vm.disableMinusEquipmentButton(
+                                equipment.id,
+                                equipment.status
+                              )
+                            },
+                            on: {
+                              click: function($event) {
+                                return _vm.removeEquipment(
+                                  equipment.id,
+                                  info.template.id
+                                )
+                              }
+                            }
+                          },
+                          [_c("span", { staticClass: "fa fa-minus" })]
+                        )
+                      ])
+                    ]
+                  )
                 }),
                 0
               )
@@ -67389,6 +67649,8 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", [
+    _vm._m(0),
+    _vm._v(" "),
     _c("div", { staticClass: "row pb-2" }, [
       _c(
         "div",
@@ -67411,11 +67673,11 @@ var render = function() {
         1
       ),
       _vm._v(" "),
-      _c("div", { staticClass: "col-8" })
+      _c("div", { staticClass: "col-3" })
     ]),
     _vm._v(" "),
     _c("table", { staticClass: "table" }, [
-      _vm._m(0),
+      _vm._m(1),
       _vm._v(" "),
       _c(
         "tbody",
@@ -67456,6 +67718,14 @@ var render = function() {
   ])
 }
 var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "text-center" }, [
+      _c("h3", [_vm._v("Lịch sử thiết bị")])
+    ])
+  },
   function() {
     var _vm = this
     var _h = _vm.$createElement
@@ -79767,6 +80037,7 @@ Vue.component('modal-component', __webpack_require__(/*! ./components/modal-comp
 Vue.component('info-status', __webpack_require__(/*! ./components/info-status.vue */ "./resources/js/components/info-status.vue")["default"]);
 Vue.component('table-component', __webpack_require__(/*! ./components/table-component.vue */ "./resources/js/components/table-component.vue")["default"]);
 Vue.component('table-history', __webpack_require__(/*! ./components/table-history.vue */ "./resources/js/components/table-history.vue")["default"]);
+Vue.component('equipment-info', __webpack_require__(/*! ./components/equipment-info.vue */ "./resources/js/components/equipment-info.vue")["default"]);
 Vue.component('test', __webpack_require__(/*! ./components/test.vue */ "./resources/js/components/test.vue")["default"]);
 var app = new Vue({
   el: '#app'
@@ -80126,6 +80397,75 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_equipment_form_vue_vue_type_template_id_13c6b72e_scoped_true___WEBPACK_IMPORTED_MODULE_0__["render"]; });
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_equipment_form_vue_vue_type_template_id_13c6b72e_scoped_true___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
+/***/ "./resources/js/components/equipment-info.vue":
+/*!****************************************************!*\
+  !*** ./resources/js/components/equipment-info.vue ***!
+  \****************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _equipment_info_vue_vue_type_template_id_02260a18_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./equipment-info.vue?vue&type=template&id=02260a18&scoped=true& */ "./resources/js/components/equipment-info.vue?vue&type=template&id=02260a18&scoped=true&");
+/* harmony import */ var _equipment_info_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./equipment-info.vue?vue&type=script&lang=js& */ "./resources/js/components/equipment-info.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _equipment_info_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _equipment_info_vue_vue_type_template_id_02260a18_scoped_true___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _equipment_info_vue_vue_type_template_id_02260a18_scoped_true___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  "02260a18",
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/equipment-info.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/components/equipment-info.vue?vue&type=script&lang=js&":
+/*!*****************************************************************************!*\
+  !*** ./resources/js/components/equipment-info.vue?vue&type=script&lang=js& ***!
+  \*****************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_equipment_info_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/babel-loader/lib??ref--4-0!../../../node_modules/vue-loader/lib??vue-loader-options!./equipment-info.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/equipment-info.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_equipment_info_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/components/equipment-info.vue?vue&type=template&id=02260a18&scoped=true&":
+/*!***********************************************************************************************!*\
+  !*** ./resources/js/components/equipment-info.vue?vue&type=template&id=02260a18&scoped=true& ***!
+  \***********************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_equipment_info_vue_vue_type_template_id_02260a18_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../node_modules/vue-loader/lib??vue-loader-options!./equipment-info.vue?vue&type=template&id=02260a18&scoped=true& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/equipment-info.vue?vue&type=template&id=02260a18&scoped=true&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_equipment_info_vue_vue_type_template_id_02260a18_scoped_true___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_equipment_info_vue_vue_type_template_id_02260a18_scoped_true___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
 

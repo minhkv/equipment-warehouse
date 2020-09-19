@@ -1,5 +1,8 @@
 <template>
     <div>
+        <div class="text-center">
+            <h3>Lịch sử thiết bị</h3>
+        </div>
         <div class="row pb-2">
             <div class="col-3">
                 <selection-filter
@@ -10,11 +13,10 @@
                     @change="selectionFilter($event)"
                 ></selection-filter>
             </div>
-            <div class="col-8">
-                
+            <div class="col-3">
+
             </div>
         </div>
-
         <table class="table">
             <thead>
                 <tr>

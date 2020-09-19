@@ -142,7 +142,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="equipment in info.template.equipments" :key="equipment.id">
+                    <tr v-for="equipment in info.template.equipments" :key="equipment.id" :class="addEquipmentRowClass(equipment)">
                         <th class="text-center align-middle" scope="row">{{ equipment.id }}</th>
                         <td class="text-center align-middle">{{ equipment.price|formatEquipmentPrice }}</td>
                         <td class="text-center align-middle">
@@ -514,11 +514,17 @@ export default {
         },
         rowClass(info) {
             return {
+                'cursor-pointer': true,
                 'table-success': 
                     this.getBorrowedAmount(info.template_id) > 0 &&
                     (this.getBorrowedAmount(info.template_id) == 
                     this.getReceivedAmount(info.template_id) + 
                     this.getLostAmount(info.template_id))
+            };
+        },
+        addEquipmentRowClass(equipment) {
+            return {
+                'table-success': this.isEquipmentSelected(equipment.id),
             };
         },
         cellLostClass(info) {
