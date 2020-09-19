@@ -1,11 +1,11 @@
 <template>
-    <span :class="displayEquipmentStatusClass(status)">
+    <span :class="displayEquipmentStatusClass(status)" data-toggle="popover" :data-content="popoverContent">
         {{status|formatEquipmentStatus}}
     </span>
 </template>
 <script>
 export default {
-    props: ['status'],
+    props: ['status', 'popoverContent'],
     data() {
         return {
 
@@ -14,6 +14,7 @@ export default {
     methods: {
         displayEquipmentStatusClass(status) {
             return {
+                'cursor-pointer': true,
                 'badge': true, 
                 'badge-pill':true, 
                 'badge-danger': status == 0,

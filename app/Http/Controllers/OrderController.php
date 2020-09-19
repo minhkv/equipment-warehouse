@@ -85,6 +85,7 @@ class OrderController extends Controller
             'orderInfos', 
             'orderInfos.equipment',
             'template.equipments',
+            'template.equipments.orderInfos.orderRequestInfo.order',
             'template.equipments.supplier',
             ]);
         return view('order-detail')->with([

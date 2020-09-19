@@ -51,8 +51,8 @@
                             <td data-toggle="modal" :data-target="'#detail' + equipment.id" class="align-middle text-center">
                                 <equipment-condition :condition="equipment.condition"></equipment-condition>
                             </td>
-                            <td data-toggle="modal" :data-target="'#detail' + equipment.id" class="align-middle text-center">
-                                <equipment-status :status="equipment.status"></equipment-status>
+                            <td class="align-middle text-center">
+                                <equipment-status-popover :equipment="equipment"></equipment-status-popover>
                             </td>
                             <td data-toggle="modal" :data-target="'#detail' + equipment.id" class="align-middle text-center">{{equipment.note}}</td>
                             <td class="align-middle text-center">

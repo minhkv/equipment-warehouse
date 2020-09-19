@@ -2706,6 +2706,55 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/equipment-status-popover.vue?vue&type=script&lang=js&":
+/*!***********************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/equipment-status-popover.vue?vue&type=script&lang=js& ***!
+  \***********************************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+//
+//
+//
+/* harmony default export */ __webpack_exports__["default"] = ({
+  props: ['equipment'],
+  data: function data() {
+    return {};
+  },
+  methods: {
+    getPopoverContent: function getPopoverContent() {
+      if (this.equipment.status == 1) return;
+      var info = this.getLastOrderInfo();
+
+      if (info) {
+        var order = this.getOrderByOrderInfo(info);
+        return 'Mã đơn: ' + order.id + ', Người mượn: ' + order.guest_name;
+      }
+
+      return 'Không có thông tin';
+    },
+    getLastOrderInfo: function getLastOrderInfo() {
+      var infos = [];
+      this.equipment.order_infos.forEach(function (info) {
+        infos.push(info);
+      });
+      return infos.sort(this.sortOrderInfoByDateDesc)[0];
+    },
+    getOrderByOrderInfo: function getOrderByOrderInfo(orderInfo) {
+      return orderInfo.order_request_info.order;
+    },
+    sortOrderInfoByDateDesc: function sortOrderInfoByDateDesc(a, b) {
+      var dateA = new Date(this.getOrderByOrderInfo(a).date_output);
+      var dateB = new Date(this.getOrderByOrderInfo(b).date_output);
+      return dateB.getTime() - dateA.getTime();
+    }
+  }
+});
+
+/***/ }),
+
 /***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/equipment-status.vue?vue&type=script&lang=js&":
 /*!***************************************************************************************************************************************************************************!*\
   !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/equipment-status.vue?vue&type=script&lang=js& ***!
@@ -2721,13 +2770,14 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ['status'],
+  props: ['status', 'popoverContent'],
   data: function data() {
     return {};
   },
   methods: {
     displayEquipmentStatusClass: function displayEquipmentStatusClass(status) {
       return {
+        'cursor-pointer': true,
         'badge': true,
         'badge-pill': true,
         'badge-danger': status == 0,
@@ -62947,16 +62997,10 @@ var render = function() {
                     _vm._v(" "),
                     _c(
                       "td",
-                      {
-                        staticClass: "align-middle text-center",
-                        attrs: {
-                          "data-toggle": "modal",
-                          "data-target": "#detail" + equipment.id
-                        }
-                      },
+                      { staticClass: "align-middle text-center" },
                       [
-                        _c("equipment-status", {
-                          attrs: { status: equipment.status }
+                        _c("equipment-status-popover", {
+                          attrs: { equipment: equipment }
                         })
                       ],
                       1
@@ -64254,6 +64298,35 @@ render._withStripped = true
 
 /***/ }),
 
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/equipment-status-popover.vue?vue&type=template&id=4f6fce98&":
+/*!***************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/equipment-status-popover.vue?vue&type=template&id=4f6fce98& ***!
+  \***************************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("equipment-status", {
+    attrs: {
+      status: _vm.equipment.status,
+      popoverContent: _vm.getPopoverContent()
+    }
+  })
+}
+var staticRenderFns = []
+render._withStripped = true
+
+
+
+/***/ }),
+
 /***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/equipment-status.vue?vue&type=template&id=e187f248&scoped=true&":
 /*!*******************************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/equipment-status.vue?vue&type=template&id=e187f248&scoped=true& ***!
@@ -64269,11 +64342,18 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("span", { class: _vm.displayEquipmentStatusClass(_vm.status) }, [
-    _vm._v(
-      "\n    " + _vm._s(_vm._f("formatEquipmentStatus")(_vm.status)) + "\n"
-    )
-  ])
+  return _c(
+    "span",
+    {
+      class: _vm.displayEquipmentStatusClass(_vm.status),
+      attrs: { "data-toggle": "popover", "data-content": _vm.popoverContent }
+    },
+    [
+      _vm._v(
+        "\n    " + _vm._s(_vm._f("formatEquipmentStatus")(_vm.status)) + "\n"
+      )
+    ]
+  )
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -66263,8 +66343,8 @@ var render = function() {
                         "td",
                         { staticClass: "align-middle text-center" },
                         [
-                          _c("equipment-status", {
-                            attrs: { status: equipment.status }
+                          _c("equipment-status-popover", {
+                            attrs: { equipment: equipment }
                           })
                         ],
                         1
@@ -80103,6 +80183,7 @@ Vue.component('info-status', __webpack_require__(/*! ./components/info-status.vu
 Vue.component('table-component', __webpack_require__(/*! ./components/table-component.vue */ "./resources/js/components/table-component.vue")["default"]);
 Vue.component('table-history', __webpack_require__(/*! ./components/table-history.vue */ "./resources/js/components/table-history.vue")["default"]);
 Vue.component('equipment-info', __webpack_require__(/*! ./components/equipment-info.vue */ "./resources/js/components/equipment-info.vue")["default"]);
+Vue.component('equipment-status-popover', __webpack_require__(/*! ./components/equipment-status-popover.vue */ "./resources/js/components/equipment-status-popover.vue")["default"]);
 Vue.component('test', __webpack_require__(/*! ./components/test.vue */ "./resources/js/components/test.vue")["default"]);
 var app = new Vue({
   el: '#app'
@@ -80139,6 +80220,9 @@ try {
 
 window.axios = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
 window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
+$(function () {
+  $('[data-toggle="popover"]').popover();
+});
 /**
  * Echo exposes an expressive API for subscribing to channels and listening
  * for events that are broadcast by Laravel. Echo and event broadcasting
@@ -80618,6 +80702,75 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_equipment_lost_vue_vue_type_template_id_f5b57ce4_scoped_true___WEBPACK_IMPORTED_MODULE_0__["render"]; });
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_equipment_lost_vue_vue_type_template_id_f5b57ce4_scoped_true___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
+/***/ "./resources/js/components/equipment-status-popover.vue":
+/*!**************************************************************!*\
+  !*** ./resources/js/components/equipment-status-popover.vue ***!
+  \**************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _equipment_status_popover_vue_vue_type_template_id_4f6fce98___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./equipment-status-popover.vue?vue&type=template&id=4f6fce98& */ "./resources/js/components/equipment-status-popover.vue?vue&type=template&id=4f6fce98&");
+/* harmony import */ var _equipment_status_popover_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./equipment-status-popover.vue?vue&type=script&lang=js& */ "./resources/js/components/equipment-status-popover.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _equipment_status_popover_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _equipment_status_popover_vue_vue_type_template_id_4f6fce98___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _equipment_status_popover_vue_vue_type_template_id_4f6fce98___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/equipment-status-popover.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/components/equipment-status-popover.vue?vue&type=script&lang=js&":
+/*!***************************************************************************************!*\
+  !*** ./resources/js/components/equipment-status-popover.vue?vue&type=script&lang=js& ***!
+  \***************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_equipment_status_popover_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/babel-loader/lib??ref--4-0!../../../node_modules/vue-loader/lib??vue-loader-options!./equipment-status-popover.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/equipment-status-popover.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_equipment_status_popover_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/components/equipment-status-popover.vue?vue&type=template&id=4f6fce98&":
+/*!*********************************************************************************************!*\
+  !*** ./resources/js/components/equipment-status-popover.vue?vue&type=template&id=4f6fce98& ***!
+  \*********************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_equipment_status_popover_vue_vue_type_template_id_4f6fce98___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../node_modules/vue-loader/lib??vue-loader-options!./equipment-status-popover.vue?vue&type=template&id=4f6fce98& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/equipment-status-popover.vue?vue&type=template&id=4f6fce98&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_equipment_status_popover_vue_vue_type_template_id_4f6fce98___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_equipment_status_popover_vue_vue_type_template_id_4f6fce98___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
 
