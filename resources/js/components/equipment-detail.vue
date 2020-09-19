@@ -103,26 +103,7 @@
             <equipment-form :template="template" :suppliers="suppliers" :url="equipmentCreateUrl" method="POST" @store="addEquipment($event)" @close="closeModal('#addEquipment')"></equipment-form>
         </modal-component>
         <modal-component v-for="(equipment) in template.equipments" :key="'h' + equipment.id" :id="'detail' + equipment.id" :title="'Lịch sử thiết bị: ' + equipment.id" size="lg">
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>Mã đơn</th>
-                        <th>Người mượn</th>
-                        <th>Tình trạng</th>
-                        <th>Trạng thái</th>
-                        <th>Ngày mượn</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr v-for="info in equipment.order_infos.sort(sortOrder)" :key="info.id">
-                        <td scope="row">{{ getOrder(info).id }}</td>
-                        <td>{{ getOrder(info).guest_name }}</td>
-                        <td><equipment-condition :condition="info.condition_received"></equipment-condition></td>
-                        <td><info-status :status="info.status"></info-status></td>
-                        <td>{{ getOrder(info).date_output|formatDate }}</td>
-                    </tr>
-                </tbody>
-            </table>
+            <table-history :items="equipment.order_infos"></table-history>
             <template v-slot:footer>
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
             </template>
@@ -152,10 +133,13 @@
             };
         },
         created() {
-            this.template = this.equipmentTemplate;
-            this.templateName = this.template.name;
+            this.init();
         },
         methods: {
+            init() {
+                this.template = this.equipmentTemplate;
+                this.templateName = this.template.name;
+            },            
             getOrder(orderInfo) {
                 return orderInfo.order_request_info.order;
             },

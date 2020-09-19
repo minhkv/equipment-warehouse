@@ -82,6 +82,8 @@ Vue.component('selection-filter',require('./components/selection-filter.vue').de
 Vue.component('select-condition',require('./components/select-condition.vue').default);
 Vue.component('modal-component',require('./components/modal-component.vue').default);
 Vue.component('info-status',require('./components/info-status.vue').default);
+Vue.component('table-component',require('./components/table-component.vue').default);
+Vue.component('table-history',require('./components/table-history.vue').default);
 Vue.component('test',require('./components/test.vue').default);
 
 var app = new Vue({
