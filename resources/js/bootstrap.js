@@ -24,7 +24,7 @@ window.axios = require('axios');
 window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 
 $(function () {
-    $('[data-toggle="popover"]').popover()
+    $('[data-toggle="popover"]').popover();
 });
 /**
  * Echo exposes an expressive API for subscribing to channels and listening

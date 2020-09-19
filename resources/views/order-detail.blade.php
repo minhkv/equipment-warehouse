@@ -1,6 +1,8 @@
 @extends('layouts.app')
 @section('content')
 <order-detail 
+    :categories="{{ json_encode($categories) }}"
+    :equipment-templates="{{ json_encode($equipmentTemplates) }}"
     :order="{{ json_encode($order) }}"
     :order-index-url="{{ json_encode(route('order.index')) }}"
     :accept-url="{{ json_encode(route('order-request.accept', $order)) }}"

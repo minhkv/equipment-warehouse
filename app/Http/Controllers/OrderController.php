@@ -79,6 +79,8 @@ class OrderController extends Controller
      */
     public function show(Order $order)
     {
+        $categories = Category::all();
+        $equipmentTemplates = EquipmentTemplate::with('equipments')->get();
         $order->load(['guest']);
         $order->orderRequestInfos->load([
             'template', 
@@ -90,6 +92,8 @@ class OrderController extends Controller
             ]);
         return view('order-detail')->with([
             'order' => $order,
+            'equipmentTemplates' => $equipmentTemplates,
+            'categories' => $categories
         ]);
     }
 

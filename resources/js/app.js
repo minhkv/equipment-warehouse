@@ -86,6 +86,7 @@ Vue.component('table-component',require('./components/table-component.vue').defa
 Vue.component('table-history',require('./components/table-history.vue').default);
 Vue.component('equipment-info',require('./components/equipment-info.vue').default);
 Vue.component('equipment-status-popover',require('./components/equipment-status-popover.vue').default);
+Vue.component('table-select-equipment',require('./components/table-select-equipment.vue').default);
 Vue.component('test',require('./components/test.vue').default);
 
 var app = new Vue({

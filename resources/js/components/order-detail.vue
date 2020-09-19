@@ -115,7 +115,12 @@
                 </table>
                 <div class="row justify-content-center">
                     <!-- Paginator -->
-                    <pagination :items="searchInputItems" @change="pagination($event)"></pagination>
+                    <pagination :items="searchInputItems" :per="6" @change="pagination($event)"></pagination>
+                </div>
+                <div v-if="displayedOrder.status == 1" class="row justify-content-center">
+                    <button type="button" class="btn btn-success btn-lg" data-toggle="modal" data-target="#addEquipment">
+                        Thêm thiết bị
+                    </button>
                 </div>
                 <hr>
                 <div class="row justify-content-center">
@@ -128,7 +133,7 @@
                 </div>
             </div>
         </article>
-        <modal-component v-for="info in paginationItems" :key="'a' + info.id" :id="'addEquipment-' + info.template.id" :title="'Thêm thiết bị ' + info.template.name" size="xl">
+        <modal-component v-for="info in this.displayedOrder.order_request_infos" :key="'a' + info.id" :id="'addEquipment-' + info.template.id" :title="'Thêm thiết bị ' + info.template.name" size="xl">
             <table class="table table-hover">
                 <thead class="thead-light">
                     <tr>
@@ -165,7 +170,7 @@
                 <button type="button" class="btn btn-primary" data-dismiss="modal">Xong</button>
             </template>
         </modal-component>
-        <modal-component v-for="info in paginationItems" :key="'v' + info.id" :id="'verifyEquipment-' + info.template.id" :title="'Kiểm thiết bị ' + info.template.name" size="xl">
+        <modal-component v-for="info in this.displayedOrder.order_request_infos" :key="'v' + info.id" :id="'verifyEquipment-' + info.template.id" :title="'Kiểm thiết bị ' + info.template.name" size="xl">
             <table class="table table-hover">
                 <thead class="thead-light">
                     <tr>
@@ -216,6 +221,13 @@
                     </tr>
                 </tbody>
             </table>
+            <template v-slot:footer>
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Xong</button>
+            </template>
+        </modal-component>
+
+        <modal-component id="addEquipment" title="Thiết bị phát sinh thêm" size="lg">
+            <table-select-equipment :items="equipmentTemplates" :selectedItems="selectedTemplates" :categories="categories"></table-select-equipment>
             <template v-slot:footer>
                 <button type="button" class="btn btn-primary" data-dismiss="modal">Xong</button>
             </template>
@@ -405,6 +417,8 @@ p {
 import moment from 'moment';
 export default {
     props: [
+        "categories",
+        "equipmentTemplates",
         "order",
         "orderIndexUrl",
         "acceptUrl",
@@ -427,7 +441,8 @@ export default {
             displayedInfos: [],
             search: '',
             searchInputItems: [],
-            paginationItems: []
+            paginationItems: [],
+            selectedTemplates: []
         };
     },
     created() {
@@ -440,6 +455,7 @@ export default {
             this.initializeEquipmentOutput();
             this.initializeEquipmentReturn();
             this.initSearchInput();
+            this.initSelectedTemplates();
         },
         initOrder() {
             Object.assign(this.displayedOrder, this.order);
@@ -496,6 +512,18 @@ export default {
         },
         initSearchInput() {
             this.searchInputItems = this.order.order_request_infos;
+        },
+        initSelectedTemplates() {
+            let app = this;
+            this.displayedOrder.order_request_infos.forEach(function(info) {
+                app.selectedTemplates.push({
+                    id: info.template.id,
+                    name: info.template.name,
+                    amount: info.amount,
+                    maxAmount: info.template.equipments.length,
+                    image: info.template.image
+                });
+            });
         },
         searchInput(items) {
             this.searchInputItems = items;
