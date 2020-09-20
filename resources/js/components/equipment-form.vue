@@ -57,9 +57,9 @@ export default {
         };
     },
     created() {
-        Object.assign(this.eq, this.blankEq);
+        this.eq = Object.assign({}, this.eq, this.blankEq);
         if (this.equipment) {
-            Object.assign(this.eq, this.equipment);
+            this.eq = Object.assign({}, this.eq, this.equipment);
             this.eq.input_date = moment(this.eq.input_date).format("YYYY-MM-DDTHH:MM:SS");
         }
 
@@ -122,7 +122,7 @@ export default {
             this.$emit('close');
         },
         changeSupplier(result){
-            console.log('changeSupplier')
+            console.log('changeSupplier');
             console.log(result);
             this.eq.supplier_name = result.value.name;
             if(result.found) {

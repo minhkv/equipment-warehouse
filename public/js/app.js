@@ -2355,10 +2355,10 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   created: function created() {
-    Object.assign(this.eq, this.blankEq);
+    this.eq = Object.assign({}, this.eq, this.blankEq);
 
     if (this.equipment) {
-      Object.assign(this.eq, this.equipment);
+      this.eq = Object.assign({}, this.eq, this.equipment);
       this.eq.input_date = moment__WEBPACK_IMPORTED_MODULE_0___default()(this.eq.input_date).format("YYYY-MM-DDTHH:MM:SS");
     }
 
