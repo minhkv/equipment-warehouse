@@ -78,7 +78,7 @@ export default {
         },
         removeOrderInfo(equipment) {
             let index = this.displayedInfo.order_infos.findIndex(info => {
-                info.equipment_id == equipment.id
+                return info.equipment_id == equipment.id;
             });
             if (index != -1) {
                 this.displayedInfo.order_infos.splice(index, 1);

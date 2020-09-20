@@ -270,7 +270,6 @@ export default {
             displayedOrder: {},
             equipmentIds: [],
             buttonDisabled: false,
-            templateBorrowedAmount: [],
             equipmentSelected: [],
             equipmentReceived: [],
             equipmentLost: [],
@@ -320,7 +319,6 @@ export default {
         initializeEquipmentOutput() {
             let equipmentSelected = {};
             let equipmentIds = [];
-            let templateBorrowedAmount = {};
             this.displayedOrder.order_request_infos.forEach(function(info) {
                 info.template.equipments.forEach(function(equipment) {
                     equipmentSelected[equipment.id] = false;
@@ -329,11 +327,9 @@ export default {
                     equipmentSelected[order_info.equipment_id] = true;
                     equipmentIds.push(order_info.equipment_id);
                 });
-                templateBorrowedAmount[info.template.id] = info.order_infos.length;
             });
             this.equipmentSelected = equipmentSelected;
             this.equipmentIds = equipmentIds;
-            this.templateBorrowedAmount = templateBorrowedAmount;
         },
         initializeEquipmentReturn() {
             let equipmentReceived = {};
@@ -395,8 +391,8 @@ export default {
             return {
                 'cursor-pointer': true,
                 'table-success': 
-                    this.getBorrowedAmount(info.template_id) > 0 &&
-                    (this.getBorrowedAmount(info.template_id) == 
+                    this.getBorrowedAmountByInfo(info) > 0 &&
+                    (this.getBorrowedAmountByInfo(info) == 
                     this.getReceivedAmount(info.template_id) + 
                     this.getLostAmount(info.template_id))
             };
@@ -429,37 +425,6 @@ export default {
         },
         getBorrowedAmountByInfo(info) {
             return info.order_infos.length;
-        },
-        getBorrowedAmount(template_id) {
-            return this.templateBorrowedAmount[template_id];
-        },
-        isEquipmentSelected(equipmentId) {
-            return this.equipmentSelected[equipmentId];
-        },
-        disablePlusEquipmentButton(equipmentId, equipmentStatus) {
-            return this.isEquipmentSelected(equipmentId) || equipmentStatus != 1;
-        },
-        disableMinusEquipmentButton(equipmentId, equipmentStatus) {
-            return !this.isEquipmentSelected(equipmentId);
-        },
-        selectEquipment(equipment, template_id) {
-            this.orderRequestInfos[template_id].order_infos.push({
-                'equipment_id': equipment.id,
-                'condition_before': equipment.condition
-            });
-            this.templateBorrowedAmount[template_id]++;
-            this.equipmentIds.push(equipment.id);
-            this.equipmentSelected[equipment.id] = true;
-        },
-        
-        removeEquipment(equipment_id, template_id) {
-            console.log('remove');
-            this.templateBorrowedAmount[template_id]--;
-            const index = this.equipmentIds.indexOf(equipment_id);
-            if (index > -1) {
-                this.equipmentIds.splice(index, 1);
-            }
-            this.equipmentSelected[equipment_id] = false;
         },
         getReceivedAmount(template_id) {
             let total = 0;
@@ -522,13 +487,7 @@ export default {
                 });
         },
         equipmentCheckBorrowedAmount() {
-            for(let key in this.templateBorrowedAmount) {
-                console.log(this.templateBorrowedAmount[key]);
-                if(this.templateBorrowedAmount[key] == 0) {
-                    alert('Bạn chưa chọn thiết bị ' + this.orderRequestInfos[key].template.name);
-                    return false;
-                }
-            }
+            
             return true;
         },
         equipmentOutput() {

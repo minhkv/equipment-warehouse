@@ -3783,7 +3783,6 @@ __webpack_require__.r(__webpack_exports__);
       displayedOrder: {},
       equipmentIds: [],
       buttonDisabled: false,
-      templateBorrowedAmount: [],
       equipmentSelected: [],
       equipmentReceived: [],
       equipmentLost: [],
@@ -3834,7 +3833,6 @@ __webpack_require__.r(__webpack_exports__);
     initializeEquipmentOutput: function initializeEquipmentOutput() {
       var equipmentSelected = {};
       var equipmentIds = [];
-      var templateBorrowedAmount = {};
       this.displayedOrder.order_request_infos.forEach(function (info) {
         info.template.equipments.forEach(function (equipment) {
           equipmentSelected[equipment.id] = false;
@@ -3843,11 +3841,9 @@ __webpack_require__.r(__webpack_exports__);
           equipmentSelected[order_info.equipment_id] = true;
           equipmentIds.push(order_info.equipment_id);
         });
-        templateBorrowedAmount[info.template.id] = info.order_infos.length;
       });
       this.equipmentSelected = equipmentSelected;
       this.equipmentIds = equipmentIds;
-      this.templateBorrowedAmount = templateBorrowedAmount;
     },
     initializeEquipmentReturn: function initializeEquipmentReturn() {
       var equipmentReceived = {};
@@ -3909,7 +3905,7 @@ __webpack_require__.r(__webpack_exports__);
     rowClass: function rowClass(info) {
       return {
         'cursor-pointer': true,
-        'table-success': this.getBorrowedAmount(info.template_id) > 0 && this.getBorrowedAmount(info.template_id) == this.getReceivedAmount(info.template_id) + this.getLostAmount(info.template_id)
+        'table-success': this.getBorrowedAmountByInfo(info) > 0 && this.getBorrowedAmountByInfo(info) == this.getReceivedAmount(info.template_id) + this.getLostAmount(info.template_id)
       };
     },
     addEquipmentRowClass: function addEquipmentRowClass(equipment) {
@@ -3940,38 +3936,6 @@ __webpack_require__.r(__webpack_exports__);
     },
     getBorrowedAmountByInfo: function getBorrowedAmountByInfo(info) {
       return info.order_infos.length;
-    },
-    getBorrowedAmount: function getBorrowedAmount(template_id) {
-      return this.templateBorrowedAmount[template_id];
-    },
-    isEquipmentSelected: function isEquipmentSelected(equipmentId) {
-      return this.equipmentSelected[equipmentId];
-    },
-    disablePlusEquipmentButton: function disablePlusEquipmentButton(equipmentId, equipmentStatus) {
-      return this.isEquipmentSelected(equipmentId) || equipmentStatus != 1;
-    },
-    disableMinusEquipmentButton: function disableMinusEquipmentButton(equipmentId, equipmentStatus) {
-      return !this.isEquipmentSelected(equipmentId);
-    },
-    selectEquipment: function selectEquipment(equipment, template_id) {
-      this.orderRequestInfos[template_id].order_infos.push({
-        'equipment_id': equipment.id,
-        'condition_before': equipment.condition
-      });
-      this.templateBorrowedAmount[template_id]++;
-      this.equipmentIds.push(equipment.id);
-      this.equipmentSelected[equipment.id] = true;
-    },
-    removeEquipment: function removeEquipment(equipment_id, template_id) {
-      console.log('remove');
-      this.templateBorrowedAmount[template_id]--;
-      var index = this.equipmentIds.indexOf(equipment_id);
-
-      if (index > -1) {
-        this.equipmentIds.splice(index, 1);
-      }
-
-      this.equipmentSelected[equipment_id] = false;
     },
     getReceivedAmount: function getReceivedAmount(template_id) {
       var total = 0;
@@ -4037,15 +4001,6 @@ __webpack_require__.r(__webpack_exports__);
       });
     },
     equipmentCheckBorrowedAmount: function equipmentCheckBorrowedAmount() {
-      for (var key in this.templateBorrowedAmount) {
-        console.log(this.templateBorrowedAmount[key]);
-
-        if (this.templateBorrowedAmount[key] == 0) {
-          alert('Bạn chưa chọn thiết bị ' + this.orderRequestInfos[key].template.name);
-          return false;
-        }
-      }
-
       return true;
     },
     equipmentOutput: function equipmentOutput() {
@@ -5263,7 +5218,7 @@ __webpack_require__.r(__webpack_exports__);
     },
     removeOrderInfo: function removeOrderInfo(equipment) {
       var index = this.displayedInfo.order_infos.findIndex(function (info) {
-        info.equipment_id == equipment.id;
+        return info.equipment_id == equipment.id;
       });
 
       if (index != -1) {

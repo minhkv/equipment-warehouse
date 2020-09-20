@@ -250,6 +250,8 @@ class OrderController extends Controller
         $orderRequestInfos = $request->input('orderRequestInfos');
         foreach($order->orderRequestInfos as $orderRequestInfoModel) {
             $template_id = $orderRequestInfoModel->template_id;
+            // remove existing orderinfo
+            $orderRequestInfoModel->orderInfos()->delete();
             // Create new orderInfo
             foreach($orderRequestInfos[$template_id]['order_infos'] as $orderInfo){
                 $equipment = Equipment::where('id', $orderInfo['equipment_id'])->first();
