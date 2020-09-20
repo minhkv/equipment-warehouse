@@ -119,49 +119,40 @@
                                 </div>
                             </td>
                         </tr>
-                        
+                        <tr>
+                            <td class="align-middle text-center" colspan="6">
+                                <h4>Phát sinh thêm</h4>
+                            </td>
+                        </tr>
+                        <tr v-for="info in ariseRequest" :key="info.id" :class="rowClass(info)">
+                            <th class="text-center" scope="row"><img :src="info.template.image" height=40 :alt="info.template.name"></th>
+                            <td class="align-middle text-center">{{ info.template.name }}</td>
+                            <td class="align-middle text-center">{{ info.template.equipments.length }}</td>
+                            <td class="align-middle text-center">{{ info.amount }}</td>
+                            <td class="align-middle text-center">
+                                {{ getBorrowedAmount(info.template.id) }}
+                            </td>
+                            <td v-if="displayedOrder.status >= 2" class="align-middle text-center font-weight-bold">
+                                {{ getReceivedAmount(info.template.id) }}
+                            </td>
+                            <td v-if="displayedOrder.status >= 2" :class="cellLostClass(info)">
+                                {{ getLostAmount(info.template.id) }}
+                            </td> 
+                            <td class="align-middle text-center">
+                                <!-- <div v-if="displayedOrder.status > 0" >
+                                    <button v-if="displayedOrder.status <= 1" type="button" class="btn btn-primary btn-sm" data-toggle="modal" :data-target="'#addEquipment-' + info.template.id">
+                                        <span class="fa fa-pencil"></span>
+                                    </button>
+                                    <button v-else type="button" class="btn btn-primary btn-sm" data-toggle="modal" :data-target="'#verifyEquipment-' + info.template.id">
+                                        <span class="fa fa-pencil"></span>
+                                    </button>
+                                </div> -->
+                            </td>
+                        </tr>
                         
                     </tbody>
                 </table>
-                <div v-if="displayedOrder.status == 1" >
-
-                    <div class="row justify-content-center">
-                        <h4>Phát sinh thêm</h4>
-                    </div>
-
-                    <table class="table table-hover">
-                        <thead class="thead-light">
-                            <tr>
-                                <th class="text-center" scope="col" width="10%"></th>
-                                <th class="text-center" scope="col" width="20%">Tên thiết bị</th>
-                                <th class="text-center" scope="col" width="10%">Số lượng</th>
-                                <th class="text-center" scope="col" width="10%">Yêu cầu</th>
-                                <th class="text-center" scope="col" width="10%">Cho mượn</th>
-                                <th class="text-center" scope="col" width="10%"></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr v-for="info in ariseRequest" :key="info.id" :class="rowClass(info)">
-                                <th class="text-center" scope="row"><img :src="info.template.image" height=40 :alt="info.template.name"></th>
-                                <td class="align-middle text-center">{{ info.template.name }}</td>
-                                <td class="align-middle text-center">{{ info.template.equipments.length }}</td>
-                                <td class="align-middle text-center">{{ info.amount }}</td>
-                                <td class="align-middle text-center">
-                                    {{ getBorrowedAmountByInfo(info) }}
-                                </td>
-                                
-                                <td class="align-middle text-center">
-                                    <div v-if="displayedOrder.status > 0" >
-                                        <button v-if="displayedOrder.status <= 1" type="button" class="btn btn-primary btn-sm" data-toggle="modal" :data-target="'#ariseEquipment-' + info.template.id">
-                                            <span class="fa fa-pencil"></span>
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    
-                </div>
+                
                 <div v-if="displayedOrder.status == 1" class="row justify-content-center">
                     <button type="button" class="btn btn-success btn-lg" data-toggle="modal" data-target="#addEquipment">
                         Thêm thiết bị
@@ -178,7 +169,7 @@
                 </div>
             </div>
         </article>
-        <modal-component v-for="info in displayedOrder.order_request_infos" :key="'a' + info.id" :id="'addEquipment-' + info.template.id" :title="'Thêm thiết bị ' + info.template.name" size="xl">
+        <modal-component v-for="info in this.displayedOrder.order_request_infos" :key="'a' + info.id" :id="'addEquipment-' + info.template.id" :title="'Thêm thiết bị ' + info.template.name" size="xl">
             <table class="table table-hover">
                 <thead class="thead-light">
                     <tr>
@@ -215,14 +206,6 @@
                 <button type="button" class="btn btn-primary" data-dismiss="modal">Xong</button>
             </template>
         </modal-component>
-
-        <modal-component v-for="(info, i) in ariseRequest" :key="'arise' + i" :id="'ariseEquipment-' + info.template.id" :title="'Thêm thiết bị ' + info.template.name" size="xl">
-            <table-select-member @change="changeAriseMember($event, i)" :requestInfo="info"></table-select-member>
-            <template v-slot:footer>
-                <button type="button" class="btn btn-primary" data-dismiss="modal">Xong</button>
-            </template>
-        </modal-component>
-
         <modal-component v-for="info in this.displayedOrder.order_request_infos" :key="'v' + info.id" :id="'verifyEquipment-' + info.template.id" :title="'Kiểm thiết bị ' + info.template.name" size="xl">
             <table class="table table-hover">
                 <thead class="thead-light">
@@ -287,384 +270,6 @@
         </modal-component>
     </div>
 </template>
-
-<script>
-import moment from 'moment';
-export default {
-    props: [
-        "categories",
-        "equipmentTemplates",
-        "order",
-        "orderIndexUrl",
-        "acceptUrl",
-        "rejectUrl",
-        "equipmentOutputUrl",
-        "equipmentReturnUrl",
-        "completeUrl",
-        "backUrl"
-        ],
-    data() {
-        return {
-            displayedOrder: {},
-            equipmentIds: [],
-            buttonDisabled: false,
-            templateBorrowedAmount: [],
-            equipmentSelected: [],
-            equipmentReceived: [],
-            equipmentLost: [],
-            orderRequestInfos: [],
-            displayedInfos: [],
-            search: '',
-            searchInputItems: [],
-            paginationItems: [],
-            selectedTemplates: [],
-            ariseRequest: [],
-        };
-    },
-    created() {
-        this.initOrder();
-        this.initialize();
-    },
-    methods: {
-        initialize() {
-            this.initializeOrderRequestInfos();
-            this.initializeEquipmentOutput();
-            this.initializeEquipmentReturn();
-            this.initSearchInput();
-            this.initSelectedTemplates();
-        },
-        initOrder() {
-            Object.assign(this.displayedOrder, this.order);
-        },
-        setOrder(order) {
-            // Object.assign(this.displayedOrder, order);
-            this.displayedOrder = order;
-        },
-        initializeOrderRequestInfos() {
-            let orderRequestInfos = {};
-            this.displayedOrder.order_request_infos.forEach(function(info) {
-                info.order_infos.forEach(function(order_info) {
-                    if(order_info.condition_before == undefined) {
-                        order_info.condition_before = order_info.equipment.condition;
-                    }
-                    if(order_info.condition_received == undefined) {
-                        order_info.condition_received = order_info.equipment.condition;
-                    }
-                });
-                orderRequestInfos[info.template.id] = info;
-            });
-            this.orderRequestInfos = orderRequestInfos;
-        },
-        initializeEquipmentOutput() {
-            let equipmentSelected = {};
-            let equipmentIds = [];
-            let templateBorrowedAmount = {};
-            this.displayedOrder.order_request_infos.forEach(function(info) {
-                info.template.equipments.forEach(function(equipment) {
-                    equipmentSelected[equipment.id] = false;
-                });
-                info.order_infos.forEach(function(order_info) {
-                    equipmentSelected[order_info.equipment_id] = true;
-                    equipmentIds.push(order_info.equipment_id);
-                });
-                templateBorrowedAmount[info.template.id] = info.order_infos.length;
-            });
-            this.equipmentSelected = equipmentSelected;
-            this.equipmentIds = equipmentIds;
-            this.templateBorrowedAmount = templateBorrowedAmount;
-        },
-        initializeEquipmentReturn() {
-            let equipmentReceived = {};
-            let equipmentLost = {};
-            this.displayedOrder.order_request_infos.forEach(function(info) {
-                info.order_infos.forEach(function(order_info) {
-                    equipmentReceived[order_info.equipment_id] = (order_info.status == 1);
-                    equipmentLost[order_info.equipment_id] = (order_info.status == 0);
-                });
-            });
-            this.equipmentReceived = equipmentReceived;
-            this.equipmentLost = equipmentLost;
-        },
-        initSearchInput() {
-            this.searchInputItems = this.order.order_request_infos;
-        },
-        initSelectedTemplates() {
-            this.selectedTemplates = this.displayedOrder.order_request_infos.map(function(info) {
-                return {
-                    id: info.template.id,
-                    name: info.template.name,
-                    amount: info.amount,
-                    maxAmount: info.template.equipments.length,
-                    image: info.template.image
-                };
-            });
-        },
-        ariseTemplate(equipmentTemplates) {
-            console.log('arise');
-            let app = this;
-            let arise = [];
-            this.ariseRequest = equipmentTemplates.map(function(template) {
-                return ({
-                    amount: template.amount,
-                    borrowed_amount: 0,
-                    order_infos: [],
-                    order_id: app.order.id,
-                    template: template,
-                    template_id: template.id
-                });
-            });
-        },
-        searchInput(items) {
-            this.searchInputItems = items;
-        },
-        pagination(items) {
-            this.paginationItems = items;
-        },
-        updatePage(data) {
-            if(data.error) {
-                alert(data.error);
-            } else {
-                this.setOrder(data);
-                this.initialize();
-            }
-            this.enableButton();
-        },
-        rowClass(info) {
-            return {
-                'cursor-pointer': true,
-                'table-success': 
-                    this.getBorrowedAmount(info.template_id) > 0 &&
-                    (this.getBorrowedAmount(info.template_id) == 
-                    this.getReceivedAmount(info.template_id) + 
-                    this.getLostAmount(info.template_id))
-            };
-        },
-        addEquipmentRowClass(equipment) {
-            return {
-                'table-success': this.isEquipmentSelected(equipment.id),
-            };
-        },
-        cellLostClass(info) {
-            return {
-                'align-middle': true, 
-                'text-center': true, 
-                'font-weight-bold': true, 
-                'bg-danger': this.getLostAmount(info.template_id) > 0, 
-                'text-light': this.getLostAmount(info.template_id) > 0
-                };
-        },
-        changeAriseMember(orderInfos, index) {
-            let requestInfo = this.ariseRequest[index];
-            Vue.set(requestInfo, 'order_infos', orderInfos);
-            Vue.set(this.ariseRequest, index, requestInfo);
-        },
-        getBorrowedAmountByInfo(info) {
-            return info.order_infos.length;
-        },
-        getBorrowedAmount(template_id) {
-            return this.templateBorrowedAmount[template_id];
-        },
-        isEquipmentSelected(equipmentId) {
-            return this.equipmentSelected[equipmentId];
-        },
-        disablePlusEquipmentButton(equipmentId, equipmentStatus) {
-            return this.isEquipmentSelected(equipmentId) || equipmentStatus != 1;
-        },
-        disableMinusEquipmentButton(equipmentId, equipmentStatus) {
-            return !this.isEquipmentSelected(equipmentId);
-        },
-        selectEquipment(equipment, template_id) {
-            this.orderRequestInfos[template_id].order_infos.push({
-                'equipment_id': equipment.id,
-                'condition_before': equipment.condition
-            });
-            this.templateBorrowedAmount[template_id]++;
-            this.equipmentIds.push(equipment.id);
-            this.equipmentSelected[equipment.id] = true;
-        },
-        
-        removeEquipment(equipment_id, template_id) {
-            console.log('remove');
-            this.templateBorrowedAmount[template_id]--;
-            const index = this.equipmentIds.indexOf(equipment_id);
-            if (index > -1) {
-                this.equipmentIds.splice(index, 1);
-            }
-            this.equipmentSelected[equipment_id] = false;
-        },
-        getReceivedAmount(template_id) {
-            let total = 0;
-            for (let i in this.orderRequestInfos[template_id].order_infos) {
-                let orderInfo = this.orderRequestInfos[template_id].order_infos[i];
-                if (this.equipmentReceived[orderInfo.equipment_id]) {
-                    total += 1;
-                }
-            }
-
-            return total;
-        },
-        getLostAmount(template_id) {
-            let total = 0;
-            for (let i in this.orderRequestInfos[template_id].order_infos) {
-                let orderInfo = this.orderRequestInfos[template_id].order_infos[i];
-                if (this.equipmentLost[orderInfo.equipment_id]) {
-                    total += 1;
-                }
-            }
-
-            return total;
-        },
-        back() {
-            let app = this;
-            this.disableButton();
-            axios.put(this.backUrl).then(res => {
-                console.log(res);
-                app.updatePage(res.data);
-            }).catch(error => {
-                console.log("handlesubmit error: ", error);
-            });
-        },
-        getCurrentLocalTime() {
-            let currentDate = (new Date()).toISOString();
-            return moment(currentDate).format();
-        },
-        acceptOrder(button) {
-            let app = this;
-            this.disableButton();
-            axios.put(this.acceptUrl, {
-                dateApproved: this.getCurrentLocalTime()
-            }).then(res => {
-                console.log(res);
-                app.updatePage(res.data);
-            }).catch(error => {
-                console.log("handlesubmit error: ", error);
-            });
-        },
-        rejectOrder() {
-            console.log(this.orderIndexUrl);
-            let app = this;
-            this.disableButton();
-            axios.put(this.rejectUrl)
-                .then(res => {
-                    console.log(res);
-                    app.updatePage(res.data);
-                }).catch(error => {
-                    console.log("handlesubmit error: ", error);
-                });
-        },
-        equipmentCheckBorrowedAmount() {
-            for(let key in this.templateBorrowedAmount) {
-                console.log(this.templateBorrowedAmount[key]);
-                if(this.templateBorrowedAmount[key] == 0) {
-                    alert('Bạn chưa chọn thiết bị ' + this.orderRequestInfos[key].template.name);
-                    return false;
-                }
-            }
-            return true;
-        },
-        equipmentOutput() {
-            console.log('equipmentOutput');
-            let app = this;
-            if(!this.equipmentCheckBorrowedAmount()) return;
-            this.disableButton();
-            axios({
-                    url: this.equipmentOutputUrl,
-                    method: 'put',
-                    data: {
-                        equipments: this.equipmentIds,
-                        orderRequestInfos: this.orderRequestInfos,
-                        dateOutput: this.getCurrentLocalTime()
-                    }
-                })
-                .then(function(res) {
-                    console.log(res);
-                    app.updatePage(res.data);
-                })
-                .catch(function(error) { 
-                    console.log(error);
-                });
-        },
-        getEquipmentStatus(equipmentId) {
-            if (this.equipmentReceived[equipmentId])
-                return 1;
-            if (this.equipmentLost[equipmentId])
-                return 0;
-            return 2;
-        },
-        updateOrderInfoStatus() {
-            for (let i in this.orderRequestInfos) {
-                for (let j in this.orderRequestInfos[i].order_infos) {
-                    var orderInfo = this.orderRequestInfos[i].order_infos[j];
-                    orderInfo.status = this.getEquipmentStatus(orderInfo.equipment_id);
-                }
-            }
-        },
-        equipmentCheck() {
-            for (let i in this.orderRequestInfos) {
-                for (let j in this.orderRequestInfos[i].order_infos) {
-                    let orderInfo = this.orderRequestInfos[i].order_infos[j];
-                    if (!this.equipmentLost[orderInfo.equipment_id] && !this.equipmentReceived[orderInfo.equipment_id]) {
-                        alert('Bạn chưa chọn trạng thái thiết bị ' + this.orderRequestInfos[i].template.name + ' có mã: ' + orderInfo.equipment_id);
-                        return false;
-                    }
-                }
-            }
-            return true;
-        },
-        equipmentReturn() {
-            console.log('return');
-            let app = this;
-            if (!this.equipmentCheck()) return;
-            this.updateOrderInfoStatus();
-            console.log(this.orderRequestInfos);
-            this.disableButton();
-            axios({
-                    url: this.equipmentReturnUrl,
-                    method: 'put',
-                    data: {
-                        orderRequestInfos: this.orderRequestInfos,
-                        dateReturn: this.getCurrentLocalTime()
-                    }
-                })
-                .then(function(res) {
-                    console.log(res);
-                    app.updatePage(res.data);
-                })
-                .catch(function(error) {
-                    console.log(error);
-                });
-        },
-        completeOrder() {
-            let app = this;
-            this.disableButton();
-
-            axios({
-                    url: this.completeUrl,
-                    method: 'put',
-                    data: {
-                        orderRequestInfos: this.orderRequestInfos,
-                        dateCompleted: this.getCurrentLocalTime()
-                    }
-                })
-                .then(function(res) {
-                    console.log(res);
-                    app.updatePage(res.data);
-                })
-                .catch(function(error) {
-                    console.log(error);
-                });
-        },
-        enableButton() {
-            this.buttonDisabled = false;
-        },
-        disableButton() {
-            this.buttonDisabled = true;
-        },
-
-        
-    }
-};
-</script>
 <style scoped>
 @import url("https://fonts.googleapis.com/css?family=Open+Sans&display=swap");
 
@@ -844,3 +449,374 @@ p {
     color: #ffca08;
 } /* Set yellow color when star hover */
 </style>
+<script>
+import moment from 'moment';
+export default {
+    props: [
+        "categories",
+        "equipmentTemplates",
+        "order",
+        "orderIndexUrl",
+        "acceptUrl",
+        "rejectUrl",
+        "equipmentOutputUrl",
+        "equipmentReturnUrl",
+        "completeUrl",
+        "backUrl"
+        ],
+    data() {
+        return {
+            displayedOrder: {},
+            equipmentIds: [],
+            buttonDisabled: false,
+            templateBorrowedAmount: [],
+            equipmentSelected: [],
+            equipmentReceived: [],
+            equipmentLost: [],
+            orderRequestInfos: [],
+            displayedInfos: [],
+            search: '',
+            searchInputItems: [],
+            paginationItems: [],
+            selectedTemplates: [],
+            ariseRequest: [],
+        };
+    },
+    created() {
+        this.initOrder();
+        this.initialize();
+    },
+    methods: {
+        initialize() {
+            this.initializeOrderRequestInfos();
+            this.initializeEquipmentOutput();
+            this.initializeEquipmentReturn();
+            this.initSearchInput();
+            this.initSelectedTemplates();
+        },
+        initOrder() {
+            Object.assign(this.displayedOrder, this.order);
+        },
+        setOrder(order) {
+            // Object.assign(this.displayedOrder, order);
+            this.displayedOrder = order;
+        },
+        initializeOrderRequestInfos() {
+            let orderRequestInfos = {};
+            this.displayedOrder.order_request_infos.forEach(function(info) {
+                info.order_infos.forEach(function(order_info) {
+                    if(order_info.condition_before == undefined) {
+                        order_info.condition_before = order_info.equipment.condition;
+                    }
+                    if(order_info.condition_received == undefined) {
+                        order_info.condition_received = order_info.equipment.condition;
+                    }
+                });
+                orderRequestInfos[info.template.id] = info;
+            });
+            this.orderRequestInfos = orderRequestInfos;
+        },
+        initializeEquipmentOutput() {
+            let equipmentSelected = {};
+            let equipmentIds = [];
+            let templateBorrowedAmount = {};
+            this.displayedOrder.order_request_infos.forEach(function(info) {
+                info.template.equipments.forEach(function(equipment) {
+                    equipmentSelected[equipment.id] = false;
+                });
+                info.order_infos.forEach(function(order_info) {
+                    equipmentSelected[order_info.equipment_id] = true;
+                    equipmentIds.push(order_info.equipment_id);
+                });
+                templateBorrowedAmount[info.template.id] = info.order_infos.length;
+            });
+            this.equipmentSelected = equipmentSelected;
+            this.equipmentIds = equipmentIds;
+            this.templateBorrowedAmount = templateBorrowedAmount;
+        },
+        initializeEquipmentReturn() {
+            let equipmentReceived = {};
+            let equipmentLost = {};
+            this.displayedOrder.order_request_infos.forEach(function(info) {
+                info.order_infos.forEach(function(order_info) {
+                    equipmentReceived[order_info.equipment_id] = (order_info.status == 1);
+                    equipmentLost[order_info.equipment_id] = (order_info.status == 0);
+                });
+            });
+            this.equipmentReceived = equipmentReceived;
+            this.equipmentLost = equipmentLost;
+        },
+        initSearchInput() {
+            this.searchInputItems = this.order.order_request_infos;
+        },
+
+        initSelectedTemplates() {
+            this.selectedTemplates = this.displayedOrder.order_request_infos.map(function(info) {
+                return {
+                    id: info.template.id,
+                    name: info.template.name,
+                    amount: info.amount,
+                    maxAmount: info.template.equipments.length,
+                    image: info.template.image
+                };
+            });
+        },
+        ariseTemplate(equipmentTemplates) {
+            console.log('arise');
+            let app = this;
+            let arise = [];
+            this.ariseRequest = equipmentTemplates.map(function(template) {
+                return ({
+                    amount: template.amount,
+                    borrowed_amount: 0,
+                    order_infos: [],
+                    order_id: app.order.id,
+                    template: template,
+                    template_id: template.id
+                });
+            })
+        },
+        searchInput(items) {
+            this.searchInputItems = items;
+        },
+        pagination(items) {
+            this.paginationItems = items;
+        },
+        updatePage(data) {
+            if(data.error) {
+                alert(data.error);
+            } else {
+                this.setOrder(data);
+                this.initialize();
+            }
+            this.enableButton();
+        },
+        rowClass(info) {
+            return {
+                'cursor-pointer': true,
+                'table-success': 
+                    this.getBorrowedAmount(info.template_id) > 0 &&
+                    (this.getBorrowedAmount(info.template_id) == 
+                    this.getReceivedAmount(info.template_id) + 
+                    this.getLostAmount(info.template_id))
+            };
+        },
+        addEquipmentRowClass(equipment) {
+            return {
+                'table-success': this.isEquipmentSelected(equipment.id),
+            };
+        },
+        cellLostClass(info) {
+            return {
+                'align-middle': true, 
+                'text-center': true, 
+                'font-weight-bold': true, 
+                'bg-danger': this.getLostAmount(info.template_id) > 0, 
+                'text-light': this.getLostAmount(info.template_id) > 0
+                };
+        },
+        getBorrowedAmount(template_id) {
+            return this.templateBorrowedAmount[template_id];
+        },
+        isEquipmentSelected(equipmentId) {
+            return this.equipmentSelected[equipmentId];
+        },
+        disablePlusEquipmentButton(equipmentId, equipmentStatus) {
+            return this.isEquipmentSelected(equipmentId) || equipmentStatus != 1;
+        },
+        disableMinusEquipmentButton(equipmentId, equipmentStatus) {
+            return !this.isEquipmentSelected(equipmentId);
+        },
+        selectEquipment(equipment, template_id) {
+            console.log('select');
+            this.orderRequestInfos[template_id].order_infos.push({
+                'equipment_id': equipment.id,
+                'condition_before': equipment.condition
+            });
+            this.templateBorrowedAmount[template_id]++;
+            this.equipmentIds.push(equipment.id);
+            this.equipmentSelected[equipment.id] = true;
+        },
+        removeEquipment(equipment_id, template_id) {
+            console.log('remove');
+            this.templateBorrowedAmount[template_id]--;
+            const index = this.equipmentIds.indexOf(equipment_id);
+            if (index > -1) {
+                this.equipmentIds.splice(index, 1);
+            }
+            this.equipmentSelected[equipment_id] = false;
+        },
+        getReceivedAmount(template_id) {
+            let total = 0;
+            for (let i in this.orderRequestInfos[template_id].order_infos) {
+                let orderInfo = this.orderRequestInfos[template_id].order_infos[i];
+                if (this.equipmentReceived[orderInfo.equipment_id]) {
+                    total += 1;
+                }
+            }
+
+            return total;
+        },
+        getLostAmount(template_id) {
+            let total = 0;
+            for (let i in this.orderRequestInfos[template_id].order_infos) {
+                let orderInfo = this.orderRequestInfos[template_id].order_infos[i];
+                if (this.equipmentLost[orderInfo.equipment_id]) {
+                    total += 1;
+                }
+            }
+
+            return total;
+        },
+        back() {
+            let app = this;
+            this.disableButton();
+            axios.put(this.backUrl).then(res => {
+                console.log(res);
+                app.updatePage(res.data);
+            }).catch(error => {
+                console.log("handlesubmit error: ", error);
+            });
+        },
+        getCurrentLocalTime() {
+            let currentDate = (new Date()).toISOString();
+            return moment(currentDate).format();
+        },
+        acceptOrder(button) {
+            let app = this;
+            this.disableButton();
+            axios.put(this.acceptUrl, {
+                dateApproved: this.getCurrentLocalTime()
+            }).then(res => {
+                console.log(res);
+                app.updatePage(res.data);
+            }).catch(error => {
+                console.log("handlesubmit error: ", error);
+            });
+        },
+        rejectOrder() {
+            console.log(this.orderIndexUrl);
+            let app = this;
+            this.disableButton();
+            axios.put(this.rejectUrl)
+                .then(res => {
+                    console.log(res);
+                    app.updatePage(res.data);
+                }).catch(error => {
+                    console.log("handlesubmit error: ", error);
+                });
+        },
+        equipmentCheckBorrowedAmount() {
+            for(let key in this.templateBorrowedAmount) {
+                console.log(this.templateBorrowedAmount[key]);
+                if(this.templateBorrowedAmount[key] == 0) {
+                    alert('Bạn chưa chọn thiết bị ' + this.orderRequestInfos[key].template.name);
+                    return false;
+                }
+            }
+            return true;
+        },
+        equipmentOutput() {
+            console.log('equipmentOutput');
+            let app = this;
+            if(!this.equipmentCheckBorrowedAmount()) return;
+            this.disableButton();
+            axios({
+                    url: this.equipmentOutputUrl,
+                    method: 'put',
+                    data: {
+                        equipments: this.equipmentIds,
+                        templateBorrowedAmount: this.templateBorrowedAmount,
+                        orderRequestInfos: this.orderRequestInfos,
+                        dateOutput: this.getCurrentLocalTime()
+                    }
+                })
+                .then(function(res) {
+                    console.log(res);
+                    app.updatePage(res.data);
+                })
+                .catch(function(error) { 
+                    console.log(error);
+                });
+        },
+        getEquipmentStatus(equipmentId) {
+            if (this.equipmentReceived[equipmentId])
+                return 1;
+            if (this.equipmentLost[equipmentId])
+                return 0;
+            return 2;
+        },
+        updateOrderInfoStatus() {
+            for (let i in this.orderRequestInfos) {
+                for (let j in this.orderRequestInfos[i].order_infos) {
+                    var orderInfo = this.orderRequestInfos[i].order_infos[j];
+                    orderInfo.status = this.getEquipmentStatus(orderInfo.equipment_id);
+                }
+            }
+        },
+        equipmentCheck() {
+            for (let i in this.orderRequestInfos) {
+                for (let j in this.orderRequestInfos[i].order_infos) {
+                    let orderInfo = this.orderRequestInfos[i].order_infos[j];
+                    if (!this.equipmentLost[orderInfo.equipment_id] && !this.equipmentReceived[orderInfo.equipment_id]) {
+                        alert('Bạn chưa chọn trạng thái thiết bị ' + this.orderRequestInfos[i].template.name + ' có mã: ' + orderInfo.equipment_id);
+                        return false;
+                    }
+                }
+            }
+            return true;
+        },
+        equipmentReturn() {
+            console.log('return');
+            let app = this;
+            if (!this.equipmentCheck()) return;
+            this.updateOrderInfoStatus();
+            console.log(this.orderRequestInfos);
+            this.disableButton();
+            axios({
+                    url: this.equipmentReturnUrl,
+                    method: 'put',
+                    data: {
+                        orderRequestInfos: this.orderRequestInfos,
+                        dateReturn: this.getCurrentLocalTime()
+                    }
+                })
+                .then(function(res) {
+                    console.log(res);
+                    app.updatePage(res.data);
+                })
+                .catch(function(error) {
+                    console.log(error);
+                });
+        },
+        completeOrder() {
+            let app = this;
+            this.disableButton();
+
+            axios({
+                    url: this.completeUrl,
+                    method: 'put',
+                    data: {
+                        orderRequestInfos: this.orderRequestInfos,
+                        dateCompleted: this.getCurrentLocalTime()
+                    }
+                })
+                .then(function(res) {
+                    console.log(res);
+                    app.updatePage(res.data);
+                })
+                .catch(function(error) {
+                    console.log(error);
+                });
+        },
+        enableButton() {
+            this.buttonDisabled = false;
+        },
+        disableButton() {
+            this.buttonDisabled = true;
+        },
+
+        
+    }
+};
+</script>

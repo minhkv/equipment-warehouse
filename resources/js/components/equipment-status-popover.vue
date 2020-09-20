@@ -20,6 +20,9 @@ export default {
         },
         getLastOrderInfo() {
             let infos = [];
+            if(!this.equipment.order_infos) {
+                return '';
+            }
             this.equipment.order_infos.forEach(function(info) {
                 infos.push(info);
             });

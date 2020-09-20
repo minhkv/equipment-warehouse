@@ -1,7 +1,7 @@
 <template>
     <div class="container">
         <div class="row py-3">
-            <a :href="equipmentTemplateIndexUrl" class="btn btn-secondary mr-auto">
+            <a :href="equipmentTemplateIndexUrl" class="btn btn-outline-dark mr-auto">
                 <i class="fa fa-chevron-left"></i> Quay lại
             </a>
         </div>

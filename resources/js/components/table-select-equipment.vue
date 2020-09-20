@@ -40,6 +40,7 @@
                         min='0' 
                         :max='template.equipments.length' 
                         v-model="getSelectedTemplate(template.id).amount"
+                        @change="sendEvent()"
                         >
                         <div v-if="notInclude[template.id]">{{notInclude[template.id].amount}}</div>
                     </td>
@@ -93,8 +94,15 @@ export default {
     },
     methods: {
         init() {
+            // this.initSelectedTemplates();
             this.initButton();
             this.initFilter();
+        },
+        initSelectedTemplates() {
+            let app = this;
+            this.selectedItems.forEach((item) => {
+                app.add(item);
+            });
         },
         initButton() {
             let app = this;
@@ -111,7 +119,6 @@ export default {
             });
         },
         selectionFilter(items) {
-            console.log('receive filter');
             this.filterItems = items;
         },
         searchInput(items) {
@@ -143,13 +150,10 @@ export default {
             this.sendEvent();
         },
         addEquipment(template) {
-            let newTemplate = {
-                id: template.id,
-                name: template.name,
-                amount: '0',
-                maxAmount: template.equipments.length,
-                image: template.image
-            };
+            let newTemplate = Object.assign({}, template, {
+                amount: template.amount || '0',
+                maxAmount: template.maxAmount || template.equipments.length,
+            });
             this.selectedTemplates.push(newTemplate);
         },
         removeEquipmentById(id) {
@@ -157,11 +161,9 @@ export default {
             this.selectedTemplates.splice(index, 1);
         },
         enableButton(template_id) {
-            console.log('enable');
             Vue.set(this.buttonDisabled, template_id, false);
         },
         disableButton(template_id) {
-            console.log('disable');
             Vue.set(this.buttonDisabled, template_id, true);
         },
         sendEvent() {
