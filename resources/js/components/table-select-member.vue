@@ -25,8 +25,8 @@
                 </td>
                 <td>{{equipment.note}}</td>
                 <td class="align-middle">
-                    <button :disabled="equipmentSelected(equipment)" @click="addEquipment(equipment)" class="btn btn-success btn-sm"><span class="fa fa-plus"></span></button>
-                    <button :disabled="!equipmentSelected(equipment)" @click="removeEquipment(equipment)" class="btn btn-danger btn-sm"><span class="fa fa-minus"></span></button>
+                    <button :disabled="disablePlusButton(equipment)" @click="addEquipment(equipment)" class="btn btn-success btn-sm"><span class="fa fa-plus"></span></button>
+                    <button :disabled="disableMinusButton(equipment)" @click="removeEquipment(equipment)" class="btn btn-danger btn-sm"><span class="fa fa-minus"></span></button>
                 </td>
             </tr>
         </tbody>
@@ -55,6 +55,12 @@ export default {
                 return info.equipment_id == equipment.id;
             });
             return selected;
+        },
+        disablePlusButton(equipment) {
+            return this.equipmentSelected(equipment) || equipment.status != 1;
+        },
+        disableMinusButton(equipment) {
+            return !this.equipmentSelected(equipment);
         },
         addEquipment(equipment) {
             this.addOrderInfo(equipment);

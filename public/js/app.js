@@ -3775,44 +3775,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ["categories", "equipmentTemplates", "order", "orderIndexUrl", "acceptUrl", "rejectUrl", "equipmentOutputUrl", "equipmentReturnUrl", "completeUrl", "backUrl"],
@@ -3964,10 +3926,17 @@ __webpack_require__.r(__webpack_exports__);
         'text-light': this.getLostAmount(info.template_id) > 0
       };
     },
+    changeMember: function changeMember(orderInfos, index) {
+      console.log('change member');
+      this.changeRequest(orderInfos, index, this.displayedOrder.order_request_infos);
+    },
     changeAriseMember: function changeAriseMember(orderInfos, index) {
-      var requestInfo = this.ariseRequest[index];
+      this.changeRequest(orderInfos, index, this.ariseRequest);
+    },
+    changeRequest: function changeRequest(orderInfos, index, orderRequest) {
+      var requestInfo = orderRequest[index];
       Vue.set(requestInfo, 'order_infos', orderInfos);
-      Vue.set(this.ariseRequest, index, requestInfo);
+      Vue.set(orderRequest, index, requestInfo);
     },
     getBorrowedAmountByInfo: function getBorrowedAmountByInfo(info) {
       return info.order_infos.length;
@@ -5271,6 +5240,12 @@ __webpack_require__.r(__webpack_exports__);
         return info.equipment_id == equipment.id;
       });
       return selected;
+    },
+    disablePlusButton: function disablePlusButton(equipment) {
+      return this.equipmentSelected(equipment) || equipment.status != 1;
+    },
+    disableMinusButton: function disableMinusButton(equipment) {
+      return !this.equipmentSelected(equipment);
     },
     addEquipment: function addEquipment(equipment) {
       this.addOrderInfo(equipment);
@@ -66201,150 +66176,129 @@ var render = function() {
             _vm._v(" "),
             _c(
               "tbody",
-              [
-                _vm._l(_vm.paginationItems, function(info) {
-                  return _c(
-                    "tr",
-                    { key: "arise" + info.id, class: _vm.rowClass(info) },
-                    [
-                      _c(
-                        "th",
-                        { staticClass: "text-center", attrs: { scope: "row" } },
-                        [
-                          _c("img", {
-                            attrs: {
-                              src: info.template.image,
-                              height: "40",
-                              alt: info.template.name
-                            }
-                          })
-                        ]
-                      ),
-                      _vm._v(" "),
-                      _c("td", { staticClass: "align-middle text-center" }, [
-                        _vm._v(_vm._s(info.template.name))
-                      ]),
-                      _vm._v(" "),
-                      _c("td", { staticClass: "align-middle text-center" }, [
-                        _vm._v(_vm._s(info.template.equipments.length))
-                      ]),
-                      _vm._v(" "),
-                      _c("td", { staticClass: "align-middle text-center" }, [
-                        _vm._v(_vm._s(info.amount))
-                      ]),
-                      _vm._v(" "),
-                      _c("td", { staticClass: "align-middle text-center" }, [
-                        _vm._v(
-                          "\n                            " +
-                            _vm._s(_vm.getBorrowedAmount(info.template.id)) +
-                            "\n                        "
-                        )
-                      ]),
-                      _vm._v(" "),
-                      _vm.displayedOrder.status >= 2
-                        ? _c(
-                            "td",
-                            {
-                              staticClass:
-                                "align-middle text-center font-weight-bold"
-                            },
-                            [
-                              _vm._v(
-                                "\n                            " +
-                                  _vm._s(
-                                    _vm.getReceivedAmount(info.template.id)
-                                  ) +
-                                  "\n                        "
-                              )
-                            ]
-                          )
-                        : _vm._e(),
-                      _vm._v(" "),
-                      _vm.displayedOrder.status >= 2
-                        ? _c("td", { class: _vm.cellLostClass(info) }, [
+              _vm._l(_vm.paginationItems, function(info) {
+                return _c(
+                  "tr",
+                  { key: "arise" + info.id, class: _vm.rowClass(info) },
+                  [
+                    _c(
+                      "th",
+                      { staticClass: "text-center", attrs: { scope: "row" } },
+                      [
+                        _c("img", {
+                          attrs: {
+                            src: info.template.image,
+                            height: "40",
+                            alt: info.template.name
+                          }
+                        })
+                      ]
+                    ),
+                    _vm._v(" "),
+                    _c("td", { staticClass: "align-middle text-center" }, [
+                      _vm._v(_vm._s(info.template.name))
+                    ]),
+                    _vm._v(" "),
+                    _c("td", { staticClass: "align-middle text-center" }, [
+                      _vm._v(_vm._s(info.template.equipments.length))
+                    ]),
+                    _vm._v(" "),
+                    _c("td", { staticClass: "align-middle text-center" }, [
+                      _vm._v(_vm._s(info.amount))
+                    ]),
+                    _vm._v(" "),
+                    _c("td", { staticClass: "align-middle text-center" }, [
+                      _vm._v(
+                        "\n                            " +
+                          _vm._s(_vm.getBorrowedAmountByInfo(info)) +
+                          "\n                        "
+                      )
+                    ]),
+                    _vm._v(" "),
+                    _vm.displayedOrder.status >= 2
+                      ? _c(
+                          "td",
+                          {
+                            staticClass:
+                              "align-middle text-center font-weight-bold"
+                          },
+                          [
                             _vm._v(
                               "\n                            " +
-                                _vm._s(_vm.getLostAmount(info.template.id)) +
+                                _vm._s(
+                                  _vm.getReceivedAmount(info.template.id)
+                                ) +
                                 "\n                        "
                             )
+                          ]
+                        )
+                      : _vm._e(),
+                    _vm._v(" "),
+                    _vm.displayedOrder.status >= 2
+                      ? _c("td", { class: _vm.cellLostClass(info) }, [
+                          _vm._v(
+                            "\n                            " +
+                              _vm._s(_vm.getLostAmount(info.template.id)) +
+                              "\n                        "
+                          )
+                        ])
+                      : _vm._e(),
+                    _vm._v(" "),
+                    _c("td", { staticClass: "align-middle text-center" }, [
+                      _vm.displayedOrder.status > 0
+                        ? _c("div", [
+                            _vm.displayedOrder.status <= 1
+                              ? _c(
+                                  "button",
+                                  {
+                                    staticClass: "btn btn-primary btn-sm",
+                                    attrs: {
+                                      type: "button",
+                                      "data-toggle": "modal",
+                                      "data-target":
+                                        "#addEquipment-" + info.template.id
+                                    }
+                                  },
+                                  [_c("span", { staticClass: "fa fa-pencil" })]
+                                )
+                              : _c(
+                                  "button",
+                                  {
+                                    staticClass: "btn btn-primary btn-sm",
+                                    attrs: {
+                                      type: "button",
+                                      "data-toggle": "modal",
+                                      "data-target":
+                                        "#verifyEquipment-" + info.template.id
+                                    }
+                                  },
+                                  [_c("span", { staticClass: "fa fa-pencil" })]
+                                )
                           ])
-                        : _vm._e(),
-                      _vm._v(" "),
-                      _c("td", { staticClass: "align-middle text-center" }, [
-                        _vm.displayedOrder.status > 0
-                          ? _c("div", [
-                              _vm.displayedOrder.status <= 1
-                                ? _c(
-                                    "button",
-                                    {
-                                      staticClass: "btn btn-primary btn-sm",
-                                      attrs: {
-                                        type: "button",
-                                        "data-toggle": "modal",
-                                        "data-target":
-                                          "#addEquipment-" + info.template.id
-                                      }
-                                    },
-                                    [
-                                      _c("span", {
-                                        staticClass: "fa fa-pencil"
-                                      })
-                                    ]
-                                  )
-                                : _c(
-                                    "button",
-                                    {
-                                      staticClass: "btn btn-primary btn-sm",
-                                      attrs: {
-                                        type: "button",
-                                        "data-toggle": "modal",
-                                        "data-target":
-                                          "#verifyEquipment-" + info.template.id
-                                      }
-                                    },
-                                    [
-                                      _c("span", {
-                                        staticClass: "fa fa-pencil"
-                                      })
-                                    ]
-                                  )
-                            ])
-                          : _vm._e()
-                      ])
-                    ]
-                  )
-                }),
-                _vm._v(" "),
-                _c("tr", [
-                  _c(
-                    "td",
-                    {
-                      staticClass: "align-middle text-center",
-                      attrs: { colspan: "6" }
-                    },
-                    [
-                      _c(
-                        "div",
-                        { staticClass: "row justify-content-center" },
-                        [
-                          _c("pagination", {
-                            attrs: { items: _vm.searchInputItems, per: 6 },
-                            on: {
-                              change: function($event) {
-                                return _vm.pagination($event)
-                              }
-                            }
-                          })
-                        ],
-                        1
-                      )
-                    ]
-                  )
-                ])
-              ],
-              2
+                        : _vm._e()
+                    ])
+                  ]
+                )
+              }),
+              0
             )
           ]),
+          _vm._v(" "),
+          _c(
+            "div",
+            { staticClass: "row justify-content-center" },
+            [
+              _c("pagination", {
+                attrs: { items: _vm.searchInputItems, per: 6 },
+                on: {
+                  change: function($event) {
+                    return _vm.pagination($event)
+                  }
+                }
+              })
+            ],
+            1
+          ),
           _vm._v(" "),
           _vm.displayedOrder.status == 1
             ? _c("div", [
@@ -66356,90 +66310,71 @@ var render = function() {
                   _c(
                     "tbody",
                     _vm._l(_vm.ariseRequest, function(info) {
-                      return _c(
-                        "tr",
-                        { key: info.id, class: _vm.rowClass(info) },
-                        [
-                          _c(
-                            "th",
-                            {
-                              staticClass: "text-center",
-                              attrs: { scope: "row" }
-                            },
-                            [
-                              _c("img", {
-                                attrs: {
-                                  src: info.template.image,
-                                  height: "40",
-                                  alt: info.template.name
-                                }
-                              })
-                            ]
-                          ),
-                          _vm._v(" "),
-                          _c(
-                            "td",
-                            { staticClass: "align-middle text-center" },
-                            [_vm._v(_vm._s(info.template.name))]
-                          ),
-                          _vm._v(" "),
-                          _c(
-                            "td",
-                            { staticClass: "align-middle text-center" },
-                            [_vm._v(_vm._s(info.template.equipments.length))]
-                          ),
-                          _vm._v(" "),
-                          _c(
-                            "td",
-                            { staticClass: "align-middle text-center" },
-                            [_vm._v(_vm._s(info.amount))]
-                          ),
-                          _vm._v(" "),
-                          _c(
-                            "td",
-                            { staticClass: "align-middle text-center" },
-                            [
-                              _vm._v(
-                                "\n                                " +
-                                  _vm._s(_vm.getBorrowedAmountByInfo(info)) +
-                                  "\n                            "
-                              )
-                            ]
-                          ),
-                          _vm._v(" "),
-                          _c(
-                            "td",
-                            { staticClass: "align-middle text-center" },
-                            [
-                              _vm.displayedOrder.status > 0
-                                ? _c("div", [
-                                    _vm.displayedOrder.status <= 1
-                                      ? _c(
-                                          "button",
-                                          {
-                                            staticClass:
-                                              "btn btn-primary btn-sm",
-                                            attrs: {
-                                              type: "button",
-                                              "data-toggle": "modal",
-                                              "data-target":
-                                                "#ariseEquipment-" +
-                                                info.template.id
-                                            }
-                                          },
-                                          [
-                                            _c("span", {
-                                              staticClass: "fa fa-pencil"
-                                            })
-                                          ]
-                                        )
-                                      : _vm._e()
-                                  ])
-                                : _vm._e()
-                            ]
+                      return _c("tr", { key: info.id }, [
+                        _c(
+                          "th",
+                          {
+                            staticClass: "text-center",
+                            attrs: { scope: "row" }
+                          },
+                          [
+                            _c("img", {
+                              attrs: {
+                                src: info.template.image,
+                                height: "40",
+                                alt: info.template.name
+                              }
+                            })
+                          ]
+                        ),
+                        _vm._v(" "),
+                        _c("td", { staticClass: "align-middle text-center" }, [
+                          _vm._v(_vm._s(info.template.name))
+                        ]),
+                        _vm._v(" "),
+                        _c("td", { staticClass: "align-middle text-center" }, [
+                          _vm._v(_vm._s(info.template.equipments.length))
+                        ]),
+                        _vm._v(" "),
+                        _c("td", { staticClass: "align-middle text-center" }, [
+                          _vm._v(_vm._s(info.amount))
+                        ]),
+                        _vm._v(" "),
+                        _c("td", { staticClass: "align-middle text-center" }, [
+                          _vm._v(
+                            "\n                                " +
+                              _vm._s(_vm.getBorrowedAmountByInfo(info)) +
+                              "\n                            "
                           )
-                        ]
-                      )
+                        ]),
+                        _vm._v(" "),
+                        _c("td", { staticClass: "align-middle text-center" }, [
+                          _vm.displayedOrder.status > 0
+                            ? _c("div", [
+                                _vm.displayedOrder.status <= 1
+                                  ? _c(
+                                      "button",
+                                      {
+                                        staticClass: "btn btn-primary btn-sm",
+                                        attrs: {
+                                          type: "button",
+                                          "data-toggle": "modal",
+                                          "data-target":
+                                            "#ariseEquipment-" +
+                                            info.template.id
+                                        }
+                                      },
+                                      [
+                                        _c("span", {
+                                          staticClass: "fa fa-pencil"
+                                        })
+                                      ]
+                                    )
+                                  : _vm._e()
+                              ])
+                            : _vm._e()
+                        ])
+                      ])
                     }),
                     0
                   )
@@ -66546,7 +66481,7 @@ var render = function() {
         ])
       ]),
       _vm._v(" "),
-      _vm._l(_vm.displayedOrder.order_request_infos, function(info) {
+      _vm._l(_vm.displayedOrder.order_request_infos, function(info, i) {
         return _c(
           "modal-component",
           {
@@ -66580,191 +66515,16 @@ var render = function() {
             )
           },
           [
-            _c("table", { staticClass: "table table-hover" }, [
-              _c("thead", { staticClass: "thead-light" }, [
-                _c("tr", [
-                  _c(
-                    "th",
-                    {
-                      staticClass: "text-center",
-                      staticStyle: { width: "5%" },
-                      attrs: { scope: "col" }
-                    },
-                    [_vm._v("Mã")]
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "th",
-                    {
-                      staticClass: "text-center",
-                      staticStyle: { width: "10%" },
-                      attrs: { scope: "col" }
-                    },
-                    [_vm._v("Giá nhập")]
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "th",
-                    {
-                      staticClass: "text-center",
-                      staticStyle: { width: "12%" },
-                      attrs: { scope: "col" }
-                    },
-                    [_vm._v("Nhà cung cấp")]
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "th",
-                    {
-                      staticClass: "text-center",
-                      staticStyle: { width: "10%" },
-                      attrs: { scope: "col" }
-                    },
-                    [_vm._v("Tình trạng")]
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "th",
-                    {
-                      staticClass: "text-center",
-                      staticStyle: { width: "10%" },
-                      attrs: { scope: "col" }
-                    },
-                    [_vm._v("Trạng thái")]
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "th",
-                    {
-                      staticClass: "text-center",
-                      staticStyle: { width: "15%" },
-                      attrs: { scope: "col" }
-                    },
-                    [_vm._v("Ghi chú")]
-                  ),
-                  _vm._v(" "),
-                  _c("th", {
-                    staticClass: "text-center",
-                    staticStyle: { width: "10%" },
-                    attrs: { scope: "col" }
-                  })
-                ])
-              ]),
-              _vm._v(" "),
-              _c(
-                "tbody",
-                _vm._l(info.template.equipments, function(equipment) {
-                  return _c(
-                    "tr",
-                    {
-                      key: equipment.id,
-                      class: _vm.addEquipmentRowClass(equipment)
-                    },
-                    [
-                      _c(
-                        "th",
-                        {
-                          staticClass: "text-center align-middle",
-                          attrs: { scope: "row" }
-                        },
-                        [_vm._v(_vm._s(equipment.id))]
-                      ),
-                      _vm._v(" "),
-                      _c("td", { staticClass: "text-center align-middle" }, [
-                        _vm._v(
-                          _vm._s(
-                            _vm._f("formatEquipmentPrice")(equipment.price)
-                          )
-                        )
-                      ]),
-                      _vm._v(" "),
-                      _c(
-                        "td",
-                        { staticClass: "text-center align-middle" },
-                        [
-                          _c("supplier-name", {
-                            attrs: { equipment: equipment }
-                          })
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "td",
-                        { staticClass: "text-center align-middle" },
-                        [
-                          _c("equipment-condition", {
-                            attrs: { condition: equipment.condition }
-                          })
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "td",
-                        { staticClass: "align-middle text-center" },
-                        [
-                          _c("equipment-status-popover", {
-                            attrs: { equipment: equipment }
-                          })
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c("td", [_vm._v(_vm._s(equipment.note))]),
-                      _vm._v(" "),
-                      _c("td", { staticClass: "align-middle" }, [
-                        _c(
-                          "button",
-                          {
-                            staticClass: "btn btn-success btn-sm",
-                            attrs: {
-                              disabled: _vm.disablePlusEquipmentButton(
-                                equipment.id,
-                                equipment.status
-                              )
-                            },
-                            on: {
-                              click: function($event) {
-                                return _vm.selectEquipment(
-                                  equipment,
-                                  info.template.id
-                                )
-                              }
-                            }
-                          },
-                          [_c("span", { staticClass: "fa fa-plus" })]
-                        ),
-                        _vm._v(" "),
-                        _c(
-                          "button",
-                          {
-                            staticClass: "btn btn-danger btn-sm",
-                            attrs: {
-                              disabled: _vm.disableMinusEquipmentButton(
-                                equipment.id,
-                                equipment.status
-                              )
-                            },
-                            on: {
-                              click: function($event) {
-                                return _vm.removeEquipment(
-                                  equipment.id,
-                                  info.template.id
-                                )
-                              }
-                            }
-                          },
-                          [_c("span", { staticClass: "fa fa-minus" })]
-                        )
-                      ])
-                    ]
-                  )
-                }),
-                0
-              )
-            ])
-          ]
+            _c("table-select-member", {
+              attrs: { requestInfo: info },
+              on: {
+                change: function($event) {
+                  return _vm.changeMember($event, i)
+                }
+              }
+            })
+          ],
+          1
         )
       }),
       _vm._v(" "),
@@ -68695,7 +68455,7 @@ var render = function() {
               "button",
               {
                 staticClass: "btn btn-success btn-sm",
-                attrs: { disabled: _vm.equipmentSelected(equipment) },
+                attrs: { disabled: _vm.disablePlusButton(equipment) },
                 on: {
                   click: function($event) {
                     return _vm.addEquipment(equipment)
@@ -68709,7 +68469,7 @@ var render = function() {
               "button",
               {
                 staticClass: "btn btn-danger btn-sm",
-                attrs: { disabled: !_vm.equipmentSelected(equipment) },
+                attrs: { disabled: _vm.disableMinusButton(equipment) },
                 on: {
                   click: function($event) {
                     return _vm.removeEquipment(equipment)

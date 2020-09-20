@@ -92,7 +92,7 @@
                             <td class="align-middle text-center">{{ info.template.equipments.length }}</td>
                             <td class="align-middle text-center">{{ info.amount }}</td>
                             <td class="align-middle text-center">
-                                {{ getBorrowedAmount(info.template.id) }}
+                                {{ getBorrowedAmountByInfo(info) }}
                             </td>
                             <td v-if="displayedOrder.status >= 2" class="align-middle text-center font-weight-bold">
                                 {{ getReceivedAmount(info.template.id) }}
@@ -111,20 +111,13 @@
                                 </div>
                             </td>
                         </tr>
-                        <tr>
-                            <td class="align-middle text-center" colspan="6">
-                                <div class="row justify-content-center">
-                                    <!-- Paginator -->
-                                    <pagination :items="searchInputItems" :per="6" @change="pagination($event)"></pagination>
-                                </div>
-                            </td>
-                        </tr>
-                        
-                        
                     </tbody>
                 </table>
+                <div class="row justify-content-center">
+                    <!-- Paginator -->
+                    <pagination :items="searchInputItems" :per="6" @change="pagination($event)"></pagination>
+                </div>
                 <div v-if="displayedOrder.status == 1" >
-
                     <div class="row justify-content-center">
                         <h4>Phát sinh thêm</h4>
                     </div>
@@ -141,7 +134,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr v-for="info in ariseRequest" :key="info.id" :class="rowClass(info)">
+                            <tr v-for="info in ariseRequest" :key="info.id">
                                 <th class="text-center" scope="row"><img :src="info.template.image" height=40 :alt="info.template.name"></th>
                                 <td class="align-middle text-center">{{ info.template.name }}</td>
                                 <td class="align-middle text-center">{{ info.template.equipments.length }}</td>
@@ -178,39 +171,8 @@
                 </div>
             </div>
         </article>
-        <modal-component v-for="info in displayedOrder.order_request_infos" :key="'a' + info.id" :id="'addEquipment-' + info.template.id" :title="'Thêm thiết bị ' + info.template.name" size="xl">
-            <table class="table table-hover">
-                <thead class="thead-light">
-                    <tr>
-                        <th class="text-center" scope="col" style="width: 5%">Mã</th>
-                        <th class="text-center" scope="col" style="width: 10%;">Giá nhập</th>
-                        <th class="text-center" scope="col" style="width: 12%;">Nhà cung cấp</th>
-                        <th class="text-center" scope="col" style="width: 10%;">Tình trạng</th>
-                        <th class="text-center" scope="col" style="width: 10%;">Trạng thái</th>
-                        <th class="text-center" scope="col" style="width: 15%;">Ghi chú</th>
-                        <th class="text-center" scope="col" style="width: 10%;"></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr v-for="equipment in info.template.equipments" :key="equipment.id" :class="addEquipmentRowClass(equipment)">
-                        <th class="text-center align-middle" scope="row">{{ equipment.id }}</th>
-                        <td class="text-center align-middle">{{ equipment.price|formatEquipmentPrice }}</td>
-                        <td class="text-center align-middle">
-                            <supplier-name :equipment="equipment"></supplier-name></td>
-                        <td class="text-center align-middle">
-                            <equipment-condition :condition="equipment.condition"></equipment-condition>
-                        </td>
-                        <td class="align-middle text-center">
-                            <equipment-status-popover :equipment="equipment"></equipment-status-popover>
-                        </td>
-                        <td>{{equipment.note}}</td>
-                        <td class="align-middle">
-                            <button :disabled="disablePlusEquipmentButton(equipment.id, equipment.status)" @click="selectEquipment(equipment, info.template.id)" class="btn btn-success btn-sm"><span class="fa fa-plus"></span></button>
-                            <button :disabled="disableMinusEquipmentButton(equipment.id, equipment.status)" @click="removeEquipment(equipment.id, info.template.id)" class="btn btn-danger btn-sm"><span class="fa fa-minus"></span></button>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+        <modal-component v-for="(info, i) in displayedOrder.order_request_infos" :key="'a' + info.id" :id="'addEquipment-' + info.template.id" :title="'Thêm thiết bị ' + info.template.name" size="xl">
+            <table-select-member @change="changeMember($event, i)" :requestInfo="info"></table-select-member>
             <template v-slot:footer>
                 <button type="button" class="btn btn-primary" data-dismiss="modal">Xong</button>
             </template>
@@ -453,10 +415,17 @@ export default {
                 'text-light': this.getLostAmount(info.template_id) > 0
                 };
         },
+        changeMember(orderInfos, index) {
+            console.log('change member');
+            this.changeRequest(orderInfos, index, this.displayedOrder.order_request_infos);
+        },
         changeAriseMember(orderInfos, index) {
-            let requestInfo = this.ariseRequest[index];
+            this.changeRequest(orderInfos, index, this.ariseRequest);
+        },
+        changeRequest(orderInfos, index, orderRequest) {
+            let requestInfo = orderRequest[index];
             Vue.set(requestInfo, 'order_infos', orderInfos);
-            Vue.set(this.ariseRequest, index, requestInfo);
+            Vue.set(orderRequest, index, requestInfo);
         },
         getBorrowedAmountByInfo(info) {
             return info.order_infos.length;
