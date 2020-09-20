@@ -3781,9 +3781,7 @@ __webpack_require__.r(__webpack_exports__);
   data: function data() {
     return {
       displayedOrder: {},
-      equipmentIds: [],
       buttonDisabled: false,
-      equipmentSelected: [],
       equipmentReceived: [],
       equipmentLost: [],
       orderRequestInfos: [],
@@ -3830,21 +3828,7 @@ __webpack_require__.r(__webpack_exports__);
       });
       this.orderRequestInfos = orderRequestInfos;
     },
-    initializeEquipmentOutput: function initializeEquipmentOutput() {
-      var equipmentSelected = {};
-      var equipmentIds = [];
-      this.displayedOrder.order_request_infos.forEach(function (info) {
-        info.template.equipments.forEach(function (equipment) {
-          equipmentSelected[equipment.id] = false;
-        });
-        info.order_infos.forEach(function (order_info) {
-          equipmentSelected[order_info.equipment_id] = true;
-          equipmentIds.push(order_info.equipment_id);
-        });
-      });
-      this.equipmentSelected = equipmentSelected;
-      this.equipmentIds = equipmentIds;
-    },
+    initializeEquipmentOutput: function initializeEquipmentOutput() {},
     initializeEquipmentReturn: function initializeEquipmentReturn() {
       var equipmentReceived = {};
       var equipmentLost = {};
@@ -3908,11 +3892,6 @@ __webpack_require__.r(__webpack_exports__);
         'table-success': this.getBorrowedAmountByInfo(info) > 0 && this.getBorrowedAmountByInfo(info) == this.getReceivedAmount(info.template_id) + this.getLostAmount(info.template_id)
       };
     },
-    addEquipmentRowClass: function addEquipmentRowClass(equipment) {
-      return {
-        'table-success': this.isEquipmentSelected(equipment.id)
-      };
-    },
     cellLostClass: function cellLostClass(info) {
       return {
         'align-middle': true,
@@ -3923,7 +3902,6 @@ __webpack_require__.r(__webpack_exports__);
       };
     },
     changeMember: function changeMember(orderInfos, index) {
-      console.log('change member');
       this.changeRequest(orderInfos, index, this.displayedOrder.order_request_infos);
     },
     changeAriseMember: function changeAriseMember(orderInfos, index) {

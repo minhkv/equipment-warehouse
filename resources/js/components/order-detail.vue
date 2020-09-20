@@ -268,9 +268,7 @@ export default {
     data() {
         return {
             displayedOrder: {},
-            equipmentIds: [],
             buttonDisabled: false,
-            equipmentSelected: [],
             equipmentReceived: [],
             equipmentLost: [],
             orderRequestInfos: [],
@@ -317,19 +315,7 @@ export default {
             this.orderRequestInfos = orderRequestInfos;
         },
         initializeEquipmentOutput() {
-            let equipmentSelected = {};
-            let equipmentIds = [];
-            this.displayedOrder.order_request_infos.forEach(function(info) {
-                info.template.equipments.forEach(function(equipment) {
-                    equipmentSelected[equipment.id] = false;
-                });
-                info.order_infos.forEach(function(order_info) {
-                    equipmentSelected[order_info.equipment_id] = true;
-                    equipmentIds.push(order_info.equipment_id);
-                });
-            });
-            this.equipmentSelected = equipmentSelected;
-            this.equipmentIds = equipmentIds;
+
         },
         initializeEquipmentReturn() {
             let equipmentReceived = {};
@@ -397,11 +383,6 @@ export default {
                     this.getLostAmount(info.template_id))
             };
         },
-        addEquipmentRowClass(equipment) {
-            return {
-                'table-success': this.isEquipmentSelected(equipment.id),
-            };
-        },
         cellLostClass(info) {
             return {
                 'align-middle': true, 
@@ -412,7 +393,6 @@ export default {
                 };
         },
         changeMember(orderInfos, index) {
-            console.log('change member');
             this.changeRequest(orderInfos, index, this.displayedOrder.order_request_infos);
         },
         changeAriseMember(orderInfos, index) {
