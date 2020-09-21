@@ -72,7 +72,47 @@
                     </div>
                 </div>
 
-                <table-display-info :status="displayedOrder.status" :items="paginationItems"></table-display-info>
+                <table class="table mt-2 table-hover">
+                    <thead class="thead-light">
+                        <tr>
+                            <th class="text-center" scope="col" width="10%"></th>
+                            <th class="text-center" scope="col" width="20%">Tên thiết bị</th>
+                            <th class="text-center" scope="col" width="10%">Số lượng</th>
+                            <th class="text-center" scope="col" width="10%">Yêu cầu</th>
+                            <th class="text-center" scope="col" width="10%">Cho mượn</th>
+                            <th v-if="displayedOrder.status >= 2" class="text-center" scope="col" width="10%">Đã trả</th>
+                            <th v-if="displayedOrder.status >= 2" class="text-center" scope="col" width="10%">Thất lạc</th>
+                            <th class="text-center" scope="col" width="10%"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="info in paginationItems" :key="'arise' + info.id" :class="rowClass(info)">
+                            <th class="text-center" scope="row"><img :src="info.template.image" height=40 :alt="info.template.name"></th>
+                            <td class="align-middle text-center">{{ info.template.name }}</td>
+                            <td class="align-middle text-center">{{ info.template.equipments.length }}</td>
+                            <td class="align-middle text-center">{{ info.amount }}</td>
+                            <td class="align-middle text-center">
+                                {{ getBorrowedAmountByInfo(info) }}
+                            </td>
+                            <td v-if="displayedOrder.status >= 2" class="align-middle text-center font-weight-bold">
+                                {{ getReceivedAmount(info.template.id) }}
+                            </td>
+                            <td v-if="displayedOrder.status >= 2" :class="cellLostClass(info)">
+                                {{ getLostAmount(info.template.id) }}
+                            </td> 
+                            <td class="align-middle text-center">
+                                <div v-if="displayedOrder.status > 0" >
+                                    <button v-if="displayedOrder.status <= 1" type="button" class="btn btn-primary btn-sm" data-toggle="modal" :data-target="'#addEquipment-' + info.template.id">
+                                        <span class="fa fa-pencil"></span>
+                                    </button>
+                                    <button v-else type="button" class="btn btn-primary btn-sm" data-toggle="modal" :data-target="'#verifyEquipment-' + info.template.id">
+                                        <span class="fa fa-pencil"></span>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
                 <div class="row justify-content-center">
                     <!-- Paginator -->
                     <pagination :items="searchInputItems" :per="6" @change="pagination($event)"></pagination>
@@ -199,12 +239,12 @@
                         </td>
                         <td class="align-middle text-center pb-5">
                             <div class="form-check">
-                                <input @change="updateOrderInfoStatus(orderInfo)" :disabled="equipmentLost[orderInfo.equipment_id]" type="checkbox" class="form-check-input" v-model="equipmentReceived[orderInfo.equipment_id]">
+                                <input :disabled="equipmentLost[orderInfo.equipment_id]" type="checkbox" class="form-check-input" v-model="equipmentReceived[orderInfo.equipment_id]">
                             </div>
                         </td>
                         <td class="align-middle text-center pb-5">
                             <div class="form-check">
-                                <input @change="updateOrderInfoStatus(orderInfo)" :disabled="equipmentReceived[orderInfo.equipment_id]" type="checkbox" class="form-check-input" v-model="equipmentLost[orderInfo.equipment_id]">
+                                <input :disabled="equipmentReceived[orderInfo.equipment_id]" type="checkbox" class="form-check-input" v-model="equipmentLost[orderInfo.equipment_id]">
                             </div>
                         </td>
                     </tr>
@@ -339,9 +379,6 @@ export default {
             });
             this.ariseRequest.splice(index, 1);
         },
-        updateOrderInfoStatus(orderInfo) {
-            orderInfo.status = this.getEquipmentStatus(orderInfo.equipment_id);
-        },
         searchInput(items) {
             this.searchInputItems = items;
         },
@@ -359,8 +396,25 @@ export default {
             }
             this.enableButton();
         },
-        
-        
+        rowClass(info) {
+            return {
+                'cursor-pointer': true,
+                'table-success': 
+                    this.getBorrowedAmountByInfo(info) > 0 &&
+                    (this.getBorrowedAmountByInfo(info) == 
+                    this.getReceivedAmount(info.template_id) + 
+                    this.getLostAmount(info.template_id))
+            };
+        },
+        cellLostClass(info) {
+            return {
+                'align-middle': true, 
+                'text-center': true, 
+                'font-weight-bold': true, 
+                'bg-danger': this.getLostAmount(info.template_id) > 0, 
+                'text-light': this.getLostAmount(info.template_id) > 0
+                };
+        },
         updateCurrentEquipment(orderInfos, index) {
             this.updateEquipment(orderInfos, index, this.displayedOrder.order_request_infos);
         },
@@ -371,6 +425,31 @@ export default {
             let requestInfo = orderRequest[index];
             Vue.set(requestInfo, 'order_infos', orderInfos);
             Vue.set(orderRequest, index, requestInfo);
+        },
+        getBorrowedAmountByInfo(info) {
+            return info.order_infos.length;
+        },
+        getReceivedAmount(template_id) {
+            let total = 0;
+            for (let i in this.orderRequestInfos[template_id].order_infos) {
+                let orderInfo = this.orderRequestInfos[template_id].order_infos[i];
+                if (this.equipmentReceived[orderInfo.equipment_id]) {
+                    total += 1;
+                }
+            }
+
+            return total;
+        },
+        getLostAmount(template_id) {
+            let total = 0;
+            for (let i in this.orderRequestInfos[template_id].order_infos) {
+                let orderInfo = this.orderRequestInfos[template_id].order_infos[i];
+                if (this.equipmentLost[orderInfo.equipment_id]) {
+                    total += 1;
+                }
+            }
+
+            return total;
         },
         back() {
             let app = this;
