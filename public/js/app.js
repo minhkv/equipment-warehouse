@@ -3704,55 +3704,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ["categories", "equipmentTemplates", "order", "orderIndexUrl", "acceptUrl", "rejectUrl", "equipmentOutputUrl", "equipmentReturnUrl", "completeUrl", "backUrl"],
@@ -3979,7 +3930,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       for (var j in this.orderRequestInfos[i].order_infos) {
         var orderInfo = this.orderRequestInfos[i].order_infos[j];
 
-        if (!this.equipmentLost[orderInfo.equipment_id] && !this.equipmentReceived[orderInfo.equipment_id]) {
+        if (orderInfo.status == 2) {
           alert('Bạn chưa chọn trạng thái thiết bị ' + this.orderRequestInfos[i].template.name + ' có mã: ' + orderInfo.equipment_id);
           return false;
         }
@@ -3990,8 +3941,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   }), _defineProperty(_methods, "equipmentReturn", function equipmentReturn() {
     console.log('return');
     var app = this;
-    if (!this.equipmentCheck()) return;
-    this.updateOrderInfoStatus();
+    if (!this.equipmentCheck()) return; // this.updateOrderInfoStatus();
+
     console.log(this.orderRequestInfos);
     this.disableButton();
     axios({
@@ -5352,7 +5303,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-/* harmony default export */ __webpack_exports__["default"] = ({});
+/* harmony default export */ __webpack_exports__["default"] = ({
+  props: ['orderInfos', 'status']
+});
 
 /***/ }),
 
@@ -66583,7 +66536,7 @@ var render = function() {
         )
       }),
       _vm._v(" "),
-      _vm._l(this.displayedOrder.order_request_infos, function(info) {
+      _vm._l(_vm.displayedOrder.order_request_infos, function(info) {
         return _c(
           "modal-component",
           {
@@ -66617,359 +66570,14 @@ var render = function() {
             )
           },
           [
-            _c("table", { staticClass: "table table-hover" }, [
-              _c("thead", { staticClass: "thead-light" }, [
-                _c("tr", [
-                  _c(
-                    "th",
-                    {
-                      staticClass: "text-center",
-                      staticStyle: { width: "5%" },
-                      attrs: { scope: "col" }
-                    },
-                    [_vm._v("Mã")]
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "th",
-                    {
-                      staticClass: "text-center",
-                      staticStyle: { width: "20%" },
-                      attrs: { scope: "col" }
-                    },
-                    [_vm._v("Tình trạng trước khi mượn")]
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "th",
-                    {
-                      staticClass: "text-center",
-                      staticStyle: { width: "25%" },
-                      attrs: { scope: "col" }
-                    },
-                    [_vm._v("Tình trạng sau khi mượn")]
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "th",
-                    {
-                      staticClass: "text-center",
-                      staticStyle: { width: "25%" },
-                      attrs: { scope: "col" }
-                    },
-                    [_vm._v("Ghi chú")]
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "th",
-                    { staticClass: "text-center", attrs: { scope: "col" } },
-                    [_vm._v("Đã nhận")]
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "th",
-                    { staticClass: "text-center", attrs: { scope: "col" } },
-                    [_vm._v("Thất lạc")]
-                  )
-                ])
-              ]),
-              _vm._v(" "),
-              _c(
-                "tbody",
-                _vm._l(info.order_infos, function(orderInfo) {
-                  return _c("tr", { key: orderInfo.id }, [
-                    _c(
-                      "th",
-                      {
-                        staticClass: "text-center align-middle",
-                        attrs: { scope: "row" }
-                      },
-                      [
-                        _vm._v(
-                          "\n                        " +
-                            _vm._s(orderInfo.equipment_id) +
-                            "\n                    "
-                        )
-                      ]
-                    ),
-                    _vm._v(" "),
-                    _c(
-                      "td",
-                      { staticClass: "text-center align-middle" },
-                      [
-                        _c("equipment-condition", {
-                          attrs: { condition: orderInfo.condition_before }
-                        })
-                      ],
-                      1
-                    ),
-                    _vm._v(" "),
-                    _c("td", { staticClass: "text-center align-middle" }, [
-                      _vm.displayedOrder.status <= 2
-                        ? _c("div", { attrs: { id: orderInfo.equipment_id } }, [
-                            _c("div", { staticClass: "dropdown" }, [
-                              _c(
-                                "select",
-                                {
-                                  directives: [
-                                    {
-                                      name: "model",
-                                      rawName: "v-model",
-                                      value: orderInfo.condition_received,
-                                      expression: "orderInfo.condition_received"
-                                    }
-                                  ],
-                                  staticClass: "custom-select mx-0",
-                                  on: {
-                                    change: function($event) {
-                                      var $$selectedVal = Array.prototype.filter
-                                        .call($event.target.options, function(
-                                          o
-                                        ) {
-                                          return o.selected
-                                        })
-                                        .map(function(o) {
-                                          var val =
-                                            "_value" in o ? o._value : o.value
-                                          return val
-                                        })
-                                      _vm.$set(
-                                        orderInfo,
-                                        "condition_received",
-                                        $event.target.multiple
-                                          ? $$selectedVal
-                                          : $$selectedVal[0]
-                                      )
-                                    }
-                                  }
-                                },
-                                [
-                                  _c(
-                                    "option",
-                                    { attrs: { selected: "", value: "1" } },
-                                    [
-                                      _c("equipment-condition", {
-                                        attrs: { condition: 1 }
-                                      })
-                                    ],
-                                    1
-                                  ),
-                                  _vm._v(" "),
-                                  _c(
-                                    "option",
-                                    { attrs: { value: "2" } },
-                                    [
-                                      _c("equipment-condition", {
-                                        attrs: { condition: 2 }
-                                      })
-                                    ],
-                                    1
-                                  ),
-                                  _vm._v(" "),
-                                  _c(
-                                    "option",
-                                    { attrs: { value: "0" } },
-                                    [
-                                      _c("equipment-condition", {
-                                        attrs: { condition: 0 }
-                                      })
-                                    ],
-                                    1
-                                  )
-                                ]
-                              )
-                            ])
-                          ])
-                        : _c(
-                            "div",
-                            [
-                              _c("equipment-condition", {
-                                attrs: {
-                                  condition: orderInfo.condition_received
-                                }
-                              })
-                            ],
-                            1
-                          )
-                    ]),
-                    _vm._v(" "),
-                    _c("td", { staticClass: "text-center" }, [
-                      _vm.displayedOrder.status <= 2
-                        ? _c("textarea", {
-                            directives: [
-                              {
-                                name: "model",
-                                rawName: "v-model",
-                                value: orderInfo.note,
-                                expression: "orderInfo.note"
-                              }
-                            ],
-                            staticClass: "form-control",
-                            attrs: { name: "note", cols: "10" },
-                            domProps: { value: orderInfo.note },
-                            on: {
-                              input: function($event) {
-                                if ($event.target.composing) {
-                                  return
-                                }
-                                _vm.$set(orderInfo, "note", $event.target.value)
-                              }
-                            }
-                          })
-                        : _c("div", [_vm._v(_vm._s(orderInfo.note))])
-                    ]),
-                    _vm._v(" "),
-                    _c("td", { staticClass: "align-middle text-center pb-5" }, [
-                      _c("div", { staticClass: "form-check" }, [
-                        _c("input", {
-                          directives: [
-                            {
-                              name: "model",
-                              rawName: "v-model",
-                              value:
-                                _vm.equipmentReceived[orderInfo.equipment_id],
-                              expression:
-                                "equipmentReceived[orderInfo.equipment_id]"
-                            }
-                          ],
-                          staticClass: "form-check-input",
-                          attrs: {
-                            disabled: _vm.equipmentLost[orderInfo.equipment_id],
-                            type: "checkbox"
-                          },
-                          domProps: {
-                            checked: Array.isArray(
-                              _vm.equipmentReceived[orderInfo.equipment_id]
-                            )
-                              ? _vm._i(
-                                  _vm.equipmentReceived[orderInfo.equipment_id],
-                                  null
-                                ) > -1
-                              : _vm.equipmentReceived[orderInfo.equipment_id]
-                          },
-                          on: {
-                            change: [
-                              function($event) {
-                                var $$a =
-                                    _vm.equipmentReceived[
-                                      orderInfo.equipment_id
-                                    ],
-                                  $$el = $event.target,
-                                  $$c = $$el.checked ? true : false
-                                if (Array.isArray($$a)) {
-                                  var $$v = null,
-                                    $$i = _vm._i($$a, $$v)
-                                  if ($$el.checked) {
-                                    $$i < 0 &&
-                                      _vm.$set(
-                                        _vm.equipmentReceived,
-                                        orderInfo.equipment_id,
-                                        $$a.concat([$$v])
-                                      )
-                                  } else {
-                                    $$i > -1 &&
-                                      _vm.$set(
-                                        _vm.equipmentReceived,
-                                        orderInfo.equipment_id,
-                                        $$a
-                                          .slice(0, $$i)
-                                          .concat($$a.slice($$i + 1))
-                                      )
-                                  }
-                                } else {
-                                  _vm.$set(
-                                    _vm.equipmentReceived,
-                                    orderInfo.equipment_id,
-                                    $$c
-                                  )
-                                }
-                              },
-                              function($event) {
-                                return _vm.updateOrderInfoStatus(orderInfo)
-                              }
-                            ]
-                          }
-                        })
-                      ])
-                    ]),
-                    _vm._v(" "),
-                    _c("td", { staticClass: "align-middle text-center pb-5" }, [
-                      _c("div", { staticClass: "form-check" }, [
-                        _c("input", {
-                          directives: [
-                            {
-                              name: "model",
-                              rawName: "v-model",
-                              value: _vm.equipmentLost[orderInfo.equipment_id],
-                              expression:
-                                "equipmentLost[orderInfo.equipment_id]"
-                            }
-                          ],
-                          staticClass: "form-check-input",
-                          attrs: {
-                            disabled:
-                              _vm.equipmentReceived[orderInfo.equipment_id],
-                            type: "checkbox"
-                          },
-                          domProps: {
-                            checked: Array.isArray(
-                              _vm.equipmentLost[orderInfo.equipment_id]
-                            )
-                              ? _vm._i(
-                                  _vm.equipmentLost[orderInfo.equipment_id],
-                                  null
-                                ) > -1
-                              : _vm.equipmentLost[orderInfo.equipment_id]
-                          },
-                          on: {
-                            change: [
-                              function($event) {
-                                var $$a =
-                                    _vm.equipmentLost[orderInfo.equipment_id],
-                                  $$el = $event.target,
-                                  $$c = $$el.checked ? true : false
-                                if (Array.isArray($$a)) {
-                                  var $$v = null,
-                                    $$i = _vm._i($$a, $$v)
-                                  if ($$el.checked) {
-                                    $$i < 0 &&
-                                      _vm.$set(
-                                        _vm.equipmentLost,
-                                        orderInfo.equipment_id,
-                                        $$a.concat([$$v])
-                                      )
-                                  } else {
-                                    $$i > -1 &&
-                                      _vm.$set(
-                                        _vm.equipmentLost,
-                                        orderInfo.equipment_id,
-                                        $$a
-                                          .slice(0, $$i)
-                                          .concat($$a.slice($$i + 1))
-                                      )
-                                  }
-                                } else {
-                                  _vm.$set(
-                                    _vm.equipmentLost,
-                                    orderInfo.equipment_id,
-                                    $$c
-                                  )
-                                }
-                              },
-                              function($event) {
-                                return _vm.updateOrderInfoStatus(orderInfo)
-                              }
-                            ]
-                          }
-                        })
-                      ])
-                    ])
-                  ])
-                }),
-                0
-              )
-            ])
-          ]
+            _c("table-verify-equipment", {
+              attrs: {
+                orderInfos: info.order_infos,
+                status: _vm.displayedOrder.status
+              }
+            })
+          ],
+          1
         )
       }),
       _vm._v(" "),
@@ -68790,7 +68398,7 @@ var render = function() {
     _vm._v(" "),
     _c(
       "tbody",
-      _vm._l(_vm.info.order_infos, function(orderInfo) {
+      _vm._l(_vm.orderInfos, function(orderInfo) {
         return _c("tr", { key: orderInfo.id }, [
           _c(
             "th",
@@ -68819,7 +68427,7 @@ var render = function() {
           ),
           _vm._v(" "),
           _c("td", { staticClass: "text-center align-middle" }, [
-            _vm.displayedOrder.status <= 2
+            _vm.status <= 2
               ? _c("div", { attrs: { id: orderInfo.equipment_id } }, [
                   _c("div", { staticClass: "dropdown" }, [
                     _c(
@@ -68857,7 +68465,7 @@ var render = function() {
                       [
                         _c(
                           "option",
-                          { attrs: { selected: "", value: "1" } },
+                          { attrs: { value: "1" } },
                           [
                             _c("equipment-condition", {
                               attrs: { condition: 1 }
@@ -68903,7 +68511,7 @@ var render = function() {
           ]),
           _vm._v(" "),
           _c("td", { staticClass: "text-center" }, [
-            _vm.displayedOrder.status <= 2
+            _vm.status <= 2
               ? _c("textarea", {
                   directives: [
                     {
@@ -68928,121 +68536,56 @@ var render = function() {
               : _c("div", [_vm._v(_vm._s(orderInfo.note))])
           ]),
           _vm._v(" "),
-          _c("td", { staticClass: "align-middle text-center pb-5" }, [
-            _c("div", { staticClass: "form-check" }, [
-              _c("input", {
-                directives: [
+          _c("td", { staticClass: "text-center align-middle" }, [
+            _c("div", [
+              _c("div", { staticClass: "dropdown" }, [
+                _c(
+                  "select",
                   {
-                    name: "model",
-                    rawName: "v-model",
-                    value: _vm.equipmentReceived[orderInfo.equipment_id],
-                    expression: "equipmentReceived[orderInfo.equipment_id]"
-                  }
-                ],
-                staticClass: "form-check-input",
-                attrs: {
-                  disabled: _vm.equipmentLost[orderInfo.equipment_id],
-                  type: "checkbox"
-                },
-                domProps: {
-                  checked: Array.isArray(
-                    _vm.equipmentReceived[orderInfo.equipment_id]
-                  )
-                    ? _vm._i(
-                        _vm.equipmentReceived[orderInfo.equipment_id],
-                        null
-                      ) > -1
-                    : _vm.equipmentReceived[orderInfo.equipment_id]
-                },
-                on: {
-                  change: function($event) {
-                    var $$a = _vm.equipmentReceived[orderInfo.equipment_id],
-                      $$el = $event.target,
-                      $$c = $$el.checked ? true : false
-                    if (Array.isArray($$a)) {
-                      var $$v = null,
-                        $$i = _vm._i($$a, $$v)
-                      if ($$el.checked) {
-                        $$i < 0 &&
-                          _vm.$set(
-                            _vm.equipmentReceived,
-                            orderInfo.equipment_id,
-                            $$a.concat([$$v])
-                          )
-                      } else {
-                        $$i > -1 &&
-                          _vm.$set(
-                            _vm.equipmentReceived,
-                            orderInfo.equipment_id,
-                            $$a.slice(0, $$i).concat($$a.slice($$i + 1))
-                          )
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: orderInfo.status,
+                        expression: "orderInfo.status"
                       }
-                    } else {
-                      _vm.$set(
-                        _vm.equipmentReceived,
-                        orderInfo.equipment_id,
-                        $$c
-                      )
-                    }
-                  }
-                }
-              })
-            ])
-          ]),
-          _vm._v(" "),
-          _c("td", { staticClass: "align-middle text-center pb-5" }, [
-            _c("div", { staticClass: "form-check" }, [
-              _c("input", {
-                directives: [
-                  {
-                    name: "model",
-                    rawName: "v-model",
-                    value: _vm.equipmentLost[orderInfo.equipment_id],
-                    expression: "equipmentLost[orderInfo.equipment_id]"
-                  }
-                ],
-                staticClass: "form-check-input",
-                attrs: {
-                  disabled: _vm.equipmentReceived[orderInfo.equipment_id],
-                  type: "checkbox"
-                },
-                domProps: {
-                  checked: Array.isArray(
-                    _vm.equipmentLost[orderInfo.equipment_id]
-                  )
-                    ? _vm._i(_vm.equipmentLost[orderInfo.equipment_id], null) >
-                      -1
-                    : _vm.equipmentLost[orderInfo.equipment_id]
-                },
-                on: {
-                  change: function($event) {
-                    var $$a = _vm.equipmentLost[orderInfo.equipment_id],
-                      $$el = $event.target,
-                      $$c = $$el.checked ? true : false
-                    if (Array.isArray($$a)) {
-                      var $$v = null,
-                        $$i = _vm._i($$a, $$v)
-                      if ($$el.checked) {
-                        $$i < 0 &&
-                          _vm.$set(
-                            _vm.equipmentLost,
-                            orderInfo.equipment_id,
-                            $$a.concat([$$v])
-                          )
-                      } else {
-                        $$i > -1 &&
-                          _vm.$set(
-                            _vm.equipmentLost,
-                            orderInfo.equipment_id,
-                            $$a.slice(0, $$i).concat($$a.slice($$i + 1))
-                          )
+                    ],
+                    staticClass: "custom-select mx-0",
+                    on: {
+                      change: function($event) {
+                        var $$selectedVal = Array.prototype.filter
+                          .call($event.target.options, function(o) {
+                            return o.selected
+                          })
+                          .map(function(o) {
+                            var val = "_value" in o ? o._value : o.value
+                            return val
+                          })
+                        _vm.$set(
+                          orderInfo,
+                          "status",
+                          $event.target.multiple
+                            ? $$selectedVal
+                            : $$selectedVal[0]
+                        )
                       }
-                    } else {
-                      _vm.$set(_vm.equipmentLost, orderInfo.equipment_id, $$c)
                     }
-                  }
-                }
-              })
+                  },
+                  [
+                    _c("option", { attrs: { value: "2" } }, [
+                      _vm._v("Đang cho mượn")
+                    ]),
+                    _vm._v(" "),
+                    _c("option", { attrs: { value: "1" } }, [
+                      _vm._v("Đã nhận")
+                    ]),
+                    _vm._v(" "),
+                    _c("option", { attrs: { value: "0" } }, [
+                      _vm._v("Thất lạc")
+                    ])
+                  ]
+                )
+              ])
             ])
           ])
         ])
@@ -69099,11 +68642,7 @@ var staticRenderFns = [
         ),
         _vm._v(" "),
         _c("th", { staticClass: "text-center", attrs: { scope: "col" } }, [
-          _vm._v("Đã nhận")
-        ]),
-        _vm._v(" "),
-        _c("th", { staticClass: "text-center", attrs: { scope: "col" } }, [
-          _vm._v("Thất lạc")
+          _vm._v("Trạng thái")
         ])
       ])
     ])
