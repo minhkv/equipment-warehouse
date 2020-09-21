@@ -218,13 +218,13 @@ class OrderController extends Controller
         
         try {
             $this->storeAriseRequest($request, $order);
-            // $this->checkEquipmentsAvailable($request, $order);
-            // $this->createOrUpdateOrderInfo($request, $order);
-            // $this->updateEquipmentStatus($request, $order);
-            // $order->update([
-            //     'status' => 2, //output
-            //     'date_output' => date_format($dateOutput, 'Y-m-d H:i:s')
-            // ]);
+            $this->checkEquipmentsAvailable($request, $order);
+            $this->createOrUpdateOrderInfo($request, $order);
+            $this->updateEquipmentStatus($request, $order);
+            $order->update([
+                'status' => 2, //output
+                'date_output' => date_format($dateOutput, 'Y-m-d H:i:s')
+            ]);
         } catch(Exception $e) {
             return json_encode((object) [
                 'error' => $e->getMessage()
@@ -233,8 +233,13 @@ class OrderController extends Controller
         return $this->loadOrder($order);
     }
     public function storeAriseRequest(Request $request, Order $order) {
-        $ariseRequestInfos = $request->input('ariseRequestInfos');
-        foreach($ariseRequestInfos as $info) {
+        $orderRequestInfos = $request->input('orderRequestInfos');
+        foreach($orderRequestInfos as $info) {
+            // Check if requestInfo exist
+            if($order->orderRequestInfos()->where('template_id', $info['template_id'])->count() > 0) {
+                continue;
+            }
+            // Create new request info
             $order->orderRequestInfos()->create([
                 'template_id' => $info['template_id'],
                 'amount' => $info['amount'],

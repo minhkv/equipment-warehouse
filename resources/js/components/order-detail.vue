@@ -186,7 +186,7 @@
             </div>
         </article>
         <modal-component v-for="(info, i) in displayedOrder.order_request_infos" :key="'a' + info.id" :id="'addEquipment-' + info.template.id" :title="'Thêm thiết bị ' + info.template.name" size="xl">
-            <table-select-equipment @change="updateEquipment($event, i)" :requestInfo="info"></table-select-equipment>
+            <table-select-equipment @change="updateCurrentEquipment($event, i)" :requestInfo="info"></table-select-equipment>
             <template v-slot:footer>
                 <button type="button" class="btn btn-primary" data-dismiss="modal">Xong</button>
             </template>
@@ -415,7 +415,7 @@ export default {
                 'text-light': this.getLostAmount(info.template_id) > 0
                 };
         },
-        updateEquipment(orderInfos, index) {
+        updateCurrentEquipment(orderInfos, index) {
             this.updateEquipment(orderInfos, index, this.displayedOrder.order_request_infos);
         },
         updateAriseEquipment(orderInfos, index) {
@@ -506,13 +506,16 @@ export default {
             let app = this;
             if(!this.equipmentCheckBorrowedAmount()) return;
             this.disableButton();
+            this.ariseRequest.forEach(request => {
+                Vue.set(this.orderRequestInfos, request.template_id, request);
+            });
+            this.ariseRequest = [];
             axios({
                 url: this.equipmentOutputUrl,
                 method: 'put',
                 data: {
                     equipments: this.equipmentIds,
                     orderRequestInfos: this.orderRequestInfos,
-                    ariseRequestInfos: this.ariseRequest,
                     dateOutput: this.getCurrentLocalTime()
                 }
             })
