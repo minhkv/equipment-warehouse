@@ -126,10 +126,11 @@
                         <thead class="thead-light">
                             <tr>
                                 <th class="text-center" scope="col" width="10%"></th>
-                                <th class="text-center" scope="col" width="20%">Tên thiết bị</th>
+                                <th class="text-center" scope="col" width="50%">Tên thiết bị</th>
                                 <th class="text-center" scope="col" width="10%">Số lượng</th>
                                 <th class="text-center" scope="col" width="10%">Yêu cầu</th>
                                 <th class="text-center" scope="col" width="10%">Cho mượn</th>
+                                <th class="text-center pr-1" scope="col" width="5%"></th>
                                 <th class="text-center" scope="col" width="10%"></th>
                             </tr>
                         </thead>
@@ -137,8 +138,18 @@
                             <tr v-for="info in ariseRequest" :key="info.id">
                                 <th class="text-center" scope="row"><img :src="info.template.image" height=40 :alt="info.template.name"></th>
                                 <td class="align-middle text-center">{{ info.template.name }}</td>
-                                <td class="align-middle text-center">{{ info.template.equipments.length }}</td>
-                                <td class="align-middle text-center">{{ info.amount }}</td>
+                                <td class="align-middle text-center">
+                                    {{ info.template.equipments.length }}</td>
+                                <td class="align-middle text-center">
+                                    <input 
+                                        class="form-control" 
+                                        type="number" 
+                                        name="amount" 
+                                        min='0' 
+                                        :max='info.template.maxAmount' 
+                                        v-model="info.template.amount"
+                                        >
+                                    </td>
                                 <td class="align-middle text-center">
                                     {{ getBorrowedAmountByInfo(info) }}
                                 </td>
@@ -149,6 +160,9 @@
                                             <span class="fa fa-pencil"></span>
                                         </button>
                                     </div>
+                                </td>
+                                <td class="align-middle text-center">
+                                    <button @click="removeAriseRequest(info)" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></button>
                                 </td>
                             </tr>
                         </tbody>
@@ -242,7 +256,7 @@
         </modal-component>
 
         <modal-component id="addEquipment" title="Thiết bị phát sinh thêm" size="lg">
-            <table-select-equipment @change="ariseTemplate($event)" :items="equipmentTemplates" :selectedItems="selectedTemplates" :categories="categories"></table-select-equipment>
+            <table-select-equipment @change="updateAriseRequest($event)" :items="equipmentTemplates" :disabledItems="selectedTemplates" :categories="categories"></table-select-equipment>
             <template v-slot:footer>
                 <button type="button" class="btn btn-primary" data-dismiss="modal">Xong</button>
             </template>
@@ -343,8 +357,7 @@ export default {
                 };
             });
         },
-        ariseTemplate(equipmentTemplates) {
-            console.log('arise');
+        updateAriseRequest(equipmentTemplates) {
             let app = this;
             let arise = [];
             this.ariseRequest = equipmentTemplates.map(function(template) {
@@ -357,6 +370,12 @@ export default {
                     template_id: template.id
                 });
             });
+        },
+        removeAriseRequest(request) {
+            let index = this.ariseRequest.findIndex(req => {
+                return req.template.id == request.template.id;
+            });
+            this.ariseRequest.splice(index, 1);
         },
         searchInput(items) {
             this.searchInputItems = items;

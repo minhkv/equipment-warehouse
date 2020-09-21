@@ -73,7 +73,7 @@
 </template>
 <script>
 export default {
-    props: ['items', 'categories', 'selectedItems'],
+    props: ['items', 'categories', 'disabledItems'],
     data() {
         return {
             buttonDisabled: {},
@@ -100,13 +100,13 @@ export default {
         },
         initSelectedTemplates() {
             let app = this;
-            this.selectedItems.forEach((item) => {
+            this.disabledItems.forEach((item) => {
                 app.add(item);
             });
         },
         initButton() {
             let app = this;
-            this.selectedItems.forEach(function(item) {
+            this.disabledItems.forEach(function(item) {
                 Vue.set(app.notInclude, item.id, item);
             });
         },

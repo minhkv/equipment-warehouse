@@ -43,8 +43,16 @@ export default {
     created() {
         this.init();
     },
+    watch: {
+        requestInfo: function() {
+            this.setDisplayedInfo();
+        }
+    },
     methods: {
         init() {
+            this.setDisplayedInfo();
+        },
+        setDisplayedInfo() {
             this.displayedInfo = Object.assign({}, this.displayedInfo, this.requestInfo);
         },
         rowClass(equipment) {
