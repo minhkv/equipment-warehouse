@@ -3809,7 +3809,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       paginationItems: [],
       selectedTemplates: [],
       ariseRequest: [],
-      removeArise: {}
+      templateNeedToRemove: {}
     };
   },
   created: function created() {
@@ -3889,7 +3889,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       });
     },
     removeAriseRequest: function removeAriseRequest(request) {
-      this.removeArise = request;
+      this.templateNeedToRemove = request;
       var index = this.ariseRequest.findIndex(function (req) {
         return req.template.id == request.template.id;
       });
@@ -3904,6 +3904,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     updatePage: function updatePage(data) {
       if (data.error) {
         alert(data.error);
+      } else if (data.test) {
+        alert(data.test);
       } else {
         this.setOrder(data);
         this.initialize();
@@ -4016,6 +4018,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       data: {
         equipments: this.equipmentIds,
         orderRequestInfos: this.orderRequestInfos,
+        ariseRequestInfos: this.ariseRequest,
         dateOutput: this.getCurrentLocalTime()
       }
     }).then(function (res) {
@@ -67027,7 +67030,7 @@ var render = function() {
               items: _vm.equipmentTemplates,
               disabledTemplates: _vm.selectedTemplates,
               categories: _vm.categories,
-              templateNeedToRemove: _vm.removeArise.template
+              templateNeedToRemove: _vm.templateNeedToRemove.template
             },
             on: {
               change: function($event) {

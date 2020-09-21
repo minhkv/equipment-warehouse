@@ -215,20 +215,31 @@ class OrderController extends Controller
     public function equipmentOutput(Request $request, Order $order) {
         $orderRequestInfos = $request->input('orderRequestInfos');
         $dateOutput = date_create($request->input('dateOutput'));
+        
         try {
-            $this->checkEquipmentsAvailable($request, $order);
-            $this->createOrUpdateOrderInfo($request, $order);
-            $this->updateEquipmentStatus($request, $order);
-            $order->update([
-                'status' => 2, //output
-                'date_output' => date_format($dateOutput, 'Y-m-d H:i:s')
-            ]);
+            $this->storeAriseRequest($request, $order);
+            // $this->checkEquipmentsAvailable($request, $order);
+            // $this->createOrUpdateOrderInfo($request, $order);
+            // $this->updateEquipmentStatus($request, $order);
+            // $order->update([
+            //     'status' => 2, //output
+            //     'date_output' => date_format($dateOutput, 'Y-m-d H:i:s')
+            // ]);
         } catch(Exception $e) {
             return json_encode((object) [
                 'error' => $e->getMessage()
             ]);
         }
         return $this->loadOrder($order);
+    }
+    public function storeAriseRequest(Request $request, Order $order) {
+        $ariseRequestInfos = $request->input('ariseRequestInfos');
+        foreach($ariseRequestInfos as $info) {
+            $order->orderRequestInfos()->create([
+                'template_id' => $info['template_id'],
+                'amount' => $info['amount'],
+            ]);            
+        }
     }
     public function checkEquipmentAvailable(Equipment $equipment) {
         return $equipment->orderInfos()->where('status', 2)->count() == 0 &&

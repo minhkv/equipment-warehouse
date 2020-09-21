@@ -256,7 +256,7 @@
         </modal-component>
 
         <modal-component id="addAriseTemplate" title="Thiết bị phát sinh thêm" size="lg">
-            <table-select-template @change="updateAriseRequest($event)" :items="equipmentTemplates" :disabledTemplates="selectedTemplates" :categories="categories" :templateNeedToRemove="removeArise.template"></table-select-template>
+            <table-select-template @change="updateAriseRequest($event)" :items="equipmentTemplates" :disabledTemplates="selectedTemplates" :categories="categories" :templateNeedToRemove="templateNeedToRemove.template"></table-select-template>
             <template v-slot:footer>
                 <button type="button" class="btn btn-primary" data-dismiss="modal">Xong</button>
             </template>
@@ -292,7 +292,7 @@ export default {
             paginationItems: [],
             selectedTemplates: [],
             ariseRequest: [],
-            removeArise: {}
+            templateNeedToRemove: {}
         };
     },
     created() {
@@ -373,7 +373,7 @@ export default {
             });
         },
         removeAriseRequest(request) {
-            this.removeArise = request;
+            this.templateNeedToRemove = request;
             let index = this.ariseRequest.findIndex(req => {
                 return req.template.id == request.template.id;
             });
@@ -388,6 +388,8 @@ export default {
         updatePage(data) {
             if(data.error) {
                 alert(data.error);
+            } else if(data.test) {
+                alert(data.test);
             } else {
                 this.setOrder(data);
                 this.initialize();
@@ -510,6 +512,7 @@ export default {
                 data: {
                     equipments: this.equipmentIds,
                     orderRequestInfos: this.orderRequestInfos,
+                    ariseRequestInfos: this.ariseRequest,
                     dateOutput: this.getCurrentLocalTime()
                 }
             })
