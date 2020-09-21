@@ -117,7 +117,7 @@
                     <!-- Paginator -->
                     <pagination :items="searchInputItems" :per="6" @change="pagination($event)"></pagination>
                 </div>
-                <div v-if="displayedOrder.status == 1" >
+                <div v-if="displayedOrder.status == 1 && ariseRequest.length > 0" >
                     <div class="row justify-content-center">
                         <h4>Phát sinh thêm</h4>
                     </div>
@@ -170,7 +170,7 @@
                     
                 </div>
                 <div v-if="displayedOrder.status == 1" class="row justify-content-center">
-                    <button type="button" class="btn btn-success btn-lg" data-toggle="modal" data-target="#addEquipment">
+                    <button type="button" class="btn btn-success btn-lg" data-toggle="modal" data-target="#addAriseTemplate">
                         Thêm thiết bị
                     </button>
                 </div>
@@ -186,14 +186,14 @@
             </div>
         </article>
         <modal-component v-for="(info, i) in displayedOrder.order_request_infos" :key="'a' + info.id" :id="'addEquipment-' + info.template.id" :title="'Thêm thiết bị ' + info.template.name" size="xl">
-            <table-select-member @change="changeMember($event, i)" :requestInfo="info"></table-select-member>
+            <table-select-equipment @change="updateEquipment($event, i)" :requestInfo="info"></table-select-equipment>
             <template v-slot:footer>
                 <button type="button" class="btn btn-primary" data-dismiss="modal">Xong</button>
             </template>
         </modal-component>
 
         <modal-component v-for="(info, i) in ariseRequest" :key="'arise' + i" :id="'ariseEquipment-' + info.template.id" :title="'Thêm thiết bị ' + info.template.name" size="xl">
-            <table-select-member @change="changeAriseMember($event, i)" :requestInfo="info"></table-select-member>
+            <table-select-equipment @change="updateAriseEquipment($event, i)" :requestInfo="info"></table-select-equipment>
             <template v-slot:footer>
                 <button type="button" class="btn btn-primary" data-dismiss="modal">Xong</button>
             </template>
@@ -255,8 +255,8 @@
             </template>
         </modal-component>
 
-        <modal-component id="addEquipment" title="Thiết bị phát sinh thêm" size="lg">
-            <table-select-equipment @change="updateAriseRequest($event)" :items="equipmentTemplates" :disabledItems="selectedTemplates" :categories="categories"></table-select-equipment>
+        <modal-component id="addAriseTemplate" title="Thiết bị phát sinh thêm" size="lg">
+            <table-select-template @change="updateAriseRequest($event)" :items="equipmentTemplates" :disabledTemplates="selectedTemplates" :categories="categories" :templateNeedToRemove="removeArise.template"></table-select-template>
             <template v-slot:footer>
                 <button type="button" class="btn btn-primary" data-dismiss="modal">Xong</button>
             </template>
@@ -292,6 +292,7 @@ export default {
             paginationItems: [],
             selectedTemplates: [],
             ariseRequest: [],
+            removeArise: {}
         };
     },
     created() {
@@ -372,6 +373,7 @@ export default {
             });
         },
         removeAriseRequest(request) {
+            this.removeArise = request;
             let index = this.ariseRequest.findIndex(req => {
                 return req.template.id == request.template.id;
             });
@@ -411,13 +413,13 @@ export default {
                 'text-light': this.getLostAmount(info.template_id) > 0
                 };
         },
-        changeMember(orderInfos, index) {
-            this.changeRequest(orderInfos, index, this.displayedOrder.order_request_infos);
+        updateEquipment(orderInfos, index) {
+            this.updateEquipment(orderInfos, index, this.displayedOrder.order_request_infos);
         },
-        changeAriseMember(orderInfos, index) {
-            this.changeRequest(orderInfos, index, this.ariseRequest);
+        updateAriseEquipment(orderInfos, index) {
+            this.updateEquipment(orderInfos, index, this.ariseRequest);
         },
-        changeRequest(orderInfos, index, orderRequest) {
+        updateEquipment(orderInfos, index, orderRequest) {
             let requestInfo = orderRequest[index];
             Vue.set(requestInfo, 'order_infos', orderInfos);
             Vue.set(orderRequest, index, requestInfo);
@@ -486,8 +488,16 @@ export default {
                 });
         },
         equipmentCheckBorrowedAmount() {
-            
-            return true;
+            return this.checkRequestAmount(this.displayedOrder.order_request_infos) &&
+                this.checkRequestAmount(this.ariseRequest);
+        },
+        checkRequestAmount(requestInfos){
+            return requestInfos.every(info => {
+                if(info.order_infos.length == 0) {
+                    alert("Số lượng mượn của thiết bị " + info.template.name + " phải > 0");
+                }
+                return info.order_infos && info.order_infos.length > 0;
+            });
         },
         equipmentOutput() {
             console.log('equipmentOutput');
@@ -495,21 +505,21 @@ export default {
             if(!this.equipmentCheckBorrowedAmount()) return;
             this.disableButton();
             axios({
-                    url: this.equipmentOutputUrl,
-                    method: 'put',
-                    data: {
-                        equipments: this.equipmentIds,
-                        orderRequestInfos: this.orderRequestInfos,
-                        dateOutput: this.getCurrentLocalTime()
-                    }
-                })
-                .then(function(res) {
-                    console.log(res);
-                    app.updatePage(res.data);
-                })
-                .catch(function(error) { 
-                    console.log(error);
-                });
+                url: this.equipmentOutputUrl,
+                method: 'put',
+                data: {
+                    equipments: this.equipmentIds,
+                    orderRequestInfos: this.orderRequestInfos,
+                    dateOutput: this.getCurrentLocalTime()
+                }
+            })
+            .then(function(res) {
+                console.log(res);
+                app.updatePage(res.data);
+            })
+            .catch(function(error) { 
+                console.log(error);
+            });
         },
         getEquipmentStatus(equipmentId) {
             if (this.equipmentReceived[equipmentId])

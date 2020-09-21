@@ -86,9 +86,9 @@ Vue.component('table-component',require('./components/table-component.vue').defa
 Vue.component('table-history',require('./components/table-history.vue').default);
 Vue.component('equipment-info',require('./components/equipment-info.vue').default);
 Vue.component('equipment-status-popover',require('./components/equipment-status-popover.vue').default);
+Vue.component('table-select-template',require('./components/table-select-template.vue').default);
 Vue.component('table-select-equipment',require('./components/table-select-equipment.vue').default);
-Vue.component('table-select-member',require('./components/table-select-member.vue').default);
-Vue.component('table-verify-member',require('./components/table-verify-member.vue').default);
+Vue.component('table-verify-equipment',require('./components/table-verify-equipment.vue').default);
 Vue.component('test',require('./components/test.vue').default);
 
 var app = new Vue({
