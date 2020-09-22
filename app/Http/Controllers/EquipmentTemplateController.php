@@ -70,7 +70,9 @@ class EquipmentTemplateController extends Controller
     public function show(EquipmentTemplate $equipmentTemplate)
     {
         $suppliers = Supplier::all();
+        $categories = Category::all();
         $equipmentTemplate->load([
+            'category',
             'equipments',
             'equipments.supplier',
             'equipments.orderInfos',
@@ -78,7 +80,8 @@ class EquipmentTemplateController extends Controller
             ]);
         return view('equipment-detail')->with([
             'equipmentTemplate' => $equipmentTemplate,
-            'suppliers' => $suppliers
+            'suppliers' => $suppliers,
+            'categories' => $categories
         ]);
     }
 
@@ -110,7 +113,7 @@ class EquipmentTemplateController extends Controller
             $request->imageFile->storeAs('img', $fileName, 'public');
             $equipmentTemplate->update(['image' => '/storage/img/'.$fileName]);
         } 
-        return $equipmentTemplate;
+        return $equipmentTemplate->load(['category']);
     }
 
     /**

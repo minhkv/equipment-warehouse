@@ -17,9 +17,10 @@
             </div>
             <div class="col-md-8">
                 <h2><b>{{template.name}}</b>
-                    <button class="btn btn-primary" type="button" data-toggle="modal" data-target="#editName">
+                    <button class="btn btn-primary" type="button" data-toggle="modal" data-target="#editInfo">
                         <i class="fa fa-pencil"></i></button>
                 </h2>
+                <p><b>Loại thiết bị:</b> {{ template.category.name }}</p>
                 <p><b>Số lượng thiết bị:</b> {{ template.equipments.length }}</p>
             </div>
         </div>
@@ -78,14 +79,15 @@
             </div>
         </div>
 
-        <modal-component id="editName" title="Chỉnh sửa tên">
+        <modal-component id="editInfo" title="Chỉnh sửa thông tin">
             <div class="form-group">
                 <label for="equipmentName">Nhập tên mới</label>
                 <input type="text" class="form-control" id="equipmentName" name="name" v-model="templateName">
             </div>
+            <selector v-model="templateCategoryId" title="Loại thiết bị" :items="categories" labelAtt="name" valueAtt="id"></selector>
             <template v-slot:footer>
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
-                <button type="button" class="btn btn-primary" @click="updateName()">Lưu thay đổi</button>
+                <button type="button" class="btn btn-primary" @click="updateInfo()">Lưu thay đổi</button>
             </template>
         </modal-component>
         <modal-component id="editImage" title="Chọn ảnh">
@@ -120,11 +122,13 @@
             "equipmentCreateUrl",
             "equipmentTemplate",
             "suppliers",
+            "categories",
         ],
         data() {
             return {
                 template: {},
                 templateName: '',
+                templateCategoryId: '',
                 imageFile: "",
                 file: "",
             };
@@ -136,6 +140,7 @@
             init() {
                 this.template = this.equipmentTemplate;
                 this.templateName = this.template.name;
+                this.templateCategoryId = this.template.category_id;
             },            
             getOrder(orderInfo) {
                 return orderInfo.order_request_info.order;
@@ -198,16 +203,20 @@
                 }
                 return true;
             },
-            updateName() {
-                console.log('updateName');
+            updateInfo() {
+                console.log('updateInfo');
                 if(!this.validateName()) return;
                 let formData = new FormData();
                 let app = this;
                 let headers = {};
                 formData.append("name", this.templateName);
+                formData.append("category_id", this.templateCategoryId);
+
                 this.sendUpdateTemplateRequest(formData, headers, function(res) {
                     app.template.name = res.data.name;
-                    app.closeModal('#editName');
+                    app.template.category_id = res.data.category_id;
+                    app.template.category = res.data.category;
+                    app.closeModal('#editInfo');
                 });
             },
             addEquipment(equipment) {

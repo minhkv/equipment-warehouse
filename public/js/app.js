@@ -2161,12 +2161,15 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ["equipmentTemplateIndexUrl", "equipmentTemplateUpdateUrl", "equipmentIndexUrl", "equipmentCreateUrl", "equipmentTemplate", "suppliers"],
+  props: ["equipmentTemplateIndexUrl", "equipmentTemplateUpdateUrl", "equipmentIndexUrl", "equipmentCreateUrl", "equipmentTemplate", "suppliers", "categories"],
   data: function data() {
     return {
       template: {},
       templateName: '',
+      templateCategoryId: '',
       imageFile: "",
       file: ""
     };
@@ -2178,6 +2181,7 @@ __webpack_require__.r(__webpack_exports__);
     init: function init() {
       this.template = this.equipmentTemplate;
       this.templateName = this.template.name;
+      this.templateCategoryId = this.template.category_id;
     },
     getOrder: function getOrder(orderInfo) {
       return orderInfo.order_request_info.order;
@@ -2240,16 +2244,19 @@ __webpack_require__.r(__webpack_exports__);
 
       return true;
     },
-    updateName: function updateName() {
-      console.log('updateName');
+    updateInfo: function updateInfo() {
+      console.log('updateInfo');
       if (!this.validateName()) return;
       var formData = new FormData();
       var app = this;
       var headers = {};
       formData.append("name", this.templateName);
+      formData.append("category_id", this.templateCategoryId);
       this.sendUpdateTemplateRequest(formData, headers, function (res) {
         app.template.name = res.data.name;
-        app.closeModal('#editName');
+        app.template.category_id = res.data.category_id;
+        app.template.category = res.data.category;
+        app.closeModal('#editInfo');
       });
     },
     addEquipment: function addEquipment(equipment) {
@@ -3882,20 +3889,12 @@ __webpack_require__.r(__webpack_exports__);
         Vue.set(_this.orderRequestInfos, request.template_id, request);
       });
       this.ariseRequest = [];
-      axios({
-        url: this.equipmentOutputUrl,
-        method: 'put',
-        data: {
-          equipments: this.equipmentIds,
-          orderRequestInfos: this.orderRequestInfos,
-          dateOutput: this.getCurrentLocalTime()
-        }
-      }).then(function (res) {
-        console.log(res);
-        app.updatePage(res.data);
-      })["catch"](function (error) {
-        console.log(error);
-      });
+      var data = {
+        equipments: this.equipmentIds,
+        orderRequestInfos: this.orderRequestInfos,
+        dateOutput: this.getCurrentLocalTime()
+      };
+      this.sendRequest(this.equipmentOutputUrl, 'put', data);
     },
     equipmentCheck: function equipmentCheck() {
       for (var i in this.orderRequestInfos) {
@@ -3942,6 +3941,18 @@ __webpack_require__.r(__webpack_exports__);
           orderRequestInfos: this.orderRequestInfos,
           dateCompleted: this.getCurrentLocalTime()
         }
+      }).then(function (res) {
+        console.log(res);
+        app.updatePage(res.data);
+      })["catch"](function (error) {
+        console.log(error);
+      });
+    },
+    sendRequest: function sendRequest(url, method, data) {
+      axios({
+        url: url,
+        method: method,
+        data: data
       }).then(function (res) {
         console.log(res);
         app.updatePage(res.data);
@@ -4628,8 +4639,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ["items", "labelAtt", "valueAtt", "value"],
+  props: ["title", "items", "labelAtt", "valueAtt", "value"],
   data: function data() {
     return {};
   },
@@ -63408,6 +63420,11 @@ var render = function() {
           ]),
           _vm._v(" "),
           _c("p", [
+            _c("b", [_vm._v("Loại thiết bị:")]),
+            _vm._v(" " + _vm._s(_vm.template.category.name))
+          ]),
+          _vm._v(" "),
+          _c("p", [
             _c("b", [_vm._v("Số lượng thiết bị:")]),
             _vm._v(" " + _vm._s(_vm.template.equipments.length))
           ])
@@ -63545,7 +63562,7 @@ var render = function() {
       _c(
         "modal-component",
         {
-          attrs: { id: "editName", title: "Chỉnh sửa tên" },
+          attrs: { id: "editInfo", title: "Chỉnh sửa thông tin" },
           scopedSlots: _vm._u([
             {
               key: "footer",
@@ -63567,7 +63584,7 @@ var render = function() {
                       attrs: { type: "button" },
                       on: {
                         click: function($event) {
-                          return _vm.updateName()
+                          return _vm.updateInfo()
                         }
                       }
                     },
@@ -63606,8 +63623,25 @@ var render = function() {
                 }
               }
             })
-          ])
-        ]
+          ]),
+          _vm._v(" "),
+          _c("selector", {
+            attrs: {
+              title: "Loại thiết bị",
+              items: _vm.categories,
+              labelAtt: "name",
+              valueAtt: "id"
+            },
+            model: {
+              value: _vm.templateCategoryId,
+              callback: function($$v) {
+                _vm.templateCategoryId = $$v
+              },
+              expression: "templateCategoryId"
+            }
+          })
+        ],
+        1
       ),
       _vm._v(" "),
       _c(
@@ -63795,7 +63829,7 @@ var staticRenderFns = [
         attrs: {
           type: "button",
           "data-toggle": "modal",
-          "data-target": "#editName"
+          "data-target": "#editInfo"
         }
       },
       [_c("i", { staticClass: "fa fa-pencil" })]
@@ -67834,6 +67868,8 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "form-group" }, [
+    _vm.title ? _c("label", [_vm._v(_vm._s(_vm.title))]) : _vm._e(),
+    _vm._v(" "),
     _c(
       "select",
       {

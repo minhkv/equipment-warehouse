@@ -1,5 +1,6 @@
 <template>
     <div class="form-group">
+        <label v-if="title">{{title}}</label>
         <select
             v-bind:value="value"
             v-on:input="$emit('input', $event.target.value)"
@@ -15,7 +16,7 @@
 </template>
 <script>
 export default {
-    props: ["items", "labelAtt", "valueAtt", "value"],
+    props: ["title", "items", "labelAtt", "valueAtt", "value"],
     data() {
         return {};
     },

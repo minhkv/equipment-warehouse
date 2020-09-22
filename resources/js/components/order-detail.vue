@@ -370,22 +370,12 @@ export default {
                 Vue.set(this.orderRequestInfos, request.template_id, request);
             });
             this.ariseRequest = [];
-            axios({
-                url: this.equipmentOutputUrl,
-                method: 'put',
-                data: {
-                    equipments: this.equipmentIds,
-                    orderRequestInfos: this.orderRequestInfos,
-                    dateOutput: this.getCurrentLocalTime()
-                }
-            })
-            .then(function(res) {
-                console.log(res);
-                app.updatePage(res.data);
-            })
-            .catch(function(error) { 
-                console.log(error);
-            });
+            let data = {
+                equipments: this.equipmentIds,
+                orderRequestInfos: this.orderRequestInfos,
+                dateOutput: this.getCurrentLocalTime()
+            };
+            this.sendRequest(this.equipmentOutputUrl, 'put', data);
         },
         equipmentCheck() {
             for (let i in this.orderRequestInfos) {
@@ -441,6 +431,20 @@ export default {
                 .catch(function(error) {
                     console.log(error);
                 });
+        },
+        sendRequest(url, method, data) {
+            axios({
+                url: url,
+                method: method,
+                data: data
+            })
+            .then(function(res) {
+                console.log(res);
+                app.updatePage(res.data);
+            })
+            .catch(function(error) { 
+                console.log(error);
+            });
         },
         enableButton() {
             this.buttonDisabled = false;

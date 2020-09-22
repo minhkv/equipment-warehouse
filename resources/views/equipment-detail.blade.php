@@ -7,5 +7,6 @@
     :equipment-create-url="{{ json_encode(route('equipment.store')) }}"
     :equipment-template="{{ json_encode($equipmentTemplate) }}"
     :suppliers="{{ json_encode($suppliers) }}"
+    :categories="{{ json_encode($categories) }}"
     ></equipment-detail>
 @endsection
