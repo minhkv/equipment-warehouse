@@ -175,12 +175,11 @@ class OrderController extends Controller
             foreach($order->orderRequestInfos as $orderRequestInfo) {
                 foreach($orderRequestInfo->orderInfos as $orderInfo) {
                     if($order->status == 2) {
-                        $orderInfo->equipment->update([
-                            'status' => 1
-                            ]);
+                        $orderInfo->equipment->update(['status' => 1]);
                         $orderInfo->update([
-                            'status' => 3   // pending
-                        ]);
+                            'backing' => 1,
+                            'status' => 3
+                            ]); // backing
                     } 
                 }
             }
@@ -188,7 +187,6 @@ class OrderController extends Controller
         $order->update([
             'status' => $order->status - 1
             ]);
-        
         return $this->loadOrder($order);
     }
 
@@ -271,12 +269,17 @@ class OrderController extends Controller
             // Create new orderInfo
             foreach($orderRequestInfos[$template_id]['order_infos'] as $orderInfo){
                 $equipment = Equipment::where('id', $orderInfo['equipment_id'])->first();
-                $equipment->orderInfos()->where('status', 3)->delete();
+                $equipment->orderInfos()->where('backing', 1)->delete();
                 $orderRequestInfoModel->orderInfos()->create([
                     'equipment_id' => $orderInfo['equipment_id'],
                     'condition_before' => $orderInfo['condition_before'],
                 ]);
             }
+        }
+    }
+    public function checkOrderInfoExisted($currentOrderInfos, $newOrderInfos) {
+        foreach($newOrderInfos as $newOrderInfo) {
+            
         }
     }
     public function updateEquipmentStatus(Request $request, Order $order) {

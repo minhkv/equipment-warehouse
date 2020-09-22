@@ -14,6 +14,7 @@ class OrderInfo extends Model
         'condition_before',
         'condition_received',
         'status',
+        'backing',
         'date_received',
         'note',
     ];

@@ -2,6 +2,7 @@
     <table class="table mt-2 table-hover">
         <thead class="thead-light">
             <tr>
+                <th class="text-center" scope="col" width="5%">Mã</th>
                 <th class="text-center" scope="col" width="10%"></th>
                 <th class="text-center" scope="col" width="20%">Tên thiết bị</th>
                 <th class="text-center" scope="col" width="10%">Số lượng</th>
@@ -14,7 +15,8 @@
         </thead>
         <tbody>
             <tr v-for="info in items" :key="'arise' + info.id" :class="rowClass(info)">
-                <th class="text-center" scope="row"><img :src="info.template.image" height=40 :alt="info.template.name"></th>
+                <th class=" align-middle text-center" scope="row">{{info.id}}</th>
+                <td class="align-middle text-center"><img :src="info.template.image" height=40 :alt="info.template.name"></td>
                 <td class="align-middle text-center">{{ info.template.name }}</td>
                 <td class="align-middle text-center">{{ info.template.equipments.length }}</td>
                 <td class="align-middle text-center">{{ info.amount }}</td>

@@ -1,150 +1,147 @@
 <template>
     <div class="container">
-        <article class="card">
-            <div class="card-body">
-                <!-- <div class="row"> -->
-                <a :href="orderIndexUrl" class="btn btn-outline-dark mb-3" data-abc="true">
-                    <i class="fa fa-chevron-left"></i> Quay lại
-                </a>
-                <h3>Đơn mượn: {{order.id}} 
-                    <order-status :status="displayedOrder.status"></order-status>
-                </h3>
-                <div class="col-10 mx-auto py-3">
-                    <div class="row">
-                        <label class="col-3 text-left"><strong><i class="fa fa-user"></i> Người mượn</strong></label>
-                        <label class="col-3 text-left">{{order.guest_name}}</label>
-                        <label class="col-3 text-left"><strong><i class="fa fa-calendar"></i> Ngày mượn</strong></label>
-                        <label class="col-3 text-left">{{order.date_borrowed|formatDate}}</label>
-                    </div>
-                    <div class="row">
-                        <label class="col-3 text-left"><strong><i class="fa fa-building"></i> Phòng ban</strong></label>
-                        <label class="col-3 text-left">{{order.department}}</label>
-                        <label class="col-3 text-left"><strong><i class="fa fa-calendar"></i> Ngày hẹn trả</strong></label>
-                        <label class="col-3 text-left">{{order.date_return|formatDate}}</label>
-                    </div>
-                    <div class="row">
-                        <label class="col-3 text-left"><strong>Mượn lâu dài:</strong></label>
-                        <label class="col-3 text-left"> {{order.long_term|formatBoolean}}</label>
-                        <label class="col-3 text-left"><strong>Lý do:</strong></label>
-                        <label class="col-3 text-left">{{order.reason}}</label>
-                    </div>
-                    <div class="row">
-                        <label class="col-3 offset-3 text-left"><strong>Ghi chú:</strong></label>
-                        <label class="col-6 text-left">{{order.note}}</label>
-                    </div>
-                </div>
-                
-                <div class="track">
-                    <div :class="{'step': true, 'active': displayedOrder.status >=0}">
-                        <span class="icon"> <i class="fa fa-book"></i> </span>
-                        <span class="text">Tạo đơn hàng</span>
-                        <span class="text-muted">{{order.created_at|formatDate}}</span>
-                    </div>
-                    <div :class="{'step': true, 'active': displayedOrder.status >=1}">
-                        <span class="icon"> <i class="fa fa-check"></i> </span>
-                        <span class="text">Chấp nhận</span>
-                        <span class="text-muted">{{order.date_approved|formatDate}}</span>
-                    </div>
-                    <div :class="{'step': true, 'active': displayedOrder.status >=2}">
-                        <span class="icon"> <i class="fa fa-user"></i> </span>
-                        <span class="text"> Xuất đồ</span>
-                        <span class="text-muted">{{order.date_output|formatDate}}</span>
-                    </div>
-                    <div :class="{'step': true, 'active': displayedOrder.status >=3}">
-                        <span class="icon"> <i class="fa fa-truck"></i> </span>
-                        <span class="text"> Trả đồ </span>
-                        <span class="text-muted">{{order.date_received|formatDate}}</span>
-                    </div>
-                    <div :class="{'step': true, 'active': displayedOrder.status >=4}">
-                        <span class="icon"> <i class="fa fa-thumbs-up"></i> </span>
-                        <span class="text">Hoàn tất</span>
-                        <span class="text-muted">{{order.date_completed|formatDate}}</span>
-                    </div>
-                </div>
-                <hr>
-                <div class="row justify-content-center">
-                    <order-title :status="displayedOrder.status"></order-title>
-                </div>
-                <div class="row mb-4">
-                    <div class="col-6 mx-auto">
-                        <!-- Search -->
-                        <search-input :items="this.displayedOrder.order_request_infos" :by="['template.name']" @change="searchInput($event)"></search-input>
-                    </div>
-                </div>
 
-                <table-display-info :status="displayedOrder.status" :items="paginationItems"></table-display-info>
-                <div class="row justify-content-center">
-                    <!-- Paginator -->
-                    <pagination :items="searchInputItems" :per="6" @change="pagination($event)"></pagination>
-                </div>
-                <div v-if="displayedOrder.status == 1 && ariseRequest.length > 0" >
-                    <div class="row justify-content-center">
-                        <h4>Phát sinh thêm</h4>
-                    </div>
-
-                    <table class="table table-hover">
-                        <thead class="thead-light">
-                            <tr>
-                                <th class="text-center" scope="col" width="10%"></th>
-                                <th class="text-center" scope="col" width="50%">Tên thiết bị</th>
-                                <th class="text-center" scope="col" width="10%">Số lượng</th>
-                                <th class="text-center" scope="col" width="10%">Yêu cầu</th>
-                                <th class="text-center" scope="col" width="10%">Cho mượn</th>
-                                <th class="text-center pr-1" scope="col" width="5%"></th>
-                                <th class="text-center" scope="col" width="10%"></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr v-for="info in ariseRequest" :key="info.id">
-                                <th class="text-center" scope="row"><img :src="info.template.image" height=40 :alt="info.template.name"></th>
-                                <td class="align-middle text-center">{{ info.template.name }}</td>
-                                <td class="align-middle text-center">
-                                    {{ info.template.equipments.length }}</td>
-                                <td class="align-middle text-center">
-                                    <input 
-                                        class="form-control" 
-                                        type="number" 
-                                        name="amount" 
-                                        min='0' 
-                                        :max='info.template.maxAmount' 
-                                        v-model="info.template.amount"
-                                        >
-                                    </td>
-                                <td class="align-middle text-center">
-                                    {{ getBorrowedAmountByInfo(info) }}
-                                </td>
-                                
-                                <td class="align-middle text-center">
-                                    <div v-if="displayedOrder.status > 0" >
-                                        <button v-if="displayedOrder.status <= 1" type="button" class="btn btn-primary btn-sm" data-toggle="modal" :data-target="'#ariseEquipment-' + info.template.id">
-                                            <span class="fa fa-pencil"></span>
-                                        </button>
-                                    </div>
-                                </td>
-                                <td class="align-middle text-center">
-                                    <button @click="removeAriseRequest(info)" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></button>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    
-                </div>
-                <div v-if="displayedOrder.status == 1" class="row justify-content-center">
-                    <button type="button" class="btn btn-success btn-lg" data-toggle="modal" data-target="#addAriseTemplate">
-                        Thêm thiết bị
-                    </button>
-                </div>
-                <hr>
-                <div class="row justify-content-center">
-                    <button v-if="displayedOrder.status >= 1 && displayedOrder.status <= 3" :disabled="buttonDisabled" @click="back" class="btn btn-secondary mr-2">Quay lại</button>
-                    <button v-if="displayedOrder.status == 0" :disabled="buttonDisabled" @click="acceptOrder" class="btn btn-primary mx-2" data-abc="true">Chấp nhận</button>
-                    <button v-if="displayedOrder.status == 0" :disabled="buttonDisabled" @click="rejectOrder" class="btn btn-danger" data-abc="true">Từ chối</button>
-                    <button v-if="displayedOrder.status == 1" :disabled="buttonDisabled" @click="equipmentOutput" class="btn btn-primary" data-abc="true">Xuất đồ</button>
-                    <button v-if="displayedOrder.status == 2" :disabled="buttonDisabled" @click="equipmentReturn" class="btn btn-primary" data-abc="true">Trả đồ</button>
-                    <button v-if="displayedOrder.status == 3" :disabled="buttonDisabled" @click="completeOrder" class="btn btn-primary" data-abc="true">Hoàn tất</button>
-                </div>
+        <a :href="orderIndexUrl" class="btn btn-outline-dark mb-3" data-abc="true">
+            <i class="fa fa-chevron-left"></i> Quay lại
+        </a>
+        <h3>Đơn mượn: {{order.id}} 
+            <order-status :status="displayedOrder.status"></order-status>
+        </h3>
+        <div class="col-10 mx-auto py-3">
+            <div class="row">
+                <label class="col-3 text-left"><strong><i class="fa fa-user"></i> Người mượn</strong></label>
+                <label class="col-3 text-left">{{order.guest_name}}</label>
+                <label class="col-3 text-left"><strong><i class="fa fa-calendar"></i> Ngày mượn</strong></label>
+                <label class="col-3 text-left">{{order.date_borrowed|formatDate}}</label>
             </div>
-        </article>
+            <div class="row">
+                <label class="col-3 text-left"><strong><i class="fa fa-building"></i> Phòng ban</strong></label>
+                <label class="col-3 text-left">{{order.department}}</label>
+                <label class="col-3 text-left"><strong><i class="fa fa-calendar"></i> Ngày hẹn trả</strong></label>
+                <label class="col-3 text-left">{{order.date_return|formatDate}}</label>
+            </div>
+            <div class="row">
+                <label class="col-3 text-left"><strong>Mượn lâu dài:</strong></label>
+                <label class="col-3 text-left"> {{order.long_term|formatBoolean}}</label>
+                <label class="col-3 text-left"><strong>Lý do:</strong></label>
+                <label class="col-3 text-left">{{order.reason}}</label>
+            </div>
+            <div class="row">
+                <label class="col-3 offset-3 text-left"><strong>Ghi chú:</strong></label>
+                <label class="col-6 text-left">{{order.note}}</label>
+            </div>
+        </div>
+        
+        <div class="track">
+            <div :class="{'step': true, 'active': displayedOrder.status >=0}">
+                <span class="icon"> <i class="fa fa-book"></i> </span>
+                <span class="text">Tạo đơn hàng</span>
+                <span class="text-muted">{{order.created_at|formatDate}}</span>
+            </div>
+            <div :class="{'step': true, 'active': displayedOrder.status >=1}">
+                <span class="icon"> <i class="fa fa-check"></i> </span>
+                <span class="text">Chấp nhận</span>
+                <span class="text-muted">{{order.date_approved|formatDate}}</span>
+            </div>
+            <div :class="{'step': true, 'active': displayedOrder.status >=2}">
+                <span class="icon"> <i class="fa fa-user"></i> </span>
+                <span class="text"> Xuất đồ</span>
+                <span class="text-muted">{{order.date_output|formatDate}}</span>
+            </div>
+            <div :class="{'step': true, 'active': displayedOrder.status >=3}">
+                <span class="icon"> <i class="fa fa-truck"></i> </span>
+                <span class="text"> Trả đồ </span>
+                <span class="text-muted">{{order.date_received|formatDate}}</span>
+            </div>
+            <div :class="{'step': true, 'active': displayedOrder.status >=4}">
+                <span class="icon"> <i class="fa fa-thumbs-up"></i> </span>
+                <span class="text">Hoàn tất</span>
+                <span class="text-muted">{{order.date_completed|formatDate}}</span>
+            </div>
+        </div>
+        <hr>
+        <div class="row justify-content-center">
+            <order-title :status="displayedOrder.status"></order-title>
+        </div>
+        <div class="row mb-4">
+            <div class="col-6 mx-auto">
+                <!-- Search -->
+                <search-input :items="this.displayedOrder.order_request_infos" :by="['template.name']" @change="searchInput($event)"></search-input>
+            </div>
+        </div>
+
+        <table-display-info :status="displayedOrder.status" :items="paginationItems"></table-display-info>
+        <div class="row justify-content-center">
+            <!-- Paginator -->
+            <pagination :items="searchInputItems" :per="6" @change="pagination($event)"></pagination>
+        </div>
+        <div v-if="displayedOrder.status == 1 && ariseRequest.length > 0" >
+            <div class="row justify-content-center">
+                <h4>Phát sinh thêm</h4>
+            </div>
+
+            <table class="table table-hover">
+                <thead class="thead-light">
+                    <tr>
+                        <th class="text-center" scope="col" width="10%"></th>
+                        <th class="text-center" scope="col" width="50%">Tên thiết bị</th>
+                        <th class="text-center" scope="col" width="10%">Số lượng</th>
+                        <th class="text-center" scope="col" width="10%">Yêu cầu</th>
+                        <th class="text-center" scope="col" width="10%">Cho mượn</th>
+                        <th class="text-center pr-1" scope="col" width="5%"></th>
+                        <th class="text-center" scope="col" width="10%"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="info in ariseRequest" :key="info.id">
+                        <th class="text-center" scope="row"><img :src="info.template.image" height=40 :alt="info.template.name"></th>
+                        <td class="align-middle text-center">{{ info.template.name }}</td>
+                        <td class="align-middle text-center">
+                            {{ info.template.equipments.length }}</td>
+                        <td class="align-middle text-center">
+                            <input 
+                                class="form-control" 
+                                type="number" 
+                                name="amount" 
+                                min='0' 
+                                :max='info.template.maxAmount' 
+                                v-model="info.template.amount"
+                                >
+                            </td>
+                        <td class="align-middle text-center">
+                            {{ getBorrowedAmountByInfo(info) }}
+                        </td>
+                        
+                        <td class="align-middle text-center">
+                            <div v-if="displayedOrder.status > 0" >
+                                <button v-if="displayedOrder.status <= 1" type="button" class="btn btn-primary btn-sm" data-toggle="modal" :data-target="'#ariseEquipment-' + info.template.id">
+                                    <span class="fa fa-pencil"></span>
+                                </button>
+                            </div>
+                        </td>
+                        <td class="align-middle text-center">
+                            <button @click="removeAriseRequest(info)" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            
+        </div>
+        <div v-if="displayedOrder.status == 1" class="row justify-content-center">
+            <button type="button" class="btn btn-success btn-lg" data-toggle="modal" data-target="#addAriseTemplate">
+                Thêm thiết bị
+            </button>
+        </div>
+        <hr>
+        <div class="row justify-content-center">
+            <button v-if="displayedOrder.status >= 1 && displayedOrder.status <= 3" :disabled="buttonDisabled" @click="back" class="btn btn-secondary mr-2">Quay lại</button>
+            <button v-if="displayedOrder.status == 0" :disabled="buttonDisabled" @click="acceptOrder" class="btn btn-primary mx-2" data-abc="true">Chấp nhận</button>
+            <button v-if="displayedOrder.status == 0" :disabled="buttonDisabled" @click="rejectOrder" class="btn btn-danger" data-abc="true">Từ chối</button>
+            <button v-if="displayedOrder.status == 1" :disabled="buttonDisabled" @click="equipmentOutput" class="btn btn-primary" data-abc="true">Xuất đồ</button>
+            <button v-if="displayedOrder.status == 2" :disabled="buttonDisabled" @click="equipmentReturn" class="btn btn-primary" data-abc="true">Trả đồ</button>
+            <button v-if="displayedOrder.status == 3" :disabled="buttonDisabled" @click="completeOrder" class="btn btn-primary" data-abc="true">Hoàn tất</button>
+        </div>
+
         <modal-component v-for="(info, i) in displayedOrder.order_request_infos" :key="'a' + info.id" :id="'addEquipment-' + info.template.id" :title="'Thêm thiết bị ' + info.template.name" size="xl">
             <table-select-equipment @change="updateCurrentEquipment($event, i)" :requestInfo="info"></table-select-equipment>
             <template v-slot:footer>

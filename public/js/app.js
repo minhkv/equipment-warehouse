@@ -3705,9 +3705,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ["categories", "equipmentTemplates", "order", "orderIndexUrl", "acceptUrl", "rejectUrl", "equipmentOutputUrl", "equipmentReturnUrl", "completeUrl", "backUrl"],
@@ -4979,6 +4976,8 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+//
+//
 //
 //
 //
@@ -66213,501 +66212,413 @@ var render = function() {
     "div",
     { staticClass: "container" },
     [
-      _c("article", { staticClass: "card" }, [
+      _c(
+        "a",
+        {
+          staticClass: "btn btn-outline-dark mb-3",
+          attrs: { href: _vm.orderIndexUrl, "data-abc": "true" }
+        },
+        [
+          _c("i", { staticClass: "fa fa-chevron-left" }),
+          _vm._v(" Quay lại\n    ")
+        ]
+      ),
+      _vm._v(" "),
+      _c(
+        "h3",
+        [
+          _vm._v("Đơn mượn: " + _vm._s(_vm.order.id) + " \n        "),
+          _c("order-status", { attrs: { status: _vm.displayedOrder.status } })
+        ],
+        1
+      ),
+      _vm._v(" "),
+      _c("div", { staticClass: "col-10 mx-auto py-3" }, [
+        _c("div", { staticClass: "row" }, [
+          _vm._m(0),
+          _vm._v(" "),
+          _c("label", { staticClass: "col-3 text-left" }, [
+            _vm._v(_vm._s(_vm.order.guest_name))
+          ]),
+          _vm._v(" "),
+          _vm._m(1),
+          _vm._v(" "),
+          _c("label", { staticClass: "col-3 text-left" }, [
+            _vm._v(_vm._s(_vm._f("formatDate")(_vm.order.date_borrowed)))
+          ])
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "row" }, [
+          _vm._m(2),
+          _vm._v(" "),
+          _c("label", { staticClass: "col-3 text-left" }, [
+            _vm._v(_vm._s(_vm.order.department))
+          ]),
+          _vm._v(" "),
+          _vm._m(3),
+          _vm._v(" "),
+          _c("label", { staticClass: "col-3 text-left" }, [
+            _vm._v(_vm._s(_vm._f("formatDate")(_vm.order.date_return)))
+          ])
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "row" }, [
+          _vm._m(4),
+          _vm._v(" "),
+          _c("label", { staticClass: "col-3 text-left" }, [
+            _vm._v(" " + _vm._s(_vm._f("formatBoolean")(_vm.order.long_term)))
+          ]),
+          _vm._v(" "),
+          _vm._m(5),
+          _vm._v(" "),
+          _c("label", { staticClass: "col-3 text-left" }, [
+            _vm._v(_vm._s(_vm.order.reason))
+          ])
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "row" }, [
+          _vm._m(6),
+          _vm._v(" "),
+          _c("label", { staticClass: "col-6 text-left" }, [
+            _vm._v(_vm._s(_vm.order.note))
+          ])
+        ])
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "track" }, [
         _c(
           "div",
-          { staticClass: "card-body" },
+          { class: { step: true, active: _vm.displayedOrder.status >= 0 } },
           [
-            _c(
-              "a",
-              {
-                staticClass: "btn btn-outline-dark mb-3",
-                attrs: { href: _vm.orderIndexUrl, "data-abc": "true" }
-              },
-              [
-                _c("i", { staticClass: "fa fa-chevron-left" }),
-                _vm._v(" Quay lại\n            ")
-              ]
-            ),
+            _vm._m(7),
             _vm._v(" "),
-            _c(
-              "h3",
-              [
-                _vm._v(
-                  "Đơn mượn: " + _vm._s(_vm.order.id) + " \n                "
-                ),
-                _c("order-status", {
-                  attrs: { status: _vm.displayedOrder.status }
-                })
-              ],
-              1
-            ),
+            _c("span", { staticClass: "text" }, [_vm._v("Tạo đơn hàng")]),
             _vm._v(" "),
-            _c("div", { staticClass: "col-10 mx-auto py-3" }, [
-              _c("div", { staticClass: "row" }, [
-                _vm._m(0),
-                _vm._v(" "),
-                _c("label", { staticClass: "col-3 text-left" }, [
-                  _vm._v(_vm._s(_vm.order.guest_name))
-                ]),
-                _vm._v(" "),
-                _vm._m(1),
-                _vm._v(" "),
-                _c("label", { staticClass: "col-3 text-left" }, [
-                  _vm._v(_vm._s(_vm._f("formatDate")(_vm.order.date_borrowed)))
-                ])
-              ]),
-              _vm._v(" "),
-              _c("div", { staticClass: "row" }, [
-                _vm._m(2),
-                _vm._v(" "),
-                _c("label", { staticClass: "col-3 text-left" }, [
-                  _vm._v(_vm._s(_vm.order.department))
-                ]),
-                _vm._v(" "),
-                _vm._m(3),
-                _vm._v(" "),
-                _c("label", { staticClass: "col-3 text-left" }, [
-                  _vm._v(_vm._s(_vm._f("formatDate")(_vm.order.date_return)))
-                ])
-              ]),
-              _vm._v(" "),
-              _c("div", { staticClass: "row" }, [
-                _vm._m(4),
-                _vm._v(" "),
-                _c("label", { staticClass: "col-3 text-left" }, [
-                  _vm._v(
-                    " " + _vm._s(_vm._f("formatBoolean")(_vm.order.long_term))
-                  )
-                ]),
-                _vm._v(" "),
-                _vm._m(5),
-                _vm._v(" "),
-                _c("label", { staticClass: "col-3 text-left" }, [
-                  _vm._v(_vm._s(_vm.order.reason))
-                ])
-              ]),
-              _vm._v(" "),
-              _c("div", { staticClass: "row" }, [
-                _vm._m(6),
-                _vm._v(" "),
-                _c("label", { staticClass: "col-6 text-left" }, [
-                  _vm._v(_vm._s(_vm.order.note))
-                ])
-              ])
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "track" }, [
-              _c(
-                "div",
-                {
-                  class: { step: true, active: _vm.displayedOrder.status >= 0 }
-                },
-                [
-                  _vm._m(7),
-                  _vm._v(" "),
-                  _c("span", { staticClass: "text" }, [_vm._v("Tạo đơn hàng")]),
-                  _vm._v(" "),
-                  _c("span", { staticClass: "text-muted" }, [
-                    _vm._v(_vm._s(_vm._f("formatDate")(_vm.order.created_at)))
-                  ])
-                ]
-              ),
-              _vm._v(" "),
-              _c(
-                "div",
-                {
-                  class: { step: true, active: _vm.displayedOrder.status >= 1 }
-                },
-                [
-                  _vm._m(8),
-                  _vm._v(" "),
-                  _c("span", { staticClass: "text" }, [_vm._v("Chấp nhận")]),
-                  _vm._v(" "),
-                  _c("span", { staticClass: "text-muted" }, [
-                    _vm._v(
-                      _vm._s(_vm._f("formatDate")(_vm.order.date_approved))
-                    )
-                  ])
-                ]
-              ),
-              _vm._v(" "),
-              _c(
-                "div",
-                {
-                  class: { step: true, active: _vm.displayedOrder.status >= 2 }
-                },
-                [
-                  _vm._m(9),
-                  _vm._v(" "),
-                  _c("span", { staticClass: "text" }, [_vm._v(" Xuất đồ")]),
-                  _vm._v(" "),
-                  _c("span", { staticClass: "text-muted" }, [
-                    _vm._v(_vm._s(_vm._f("formatDate")(_vm.order.date_output)))
-                  ])
-                ]
-              ),
-              _vm._v(" "),
-              _c(
-                "div",
-                {
-                  class: { step: true, active: _vm.displayedOrder.status >= 3 }
-                },
-                [
-                  _vm._m(10),
-                  _vm._v(" "),
-                  _c("span", { staticClass: "text" }, [_vm._v(" Trả đồ ")]),
-                  _vm._v(" "),
-                  _c("span", { staticClass: "text-muted" }, [
-                    _vm._v(
-                      _vm._s(_vm._f("formatDate")(_vm.order.date_received))
-                    )
-                  ])
-                ]
-              ),
-              _vm._v(" "),
-              _c(
-                "div",
-                {
-                  class: { step: true, active: _vm.displayedOrder.status >= 4 }
-                },
-                [
-                  _vm._m(11),
-                  _vm._v(" "),
-                  _c("span", { staticClass: "text" }, [_vm._v("Hoàn tất")]),
-                  _vm._v(" "),
-                  _c("span", { staticClass: "text-muted" }, [
-                    _vm._v(
-                      _vm._s(_vm._f("formatDate")(_vm.order.date_completed))
-                    )
-                  ])
-                ]
-              )
-            ]),
-            _vm._v(" "),
-            _c("hr"),
-            _vm._v(" "),
-            _c(
-              "div",
-              { staticClass: "row justify-content-center" },
-              [
-                _c("order-title", {
-                  attrs: { status: _vm.displayedOrder.status }
-                })
-              ],
-              1
-            ),
-            _vm._v(" "),
-            _c("div", { staticClass: "row mb-4" }, [
-              _c(
-                "div",
-                { staticClass: "col-6 mx-auto" },
-                [
-                  _c("search-input", {
-                    attrs: {
-                      items: this.displayedOrder.order_request_infos,
-                      by: ["template.name"]
-                    },
-                    on: {
-                      change: function($event) {
-                        return _vm.searchInput($event)
-                      }
-                    }
-                  })
-                ],
-                1
-              )
-            ]),
-            _vm._v(" "),
-            _c("table-display-info", {
-              attrs: {
-                status: _vm.displayedOrder.status,
-                items: _vm.paginationItems
-              }
-            }),
-            _vm._v(" "),
-            _c(
-              "div",
-              { staticClass: "row justify-content-center" },
-              [
-                _c("pagination", {
-                  attrs: { items: _vm.searchInputItems, per: 6 },
-                  on: {
-                    change: function($event) {
-                      return _vm.pagination($event)
-                    }
-                  }
-                })
-              ],
-              1
-            ),
-            _vm._v(" "),
-            _vm.displayedOrder.status == 1 && _vm.ariseRequest.length > 0
-              ? _c("div", [
-                  _vm._m(12),
-                  _vm._v(" "),
-                  _c("table", { staticClass: "table table-hover" }, [
-                    _vm._m(13),
-                    _vm._v(" "),
-                    _c(
-                      "tbody",
-                      _vm._l(_vm.ariseRequest, function(info) {
-                        return _c("tr", { key: info.id }, [
-                          _c(
-                            "th",
-                            {
-                              staticClass: "text-center",
-                              attrs: { scope: "row" }
-                            },
-                            [
-                              _c("img", {
-                                attrs: {
-                                  src: info.template.image,
-                                  height: "40",
-                                  alt: info.template.name
-                                }
-                              })
-                            ]
-                          ),
-                          _vm._v(" "),
-                          _c(
-                            "td",
-                            { staticClass: "align-middle text-center" },
-                            [_vm._v(_vm._s(info.template.name))]
-                          ),
-                          _vm._v(" "),
-                          _c(
-                            "td",
-                            { staticClass: "align-middle text-center" },
-                            [
-                              _vm._v(
-                                "\n                                " +
-                                  _vm._s(info.template.equipments.length)
-                              )
-                            ]
-                          ),
-                          _vm._v(" "),
-                          _c(
-                            "td",
-                            { staticClass: "align-middle text-center" },
-                            [
-                              _c("input", {
-                                directives: [
-                                  {
-                                    name: "model",
-                                    rawName: "v-model",
-                                    value: info.template.amount,
-                                    expression: "info.template.amount"
-                                  }
-                                ],
-                                staticClass: "form-control",
-                                attrs: {
-                                  type: "number",
-                                  name: "amount",
-                                  min: "0",
-                                  max: info.template.maxAmount
-                                },
-                                domProps: { value: info.template.amount },
-                                on: {
-                                  input: function($event) {
-                                    if ($event.target.composing) {
-                                      return
-                                    }
-                                    _vm.$set(
-                                      info.template,
-                                      "amount",
-                                      $event.target.value
-                                    )
-                                  }
-                                }
-                              })
-                            ]
-                          ),
-                          _vm._v(" "),
-                          _c(
-                            "td",
-                            { staticClass: "align-middle text-center" },
-                            [
-                              _vm._v(
-                                "\n                                " +
-                                  _vm._s(_vm.getBorrowedAmountByInfo(info)) +
-                                  "\n                            "
-                              )
-                            ]
-                          ),
-                          _vm._v(" "),
-                          _c(
-                            "td",
-                            { staticClass: "align-middle text-center" },
-                            [
-                              _vm.displayedOrder.status > 0
-                                ? _c("div", [
-                                    _vm.displayedOrder.status <= 1
-                                      ? _c(
-                                          "button",
-                                          {
-                                            staticClass:
-                                              "btn btn-primary btn-sm",
-                                            attrs: {
-                                              type: "button",
-                                              "data-toggle": "modal",
-                                              "data-target":
-                                                "#ariseEquipment-" +
-                                                info.template.id
-                                            }
-                                          },
-                                          [
-                                            _c("span", {
-                                              staticClass: "fa fa-pencil"
-                                            })
-                                          ]
-                                        )
-                                      : _vm._e()
-                                  ])
-                                : _vm._e()
-                            ]
-                          ),
-                          _vm._v(" "),
-                          _c(
-                            "td",
-                            { staticClass: "align-middle text-center" },
-                            [
-                              _c(
-                                "button",
-                                {
-                                  staticClass: "btn btn-danger btn-sm",
-                                  on: {
-                                    click: function($event) {
-                                      return _vm.removeAriseRequest(info)
-                                    }
-                                  }
-                                },
-                                [_c("i", { staticClass: "fa fa-trash" })]
-                              )
-                            ]
-                          )
-                        ])
-                      }),
-                      0
-                    )
-                  ])
-                ])
-              : _vm._e(),
-            _vm._v(" "),
-            _vm.displayedOrder.status == 1
-              ? _c("div", { staticClass: "row justify-content-center" }, [
-                  _c(
-                    "button",
-                    {
-                      staticClass: "btn btn-success btn-lg",
-                      attrs: {
-                        type: "button",
-                        "data-toggle": "modal",
-                        "data-target": "#addAriseTemplate"
-                      }
-                    },
-                    [
-                      _vm._v(
-                        "\n                    Thêm thiết bị\n                "
-                      )
-                    ]
-                  )
-                ])
-              : _vm._e(),
-            _vm._v(" "),
-            _c("hr"),
-            _vm._v(" "),
-            _c("div", { staticClass: "row justify-content-center" }, [
-              _vm.displayedOrder.status >= 1 && _vm.displayedOrder.status <= 3
-                ? _c(
-                    "button",
-                    {
-                      staticClass: "btn btn-secondary mr-2",
-                      attrs: { disabled: _vm.buttonDisabled },
-                      on: { click: _vm.back }
-                    },
-                    [_vm._v("Quay lại")]
-                  )
-                : _vm._e(),
-              _vm._v(" "),
-              _vm.displayedOrder.status == 0
-                ? _c(
-                    "button",
-                    {
-                      staticClass: "btn btn-primary mx-2",
-                      attrs: {
-                        disabled: _vm.buttonDisabled,
-                        "data-abc": "true"
-                      },
-                      on: { click: _vm.acceptOrder }
-                    },
-                    [_vm._v("Chấp nhận")]
-                  )
-                : _vm._e(),
-              _vm._v(" "),
-              _vm.displayedOrder.status == 0
-                ? _c(
-                    "button",
-                    {
-                      staticClass: "btn btn-danger",
-                      attrs: {
-                        disabled: _vm.buttonDisabled,
-                        "data-abc": "true"
-                      },
-                      on: { click: _vm.rejectOrder }
-                    },
-                    [_vm._v("Từ chối")]
-                  )
-                : _vm._e(),
-              _vm._v(" "),
-              _vm.displayedOrder.status == 1
-                ? _c(
-                    "button",
-                    {
-                      staticClass: "btn btn-primary",
-                      attrs: {
-                        disabled: _vm.buttonDisabled,
-                        "data-abc": "true"
-                      },
-                      on: { click: _vm.equipmentOutput }
-                    },
-                    [_vm._v("Xuất đồ")]
-                  )
-                : _vm._e(),
-              _vm._v(" "),
-              _vm.displayedOrder.status == 2
-                ? _c(
-                    "button",
-                    {
-                      staticClass: "btn btn-primary",
-                      attrs: {
-                        disabled: _vm.buttonDisabled,
-                        "data-abc": "true"
-                      },
-                      on: { click: _vm.equipmentReturn }
-                    },
-                    [_vm._v("Trả đồ")]
-                  )
-                : _vm._e(),
-              _vm._v(" "),
-              _vm.displayedOrder.status == 3
-                ? _c(
-                    "button",
-                    {
-                      staticClass: "btn btn-primary",
-                      attrs: {
-                        disabled: _vm.buttonDisabled,
-                        "data-abc": "true"
-                      },
-                      on: { click: _vm.completeOrder }
-                    },
-                    [_vm._v("Hoàn tất")]
-                  )
-                : _vm._e()
+            _c("span", { staticClass: "text-muted" }, [
+              _vm._v(_vm._s(_vm._f("formatDate")(_vm.order.created_at)))
             ])
+          ]
+        ),
+        _vm._v(" "),
+        _c(
+          "div",
+          { class: { step: true, active: _vm.displayedOrder.status >= 1 } },
+          [
+            _vm._m(8),
+            _vm._v(" "),
+            _c("span", { staticClass: "text" }, [_vm._v("Chấp nhận")]),
+            _vm._v(" "),
+            _c("span", { staticClass: "text-muted" }, [
+              _vm._v(_vm._s(_vm._f("formatDate")(_vm.order.date_approved)))
+            ])
+          ]
+        ),
+        _vm._v(" "),
+        _c(
+          "div",
+          { class: { step: true, active: _vm.displayedOrder.status >= 2 } },
+          [
+            _vm._m(9),
+            _vm._v(" "),
+            _c("span", { staticClass: "text" }, [_vm._v(" Xuất đồ")]),
+            _vm._v(" "),
+            _c("span", { staticClass: "text-muted" }, [
+              _vm._v(_vm._s(_vm._f("formatDate")(_vm.order.date_output)))
+            ])
+          ]
+        ),
+        _vm._v(" "),
+        _c(
+          "div",
+          { class: { step: true, active: _vm.displayedOrder.status >= 3 } },
+          [
+            _vm._m(10),
+            _vm._v(" "),
+            _c("span", { staticClass: "text" }, [_vm._v(" Trả đồ ")]),
+            _vm._v(" "),
+            _c("span", { staticClass: "text-muted" }, [
+              _vm._v(_vm._s(_vm._f("formatDate")(_vm.order.date_received)))
+            ])
+          ]
+        ),
+        _vm._v(" "),
+        _c(
+          "div",
+          { class: { step: true, active: _vm.displayedOrder.status >= 4 } },
+          [
+            _vm._m(11),
+            _vm._v(" "),
+            _c("span", { staticClass: "text" }, [_vm._v("Hoàn tất")]),
+            _vm._v(" "),
+            _c("span", { staticClass: "text-muted" }, [
+              _vm._v(_vm._s(_vm._f("formatDate")(_vm.order.date_completed)))
+            ])
+          ]
+        )
+      ]),
+      _vm._v(" "),
+      _c("hr"),
+      _vm._v(" "),
+      _c(
+        "div",
+        { staticClass: "row justify-content-center" },
+        [_c("order-title", { attrs: { status: _vm.displayedOrder.status } })],
+        1
+      ),
+      _vm._v(" "),
+      _c("div", { staticClass: "row mb-4" }, [
+        _c(
+          "div",
+          { staticClass: "col-6 mx-auto" },
+          [
+            _c("search-input", {
+              attrs: {
+                items: this.displayedOrder.order_request_infos,
+                by: ["template.name"]
+              },
+              on: {
+                change: function($event) {
+                  return _vm.searchInput($event)
+                }
+              }
+            })
           ],
           1
         )
+      ]),
+      _vm._v(" "),
+      _c("table-display-info", {
+        attrs: { status: _vm.displayedOrder.status, items: _vm.paginationItems }
+      }),
+      _vm._v(" "),
+      _c(
+        "div",
+        { staticClass: "row justify-content-center" },
+        [
+          _c("pagination", {
+            attrs: { items: _vm.searchInputItems, per: 6 },
+            on: {
+              change: function($event) {
+                return _vm.pagination($event)
+              }
+            }
+          })
+        ],
+        1
+      ),
+      _vm._v(" "),
+      _vm.displayedOrder.status == 1 && _vm.ariseRequest.length > 0
+        ? _c("div", [
+            _vm._m(12),
+            _vm._v(" "),
+            _c("table", { staticClass: "table table-hover" }, [
+              _vm._m(13),
+              _vm._v(" "),
+              _c(
+                "tbody",
+                _vm._l(_vm.ariseRequest, function(info) {
+                  return _c("tr", { key: info.id }, [
+                    _c(
+                      "th",
+                      { staticClass: "text-center", attrs: { scope: "row" } },
+                      [
+                        _c("img", {
+                          attrs: {
+                            src: info.template.image,
+                            height: "40",
+                            alt: info.template.name
+                          }
+                        })
+                      ]
+                    ),
+                    _vm._v(" "),
+                    _c("td", { staticClass: "align-middle text-center" }, [
+                      _vm._v(_vm._s(info.template.name))
+                    ]),
+                    _vm._v(" "),
+                    _c("td", { staticClass: "align-middle text-center" }, [
+                      _vm._v(
+                        "\n                        " +
+                          _vm._s(info.template.equipments.length)
+                      )
+                    ]),
+                    _vm._v(" "),
+                    _c("td", { staticClass: "align-middle text-center" }, [
+                      _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: info.template.amount,
+                            expression: "info.template.amount"
+                          }
+                        ],
+                        staticClass: "form-control",
+                        attrs: {
+                          type: "number",
+                          name: "amount",
+                          min: "0",
+                          max: info.template.maxAmount
+                        },
+                        domProps: { value: info.template.amount },
+                        on: {
+                          input: function($event) {
+                            if ($event.target.composing) {
+                              return
+                            }
+                            _vm.$set(
+                              info.template,
+                              "amount",
+                              $event.target.value
+                            )
+                          }
+                        }
+                      })
+                    ]),
+                    _vm._v(" "),
+                    _c("td", { staticClass: "align-middle text-center" }, [
+                      _vm._v(
+                        "\n                        " +
+                          _vm._s(_vm.getBorrowedAmountByInfo(info)) +
+                          "\n                    "
+                      )
+                    ]),
+                    _vm._v(" "),
+                    _c("td", { staticClass: "align-middle text-center" }, [
+                      _vm.displayedOrder.status > 0
+                        ? _c("div", [
+                            _vm.displayedOrder.status <= 1
+                              ? _c(
+                                  "button",
+                                  {
+                                    staticClass: "btn btn-primary btn-sm",
+                                    attrs: {
+                                      type: "button",
+                                      "data-toggle": "modal",
+                                      "data-target":
+                                        "#ariseEquipment-" + info.template.id
+                                    }
+                                  },
+                                  [_c("span", { staticClass: "fa fa-pencil" })]
+                                )
+                              : _vm._e()
+                          ])
+                        : _vm._e()
+                    ]),
+                    _vm._v(" "),
+                    _c("td", { staticClass: "align-middle text-center" }, [
+                      _c(
+                        "button",
+                        {
+                          staticClass: "btn btn-danger btn-sm",
+                          on: {
+                            click: function($event) {
+                              return _vm.removeAriseRequest(info)
+                            }
+                          }
+                        },
+                        [_c("i", { staticClass: "fa fa-trash" })]
+                      )
+                    ])
+                  ])
+                }),
+                0
+              )
+            ])
+          ])
+        : _vm._e(),
+      _vm._v(" "),
+      _vm.displayedOrder.status == 1
+        ? _c("div", { staticClass: "row justify-content-center" }, [
+            _c(
+              "button",
+              {
+                staticClass: "btn btn-success btn-lg",
+                attrs: {
+                  type: "button",
+                  "data-toggle": "modal",
+                  "data-target": "#addAriseTemplate"
+                }
+              },
+              [_vm._v("\n            Thêm thiết bị\n        ")]
+            )
+          ])
+        : _vm._e(),
+      _vm._v(" "),
+      _c("hr"),
+      _vm._v(" "),
+      _c("div", { staticClass: "row justify-content-center" }, [
+        _vm.displayedOrder.status >= 1 && _vm.displayedOrder.status <= 3
+          ? _c(
+              "button",
+              {
+                staticClass: "btn btn-secondary mr-2",
+                attrs: { disabled: _vm.buttonDisabled },
+                on: { click: _vm.back }
+              },
+              [_vm._v("Quay lại")]
+            )
+          : _vm._e(),
+        _vm._v(" "),
+        _vm.displayedOrder.status == 0
+          ? _c(
+              "button",
+              {
+                staticClass: "btn btn-primary mx-2",
+                attrs: { disabled: _vm.buttonDisabled, "data-abc": "true" },
+                on: { click: _vm.acceptOrder }
+              },
+              [_vm._v("Chấp nhận")]
+            )
+          : _vm._e(),
+        _vm._v(" "),
+        _vm.displayedOrder.status == 0
+          ? _c(
+              "button",
+              {
+                staticClass: "btn btn-danger",
+                attrs: { disabled: _vm.buttonDisabled, "data-abc": "true" },
+                on: { click: _vm.rejectOrder }
+              },
+              [_vm._v("Từ chối")]
+            )
+          : _vm._e(),
+        _vm._v(" "),
+        _vm.displayedOrder.status == 1
+          ? _c(
+              "button",
+              {
+                staticClass: "btn btn-primary",
+                attrs: { disabled: _vm.buttonDisabled, "data-abc": "true" },
+                on: { click: _vm.equipmentOutput }
+              },
+              [_vm._v("Xuất đồ")]
+            )
+          : _vm._e(),
+        _vm._v(" "),
+        _vm.displayedOrder.status == 2
+          ? _c(
+              "button",
+              {
+                staticClass: "btn btn-primary",
+                attrs: { disabled: _vm.buttonDisabled, "data-abc": "true" },
+                on: { click: _vm.equipmentReturn }
+              },
+              [_vm._v("Trả đồ")]
+            )
+          : _vm._e(),
+        _vm._v(" "),
+        _vm.displayedOrder.status == 3
+          ? _c(
+              "button",
+              {
+                staticClass: "btn btn-primary",
+                attrs: { disabled: _vm.buttonDisabled, "data-abc": "true" },
+                on: { click: _vm.completeOrder }
+              },
+              [_vm._v("Hoàn tất")]
+            )
+          : _vm._e()
       ]),
       _vm._v(" "),
       _vm._l(_vm.displayedOrder.order_request_infos, function(info, i) {
@@ -68334,6 +68245,12 @@ var render = function() {
   return _c("table", { staticClass: "table mt-2 table-hover" }, [
     _c("thead", { staticClass: "thead-light" }, [
       _c("tr", [
+        _c(
+          "th",
+          { staticClass: "text-center", attrs: { scope: "col", width: "5%" } },
+          [_vm._v("Mã")]
+        ),
+        _vm._v(" "),
         _c("th", {
           staticClass: "text-center",
           attrs: { scope: "col", width: "10%" }
@@ -68396,7 +68313,16 @@ var render = function() {
       "tbody",
       _vm._l(_vm.items, function(info) {
         return _c("tr", { key: "arise" + info.id, class: _vm.rowClass(info) }, [
-          _c("th", { staticClass: "text-center", attrs: { scope: "row" } }, [
+          _c(
+            "th",
+            {
+              staticClass: " align-middle text-center",
+              attrs: { scope: "row" }
+            },
+            [_vm._v(_vm._s(info.id))]
+          ),
+          _vm._v(" "),
+          _c("td", { staticClass: "align-middle text-center" }, [
             _c("img", {
               attrs: {
                 src: info.template.image,
