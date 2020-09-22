@@ -1,86 +1,68 @@
 <template>
     <div class="container">
-        <div class="row justify-content-center">
-            <div class="main-card mb-3 card col-md-12">
-                <!-- <div class="card-header">
-                    <div class="btn-actions-pane-right">
-                        <div class="nav">
-                            <a data-toggle="tab" href="#tab-eg2-0" class="btn-pill btn-wide active btn btn-outline-alternate btn-sm">Đơn mượn</a>
-                            <a data-toggle="tab" href="#tab-eg2-1" class="btn-pill btn-wide mr-1 ml-1  btn btn-outline-alternate btn-sm">Đơn nhập</a>
-                        </div>
-                    </div>
-                </div> -->
-                <div class="card-body">
-                    <div class="tab-content">
-                        <div class="tab-pane active" id="tab-eg2-0" role="tabpanel">
-                            <div class="row">
-                                <div class="col-md-12 text-center">
-                                    <h2>Đơn mượn thiết bị</h2>
-                                </div>
-                            </div>
-                            <div class="row py-4">
-                                <div class="dropdown col-2">
-                                    <!-- filterLongTermItems -->
-                                    <selection-filter :items="orders" :values="filterLongTermConfig.values" :all="filterLongTermConfig.all" :by="filterLongTermConfig.by" @change="filterLongTerm($event)"></selection-filter>
-                                </div>
-                                <div class="dropdown col-2">
-                                    <!-- filterStatusItems -->
-                                    <selection-filter :items="filterLongTermItems" :values="filterStatusConfig.values" :all="filterStatusConfig.all" :by="filterStatusConfig.by" @change="filterStatus($event)"></selection-filter>
-                                </div>
-                                <div class="col-7">
-                                    <!-- searchInputItems -->
-                                    <search-input :items="filterStatusItems" :by="['guest_name', 'id']" @change="searchInput($event)"></search-input>
-                                </div>
-                                <a :href="orderCreateUrl" type="button" class="btn btn-success ml-auto">Tạo đơn</a>
-                            </div>
-                            <div class="row">
-                                <table v-if="searchInputItems.length > 0" class="table table-hover">
-                                    <thead class="thead-light">
-                                        <tr>
-                                            <th style="width: 5%;" class="align-middle text-center" scope="col">Mã</th>
-                                            <th style="width: 18%;" class="align-middle text-center" scope="col">Người mượn</th>
-                                            <th style="width: 8%;" class="align-middle text-center" scope="col">Lâu dài</th>
-                                            <th style="width: 18%;" class="align-middle text-center" scope="col">Lý do mượn</th>
-                                            <th style="width: 16%;" class="align-middle text-center" scope="col">Ngày tạo</th>
-                                            <th style="width: 8%;" class="align-middle text-center" scope="col">Yêu cầu</th>
-                                            <th style="width: 9%;" class="align-middle text-center" scope="col">Cho mượn</th>
-                                            <th style="width: 10%;" class="align-middle text-center" scope="col">Trạng thái</th>
-                                            <th style="width: 15%;" class="align-middle text-center" scope="col"></th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr class="cursor-pointer" v-for="order in paginationItems" :key="order.id" :class="rowClass(order.status)" >
-                                            <th @click="redirect(orderDetailUrl(order.id))" scope="row" class="align-middle text-center">{{order.id}}</th>
-                                            <td @click="redirect(orderDetailUrl(order.id))" class="text-center align-middle">{{order.guest_name}}</td>
-                                            <td @click="redirect(orderDetailUrl(order.id))" class="text-center align-middle">{{order.long_term|formatBoolean}}</td>
-                                            <td @click="redirect(orderDetailUrl(order.id))" class="text-center align-middle">{{order.reason}}</td>
-                                            <td @click="redirect(orderDetailUrl(order.id))" class="text-center align-middle">{{order.created_at|formatDate}}</td>
-                                            <td @click="redirect(orderDetailUrl(order.id))" class="text-center align-middle">{{ getOrderRequestAmount(order) }}</td>
-                                            <td @click="redirect(orderDetailUrl(order.id))" class="text-center align-middle">{{ getOrderBorrowedAmount(order) }} </td>
-                                            <td @click="redirect(orderDetailUrl(order.id))" class="text-center align-middle">
-                                                <h6>
-                                                    <order-status :status="order.status"></order-status>
-                                                </h6>
-                                            </td>
-                                            <td class="align-middle">
-                                                <button :disabled="order.status != -1 && order.status != 4" type="button" class="btn btn-danger btn-sm" @click="destroyOrder(order.id);filterOrder();">
-                                                    <span class="fa fa-trash"></span>
-                                                </button>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                                <div v-else class="row justify-content-center">
-                                    <h5>Không tìm thấy đơn mượn nào.</h5>
-                                </div>
-                                <div class="row justify-content-center">
-                                    <!-- Paginator -->
-                                    <pagination :items="searchInputItems" @change="pagination($event)"></pagination>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <h2>Đơn mượn thiết bị</h2>
+            </div>
+        </div>
+        <div class="row py-4">
+            <div class="dropdown col-2">
+                <!-- filterLongTermItems -->
+                <selection-filter :items="orders" :values="filterLongTermConfig.values" :all="filterLongTermConfig.all" :by="filterLongTermConfig.by" @change="filterLongTerm($event)"></selection-filter>
+            </div>
+            <div class="dropdown col-2">
+                <!-- filterStatusItems -->
+                <selection-filter :items="filterLongTermItems" :values="filterStatusConfig.values" :all="filterStatusConfig.all" :by="filterStatusConfig.by" @change="filterStatus($event)"></selection-filter>
+            </div>
+            <div class="col-7">
+                <!-- searchInputItems -->
+                <search-input :items="filterStatusItems" :by="['guest_name', 'id']" @change="searchInput($event)"></search-input>
+            </div>
+            <a :href="orderCreateUrl" type="button" class="btn btn-success ml-auto">Tạo đơn</a>
+        </div>
+        <div class="row">
+            <table v-if="searchInputItems.length > 0" class="table table-hover">
+                <thead class="thead-light">
+                    <tr>
+                        <th @click="sort('id')" style="width: 5%;" class="align-middle text-center" scope="col">Mã</th>
+                        <th @click="sort('guest_name')" style="width: 18%;" class="align-middle text-center" scope="col">Người mượn</th>
+                        <th style="width: 8%;" class="align-middle text-center" scope="col">Lâu dài</th>
+                        <th style="width: 18%;" class="align-middle text-center" scope="col">Lý do mượn</th>
+                        <th @click="sort('created_at')" style="width: 16%;" class="align-middle text-center" scope="col">Ngày tạo</th>
+                        <th style="width: 8%;" class="align-middle text-center" scope="col">Yêu cầu</th>
+                        <th style="width: 9%;" class="align-middle text-center" scope="col">Cho mượn</th>
+                        <th @click="sort('status')" style="width: 10%;" class="align-middle text-center" scope="col">Trạng thái</th>
+                        <th style="width: 15%;" class="align-middle text-center" scope="col"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="cursor-pointer" v-for="order in paginationItems" :key="order.id" :class="rowClass(order.status)" >
+                        <th @click="redirect(orderDetailUrl(order.id))" scope="row" class="align-middle text-center">{{order.id}}</th>
+                        <td @click="redirect(orderDetailUrl(order.id))" class="text-center align-middle">{{order.guest_name}}</td>
+                        <td @click="redirect(orderDetailUrl(order.id))" class="text-center align-middle">{{order.long_term|formatBoolean}}</td>
+                        <td @click="redirect(orderDetailUrl(order.id))" class="text-center align-middle">{{order.reason}}</td>
+                        <td @click="redirect(orderDetailUrl(order.id))" class="text-center align-middle">{{order.created_at|formatDate}}</td>
+                        <td @click="redirect(orderDetailUrl(order.id))" class="text-center align-middle">{{ getOrderRequestAmount(order) }}</td>
+                        <td @click="redirect(orderDetailUrl(order.id))" class="text-center align-middle">{{ getOrderBorrowedAmount(order) }} </td>
+                        <td @click="redirect(orderDetailUrl(order.id))" class="text-center align-middle">
+                            <h6>
+                                <order-status :status="order.status"></order-status>
+                            </h6>
+                        </td>
+                        <td class="align-middle">
+                            <button :disabled="order.status != -1 && order.status != 4" type="button" class="btn btn-danger btn-sm" @click="destroyOrder(order.id);filterOrder();">
+                                <span class="fa fa-trash"></span>
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <div v-else class="row justify-content-center">
+                <h5>Không tìm thấy đơn mượn nào.</h5>
+            </div>
+            <div class="row justify-content-center">
+                <!-- Paginator -->
+                <pagination :items="searchInputItems" @change="pagination($event)"></pagination>
             </div>
         </div>
     </div>
@@ -118,6 +100,7 @@ export default {
             filterStatusItems: [],
             searchInputItems: [],
             paginationItems: [],
+            ascending: true
         };
     },
     created() {
@@ -127,6 +110,7 @@ export default {
         init() {
             this.initFilterOrderLongTerm();
         },
+        
         initFilterOrderLongTerm() {
             this.filterLongTermItems = this.orders;
         },
@@ -184,7 +168,36 @@ export default {
         redirect(url) {
             console.log(url);
             window.location.href = url;
-        }
+        },
+        getAtt(item, att) {
+            let splitAtt = att.split('.');
+            if(splitAtt.length > 1) {
+                return this.getNestedAtt(item, splitAtt);
+            }
+            return item[att];
+        },
+        getNestedAtt(item, atts) {
+            let value, i = 0;
+            atts.forEach(att => {
+                if(i == 0) {
+                    value = item[att];
+                } else {
+                    value = value[att];
+                }
+                i++;
+            });
+            return value;
+        },
+        sort(att) {
+            let app = this;
+            let sign = this.ascending ? 1 : -1;
+            this.ascending = !this.ascending;
+            this.searchInputItems = this.searchInputItems.sort(function(a, b) {
+                let aValue = app.getAtt(a, att).toString();
+                let bValue = app.getAtt(b, att).toString();
+                return sign * aValue.localeCompare(bValue);
+            });
+        },
     }
 }
 </script>

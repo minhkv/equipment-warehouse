@@ -569,20 +569,6 @@ p {
     margin-bottom: 1rem;
 }
 
-/* .btn-warning {
-    color: #ffffff;
-    background-color: #ee5435;
-    border-color: #ee5435;
-    border-radius: 1px
-}
-
-.btn-warning:hover {
-    color: #ffffff;
-    background-color: #ff2b00;
-    border-color: #ff2b00;
-    border-radius: 1px
-} */
-
 .checked {
     color: orange;
 }
