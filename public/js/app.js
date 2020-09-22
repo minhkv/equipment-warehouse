@@ -3832,12 +3832,7 @@ __webpack_require__.r(__webpack_exports__);
     back: function back() {
       var app = this;
       this.disableButton();
-      axios.put(this.backUrl).then(function (res) {
-        console.log(res);
-        app.updatePage(res.data);
-      })["catch"](function (error) {
-        console.log("handlesubmit error: ", error);
-      });
+      this.sendRequest(this.backUrl, 'put', {}, this.updatePage);
     },
     getCurrentLocalTime: function getCurrentLocalTime() {
       var currentDate = new Date().toISOString();
@@ -3894,7 +3889,7 @@ __webpack_require__.r(__webpack_exports__);
         orderRequestInfos: this.orderRequestInfos,
         dateOutput: this.getCurrentLocalTime()
       };
-      this.sendRequest(this.equipmentOutputUrl, 'put', data);
+      this.sendRequest(this.equipmentOutputUrl, 'put', data, this.updatePage);
     },
     equipmentCheck: function equipmentCheck() {
       for (var i in this.orderRequestInfos) {
@@ -3917,45 +3912,30 @@ __webpack_require__.r(__webpack_exports__);
 
       console.log(this.orderRequestInfos);
       this.disableButton();
-      axios({
-        url: this.equipmentReturnUrl,
-        method: 'put',
-        data: {
-          orderRequestInfos: this.orderRequestInfos,
-          dateReturn: this.getCurrentLocalTime()
-        }
-      }).then(function (res) {
-        console.log(res);
-        app.updatePage(res.data);
-      })["catch"](function (error) {
-        console.log(error);
-      });
+      var data = {
+        orderRequestInfos: this.orderRequestInfos,
+        dateReturn: this.getCurrentLocalTime()
+      };
+      this.sendRequest(this.equipmentReturnUrl, 'put', data, this.updatePage);
     },
     completeOrder: function completeOrder() {
       var app = this;
       this.disableButton();
-      axios({
-        url: this.completeUrl,
-        method: 'put',
-        data: {
-          orderRequestInfos: this.orderRequestInfos,
-          dateCompleted: this.getCurrentLocalTime()
-        }
-      }).then(function (res) {
-        console.log(res);
-        app.updatePage(res.data);
-      })["catch"](function (error) {
-        console.log(error);
-      });
+      var data = {
+        orderRequestInfos: this.orderRequestInfos,
+        dateCompleted: this.getCurrentLocalTime()
+      };
+      this.sendRequest(this.completeUrl, 'put', data, this.updatePage);
     },
-    sendRequest: function sendRequest(url, method, data) {
+    sendRequest: function sendRequest(url, method, data, callback) {
+      var app = this;
       axios({
         url: url,
         method: method,
         data: data
       }).then(function (res) {
         console.log(res);
-        app.updatePage(res.data);
+        callback(res.data);
       })["catch"](function (error) {
         console.log(error);
       });

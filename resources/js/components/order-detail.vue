@@ -314,12 +314,7 @@ export default {
         back() {
             let app = this;
             this.disableButton();
-            axios.put(this.backUrl).then(res => {
-                console.log(res);
-                app.updatePage(res.data);
-            }).catch(error => {
-                console.log("handlesubmit error: ", error);
-            });
+            this.sendRequest(this.backUrl, 'put', {}, this.updatePage);
         },
         getCurrentLocalTime() {
             let currentDate = (new Date()).toISOString();
@@ -375,7 +370,7 @@ export default {
                 orderRequestInfos: this.orderRequestInfos,
                 dateOutput: this.getCurrentLocalTime()
             };
-            this.sendRequest(this.equipmentOutputUrl, 'put', data);
+            this.sendRequest(this.equipmentOutputUrl, 'put', data, this.updatePage);
         },
         equipmentCheck() {
             for (let i in this.orderRequestInfos) {
@@ -396,43 +391,23 @@ export default {
             // this.updateOrderInfoStatus();
             console.log(this.orderRequestInfos);
             this.disableButton();
-            axios({
-                    url: this.equipmentReturnUrl,
-                    method: 'put',
-                    data: {
-                        orderRequestInfos: this.orderRequestInfos,
-                        dateReturn: this.getCurrentLocalTime()
-                    }
-                })
-                .then(function(res) {
-                    console.log(res);
-                    app.updatePage(res.data);
-                })
-                .catch(function(error) {
-                    console.log(error);
-                });
+            let data = {
+                orderRequestInfos: this.orderRequestInfos,
+                dateReturn: this.getCurrentLocalTime()
+            };
+            this.sendRequest(this.equipmentReturnUrl, 'put', data, this.updatePage);
         },
         completeOrder() {
             let app = this;
             this.disableButton();
-
-            axios({
-                    url: this.completeUrl,
-                    method: 'put',
-                    data: {
-                        orderRequestInfos: this.orderRequestInfos,
-                        dateCompleted: this.getCurrentLocalTime()
-                    }
-                })
-                .then(function(res) {
-                    console.log(res);
-                    app.updatePage(res.data);
-                })
-                .catch(function(error) {
-                    console.log(error);
-                });
+            let data = {
+                orderRequestInfos: this.orderRequestInfos,
+                dateCompleted: this.getCurrentLocalTime()
+            };
+            this.sendRequest(this.completeUrl, 'put', data, this.updatePage);
         },
-        sendRequest(url, method, data) {
+        sendRequest(url, method, data, callback) {
+            let app = this;
             axios({
                 url: url,
                 method: method,
@@ -440,7 +415,7 @@ export default {
             })
             .then(function(res) {
                 console.log(res);
-                app.updatePage(res.data);
+                callback(res.data);
             })
             .catch(function(error) { 
                 console.log(error);
