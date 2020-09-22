@@ -194,8 +194,6 @@ export default {
         return {
             displayedOrder: {},
             buttonDisabled: false,
-            equipmentReceived: [],
-            equipmentLost: [],
             orderRequestInfos: [],
             displayedInfos: [],
             search: '',
@@ -244,16 +242,7 @@ export default {
 
         },
         initializeEquipmentReturn() {
-            let equipmentReceived = {};
-            let equipmentLost = {};
-            this.displayedOrder.order_request_infos.forEach(function(info) {
-                info.order_infos.forEach(function(order_info) {
-                    equipmentReceived[order_info.equipment_id] = (order_info.status == 1);
-                    equipmentLost[order_info.equipment_id] = (order_info.status == 0);
-                });
-            });
-            this.equipmentReceived = equipmentReceived;
-            this.equipmentLost = equipmentLost;
+            
         },
         initSearchInput() {
             this.searchInputItems = this.order.order_request_infos;
@@ -293,9 +282,7 @@ export default {
         getBorrowedAmountByInfo(info) {
             return info.order_infos.length;
         },
-        updateOrderInfoStatus(orderInfo) {
-            orderInfo.status = this.getEquipmentStatus(orderInfo.equipment_id);
-        },
+        
         searchInput(items) {
             this.searchInputItems = items;
         },
@@ -399,21 +386,6 @@ export default {
             .catch(function(error) { 
                 console.log(error);
             });
-        },
-        getEquipmentStatus(equipmentId) {
-            if (this.equipmentReceived[equipmentId])
-                return 1;
-            if (this.equipmentLost[equipmentId])
-                return 0;
-            return 2;
-        },
-        updateOrderInfoStatus() {
-            for (let i in this.orderRequestInfos) {
-                for (let j in this.orderRequestInfos[i].order_infos) {
-                    var orderInfo = this.orderRequestInfos[i].order_infos[j];
-                    orderInfo.status = this.getEquipmentStatus(orderInfo.equipment_id);
-                }
-            }
         },
         equipmentCheck() {
             for (let i in this.orderRequestInfos) {

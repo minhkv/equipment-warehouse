@@ -3523,10 +3523,6 @@ __webpack_require__.r(__webpack_exports__);
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js");
 /* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(moment__WEBPACK_IMPORTED_MODULE_0__);
-var _methods;
-
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
 //
 //
 //
@@ -3711,8 +3707,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     return {
       displayedOrder: {},
       buttonDisabled: false,
-      equipmentReceived: [],
-      equipmentLost: [],
       orderRequestInfos: [],
       displayedInfos: [],
       search: '',
@@ -3727,7 +3721,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     this.initOrder();
     this.initialize();
   },
-  methods: (_methods = {
+  methods: {
     initialize: function initialize() {
       this.initializeOrderRequestInfos();
       this.initializeEquipmentOutput();
@@ -3759,18 +3753,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       this.orderRequestInfos = orderRequestInfos;
     },
     initializeEquipmentOutput: function initializeEquipmentOutput() {},
-    initializeEquipmentReturn: function initializeEquipmentReturn() {
-      var equipmentReceived = {};
-      var equipmentLost = {};
-      this.displayedOrder.order_request_infos.forEach(function (info) {
-        info.order_infos.forEach(function (order_info) {
-          equipmentReceived[order_info.equipment_id] = order_info.status == 1;
-          equipmentLost[order_info.equipment_id] = order_info.status == 0;
-        });
-      });
-      this.equipmentReceived = equipmentReceived;
-      this.equipmentLost = equipmentLost;
-    },
+    initializeEquipmentReturn: function initializeEquipmentReturn() {},
     initSearchInput: function initSearchInput() {
       this.searchInputItems = this.order.order_request_infos;
     },
@@ -3808,9 +3791,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     },
     getBorrowedAmountByInfo: function getBorrowedAmountByInfo(info) {
       return info.order_infos.length;
-    },
-    updateOrderInfoStatus: function updateOrderInfoStatus(orderInfo) {
-      orderInfo.status = this.getEquipmentStatus(orderInfo.equipment_id);
     },
     searchInput: function searchInput(items) {
       this.searchInputItems = items;
@@ -3916,72 +3896,65 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         console.log(error);
       });
     },
-    getEquipmentStatus: function getEquipmentStatus(equipmentId) {
-      if (this.equipmentReceived[equipmentId]) return 1;
-      if (this.equipmentLost[equipmentId]) return 0;
-      return 2;
-    }
-  }, _defineProperty(_methods, "updateOrderInfoStatus", function updateOrderInfoStatus() {
-    for (var i in this.orderRequestInfos) {
-      for (var j in this.orderRequestInfos[i].order_infos) {
-        var orderInfo = this.orderRequestInfos[i].order_infos[j];
-        orderInfo.status = this.getEquipmentStatus(orderInfo.equipment_id);
-      }
-    }
-  }), _defineProperty(_methods, "equipmentCheck", function equipmentCheck() {
-    for (var i in this.orderRequestInfos) {
-      for (var j in this.orderRequestInfos[i].order_infos) {
-        var orderInfo = this.orderRequestInfos[i].order_infos[j];
+    equipmentCheck: function equipmentCheck() {
+      for (var i in this.orderRequestInfos) {
+        for (var j in this.orderRequestInfos[i].order_infos) {
+          var orderInfo = this.orderRequestInfos[i].order_infos[j];
 
-        if (orderInfo.status == 2) {
-          alert('Bạn chưa chọn trạng thái thiết bị ' + this.orderRequestInfos[i].template.name + ' có mã: ' + orderInfo.equipment_id);
-          return false;
+          if (orderInfo.status == 2) {
+            alert('Bạn chưa chọn trạng thái thiết bị ' + this.orderRequestInfos[i].template.name + ' có mã: ' + orderInfo.equipment_id);
+            return false;
+          }
         }
       }
+
+      return true;
+    },
+    equipmentReturn: function equipmentReturn() {
+      console.log('return');
+      var app = this;
+      if (!this.equipmentCheck()) return; // this.updateOrderInfoStatus();
+
+      console.log(this.orderRequestInfos);
+      this.disableButton();
+      axios({
+        url: this.equipmentReturnUrl,
+        method: 'put',
+        data: {
+          orderRequestInfos: this.orderRequestInfos,
+          dateReturn: this.getCurrentLocalTime()
+        }
+      }).then(function (res) {
+        console.log(res);
+        app.updatePage(res.data);
+      })["catch"](function (error) {
+        console.log(error);
+      });
+    },
+    completeOrder: function completeOrder() {
+      var app = this;
+      this.disableButton();
+      axios({
+        url: this.completeUrl,
+        method: 'put',
+        data: {
+          orderRequestInfos: this.orderRequestInfos,
+          dateCompleted: this.getCurrentLocalTime()
+        }
+      }).then(function (res) {
+        console.log(res);
+        app.updatePage(res.data);
+      })["catch"](function (error) {
+        console.log(error);
+      });
+    },
+    enableButton: function enableButton() {
+      this.buttonDisabled = false;
+    },
+    disableButton: function disableButton() {
+      this.buttonDisabled = true;
     }
-
-    return true;
-  }), _defineProperty(_methods, "equipmentReturn", function equipmentReturn() {
-    console.log('return');
-    var app = this;
-    if (!this.equipmentCheck()) return; // this.updateOrderInfoStatus();
-
-    console.log(this.orderRequestInfos);
-    this.disableButton();
-    axios({
-      url: this.equipmentReturnUrl,
-      method: 'put',
-      data: {
-        orderRequestInfos: this.orderRequestInfos,
-        dateReturn: this.getCurrentLocalTime()
-      }
-    }).then(function (res) {
-      console.log(res);
-      app.updatePage(res.data);
-    })["catch"](function (error) {
-      console.log(error);
-    });
-  }), _defineProperty(_methods, "completeOrder", function completeOrder() {
-    var app = this;
-    this.disableButton();
-    axios({
-      url: this.completeUrl,
-      method: 'put',
-      data: {
-        orderRequestInfos: this.orderRequestInfos,
-        dateCompleted: this.getCurrentLocalTime()
-      }
-    }).then(function (res) {
-      console.log(res);
-      app.updatePage(res.data);
-    })["catch"](function (error) {
-      console.log(error);
-    });
-  }), _defineProperty(_methods, "enableButton", function enableButton() {
-    this.buttonDisabled = false;
-  }), _defineProperty(_methods, "disableButton", function disableButton() {
-    this.buttonDisabled = true;
-  }), _methods)
+  }
 });
 
 /***/ }),
