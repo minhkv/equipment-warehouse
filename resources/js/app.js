@@ -92,6 +92,7 @@ Vue.component('table-verify-equipment',require('./components/table-verify-equipm
 Vue.component('table-display-info',require('./components/table-display-info.vue').default);
 Vue.component('supplier',require('./components/supplier.vue').default);
 Vue.component('supplier-form',require('./components/supplier-form.vue').default);
+Vue.component('selector',require('./components/selector.vue').default);
 Vue.component('test',require('./components/test.vue').default);
 
 var app = new Vue({
