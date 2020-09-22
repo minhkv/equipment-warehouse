@@ -424,8 +424,6 @@ export default {
         disableButton() {
             this.buttonDisabled = true;
         },
-
-        
     }
 };
 </script>

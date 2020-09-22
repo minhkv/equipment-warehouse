@@ -8,6 +8,8 @@ use App\User;
 use App\EquipmentTemplate;
 use App\Equipment;
 use App\Category;
+use App\OrderInfo;
+use App\OrderRequestInfo;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Exception;
@@ -178,7 +180,7 @@ class OrderController extends Controller
                         $orderInfo->equipment->update(['status' => 1]);
                         $orderInfo->update([
                             'backing' => 1,
-                            'status' => 3
+                            // 'status' => 3
                             ]); // backing
                     } 
                 }
@@ -265,22 +267,32 @@ class OrderController extends Controller
         foreach($order->orderRequestInfos as $orderRequestInfoModel) {
             $template_id = $orderRequestInfoModel->template_id;
             // remove existing orderinfo
-            $orderRequestInfoModel->orderInfos()->delete();
+            // $orderRequestInfoModel->orderInfos()->delete();
             // Create new orderInfo
             foreach($orderRequestInfos[$template_id]['order_infos'] as $orderInfo){
-                $equipment = Equipment::where('id', $orderInfo['equipment_id'])->first();
-                $equipment->orderInfos()->where('backing', 1)->delete();
-                $orderRequestInfoModel->orderInfos()->create([
-                    'equipment_id' => $orderInfo['equipment_id'],
-                    'condition_before' => $orderInfo['condition_before'],
-                ]);
+                // update if existed
+                $existedOrderInfos = $this->getExistedOrderInfos($orderInfo, $orderRequestInfoModel);
+                if ($existedOrderInfos->count() > 0) {
+                    $existedOrderInfo = $existedOrderInfos->first();
+                    $existedOrderInfo->update([
+                        'backing' => 0
+                    ]);
+                    // delete backing orderinfo
+                    $equipment = Equipment::where('id', $orderInfo['equipment_id'])->first();
+                    $equipment->orderInfos()->where('backing', 1)->delete();
+                } else {
+                    // Create if not existed
+                    $orderRequestInfoModel->orderInfos()->create([
+                        'equipment_id' => $orderInfo['equipment_id'],
+                        'condition_before' => $orderInfo['condition_before'],
+                    ]);
+                }
+                
             }
         }
     }
-    public function checkOrderInfoExisted($currentOrderInfos, $newOrderInfos) {
-        foreach($newOrderInfos as $newOrderInfo) {
-            
-        }
+    public function getExistedOrderInfos($orderInfo, OrderRequestInfo $orderRequest) {
+        return $orderRequest->orderInfos()->where('equipment_id', $orderInfo['equipment_id']);
     }
     public function updateEquipmentStatus(Request $request, Order $order) {
         $orderRequestInfos = $request->input('orderRequestInfos');
