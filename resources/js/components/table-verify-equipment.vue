@@ -10,7 +10,7 @@
             </tr>
         </thead>
         <tbody>
-            <tr v-for="orderInfo in orderInfos" :key="orderInfo.id">
+            <tr v-for="orderInfo in orderInfos" :key="orderInfo.id" :class="rowClass(orderInfo)">
                 <th class="text-center align-middle" scope="row">
                     {{ orderInfo.equipment_id }}
                 </th>
@@ -52,7 +52,15 @@
 </template>
 <script>
 export default {
-    props: ['orderInfos', 'status']
+    props: ['orderInfos', 'status'],
+    methods: {
+        rowClass(orderInfo) {
+            return {
+                'table-success': orderInfo.status == 1,
+                'table-danger': orderInfo.status == 0
+            };
+        }
+    }
 }
 </script>
 <style scoped>

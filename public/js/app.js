@@ -5543,7 +5543,15 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ['orderInfos', 'status']
+  props: ['orderInfos', 'status'],
+  methods: {
+    rowClass: function rowClass(orderInfo) {
+      return {
+        'table-success': orderInfo.status == 1,
+        'table-danger': orderInfo.status == 0
+      };
+    }
+  }
 });
 
 /***/ }),
@@ -69047,7 +69055,7 @@ var render = function() {
     _c(
       "tbody",
       _vm._l(_vm.orderInfos, function(orderInfo) {
-        return _c("tr", { key: orderInfo.id }, [
+        return _c("tr", { key: orderInfo.id, class: _vm.rowClass(orderInfo) }, [
           _c(
             "th",
             {
