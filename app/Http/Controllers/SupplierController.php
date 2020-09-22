@@ -39,8 +39,8 @@ class SupplierController extends Controller
     public function store(Request $request)
     {
         // dd($request->all());
-        Supplier::create($request->all());
-        return redirect()->back();
+        $supplier = Supplier::create($request->all());
+        return $supplier;
     }
 
     /**
@@ -74,7 +74,8 @@ class SupplierController extends Controller
      */
     public function update(Request $request, Supplier $supplier)
     {
-        //
+        $supplier->update($request->all());
+        return $supplier;
     }
 
     /**
@@ -86,6 +87,6 @@ class SupplierController extends Controller
     public function destroy(Supplier $supplier)
     {
         $supplier->delete();
-        return redirect()->back();
+        return 'delete';
     }
 }

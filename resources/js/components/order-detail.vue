@@ -290,6 +290,9 @@ export default {
             });
             this.ariseRequest.splice(index, 1);
         },
+        getBorrowedAmountByInfo(info) {
+            return info.order_infos.length;
+        },
         updateOrderInfoStatus(orderInfo) {
             orderInfo.status = this.getEquipmentStatus(orderInfo.equipment_id);
         },
@@ -310,8 +313,6 @@ export default {
             }
             this.enableButton();
         },
-        
-        
         updateCurrentEquipment(orderInfos, index) {
             this.updateEquipment(orderInfos, index, this.displayedOrder.order_request_infos);
         },

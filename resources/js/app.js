@@ -90,6 +90,8 @@ Vue.component('table-select-template',require('./components/table-select-templat
 Vue.component('table-select-equipment',require('./components/table-select-equipment.vue').default);
 Vue.component('table-verify-equipment',require('./components/table-verify-equipment.vue').default);
 Vue.component('table-display-info',require('./components/table-display-info.vue').default);
+Vue.component('supplier',require('./components/supplier.vue').default);
+Vue.component('supplier-form',require('./components/supplier-form.vue').default);
 Vue.component('test',require('./components/test.vue').default);
 
 var app = new Vue({
