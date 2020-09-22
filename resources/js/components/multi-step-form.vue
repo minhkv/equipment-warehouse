@@ -31,7 +31,8 @@
                             <div class="form-group row">
                                 <label for="room" class="col-3 col-form-label text-left">Phòng</label>
                                 <div class="col-9">
-                                    <input v-model="department" @blur="storeStorageValue" required type="text" name="room" id="room" class="form-control" placeholder="Phòng">
+                                    <!-- <input v-model="department" @blur="storeStorageValue" required type="text" name="room" id="room" class="form-control" placeholder="Phòng"> -->
+                                    <selector v-model="department" :items="channels" labelAtt="name" valueAtt="name"></selector>
                                 </div>
                             </div>
                             <div class="form-group row">
@@ -247,6 +248,7 @@ export default {
         "orderIndexUrl",
         "templates",
         "categories",
+        "channels",
         "type",
         "stockerId",
         "orderCreateUrl"

@@ -12,19 +12,28 @@ class ChannelSeeder extends Seeder
     public function run()
     {
         DB::table('channels')->insertOrIgnore([
-            'name' => "VTV1",
+            'name' => "Phòng Cinehome",
         ]);
         DB::table('channels')->insertOrIgnore([
-            'name' => "Discovery",
+            'name' => "Phòng Tuổi trẻ",
         ]);
         DB::table('channels')->insertOrIgnore([
-            'name' => "Cartoon Networks",
+            'name' => "Phòng Kỹ thuật",
         ]);
         DB::table('channels')->insertOrIgnore([
-            'name' => "HBO",
+            'name' => "Phòng Biên tập",
         ]);
         DB::table('channels')->insertOrIgnore([
-            'name' => "ESPN"
+            'name' => "Phòng Sub"
+        ]);
+        DB::table('channels')->insertOrIgnore([
+            'name' => "Phòng IT-CLIP"
+        ]);
+        DB::table('channels')->insertOrIgnore([
+            'name' => "Phòng Dựng"
+        ]);
+        DB::table('channels')->insertOrIgnore([
+            'name' => "Phòng SEO"
         ]);
     }
 }

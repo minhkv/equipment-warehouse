@@ -3285,8 +3285,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ["orderIndexUrl", "templates", "categories", "type", "stockerId", "orderCreateUrl"],
+  props: ["orderIndexUrl", "templates", "categories", "channels", "type", "stockerId", "orderCreateUrl"],
   data: function data() {
     return {
       step: 0,
@@ -4619,11 +4620,22 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ['items', 'labelAtt', 'valueAtt'],
+  props: ["items", "labelAtt", "valueAtt", "value"],
+  data: function data() {
+    return {};
+  },
   methods: {
     getAtt: function getAtt(item, att) {
-      var splitAtt = att.split('.');
+      var splitAtt = att.split(".");
 
       if (splitAtt.length > 1) {
         return this.getNestedAtt(item, splitAtt);
@@ -65209,36 +65221,27 @@ var render = function() {
                       [_vm._v("Phòng")]
                     ),
                     _vm._v(" "),
-                    _c("div", { staticClass: "col-9" }, [
-                      _c("input", {
-                        directives: [
-                          {
-                            name: "model",
-                            rawName: "v-model",
+                    _c(
+                      "div",
+                      { staticClass: "col-9" },
+                      [
+                        _c("selector", {
+                          attrs: {
+                            items: _vm.channels,
+                            labelAtt: "name",
+                            valueAtt: "name"
+                          },
+                          model: {
                             value: _vm.department,
+                            callback: function($$v) {
+                              _vm.department = $$v
+                            },
                             expression: "department"
                           }
-                        ],
-                        staticClass: "form-control",
-                        attrs: {
-                          required: "",
-                          type: "text",
-                          name: "room",
-                          id: "room",
-                          placeholder: "Phòng"
-                        },
-                        domProps: { value: _vm.department },
-                        on: {
-                          blur: _vm.storeStorageValue,
-                          input: function($event) {
-                            if ($event.target.composing) {
-                              return
-                            }
-                            _vm.department = $event.target.value
-                          }
-                        }
-                      })
-                    ])
+                        })
+                      ],
+                      1
+                    )
                   ]),
                   _vm._v(" "),
                   _c("div", { staticClass: "form-group row" }, [
@@ -67825,7 +67828,15 @@ var render = function() {
   return _c("div", { staticClass: "form-group" }, [
     _c(
       "select",
-      { staticClass: "form-control" },
+      {
+        staticClass: "form-control",
+        domProps: { value: _vm.value },
+        on: {
+          input: function($event) {
+            return _vm.$emit("input", $event.target.value)
+          }
+        }
+      },
       _vm._l(_vm.items, function(item) {
         return _c(
           "option",
