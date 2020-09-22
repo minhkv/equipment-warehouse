@@ -68,7 +68,9 @@
     </div>
 </template>
 <script>
+import ObjectMixin from '../mixins/ObjectMixin';
 export default {
+    mixins: [ObjectMixin],
     props: [
         'orders',
         'orderCreateUrl',
@@ -168,25 +170,6 @@ export default {
         redirect(url) {
             console.log(url);
             window.location.href = url;
-        },
-        getAtt(item, att) {
-            let splitAtt = att.split('.');
-            if(splitAtt.length > 1) {
-                return this.getNestedAtt(item, splitAtt);
-            }
-            return item[att];
-        },
-        getNestedAtt(item, atts) {
-            let value, i = 0;
-            atts.forEach(att => {
-                if(i == 0) {
-                    value = item[att];
-                } else {
-                    value = value[att];
-                }
-                i++;
-            });
-            return value;
         },
         sort(att) {
             let app = this;

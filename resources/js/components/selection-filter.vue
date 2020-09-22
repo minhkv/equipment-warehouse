@@ -5,7 +5,9 @@
     </select>
 </template>
 <script>
+import ObjectMixin from '../mixins/ObjectMixin';
 export default {
+    mixins: [ObjectMixin],
     props: ['default', 'items', 'values', 'by', 'all'],
     created() {
         this.init();
@@ -41,25 +43,6 @@ export default {
                 this.displayedItems = this.items.filter(x => this.getAtt(x, this.by) == this.model);
             }
             this.sendEvent();
-        },
-        getAtt(item, att) {
-            let splitAtt = att.split('.');
-            if(splitAtt.length > 1) {
-                return this.getNestedAtt(item, splitAtt);
-            }
-            return item[att];
-        },
-        getNestedAtt(item, atts) {
-            let value, i = 0;
-            atts.forEach(att => {
-                if(i == 0) {
-                    value = item[att];
-                } else {
-                    value = value[att];
-                }
-                i++;
-            });
-            return value;
         },
         sendEvent() {
             console.log('send filter ' + this.by);
