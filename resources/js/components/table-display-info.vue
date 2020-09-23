@@ -51,6 +51,7 @@ export default {
             return {
                 'cursor-pointer': true,
                 'table-success': 
+                    this.status >= 2 &&
                     this.getBorrowedAmountByInfo(info) > 0 &&
                     (this.getBorrowedAmountByInfo(info) == 
                     this.getReceivedAmount(info) + 

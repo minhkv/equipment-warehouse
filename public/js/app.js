@@ -4926,7 +4926,7 @@ __webpack_require__.r(__webpack_exports__);
     rowClass: function rowClass(info) {
       return {
         'cursor-pointer': true,
-        'table-success': this.getBorrowedAmountByInfo(info) > 0 && this.getBorrowedAmountByInfo(info) == this.getReceivedAmount(info) + this.getLostAmount(info)
+        'table-success': this.status >= 2 && this.getBorrowedAmountByInfo(info) > 0 && this.getBorrowedAmountByInfo(info) == this.getReceivedAmount(info) + this.getLostAmount(info)
       };
     },
     cellLostClass: function cellLostClass(info) {
@@ -5396,6 +5396,7 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+//
 //
 //
 //
@@ -69005,54 +69006,62 @@ var render = function() {
           _vm._v(" "),
           _c("td", { staticClass: "text-center align-middle" }, [
             _c("div", [
-              _c("div", { staticClass: "dropdown" }, [
-                _c(
-                  "select",
-                  {
-                    directives: [
+              _vm.status <= 2
+                ? _c("div", { staticClass: "dropdown" }, [
+                    _c(
+                      "select",
                       {
-                        name: "model",
-                        rawName: "v-model",
-                        value: orderInfo.status,
-                        expression: "orderInfo.status"
-                      }
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: orderInfo.status,
+                            expression: "orderInfo.status"
+                          }
+                        ],
+                        staticClass: "custom-select mx-0",
+                        on: {
+                          change: function($event) {
+                            var $$selectedVal = Array.prototype.filter
+                              .call($event.target.options, function(o) {
+                                return o.selected
+                              })
+                              .map(function(o) {
+                                var val = "_value" in o ? o._value : o.value
+                                return val
+                              })
+                            _vm.$set(
+                              orderInfo,
+                              "status",
+                              $event.target.multiple
+                                ? $$selectedVal
+                                : $$selectedVal[0]
+                            )
+                          }
+                        }
+                      },
+                      [
+                        _c("option", { attrs: { value: "2" } }, [
+                          _vm._v("Đang cho mượn")
+                        ]),
+                        _vm._v(" "),
+                        _c("option", { attrs: { value: "1" } }, [
+                          _vm._v("Đã nhận")
+                        ]),
+                        _vm._v(" "),
+                        _c("option", { attrs: { value: "0" } }, [
+                          _vm._v("Thất lạc")
+                        ])
+                      ]
+                    )
+                  ])
+                : _c(
+                    "div",
+                    [
+                      _c("info-status", { attrs: { status: orderInfo.status } })
                     ],
-                    staticClass: "custom-select mx-0",
-                    on: {
-                      change: function($event) {
-                        var $$selectedVal = Array.prototype.filter
-                          .call($event.target.options, function(o) {
-                            return o.selected
-                          })
-                          .map(function(o) {
-                            var val = "_value" in o ? o._value : o.value
-                            return val
-                          })
-                        _vm.$set(
-                          orderInfo,
-                          "status",
-                          $event.target.multiple
-                            ? $$selectedVal
-                            : $$selectedVal[0]
-                        )
-                      }
-                    }
-                  },
-                  [
-                    _c("option", { attrs: { value: "2" } }, [
-                      _vm._v("Đang cho mượn")
-                    ]),
-                    _vm._v(" "),
-                    _c("option", { attrs: { value: "1" } }, [
-                      _vm._v("Đã nhận")
-                    ]),
-                    _vm._v(" "),
-                    _c("option", { attrs: { value: "0" } }, [
-                      _vm._v("Thất lạc")
-                    ])
-                  ]
-                )
-              ])
+                    1
+                  )
             ])
           ])
         ])

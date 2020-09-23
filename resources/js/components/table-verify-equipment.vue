@@ -37,13 +37,14 @@
                 </td>
                 <td class="text-center align-middle">
                     <div>
-                        <div class="dropdown">
+                        <div v-if="status <=2" class="dropdown">
                             <select v-model="orderInfo.status" class="custom-select mx-0">
                                 <option value='2'>Đang cho mượn</option>
                                 <option value='1'>Đã nhận</option>
                                 <option value='0'>Thất lạc</option>
                             </select>
                         </div>
+                        <div v-else><info-status :status="orderInfo.status"></info-status></div>
                     </div>
                 </td>
             </tr>

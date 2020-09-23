@@ -266,9 +266,6 @@ class OrderController extends Controller
         $orderRequestInfos = $request->input('orderRequestInfos');
         foreach($order->orderRequestInfos as $orderRequestInfoModel) {
             $template_id = $orderRequestInfoModel->template_id;
-            // remove existing orderinfo
-            // $orderRequestInfoModel->orderInfos()->delete();
-            // Create new orderInfo
             foreach($orderRequestInfos[$template_id]['order_infos'] as $orderInfo){
                 // update if existed
                 $existedOrderInfos = $this->getExistedOrderInfos($orderInfo, $orderRequestInfoModel);
@@ -287,7 +284,6 @@ class OrderController extends Controller
                         'condition_before' => $orderInfo['condition_before'],
                     ]);
                 }
-                
             }
         }
     }
