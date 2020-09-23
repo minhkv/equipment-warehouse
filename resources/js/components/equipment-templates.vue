@@ -47,7 +47,7 @@
                             <a
                                 :href="equipmentTemplateShowUrl(template.id)"
                                 class="btn btn-primary btn-sm">
-                                <span class="fa fa-pencil"></span>
+                                <span class="fa fa-edit"></span>
                             </a>
                             <button
                                 class="btn btn-danger btn-sm"

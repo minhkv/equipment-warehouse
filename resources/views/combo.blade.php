@@ -26,7 +26,7 @@
                         <h2 class="card-title">{{ $combo->name }}</h2>
                         <p class="card-text">Số lượng: {{ $combo->comboInfos->count() }}</p>
                         <a href="#" class="btn btn-warning"><span class="fa fa-plus"></span> Thêm vào giỏ</a>
-                        <a href="{{ route('combo.show', $combo) }}" class="btn btn-primary"><span class="fa fa-pencil"></span></a>
+                        <a href="{{ route('combo.show', $combo) }}" class="btn btn-primary"><span class="fa fa-edit"></span></a>
                         <x-delete-button route-name="combo.destroy" id="{{$combo->id}}" />
                     </div>
                 </div>

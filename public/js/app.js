@@ -3773,10 +3773,41 @@ __webpack_require__.r(__webpack_exports__);
         };
       });
     },
-    updateAriseRequest: function updateAriseRequest(equipmentTemplates) {
+    freshRequest: function freshRequest(data) {
+      console.log('fresh');
+      this.freshOriginTemplates(data.origin);
+      this.freshSelectedTemplates();
+    },
+    freshOriginTemplates: function freshOriginTemplates(templates) {
+      var newRequestInfos = this.displayedOrder.order_request_infos.filter(function (requestInfo) {
+        var index = templates.findIndex(function (template) {
+          return template.id == requestInfo.template_id;
+        });
+        return index != -1;
+      });
+      Vue.set(this.displayedOrder, 'order_request_infos', newRequestInfos);
+    },
+    freshSelectedTemplates: function freshSelectedTemplates() {
+      this.selectedTemplates = [];
+      this.initSelectedTemplates();
+    },
+    updateRequest: function updateRequest(data) {
+      this.updateOriginRequest(data);
+      this.updateAriseRequest(data);
+    },
+    updateOriginRequest: function updateOriginRequest(data) {
       var app = this;
-      var arise = [];
-      this.ariseRequest = equipmentTemplates.map(function (template) {
+      this.freshOriginTemplates(data.origin);
+      data.origin.forEach(function (template) {
+        var orderInfo = app.displayedOrder.order_request_infos.find(function (info) {
+          return info.template.id == template.id;
+        });
+        Vue.set(orderInfo, 'amount', template.amount);
+      });
+    },
+    updateAriseRequest: function updateAriseRequest(data) {
+      var app = this;
+      this.ariseRequest = data.arise.map(function (template) {
         return {
           amount: template.amount,
           borrowed_amount: 0,
@@ -3881,6 +3912,7 @@ __webpack_require__.r(__webpack_exports__);
         Vue.set(_this.orderRequestInfos, request.template_id, request);
       });
       this.ariseRequest = [];
+      this.selectedTemplates = [];
       var data = {
         equipments: this.equipmentIds,
         orderRequestInfos: this.orderRequestInfos,
@@ -4920,6 +4952,17 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['status', 'items'],
   methods: {
@@ -4958,6 +5001,9 @@ __webpack_require__.r(__webpack_exports__);
         }
       });
       return total;
+    },
+    sendEvent: function sendEvent() {
+      this.$emit('change', this.items);
     }
   }
 });
@@ -5259,6 +5305,16 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['items', 'categories', 'disabledTemplates', 'templateNeedToRemove'],
   data: function data() {
@@ -5338,7 +5394,10 @@ __webpack_require__.r(__webpack_exports__);
       this.sendEvent();
     },
     addTemplate: function addTemplate(template) {
-      var newTemplate = Object.assign({}, template, {
+      var temp = this.items.find(function (item) {
+        return item.id == template.id;
+      });
+      var newTemplate = Object.assign({}, temp, {
         amount: template.amount || '0',
         maxAmount: template.maxAmount || template.equipments.length
       });
@@ -5353,7 +5412,11 @@ __webpack_require__.r(__webpack_exports__);
       var index = this.selectedItems.findIndex(function (x) {
         return x.id == id;
       });
-      this.selectedItems.splice(index, 1);
+      if (index != -1) this.selectedItems.splice(index, 1);
+      index = this.disabledTemplates.findIndex(function (x) {
+        return x.id == id;
+      });
+      if (index != -1) this.disabledTemplates.splice(index, 1);
     },
     enableButton: function enableButton(template_id) {
       Vue.set(this.buttonDisabled, template_id, false);
@@ -5377,10 +5440,15 @@ __webpack_require__.r(__webpack_exports__);
       return this.itemSelected(template) || this.itemDisabled(template);
     },
     disableMinusButton: function disableMinusButton(template) {
-      return !this.itemSelected(template);
+      return !this.itemSelected(template) && !this.itemDisabled(template);
     },
     sendEvent: function sendEvent() {
-      this.$emit('change', this.selectedItems);
+      console.log('send');
+      var data = {
+        origin: this.disabledTemplates,
+        arise: this.selectedItems
+      };
+      this.$emit('change', data);
     }
   }
 });
@@ -63421,7 +63489,7 @@ var render = function() {
                             "data-target": "#editEquipment" + equipment.id
                           }
                         },
-                        [_c("span", { staticClass: "fa fa-pencil" })]
+                        [_c("span", { staticClass: "fa fa-edit" })]
                       )
                     ]),
                     _vm._v(" "),
@@ -63709,7 +63777,7 @@ var staticRenderFns = [
             "data-target": "#editImage"
           }
         },
-        [_c("i", { staticClass: "fa fa-pencil" })]
+        [_c("i", { staticClass: "fa fa-edit" })]
       )
     ])
   },
@@ -63727,7 +63795,7 @@ var staticRenderFns = [
           "data-target": "#editInfo"
         }
       },
-      [_c("i", { staticClass: "fa fa-pencil" })]
+      [_c("i", { staticClass: "fa fa-edit" })]
     )
   },
   function() {
@@ -64886,7 +64954,7 @@ var render = function() {
                           href: _vm.equipmentTemplateShowUrl(template.id)
                         }
                       },
-                      [_c("span", { staticClass: "fa fa-pencil" })]
+                      [_c("span", { staticClass: "fa fa-edit" })]
                     ),
                     _vm._v(" "),
                     _c(
@@ -66288,7 +66356,15 @@ var render = function() {
       ]),
       _vm._v(" "),
       _c("table-display-info", {
-        attrs: { status: _vm.displayedOrder.status, items: _vm.paginationItems }
+        attrs: {
+          status: _vm.displayedOrder.status,
+          items: _vm.paginationItems
+        },
+        on: {
+          change: function($event) {
+            return _vm.freshSelectedTemplates($event)
+          }
+        }
       }),
       _vm._v(" "),
       _c(
@@ -66399,7 +66475,7 @@ var render = function() {
                                         "#ariseEquipment-" + info.template.id
                                     }
                                   },
-                                  [_c("span", { staticClass: "fa fa-pencil" })]
+                                  [_c("span", { staticClass: "fa fa-edit" })]
                                 )
                               : _vm._e()
                           ])
@@ -66697,7 +66773,7 @@ var render = function() {
             },
             on: {
               change: function($event) {
-                return _vm.updateAriseRequest($event)
+                return _vm.updateRequest($event)
               }
             }
           })
@@ -67926,7 +68002,7 @@ var render = function() {
                         "data-target": "#editSupplier" + supplier.id
                       }
                     },
-                    [_c("span", { staticClass: "fa fa-pencil" })]
+                    [_c("span", { staticClass: "fa fa-edit" })]
                   ),
                   _vm._v(" "),
                   _c(
@@ -68241,7 +68317,36 @@ var render = function() {
           ]),
           _vm._v(" "),
           _c("td", { staticClass: "align-middle text-center" }, [
-            _vm._v(_vm._s(info.amount))
+            _vm.status == 1
+              ? _c("input", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: info.amount,
+                      expression: "info.amount"
+                    }
+                  ],
+                  staticClass: "form-control",
+                  attrs: {
+                    type: "number",
+                    min: "0",
+                    max: info.template.equipments.length
+                  },
+                  domProps: { value: info.amount },
+                  on: {
+                    change: function($event) {
+                      return _vm.sendEvent()
+                    },
+                    input: function($event) {
+                      if ($event.target.composing) {
+                        return
+                      }
+                      _vm.$set(info, "amount", $event.target.value)
+                    }
+                  }
+                })
+              : _c("div", [_vm._v(_vm._s(info.amount))])
           ]),
           _vm._v(" "),
           _c("td", { staticClass: "align-middle text-center" }, [
@@ -68290,7 +68395,7 @@ var render = function() {
                             "data-target": "#addEquipment-" + info.template.id
                           }
                         },
-                        [_c("span", { staticClass: "fa fa-pencil" })]
+                        [_c("i", { staticClass: "fas fa-edit" })]
                       )
                     : _c(
                         "button",
@@ -68303,7 +68408,7 @@ var render = function() {
                               "#verifyEquipment-" + info.template.id
                           }
                         },
-                        [_c("span", { staticClass: "fa fa-pencil" })]
+                        [_c("i", { staticClass: "fa fa-edit" })]
                       )
                 ])
               : _vm._e()
@@ -68738,9 +68843,41 @@ var render = function() {
                 : _vm._e(),
               _vm._v(" "),
               _vm.itemDisabled(template)
-                ? _c("div", [
-                    _vm._v(_vm._s(_vm.getDisabledTemplate(template.id).amount))
-                  ])
+                ? _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.getDisabledTemplate(template.id).amount,
+                        expression: "getDisabledTemplate(template.id).amount"
+                      }
+                    ],
+                    staticClass: "form-control",
+                    attrs: {
+                      type: "number",
+                      name: "amount",
+                      min: "0",
+                      max: template.equipments.length
+                    },
+                    domProps: {
+                      value: _vm.getDisabledTemplate(template.id).amount
+                    },
+                    on: {
+                      change: function($event) {
+                        return _vm.sendEvent()
+                      },
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.$set(
+                          _vm.getDisabledTemplate(template.id),
+                          "amount",
+                          $event.target.value
+                        )
+                      }
+                    }
+                  })
                 : _vm._e()
             ]),
             _vm._v(" "),

@@ -42,7 +42,17 @@
                         v-model="getSelectedTemplate(template.id).amount"
                         @change="sendEvent()"
                         >
-                        <div v-if="itemDisabled(template)">{{getDisabledTemplate(template.id).amount}}</div>
+                        <input 
+                        class="form-control" 
+                        v-if="itemDisabled(template)"
+                        type="number" 
+                        name="amount" 
+                        min='0' 
+                        :max='template.equipments.length' 
+                        v-model="getDisabledTemplate(template.id).amount"
+                        @change="sendEvent()"
+                        >
+                        <!-- <div v-if="itemDisabled(template)">{{getDisabledTemplate(template.id).amount}}</div> -->
                     </td>
 
                     <td class="align-middle text-center">
@@ -148,7 +158,10 @@ export default {
             this.sendEvent();
         },
         addTemplate(template) {
-            let newTemplate = Object.assign({}, template, {
+            let temp = this.items.find(item => {
+                return item.id == template.id;
+            });
+            let newTemplate = Object.assign({}, temp, {
                 amount: template.amount || '0',
                 maxAmount: template.maxAmount || template.equipments.length,
             });
@@ -160,7 +173,11 @@ export default {
         },
         removeTemplate(id) {
             let index = this.selectedItems.findIndex(x => x.id == id);
-            this.selectedItems.splice(index, 1);
+            if(index != -1)
+                this.selectedItems.splice(index, 1);
+            index = this.disabledTemplates.findIndex(x => x.id == id);
+            if(index != -1)
+                this.disabledTemplates.splice(index, 1);
         },
         enableButton(template_id) {
             Vue.set(this.buttonDisabled, template_id, false);
@@ -184,10 +201,15 @@ export default {
             return this.itemSelected(template) || this.itemDisabled(template);
         },
         disableMinusButton(template) {
-            return !this.itemSelected(template);
+            return !this.itemSelected(template) && !this.itemDisabled(template);
         },
         sendEvent() {
-            this.$emit('change', this.selectedItems);
+            console.log('send');
+            let data = {
+                origin: this.disabledTemplates,
+                arise: this.selectedItems
+            };
+            this.$emit('change', data);
         }
     }
 }

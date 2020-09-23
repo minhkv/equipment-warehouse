@@ -158,7 +158,7 @@ class OrderController extends Controller
     }
 
     public function loadOrder(Order $order) {
-        $order->load(['guest']);
+        $order->load(['guest', 'orderRequestInfos',]);
         $order->orderRequestInfos->load([
             'template', 
             'orderInfos', 
@@ -179,20 +179,15 @@ class OrderController extends Controller
                     if($order->status == 2) {
                         $orderInfo->equipment->update(['status' => 1]);
                         $orderInfo->update([
-                            'backing' => 1,
-                            // 'status' => 3
-                            ]); // backing
+                            'backing' => 1, 
+                        ]); // backing
                     } 
                 }
             }
         }
-        $order->update([
-            'status' => $order->status - 1
-            ]);
+        $order->update(['status' => $order->status - 1]);
         return $this->loadOrder($order);
     }
-
-
 
     public function acceptOrderRequest(Request $request, Order $order) {
         $dateApproved = date_create($request->input('dateApproved'));
@@ -219,6 +214,7 @@ class OrderController extends Controller
         try {
             $this->storeAriseRequest($request, $order);
             $this->checkEquipmentsAvailable($request, $order);
+            $this->createOrUpdateRequestInfo($request, $order);
             $this->createOrUpdateOrderInfo($request, $order);
             $this->updateEquipmentStatus($request, $order);
             $order->update([
@@ -226,9 +222,7 @@ class OrderController extends Controller
                 'date_output' => date_format($dateOutput, 'Y-m-d H:i:s')
             ]);
         } catch(Exception $e) {
-            return json_encode((object) [
-                'error' => $e->getMessage()
-            ]);
+            return json_encode((object) ['error' => $e->getMessage()]);
         }
         return $this->loadOrder($order);
     }
@@ -243,12 +237,11 @@ class OrderController extends Controller
             $order->orderRequestInfos()->create([
                 'template_id' => $info['template_id'],
                 'amount' => $info['amount'],
-            ]);            
+            ]);
         }
     }
     public function checkEquipmentAvailable(Equipment $equipment) {
-        return $equipment->orderInfos()->where('status', 2)->count() == 0 &&
-            $equipment->status == 1;
+        return $equipment->status == 1;
     }
     public function checkEquipmentsAvailable(Request $request, Order $order) {
         $orderRequestInfos = $request->input('orderRequestInfos');
@@ -262,6 +255,20 @@ class OrderController extends Controller
             }
         }
     }
+    public function createOrUpdateRequestInfo(Request $request, Order $order) {
+        $orderRequestInfos = $request->input('orderRequestInfos');
+        foreach($orderRequestInfos as $orderRequestInfo) {
+            // if request existed then update
+            $existedRequestInfos = $this->getExistedRequestInfos($orderRequestInfo, $order);
+            if($existedRequestInfos->count() > 0) {
+                $existedRequestInfo = $existedRequestInfos->first();
+                $existedRequestInfo->update(['amount' => $orderRequestInfo['amount']]);
+            }
+        }
+    }
+    public function getExistedRequestInfos($requestInfo, Order $order) {
+        return $order->orderRequestInfos()->where('template_id', $requestInfo['template_id']);
+    }
     public function createOrUpdateOrderInfo(Request $request, Order $order) {
         $orderRequestInfos = $request->input('orderRequestInfos');
         foreach($order->orderRequestInfos as $orderRequestInfoModel) {
@@ -272,7 +279,7 @@ class OrderController extends Controller
                 if ($existedOrderInfos->count() > 0) {
                     $existedOrderInfo = $existedOrderInfos->first();
                     $existedOrderInfo->update([
-                        'backing' => 0
+                        'backing' => 0,
                     ]);
                     // delete backing orderinfo
                     $equipment = Equipment::where('id', $orderInfo['equipment_id'])->first();
@@ -289,6 +296,15 @@ class OrderController extends Controller
     }
     public function getExistedOrderInfos($orderInfo, OrderRequestInfo $orderRequest) {
         return $orderRequest->orderInfos()->where('equipment_id', $orderInfo['equipment_id']);
+    }
+    public function deleteOrderInfoNotSend(Request $request, Order $order) {
+        $orderRequestInfos = $request->input('orderRequestInfos');
+        foreach($order->orderRequestInfos as $orderRequestInfoModel) {
+            $template_id = $orderRequestInfoModel->template_id;
+            foreach($orderRequestInfoModel->orderInfos as $orderInfo){
+                
+            }
+        }
     }
     public function updateEquipmentStatus(Request $request, Order $order) {
         $orderRequestInfos = $request->input('orderRequestInfos');

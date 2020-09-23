@@ -15,13 +15,16 @@ class ChannelSeeder extends Seeder
             'name' => "Phòng Cinehome",
         ]);
         DB::table('channels')->insertOrIgnore([
-            'name' => "Phòng Tuổi trẻ",
+            'name' => "Phòng Tuổi Trẻ - Quốc Tế",
         ]);
         DB::table('channels')->insertOrIgnore([
-            'name' => "Phòng Kỹ thuật",
+            'name' => "Phòng Đạo Tràng",
         ]);
         DB::table('channels')->insertOrIgnore([
-            'name' => "Phòng Biên tập",
+            'name' => "Phòng Kỹ Thuật",
+        ]);
+        DB::table('channels')->insertOrIgnore([
+            'name' => "Phòng Biên Tập",
         ]);
         DB::table('channels')->insertOrIgnore([
             'name' => "Phòng Sub"
@@ -33,7 +36,7 @@ class ChannelSeeder extends Seeder
             'name' => "Phòng Dựng"
         ]);
         DB::table('channels')->insertOrIgnore([
-            'name' => "Phòng SEO"
+            'name' => "Phòng Marketing"
         ]);
     }
 }

@@ -70,7 +70,7 @@
             </div>
         </div>
 
-        <table-display-info :status="displayedOrder.status" :items="paginationItems"></table-display-info>
+        <table-display-info @change="freshSelectedTemplates($event)" :status="displayedOrder.status" :items="paginationItems"></table-display-info>
         <div class="row justify-content-center">
             <!-- Paginator -->
             <pagination :items="searchInputItems" :per="6" @change="pagination($event)"></pagination>
@@ -115,7 +115,7 @@
                         <td class="align-middle text-center">
                             <div v-if="displayedOrder.status > 0" >
                                 <button v-if="displayedOrder.status <= 1" type="button" class="btn btn-primary btn-sm" data-toggle="modal" :data-target="'#ariseEquipment-' + info.template.id">
-                                    <span class="fa fa-pencil"></span>
+                                    <span class="fa fa-edit"></span>
                                 </button>
                             </div>
                         </td>
@@ -164,7 +164,7 @@
         </modal-component>
 
         <modal-component id="addAriseTemplate" title="Thiết bị phát sinh thêm" size="lg">
-            <table-select-template @change="updateAriseRequest($event)" :items="equipmentTemplates" :disabledTemplates="selectedTemplates" :categories="categories" :templateNeedToRemove="templateNeedToRemove.template"></table-select-template>
+            <table-select-template @change="updateRequest($event)" :items="equipmentTemplates" :disabledTemplates="selectedTemplates" :categories="categories" :templateNeedToRemove="templateNeedToRemove.template"></table-select-template>
             <template v-slot:footer>
                 <button type="button" class="btn btn-primary" data-dismiss="modal">Xong</button>
             </template>
@@ -251,14 +251,43 @@ export default {
                     name: info.template.name,
                     amount: info.amount,
                     maxAmount: info.template.equipments.length,
-                    image: info.template.image
+                    image: info.template.image,
                 };
             });
         },
-        updateAriseRequest(equipmentTemplates) {
+        freshRequest(data) {
+            console.log('fresh');
+            this.freshOriginTemplates(data.origin);
+            this.freshSelectedTemplates();
+        },
+        freshOriginTemplates(templates) {
+            let newRequestInfos = this.displayedOrder.order_request_infos.filter(requestInfo => {
+                let index = templates.findIndex(template => {return template.id == requestInfo.template_id});
+                return index != -1;
+            });
+            Vue.set(this.displayedOrder, 'order_request_infos', newRequestInfos);
+        },
+        freshSelectedTemplates() {
+            this.selectedTemplates = [];
+            this.initSelectedTemplates();
+        },
+        updateRequest(data) {
+            this.updateOriginRequest(data);
+            this.updateAriseRequest(data);
+        },
+        updateOriginRequest(data) {
             let app = this;
-            let arise = [];
-            this.ariseRequest = equipmentTemplates.map(function(template) {
+            this.freshOriginTemplates(data.origin);
+            data.origin.forEach(function (template) {
+                let orderInfo = app.displayedOrder.order_request_infos.find(info => {
+                    return info.template.id == template.id;
+                });
+                Vue.set(orderInfo, 'amount', template.amount);
+            });
+        },
+        updateAriseRequest(data) {
+            let app = this;
+            this.ariseRequest = data.arise.map(function(template) {
                 return ({
                     amount: template.amount,
                     borrowed_amount: 0,
@@ -268,6 +297,7 @@ export default {
                     template_id: template.id
                 });
             });
+            
         },
         removeAriseRequest(request) {
             this.templateNeedToRemove = request;
@@ -362,6 +392,7 @@ export default {
                 Vue.set(this.orderRequestInfos, request.template_id, request);
             });
             this.ariseRequest = [];
+            this.selectedTemplates = [];
             let data = {
                 equipments: this.equipmentIds,
                 orderRequestInfos: this.orderRequestInfos,

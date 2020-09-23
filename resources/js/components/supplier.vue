@@ -26,7 +26,7 @@
                         <td class="align-middle">{{ supplier.note }}</td>
                         <td>
                             <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" :data-target="'#editSupplier' + supplier.id">
-                                <span class="fa fa-pencil"></span>
+                                <span class="fa fa-edit"></span>
                             </button>
                             <button @click="removeSupplier(supplier)" type="button" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></button>
                         </td>

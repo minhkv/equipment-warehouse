@@ -19,7 +19,18 @@
                 <td class="align-middle text-center"><img :src="info.template.image" height=40 :alt="info.template.name"></td>
                 <td class="align-middle text-center">{{ info.template.name }}</td>
                 <td class="align-middle text-center">{{ info.template.equipments.length }}</td>
-                <td class="align-middle text-center">{{ info.amount }}</td>
+                <td class="align-middle text-center">
+                    <input 
+                        v-if="status == 1"
+                        class="form-control" 
+                        type="number" 
+                        min='0' 
+                        :max='info.template.equipments.length' 
+                        v-model="info.amount"
+                        @change="sendEvent()"
+                    >
+                    <div v-else>{{info.amount}}</div>
+                </td>
                 <td class="align-middle text-center">
                     {{ getBorrowedAmountByInfo(info) }}
                 </td>
@@ -32,10 +43,10 @@
                 <td class="align-middle text-center">
                     <div v-if="status > 0" >
                         <button v-if="status <= 1" type="button" class="btn btn-primary btn-sm" data-toggle="modal" :data-target="'#addEquipment-' + info.template.id">
-                            <span class="fa fa-pencil"></span>
+                            <i class="fas fa-edit"></i>
                         </button>
                         <button v-else type="button" class="btn btn-primary btn-sm" data-toggle="modal" :data-target="'#verifyEquipment-' + info.template.id">
-                            <span class="fa fa-pencil"></span>
+                            <i class="fa fa-edit"></i>
                         </button>
                     </div>
                 </td>
@@ -88,6 +99,9 @@ export default {
             });
             return total;
         },
+        sendEvent() {
+            this.$emit('change', this.items);
+        }
     }
 }
 </script>

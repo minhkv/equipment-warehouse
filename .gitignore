@@ -13,4 +13,5 @@ yarn-error.log
 resources/views/test.blade.php
 public/css/test.css
 public/js/app.js
+public/fonts
 resources/components/test.vue

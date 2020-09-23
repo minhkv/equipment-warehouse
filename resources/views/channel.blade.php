@@ -27,7 +27,7 @@
                             <td class="align-middle">
                                 <!-- Add equipment -->
                                 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#{{'editchannel'.$channel->id}}">
-                                    <span class="fa fa-pencil"></span>
+                                    <span class="fa fa-edit"></span>
                                 </button>
                                 <button href="{{route('channel.destroy', $channel)}}" type="button" class="btn btn-danger" 
                                 onclick="event.preventDefault();

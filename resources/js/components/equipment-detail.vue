@@ -10,7 +10,7 @@
                 <img class="w-100" :src="template.image" :alt="template.name" />
                 <div class="overlay-button">
                     <button class="btn btn-primary" type="button" data-toggle="modal" data-target="#editImage">
-                        <i class="fa fa-pencil"></i>
+                        <i class="fa fa-edit"></i>
                     </button>
                     
                 </div>
@@ -18,7 +18,7 @@
             <div class="col-md-8">
                 <h2><b>{{template.name}}</b>
                     <button class="btn btn-primary" type="button" data-toggle="modal" data-target="#editInfo">
-                        <i class="fa fa-pencil"></i></button>
+                        <i class="fa fa-edit"></i></button>
                 </h2>
                 <p><b>Loại thiết bị:</b> {{ template.category.name }}</p>
                 <p><b>Số lượng thiết bị:</b> {{ template.equipments.length }}</p>
@@ -61,7 +61,7 @@
                             </td>
                             <td class="align-middle px-0">
                                 <button :disabled="equipment.status != 1" type="button" class="btn btn-primary btn-sm" data-toggle="modal" :data-target="'#editEquipment' + equipment.id">
-                                    <span class="fa fa-pencil"></span>
+                                    <span class="fa fa-edit"></span>
                                 </button>
                             </td>
                             <td class="align-middle px-0">
