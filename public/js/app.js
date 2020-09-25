@@ -3794,6 +3794,7 @@ __webpack_require__.r(__webpack_exports__);
     updateRequest: function updateRequest(data) {
       this.updateOriginRequest(data);
       this.updateAriseRequest(data);
+      this.updateClientRequest(data);
     },
     updateOriginRequest: function updateOriginRequest(data) {
       var app = this;
@@ -3803,6 +3804,15 @@ __webpack_require__.r(__webpack_exports__);
           return info.template.id == template.id;
         });
         Vue.set(orderInfo, 'amount', template.amount);
+      });
+    },
+    updateClientRequest: function updateClientRequest(data) {
+      var _this = this;
+
+      var app = this;
+      this.orderRequestInfos = {};
+      this.displayedOrder.order_request_infos.forEach(function (request) {
+        Vue.set(_this.orderRequestInfos, request.template_id, request);
       });
     },
     updateAriseRequest: function updateAriseRequest(data) {
@@ -3902,14 +3912,14 @@ __webpack_require__.r(__webpack_exports__);
       });
     },
     equipmentOutput: function equipmentOutput() {
-      var _this = this;
+      var _this2 = this;
 
       console.log('equipmentOutput');
       var app = this;
       if (!this.equipmentCheckBorrowedAmount()) return;
       this.disableButton();
       this.ariseRequest.forEach(function (request) {
-        Vue.set(_this.orderRequestInfos, request.template_id, request);
+        Vue.set(_this2.orderRequestInfos, request.template_id, request);
       });
       this.ariseRequest = [];
       this.selectedTemplates = [];
@@ -68840,9 +68850,7 @@ var render = function() {
                       }
                     }
                   })
-                : _vm._e(),
-              _vm._v(" "),
-              _vm.itemDisabled(template)
+                : _vm.itemDisabled(template)
                 ? _c("input", {
                     directives: [
                       {

@@ -274,6 +274,7 @@ export default {
         updateRequest(data) {
             this.updateOriginRequest(data);
             this.updateAriseRequest(data);
+            this.updateClientRequest(data);
         },
         updateOriginRequest(data) {
             let app = this;
@@ -284,6 +285,14 @@ export default {
                 });
                 Vue.set(orderInfo, 'amount', template.amount);
             });
+        },
+        updateClientRequest(data) {
+            let app = this;
+            this.orderRequestInfos = {};
+            this.displayedOrder.order_request_infos.forEach(request => {
+                Vue.set(this.orderRequestInfos, request.template_id, request);
+            });
+            
         },
         updateAriseRequest(data) {
             let app = this;

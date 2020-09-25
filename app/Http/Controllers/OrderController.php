@@ -210,11 +210,15 @@ class OrderController extends Controller
     public function equipmentOutput(Request $request, Order $order) {
         $orderRequestInfos = $request->input('orderRequestInfos');
         $dateOutput = date_create($request->input('dateOutput'));
+        // return json_encode((object) ['test' => $request->all()]);
         
         try {
+            $this->deleteRequestInfoNotSend($request, $order);
+            $this->deleteOrderInfoNotSend($request, $order);
             $this->storeAriseRequest($request, $order);
-            $this->checkEquipmentsAvailable($request, $order);
             $this->createOrUpdateRequestInfo($request, $order);
+            $order = $this->loadOrder($order);
+            $this->checkEquipmentsAvailable($request, $order);
             $this->createOrUpdateOrderInfo($request, $order);
             $this->updateEquipmentStatus($request, $order);
             $order->update([
@@ -297,12 +301,38 @@ class OrderController extends Controller
     public function getExistedOrderInfos($orderInfo, OrderRequestInfo $orderRequest) {
         return $orderRequest->orderInfos()->where('equipment_id', $orderInfo['equipment_id']);
     }
-    public function deleteOrderInfoNotSend(Request $request, Order $order) {
-        $orderRequestInfos = $request->input('orderRequestInfos');
+    public function deleteRequestInfoNotSend(Request $request, Order $order) {
+        $clientOris = $request->input('orderRequestInfos');
         foreach($order->orderRequestInfos as $orderRequestInfoModel) {
-            $template_id = $orderRequestInfoModel->template_id;
+            // find request info in client request
+            $found = false;
+            foreach($clientOris as $templateId => $clientRequestInfo) {
+                if($templateId == $orderRequestInfoModel->template_id) {
+                    $found = true;
+                }
+            }
+            // if not found then delete
+            if(!$found) {
+                $orderRequestInfoModel->delete();
+            }
+        }
+    }
+    public function deleteOrderInfoNotSend(Request $request, Order $order) {
+        $clientOri = $request->input('orderRequestInfos');
+        foreach($order->orderRequestInfos as $orderRequestInfoModel) {
+            $templateId = $orderRequestInfoModel->template_id;
             foreach($orderRequestInfoModel->orderInfos as $orderInfo){
-                
+                // find order info in client request
+                $found = false;
+                foreach($clientOri[$templateId]['order_infos'] as $clientOrderInfo) {
+                    if($clientOrderInfo['equipment_id'] == $orderInfo->equipment_id) {
+                        $found = true;
+                    }
+                }
+                // if not found then delete
+                if(!$found) {
+                    $orderInfo->delete();
+                }
             }
         }
     }

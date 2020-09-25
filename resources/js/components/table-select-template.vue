@@ -44,7 +44,7 @@
                         >
                         <input 
                         class="form-control" 
-                        v-if="itemDisabled(template)"
+                        v-else-if="itemDisabled(template)"
                         type="number" 
                         name="amount" 
                         min='0' 
