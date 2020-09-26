@@ -33,6 +33,9 @@ class Order extends Model
     public function orderRequestInfos() {
         return $this->hasMany(OrderRequestInfo::class);
     }
+    public function stocker() {
+        return $this->belongsTo(User::class, 'stocker_id', 'id');
+    }
     public function guest() {
         return $this->belongsTo(User::class, 'guest_id', 'id');
     }

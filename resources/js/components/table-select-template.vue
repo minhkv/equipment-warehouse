@@ -56,21 +56,11 @@
                     </td>
 
                     <td class="align-middle text-center">
-                        <button 
-                        :disabled="disablePlusButton(template)" 
-                        v-on:click="add(template)" 
-                        type="button" 
-                        class="btn btn-success btn-sm" 
-                        >
-                            <span class="fa fa-plus"></span>
-                        </button>
-                        <button 
-                        :disabled="disableMinusButton(template)" 
-                        @click="remove(template)" 
-                        type="button" 
-                        class="btn btn-danger btn-sm">
-                            <span class="fa fa-minus"></span>
-                        </button>
+                        <div class="form-check form-check-inline">
+                            <label class="form-check-label">
+                                <input class="form-check-input" type="checkbox" :checked="templateChecked(template)" @change="updateSelectedTemplate($event, template)"> 
+                            </label>
+                        </div>
                     </td>
                 </tr>
             </tbody>
@@ -157,6 +147,13 @@ export default {
             this.removeTemplate(template.id);
             this.sendEvent();
         },
+        updateSelectedTemplate(e, template) {
+            if(e.srcElement.checked) {
+                this.add(template);
+            } else {
+                this.remove(template);
+            }
+        },
         addTemplate(template) {
             let temp = this.items.find(item => {
                 return item.id == template.id;
@@ -197,7 +194,7 @@ export default {
             });
             return disabled;
         },
-        disablePlusButton(template) {
+        templateChecked(template) {
             return this.itemSelected(template) || this.itemDisabled(template);
         },
         disableMinusButton(template) {

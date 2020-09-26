@@ -26,6 +26,7 @@ class OrderController extends Controller
         $orders = Order::with([
             'orderRequestInfos', 
             'orderRequestInfos.orderInfos', 
+            'stocker',
             'guest'
             ])->orderBy('created_at', 'DESC')->get();
         return view('order')->with([
@@ -210,8 +211,7 @@ class OrderController extends Controller
     public function equipmentOutput(Request $request, Order $order) {
         $orderRequestInfos = $request->input('orderRequestInfos');
         $dateOutput = date_create($request->input('dateOutput'));
-        // return json_encode((object) ['test' => $request->all()]);
-        
+        $save = $request->input('save');
         try {
             $this->deleteRequestInfoNotSend($request, $order);
             $this->deleteOrderInfoNotSend($request, $order);
@@ -220,11 +220,13 @@ class OrderController extends Controller
             $order = $this->loadOrder($order);
             $this->checkEquipmentsAvailable($request, $order);
             $this->createOrUpdateOrderInfo($request, $order);
-            $this->updateEquipmentStatus($request, $order);
-            $order->update([
-                'status' => 2, //output
-                'date_output' => date_format($dateOutput, 'Y-m-d H:i:s')
-            ]);
+            if(!$save) {
+                $this->updateEquipmentStatus($request, $order);
+                $order->update([
+                    'status' => 2, //output
+                    'date_output' => date_format($dateOutput, 'Y-m-d H:i:s')
+                ]);
+            }
         } catch(Exception $e) {
             return json_encode((object) ['error' => $e->getMessage()]);
         }
@@ -275,6 +277,7 @@ class OrderController extends Controller
     }
     public function createOrUpdateOrderInfo(Request $request, Order $order) {
         $orderRequestInfos = $request->input('orderRequestInfos');
+        $save = $request->input('save');
         foreach($order->orderRequestInfos as $orderRequestInfoModel) {
             $template_id = $orderRequestInfoModel->template_id;
             foreach($orderRequestInfos[$template_id]['order_infos'] as $orderInfo){
@@ -286,13 +289,16 @@ class OrderController extends Controller
                         'backing' => 0,
                     ]);
                     // delete backing orderinfo
-                    $equipment = Equipment::where('id', $orderInfo['equipment_id'])->first();
-                    $equipment->orderInfos()->where('backing', 1)->delete();
+                    // $equipment = Equipment::where('id', $orderInfo['equipment_id'])->first();
+                    // $equipment->orderInfos()->where('backing', 1)->delete();
                 } else {
+                    $backing = 0;
+                    if($save) $backing = 1;
                     // Create if not existed
                     $orderRequestInfoModel->orderInfos()->create([
                         'equipment_id' => $orderInfo['equipment_id'],
                         'condition_before' => $orderInfo['condition_before'],
+                        'backing' => $backing
                     ]);
                 }
             }
@@ -350,6 +356,7 @@ class OrderController extends Controller
     public function equipmentReturn(Request $request, Order $order) {
         $orderRequestInfos = $request->input('orderRequestInfos');
         $dateReturn = date_create($request->input('dateReturn'));
+        $save = $request->input('save');
         
         foreach($order->orderRequestInfos as $orderRequestInfoModel) {
             $template_id = $orderRequestInfoModel->template_id;
@@ -365,10 +372,12 @@ class OrderController extends Controller
                 }
             }
         }
-        $order->update([
-            'status' => 3, //returnEquipment
-            'date_received' => date_format($dateReturn, 'Y-m-d H:i:s')
-            ]);
+        if(!$save) {
+            $order->update([
+                'status' => 3, //returnEquipment
+                'date_received' => date_format($dateReturn, 'Y-m-d H:i:s')
+                ]);
+        }
         $order->load(['guest']);
 
         return $this->loadOrder($order);

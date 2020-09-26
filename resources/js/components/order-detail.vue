@@ -134,11 +134,19 @@
         </div>
         <hr>
         <div class="row justify-content-center">
-            <button v-if="displayedOrder.status >= 1 && displayedOrder.status <= 3" :disabled="buttonDisabled" @click="back" class="btn btn-secondary mr-2">Quay lại</button>
+            <button v-if="displayedOrder.status >= 1 && displayedOrder.status <= 3" :disabled="buttonDisabled" @click="back" class="btn btn-secondary mr-2">
+                <i class="fa fa-chevron-left"></i> Quay lại
+            </button>
+            <button v-if="displayedOrder.status == 1 || displayedOrder.status == 2" :disabled="buttonDisabled" @click="saveStatus" class="btn btn-primary mr-2">Lưu</button>
+
             <button v-if="displayedOrder.status == 0" :disabled="buttonDisabled" @click="acceptOrder" class="btn btn-primary mx-2" data-abc="true">Chấp nhận</button>
             <button v-if="displayedOrder.status == 0" :disabled="buttonDisabled" @click="rejectOrder" class="btn btn-danger" data-abc="true">Từ chối</button>
-            <button v-if="displayedOrder.status == 1" :disabled="buttonDisabled" @click="equipmentOutput" class="btn btn-primary" data-abc="true">Xuất đồ</button>
-            <button v-if="displayedOrder.status == 2" :disabled="buttonDisabled" @click="equipmentReturn" class="btn btn-primary" data-abc="true">Trả đồ</button>
+            <button v-if="displayedOrder.status == 1" :disabled="buttonDisabled" @click="equipmentOutput" class="btn btn-primary" data-abc="true">
+                Xuất đồ <i class="fa fa-chevron-right"></i>
+            </button>
+            <button v-if="displayedOrder.status == 2" :disabled="buttonDisabled" @click="equipmentReturn" class="btn btn-primary" data-abc="true">
+                Trả đồ <i class="fa fa-chevron-right"></i>
+            </button>
             <button v-if="displayedOrder.status == 3" :disabled="buttonDisabled" @click="completeOrder" class="btn btn-primary" data-abc="true">Hoàn tất</button>
         </div>
 
@@ -198,7 +206,8 @@ export default {
             paginationItems: [],
             selectedTemplates: [],
             ariseRequest: [],
-            templateNeedToRemove: {}
+            templateNeedToRemove: {},
+            save: false,
         };
     },
     created() {
@@ -334,6 +343,7 @@ export default {
                 this.setOrder(data);
                 this.initialize();
             }
+            this.save = false;
             this.enableButton();
         },
         updateCurrentEquipment(orderInfos, index) {
@@ -351,6 +361,14 @@ export default {
             let app = this;
             this.disableButton();
             this.sendRequest(this.backUrl, 'put', {}, this.updatePage);
+        },
+        saveStatus() {
+            this.save = true;
+            if(this.displayedOrder.status == 1) {
+                this.equipmentOutput();
+            } else if(this.displayedOrder.status == 2) {
+                this.equipmentReturn();
+            }
         },
         getCurrentLocalTime() {
             let currentDate = (new Date()).toISOString();
@@ -381,6 +399,7 @@ export default {
                 });
         },
         equipmentCheckBorrowedAmount() {
+            if(this.save) return true;
             return this.checkRequestAmount(this.displayedOrder.order_request_infos) &&
                 this.checkRequestAmount(this.ariseRequest);
         },
@@ -403,13 +422,14 @@ export default {
             this.ariseRequest = [];
             this.selectedTemplates = [];
             let data = {
-                equipments: this.equipmentIds,
                 orderRequestInfos: this.orderRequestInfos,
-                dateOutput: this.getCurrentLocalTime()
+                dateOutput: this.getCurrentLocalTime(),
+                save: this.save
             };
             this.sendRequest(this.equipmentOutputUrl, 'put', data, this.updatePage);
         },
         equipmentCheck() {
+            if(this.save) return true;
             for (let i in this.orderRequestInfos) {
                 for (let j in this.orderRequestInfos[i].order_infos) {
                     let orderInfo = this.orderRequestInfos[i].order_infos[j];
@@ -425,12 +445,12 @@ export default {
             console.log('return');
             let app = this;
             if (!this.equipmentCheck()) return;
-            // this.updateOrderInfoStatus();
             console.log(this.orderRequestInfos);
             this.disableButton();
             let data = {
                 orderRequestInfos: this.orderRequestInfos,
-                dateReturn: this.getCurrentLocalTime()
+                dateReturn: this.getCurrentLocalTime(),
+                save: this.save
             };
             this.sendRequest(this.equipmentReturnUrl, 'put', data, this.updatePage);
         },

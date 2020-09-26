@@ -25,8 +25,11 @@
                 </td>
                 <td>{{equipment.note}}</td>
                 <td class="align-middle">
-                    <button :disabled="disablePlusButton(equipment)" @click="addEquipment(equipment)" class="btn btn-success btn-sm"><span class="fa fa-plus"></span></button>
-                    <button :disabled="disableMinusButton(equipment)" @click="removeEquipment(equipment)" class="btn btn-danger btn-sm"><span class="fa fa-minus"></span></button>
+                    <div class="form-check form-check-inline">
+                        <label class="form-check-label">
+                            <input class="form-check-input" type="checkbox" :disabled="equipmentNotAvailable(equipment)" :checked="equipmentSelected(equipment)" @change="updateSelectedEquipment($event, equipment)"> 
+                        </label>
+                    </div>
                 </td>
             </tr>
         </tbody>
@@ -64,11 +67,21 @@ export default {
             });
             return selected;
         },
+        equipmentNotAvailable(equipment) {
+            return equipment.status != 1;
+        },
         disablePlusButton(equipment) {
             return this.equipmentSelected(equipment) || equipment.status != 1;
         },
         disableMinusButton(equipment) {
             return !this.equipmentSelected(equipment);
+        },
+        updateSelectedEquipment(e, equipment) {
+            if(e.srcElement.checked) {
+                this.addEquipment(equipment);
+            } else {
+                this.removeEquipment(equipment);
+            }
         },
         addEquipment(equipment) {
             this.addOrderInfo(equipment);

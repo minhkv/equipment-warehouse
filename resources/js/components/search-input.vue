@@ -6,9 +6,9 @@
                 v-model="search"
                 class="form-control mr-sm-2"
                 type="search"
-                placeholder="Tìm kiếm"
+                :placeholder="holder"
             />
-            <button class="btn btn-outline-primary my-2 my-sm-0" type="submit">
+            <button class="btn btn-outline-primary my-2 my-sm-0" type="button">
                 <span class="fa fa-search"></span>
             </button>
         </div>
@@ -19,10 +19,11 @@
 import ObjectMixin from '../mixins/ObjectMixin';
 export default {
     mixins: [ObjectMixin],
-    props: ['items', 'by'],
+    props: ['items', 'by', 'placeholder'],
     data() {
         return {
             search: '',
+            holder: 'Tìm kiếm'
         };
     },
     created() {
@@ -35,6 +36,7 @@ export default {
     },
     methods: {
         init() {
+            if(this.placeholder) this.holder = this.placeholder;
             this.sendEvent();
         },
         update() {

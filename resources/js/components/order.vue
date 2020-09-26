@@ -16,7 +16,7 @@
             </div>
             <div class="col-7">
                 <!-- searchInputItems -->
-                <search-input :items="filterStatusItems" :by="['guest_name', 'id']" @change="searchInput($event)"></search-input>
+                <search-input :items="filterStatusItems" :by="['guest_name', 'id', 'stocker.name']" placeholder="Nhập tên hoặc mã" @change="searchInput($event)"></search-input>
             </div>
             <a :href="orderCreateUrl" type="button" class="btn btn-success ml-auto">Tạo đơn</a>
         </div>
@@ -26,11 +26,10 @@
                     <tr>
                         <th @click="sort('id')" style="width: 5%;" class="align-middle text-center" scope="col">Mã</th>
                         <th @click="sort('guest_name')" style="width: 18%;" class="align-middle text-center" scope="col">Người mượn</th>
+                        <th @click="sort('stocker.name')" style="width: 18%;" class="align-middle text-center" scope="col">Người cho mượn</th>
                         <th style="width: 8%;" class="align-middle text-center" scope="col">Lâu dài</th>
-                        <th style="width: 18%;" class="align-middle text-center" scope="col">Lý do mượn</th>
                         <th @click="sort('created_at')" style="width: 16%;" class="align-middle text-center" scope="col">Ngày tạo</th>
-                        <th style="width: 8%;" class="align-middle text-center" scope="col">Yêu cầu</th>
-                        <th style="width: 9%;" class="align-middle text-center" scope="col">Cho mượn</th>
+                        <th @click="sort('date_output')" style="width: 16%;" class="align-middle text-center" scope="col">Ngày mượn</th>
                         <th @click="sort('status')" style="width: 10%;" class="align-middle text-center" scope="col">Trạng thái</th>
                         <th style="width: 15%;" class="align-middle text-center" scope="col"></th>
                     </tr>
@@ -39,11 +38,10 @@
                     <tr class="cursor-pointer" v-for="order in paginationItems" :key="order.id" :class="rowClass(order.status)" >
                         <th @click="redirect(orderDetailUrl(order.id))" scope="row" class="align-middle text-center">{{order.id}}</th>
                         <td @click="redirect(orderDetailUrl(order.id))" class="text-center align-middle">{{order.guest_name}}</td>
+                        <td @click="redirect(orderDetailUrl(order.id))" class="text-center align-middle">{{order.stocker.name}}</td>
                         <td @click="redirect(orderDetailUrl(order.id))" class="text-center align-middle">{{order.long_term|formatBoolean}}</td>
-                        <td @click="redirect(orderDetailUrl(order.id))" class="text-center align-middle">{{order.reason}}</td>
                         <td @click="redirect(orderDetailUrl(order.id))" class="text-center align-middle">{{order.created_at|formatDate}}</td>
-                        <td @click="redirect(orderDetailUrl(order.id))" class="text-center align-middle">{{ getOrderRequestAmount(order) }}</td>
-                        <td @click="redirect(orderDetailUrl(order.id))" class="text-center align-middle">{{ getOrderBorrowedAmount(order) }} </td>
+                        <td @click="redirect(orderDetailUrl(order.id))" class="text-center align-middle">{{order.date_output|formatDate}}</td>
                         <td @click="redirect(orderDetailUrl(order.id))" class="text-center align-middle">
                             <h6>
                                 <order-status :status="order.status"></order-status>
@@ -164,7 +162,7 @@ export default {
                 'table-danger': status == -1,
                 'table-warning': status == 0,
                 'table-primary': status > 0 && status < 4,
-                'table-success': status == 4 
+                'table-secondary': status == 4 
             };
         },
         redirect(url) {

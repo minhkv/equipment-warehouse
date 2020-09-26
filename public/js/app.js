@@ -3705,6 +3705,14 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ["categories", "equipmentTemplates", "order", "orderIndexUrl", "acceptUrl", "rejectUrl", "equipmentOutputUrl", "equipmentReturnUrl", "completeUrl", "backUrl"],
@@ -3719,7 +3727,8 @@ __webpack_require__.r(__webpack_exports__);
       paginationItems: [],
       selectedTemplates: [],
       ariseRequest: [],
-      templateNeedToRemove: {}
+      templateNeedToRemove: {},
+      save: false
     };
   },
   created: function created() {
@@ -3854,6 +3863,7 @@ __webpack_require__.r(__webpack_exports__);
         this.initialize();
       }
 
+      this.save = false;
       this.enableButton();
     },
     updateCurrentEquipment: function updateCurrentEquipment(orderInfos, index) {
@@ -3871,6 +3881,15 @@ __webpack_require__.r(__webpack_exports__);
       var app = this;
       this.disableButton();
       this.sendRequest(this.backUrl, 'put', {}, this.updatePage);
+    },
+    saveStatus: function saveStatus() {
+      this.save = true;
+
+      if (this.displayedOrder.status == 1) {
+        this.equipmentOutput();
+      } else if (this.displayedOrder.status == 2) {
+        this.equipmentReturn();
+      }
     },
     getCurrentLocalTime: function getCurrentLocalTime() {
       var currentDate = new Date().toISOString();
@@ -3900,6 +3919,7 @@ __webpack_require__.r(__webpack_exports__);
       });
     },
     equipmentCheckBorrowedAmount: function equipmentCheckBorrowedAmount() {
+      if (this.save) return true;
       return this.checkRequestAmount(this.displayedOrder.order_request_infos) && this.checkRequestAmount(this.ariseRequest);
     },
     checkRequestAmount: function checkRequestAmount(requestInfos) {
@@ -3924,13 +3944,15 @@ __webpack_require__.r(__webpack_exports__);
       this.ariseRequest = [];
       this.selectedTemplates = [];
       var data = {
-        equipments: this.equipmentIds,
         orderRequestInfos: this.orderRequestInfos,
-        dateOutput: this.getCurrentLocalTime()
+        dateOutput: this.getCurrentLocalTime(),
+        save: this.save
       };
       this.sendRequest(this.equipmentOutputUrl, 'put', data, this.updatePage);
     },
     equipmentCheck: function equipmentCheck() {
+      if (this.save) return true;
+
       for (var i in this.orderRequestInfos) {
         for (var j in this.orderRequestInfos[i].order_infos) {
           var orderInfo = this.orderRequestInfos[i].order_infos[j];
@@ -3947,13 +3969,13 @@ __webpack_require__.r(__webpack_exports__);
     equipmentReturn: function equipmentReturn() {
       console.log('return');
       var app = this;
-      if (!this.equipmentCheck()) return; // this.updateOrderInfoStatus();
-
+      if (!this.equipmentCheck()) return;
       console.log(this.orderRequestInfos);
       this.disableButton();
       var data = {
         orderRequestInfos: this.orderRequestInfos,
-        dateReturn: this.getCurrentLocalTime()
+        dateReturn: this.getCurrentLocalTime(),
+        save: this.save
       };
       this.sendRequest(this.equipmentReturnUrl, 'put', data, this.updatePage);
     },
@@ -4138,8 +4160,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   mixins: [_mixins_ObjectMixin__WEBPACK_IMPORTED_MODULE_0__["default"]],
@@ -4252,7 +4272,7 @@ __webpack_require__.r(__webpack_exports__);
         'table-danger': status == -1,
         'table-warning': status == 0,
         'table-primary': status > 0 && status < 4,
-        'table-success': status == 4
+        'table-secondary': status == 4
       };
     },
     redirect: function redirect(url) {
@@ -4423,10 +4443,11 @@ __webpack_require__.r(__webpack_exports__);
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   mixins: [_mixins_ObjectMixin__WEBPACK_IMPORTED_MODULE_0__["default"]],
-  props: ['items', 'by'],
+  props: ['items', 'by', 'placeholder'],
   data: function data() {
     return {
-      search: ''
+      search: '',
+      holder: 'Tìm kiếm'
     };
   },
   created: function created() {
@@ -4439,6 +4460,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {
     init: function init() {
+      if (this.placeholder) this.holder = this.placeholder;
       this.sendEvent();
     },
     update: function update() {
@@ -5165,6 +5187,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['requestInfo'],
   data: function data() {
@@ -5196,11 +5221,21 @@ __webpack_require__.r(__webpack_exports__);
       });
       return selected;
     },
+    equipmentNotAvailable: function equipmentNotAvailable(equipment) {
+      return equipment.status != 1;
+    },
     disablePlusButton: function disablePlusButton(equipment) {
       return this.equipmentSelected(equipment) || equipment.status != 1;
     },
     disableMinusButton: function disableMinusButton(equipment) {
       return !this.equipmentSelected(equipment);
+    },
+    updateSelectedEquipment: function updateSelectedEquipment(e, equipment) {
+      if (e.srcElement.checked) {
+        this.addEquipment(equipment);
+      } else {
+        this.removeEquipment(equipment);
+      }
     },
     addEquipment: function addEquipment(equipment) {
       this.addOrderInfo(equipment);
@@ -5242,16 +5277,6 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 //
 //
 //
@@ -5403,6 +5428,13 @@ __webpack_require__.r(__webpack_exports__);
       this.removeTemplate(template.id);
       this.sendEvent();
     },
+    updateSelectedTemplate: function updateSelectedTemplate(e, template) {
+      if (e.srcElement.checked) {
+        this.add(template);
+      } else {
+        this.remove(template);
+      }
+    },
     addTemplate: function addTemplate(template) {
       var temp = this.items.find(function (item) {
         return item.id == template.id;
@@ -5446,7 +5478,7 @@ __webpack_require__.r(__webpack_exports__);
       });
       return disabled;
     },
-    disablePlusButton: function disablePlusButton(template) {
+    templateChecked: function templateChecked(template) {
       return this.itemSelected(template) || this.itemDisabled(template);
     },
     disableMinusButton: function disableMinusButton(template) {
@@ -66542,7 +66574,22 @@ var render = function() {
                 attrs: { disabled: _vm.buttonDisabled },
                 on: { click: _vm.back }
               },
-              [_vm._v("Quay lại")]
+              [
+                _c("i", { staticClass: "fa fa-chevron-left" }),
+                _vm._v(" Quay lại\n        ")
+              ]
+            )
+          : _vm._e(),
+        _vm._v(" "),
+        _vm.displayedOrder.status == 1 || _vm.displayedOrder.status == 2
+          ? _c(
+              "button",
+              {
+                staticClass: "btn btn-primary mr-2",
+                attrs: { disabled: _vm.buttonDisabled },
+                on: { click: _vm.saveStatus }
+              },
+              [_vm._v("Lưu")]
             )
           : _vm._e(),
         _vm._v(" "),
@@ -66578,7 +66625,10 @@ var render = function() {
                 attrs: { disabled: _vm.buttonDisabled, "data-abc": "true" },
                 on: { click: _vm.equipmentOutput }
               },
-              [_vm._v("Xuất đồ")]
+              [
+                _vm._v("\n            Xuất đồ "),
+                _c("i", { staticClass: "fa fa-chevron-right" })
+              ]
             )
           : _vm._e(),
         _vm._v(" "),
@@ -66590,7 +66640,10 @@ var render = function() {
                 attrs: { disabled: _vm.buttonDisabled, "data-abc": "true" },
                 on: { click: _vm.equipmentReturn }
               },
-              [_vm._v("Trả đồ")]
+              [
+                _vm._v("\n            Trả đồ "),
+                _c("i", { staticClass: "fa fa-chevron-right" })
+              ]
             )
           : _vm._e(),
         _vm._v(" "),
@@ -67081,7 +67134,11 @@ var render = function() {
         { staticClass: "col-7" },
         [
           _c("search-input", {
-            attrs: { items: _vm.filterStatusItems, by: ["guest_name", "id"] },
+            attrs: {
+              items: _vm.filterStatusItems,
+              by: ["guest_name", "id", "stocker.name"],
+              placeholder: "Nhập tên hoặc mã"
+            },
             on: {
               change: function($event) {
                 return _vm.searchInput($event)
@@ -67141,20 +67198,25 @@ var render = function() {
                   "th",
                   {
                     staticClass: "align-middle text-center",
-                    staticStyle: { width: "8%" },
-                    attrs: { scope: "col" }
+                    staticStyle: { width: "18%" },
+                    attrs: { scope: "col" },
+                    on: {
+                      click: function($event) {
+                        return _vm.sort("stocker.name")
+                      }
+                    }
                   },
-                  [_vm._v("Lâu dài")]
+                  [_vm._v("Người cho mượn")]
                 ),
                 _vm._v(" "),
                 _c(
                   "th",
                   {
                     staticClass: "align-middle text-center",
-                    staticStyle: { width: "18%" },
+                    staticStyle: { width: "8%" },
                     attrs: { scope: "col" }
                   },
-                  [_vm._v("Lý do mượn")]
+                  [_vm._v("Lâu dài")]
                 ),
                 _vm._v(" "),
                 _c(
@@ -67176,20 +67238,15 @@ var render = function() {
                   "th",
                   {
                     staticClass: "align-middle text-center",
-                    staticStyle: { width: "8%" },
-                    attrs: { scope: "col" }
+                    staticStyle: { width: "16%" },
+                    attrs: { scope: "col" },
+                    on: {
+                      click: function($event) {
+                        return _vm.sort("date_output")
+                      }
+                    }
                   },
-                  [_vm._v("Yêu cầu")]
-                ),
-                _vm._v(" "),
-                _c(
-                  "th",
-                  {
-                    staticClass: "align-middle text-center",
-                    staticStyle: { width: "9%" },
-                    attrs: { scope: "col" }
-                  },
-                  [_vm._v("Cho mượn")]
+                  [_vm._v("Ngày mượn")]
                 ),
                 _vm._v(" "),
                 _c(
@@ -67263,7 +67320,7 @@ var render = function() {
                           }
                         }
                       },
-                      [_vm._v(_vm._s(_vm._f("formatBoolean")(order.long_term)))]
+                      [_vm._v(_vm._s(order.stocker.name))]
                     ),
                     _vm._v(" "),
                     _c(
@@ -67276,7 +67333,7 @@ var render = function() {
                           }
                         }
                       },
-                      [_vm._v(_vm._s(order.reason))]
+                      [_vm._v(_vm._s(_vm._f("formatBoolean")(order.long_term)))]
                     ),
                     _vm._v(" "),
                     _c(
@@ -67302,20 +67359,7 @@ var render = function() {
                           }
                         }
                       },
-                      [_vm._v(_vm._s(_vm.getOrderRequestAmount(order)))]
-                    ),
-                    _vm._v(" "),
-                    _c(
-                      "td",
-                      {
-                        staticClass: "text-center align-middle",
-                        on: {
-                          click: function($event) {
-                            _vm.redirect(_vm.orderDetailUrl(order.id))
-                          }
-                        }
-                      },
-                      [_vm._v(_vm._s(_vm.getOrderBorrowedAmount(order)) + " ")]
+                      [_vm._v(_vm._s(_vm._f("formatDate")(order.date_output)))]
                     ),
                     _vm._v(" "),
                     _c(
@@ -67512,7 +67556,7 @@ var render = function() {
           }
         ],
         staticClass: "form-control mr-sm-2",
-        attrs: { type: "search", placeholder: "Tìm kiếm" },
+        attrs: { type: "search", placeholder: _vm.holder },
         domProps: { value: _vm.search },
         on: {
           keyup: _vm.keyup,
@@ -67538,7 +67582,7 @@ var staticRenderFns = [
       "button",
       {
         staticClass: "btn btn-outline-primary my-2 my-sm-0",
-        attrs: { type: "submit" }
+        attrs: { type: "button" }
       },
       [_c("span", { staticClass: "fa fa-search" })]
     )
@@ -68621,33 +68665,23 @@ var render = function() {
           _c("td", [_vm._v(_vm._s(equipment.note))]),
           _vm._v(" "),
           _c("td", { staticClass: "align-middle" }, [
-            _c(
-              "button",
-              {
-                staticClass: "btn btn-success btn-sm",
-                attrs: { disabled: _vm.disablePlusButton(equipment) },
-                on: {
-                  click: function($event) {
-                    return _vm.addEquipment(equipment)
+            _c("div", { staticClass: "form-check form-check-inline" }, [
+              _c("label", { staticClass: "form-check-label" }, [
+                _c("input", {
+                  staticClass: "form-check-input",
+                  attrs: {
+                    type: "checkbox",
+                    disabled: _vm.equipmentNotAvailable(equipment)
+                  },
+                  domProps: { checked: _vm.equipmentSelected(equipment) },
+                  on: {
+                    change: function($event) {
+                      return _vm.updateSelectedEquipment($event, equipment)
+                    }
                   }
-                }
-              },
-              [_c("span", { staticClass: "fa fa-plus" })]
-            ),
-            _vm._v(" "),
-            _c(
-              "button",
-              {
-                staticClass: "btn btn-danger btn-sm",
-                attrs: { disabled: _vm.disableMinusButton(equipment) },
-                on: {
-                  click: function($event) {
-                    return _vm.removeEquipment(equipment)
-                  }
-                }
-              },
-              [_c("span", { staticClass: "fa fa-minus" })]
-            )
+                })
+              ])
+            ])
           ])
         ])
       }),
@@ -68890,39 +68924,20 @@ var render = function() {
             ]),
             _vm._v(" "),
             _c("td", { staticClass: "align-middle text-center" }, [
-              _c(
-                "button",
-                {
-                  staticClass: "btn btn-success btn-sm",
-                  attrs: {
-                    disabled: _vm.disablePlusButton(template),
-                    type: "button"
-                  },
-                  on: {
-                    click: function($event) {
-                      return _vm.add(template)
+              _c("div", { staticClass: "form-check form-check-inline" }, [
+                _c("label", { staticClass: "form-check-label" }, [
+                  _c("input", {
+                    staticClass: "form-check-input",
+                    attrs: { type: "checkbox" },
+                    domProps: { checked: _vm.templateChecked(template) },
+                    on: {
+                      change: function($event) {
+                        return _vm.updateSelectedTemplate($event, template)
+                      }
                     }
-                  }
-                },
-                [_c("span", { staticClass: "fa fa-plus" })]
-              ),
-              _vm._v(" "),
-              _c(
-                "button",
-                {
-                  staticClass: "btn btn-danger btn-sm",
-                  attrs: {
-                    disabled: _vm.disableMinusButton(template),
-                    type: "button"
-                  },
-                  on: {
-                    click: function($event) {
-                      return _vm.remove(template)
-                    }
-                  }
-                },
-                [_c("span", { staticClass: "fa fa-minus" })]
-              )
+                  })
+                ])
+              ])
             ])
           ])
         }),
