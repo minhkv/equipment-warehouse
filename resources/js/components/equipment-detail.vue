@@ -33,15 +33,15 @@
                 </div>
             </div>
             <div class="row">
-                <table class="table table-hover col-8 mx-auto">
+                <table class="table table-hover col-10 mx-auto">
                     <thead class="thead-light">
                         <tr>
                             <th class="text-center" scope="col" style="width: 5%">Mã</th>
-                            
+                            <th class="text-center" scope="col" style="width: 15%">Tên thiết bị</th>
                             <th class="text-center" scope="col" style="width: 10%;">Tình trạng</th>
                             <th class="text-center" scope="col" style="width: 10%;">Trạng thái</th>
                             <th class="text-center" scope="col" style="width: 15%;">Ghi chú</th>
-                            <th class="text-center" scope="col" style="width: 4%;"></th>
+                            <th class="text-center" scope="col" style="width: 6%;"></th>
                             <th class="text-center" scope="col" style="width: 2%;"></th>
                             <th class="text-center" scope="col" style="width: 4%;"></th>
                         </tr>
@@ -49,6 +49,7 @@
                     <tbody>
                         <tr v-for="(equipment, index) in template.equipments" :key="equipment.id" class="cursor-pointer" >
                             <th data-toggle="modal" :data-target="'#detail' + equipment.id" class="align-middle text-center" scope="row">{{ equipment.id }}</th>
+                            <th data-toggle="modal" :data-target="'#detail' + equipment.id" class="align-middle text-center" scope="row">{{ equipment.name }}</th>
                             <td data-toggle="modal" :data-target="'#detail' + equipment.id" class="align-middle text-center">
                                 <equipment-condition :condition="equipment.condition"></equipment-condition>
                             </td>

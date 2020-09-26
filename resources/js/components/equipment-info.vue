@@ -5,7 +5,15 @@
                 <strong><i class="fa fa-barcode"></i> Mã</strong>
             </label>
             <label class="col-3 text-left">
-                {{ equipment.input_date|formatDate }}
+                {{ equipment.id }}
+            </label>
+        </div>
+        <div class="row">
+            <label class="col-3 text-left">
+                <strong> Tên</strong>
+            </label>
+            <label class="col-3 text-left">
+                {{ equipment.name }}
             </label>
         </div>
         <div class="row">
@@ -18,7 +26,7 @@
         </div>
         <div class="row">
             <label class="col-3 text-left">
-                <strong><i class="fa fa-money" aria-hidden="true"></i> Giá nhập</strong>
+                <strong><i class="fa fa-money"></i> Giá nhập</strong>
             </label>
             <label class="col-3 text-left">
                 {{ equipment.price|formatEquipmentPrice }}

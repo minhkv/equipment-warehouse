@@ -2163,6 +2163,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ["equipmentTemplateIndexUrl", "equipmentTemplateUpdateUrl", "equipmentIndexUrl", "equipmentCreateUrl", "equipmentTemplate", "suppliers", "categories"],
   data: function data() {
@@ -2343,6 +2344,10 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['equipment', 'template', 'suppliers', 'method', 'url'],
@@ -2458,6 +2463,14 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -5187,9 +5200,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['requestInfo'],
   data: function data() {
@@ -5224,11 +5234,8 @@ __webpack_require__.r(__webpack_exports__);
     equipmentNotAvailable: function equipmentNotAvailable(equipment) {
       return equipment.status != 1;
     },
-    disablePlusButton: function disablePlusButton(equipment) {
-      return this.equipmentSelected(equipment) || equipment.status != 1;
-    },
-    disableMinusButton: function disableMinusButton(equipment) {
-      return !this.equipmentSelected(equipment);
+    disableCheckbox: function disableCheckbox(equipment) {
+      return this.equipmentNotAvailable(equipment) && !this.equipmentSelected(equipment);
     },
     updateSelectedEquipment: function updateSelectedEquipment(e, equipment) {
       if (e.srcElement.checked) {
@@ -5277,7 +5284,6 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-//
 //
 //
 //
@@ -63442,7 +63448,7 @@ var render = function() {
         _vm._m(2),
         _vm._v(" "),
         _c("div", { staticClass: "row" }, [
-          _c("table", { staticClass: "table table-hover col-8 mx-auto" }, [
+          _c("table", { staticClass: "table table-hover col-10 mx-auto" }, [
             _vm._m(3),
             _vm._v(" "),
             _c(
@@ -63463,6 +63469,19 @@ var render = function() {
                         }
                       },
                       [_vm._v(_vm._s(equipment.id))]
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "th",
+                      {
+                        staticClass: "align-middle text-center",
+                        attrs: {
+                          "data-toggle": "modal",
+                          "data-target": "#detail" + equipment.id,
+                          scope: "row"
+                        }
+                      },
+                      [_vm._v(_vm._s(equipment.name))]
                     ),
                     _vm._v(" "),
                     _c(
@@ -63870,6 +63889,16 @@ var staticRenderFns = [
           "th",
           {
             staticClass: "text-center",
+            staticStyle: { width: "15%" },
+            attrs: { scope: "col" }
+          },
+          [_vm._v("Tên thiết bị")]
+        ),
+        _vm._v(" "),
+        _c(
+          "th",
+          {
+            staticClass: "text-center",
             staticStyle: { width: "10%" },
             attrs: { scope: "col" }
           },
@@ -63898,7 +63927,7 @@ var staticRenderFns = [
         _vm._v(" "),
         _c("th", {
           staticClass: "text-center",
-          staticStyle: { width: "4%" },
+          staticStyle: { width: "6%" },
           attrs: { scope: "col" }
         }),
         _vm._v(" "),
@@ -63958,6 +63987,32 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", [
+    _c("div", { staticClass: "form-group" }, [
+      _c("label", { attrs: { for: "price" } }, [_vm._v("Tên thiết bị")]),
+      _vm._v(" "),
+      _c("input", {
+        directives: [
+          {
+            name: "model",
+            rawName: "v-model",
+            value: _vm.eq.name,
+            expression: "eq.name"
+          }
+        ],
+        staticClass: "form-control",
+        attrs: { type: "text", placeholder: "Tên thiết bị" },
+        domProps: { value: _vm.eq.name },
+        on: {
+          input: function($event) {
+            if ($event.target.composing) {
+              return
+            }
+            _vm.$set(_vm.eq, "name", $event.target.value)
+          }
+        }
+      })
+    ]),
+    _vm._v(" "),
     _c("div", { staticClass: "form-group" }, [
       _vm._m(0),
       _vm._v(" "),
@@ -64207,16 +64262,20 @@ var render = function() {
       _vm._m(0),
       _vm._v(" "),
       _c("label", { staticClass: "col-3 text-left" }, [
-        _vm._v(
-          "\n            " +
-            _vm._s(_vm._f("formatDate")(_vm.equipment.input_date)) +
-            "\n        "
-        )
+        _vm._v("\n            " + _vm._s(_vm.equipment.id) + "\n        ")
       ])
     ]),
     _vm._v(" "),
     _c("div", { staticClass: "row" }, [
       _vm._m(1),
+      _vm._v(" "),
+      _c("label", { staticClass: "col-3 text-left" }, [
+        _vm._v("\n            " + _vm._s(_vm.equipment.name) + "\n        ")
+      ])
+    ]),
+    _vm._v(" "),
+    _c("div", { staticClass: "row" }, [
+      _vm._m(2),
       _vm._v(" "),
       _c("label", { staticClass: "col-3 text-left" }, [
         _vm._v(
@@ -64228,7 +64287,7 @@ var render = function() {
     ]),
     _vm._v(" "),
     _c("div", { staticClass: "row" }, [
-      _vm._m(2),
+      _vm._m(3),
       _vm._v(" "),
       _c("label", { staticClass: "col-3 text-left" }, [
         _vm._v(
@@ -64240,7 +64299,7 @@ var render = function() {
     ]),
     _vm._v(" "),
     _c("div", { staticClass: "row" }, [
-      _vm._m(3),
+      _vm._m(4),
       _vm._v(" "),
       _c(
         "label",
@@ -64251,7 +64310,7 @@ var render = function() {
     ]),
     _vm._v(" "),
     _c("div", { staticClass: "row" }, [
-      _vm._m(4),
+      _vm._m(5),
       _vm._v(" "),
       _c(
         "label",
@@ -64266,7 +64325,7 @@ var render = function() {
     ]),
     _vm._v(" "),
     _c("div", { staticClass: "row" }, [
-      _vm._m(5),
+      _vm._m(6),
       _vm._v(" "),
       _c(
         "label",
@@ -64277,7 +64336,7 @@ var render = function() {
     ]),
     _vm._v(" "),
     _c("div", { staticClass: "row" }, [
-      _vm._m(6),
+      _vm._m(7),
       _vm._v(" "),
       _c("label", { staticClass: "col-3 text-left" }, [
         _vm._v("\n            " + _vm._s(_vm.equipment.note) + "\n        ")
@@ -64299,6 +64358,14 @@ var staticRenderFns = [
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
     return _c("label", { staticClass: "col-3 text-left" }, [
+      _c("strong", [_vm._v(" Tên")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("label", { staticClass: "col-3 text-left" }, [
       _c("strong", [
         _c("i", { staticClass: "fa fa-calendar" }),
         _vm._v(" Ngày nhập")
@@ -64311,10 +64378,7 @@ var staticRenderFns = [
     var _c = _vm._self._c || _h
     return _c("label", { staticClass: "col-3 text-left" }, [
       _c("strong", [
-        _c("i", {
-          staticClass: "fa fa-money",
-          attrs: { "aria-hidden": "true" }
-        }),
+        _c("i", { staticClass: "fa fa-money" }),
         _vm._v(" Giá nhập")
       ])
     ])
@@ -68630,19 +68694,11 @@ var render = function() {
           ),
           _vm._v(" "),
           _c("td", { staticClass: "text-center align-middle" }, [
-            _vm._v(_vm._s(_vm._f("formatEquipmentPrice")(equipment.price)))
+            _vm._v(_vm._s(equipment.name))
           ]),
           _vm._v(" "),
           _c(
             "td",
-            { staticClass: "text-center align-middle" },
-            [_c("supplier-name", { attrs: { equipment: equipment } })],
-            1
-          ),
-          _vm._v(" "),
-          _c(
-            "td",
-            { staticClass: "text-center align-middle" },
             [
               _c("equipment-condition", {
                 attrs: { condition: equipment.condition }
@@ -68671,7 +68727,7 @@ var render = function() {
                   staticClass: "form-check-input",
                   attrs: {
                     type: "checkbox",
-                    disabled: _vm.equipmentNotAvailable(equipment)
+                    disabled: _vm.disableCheckbox(equipment)
                   },
                   domProps: { checked: _vm.equipmentSelected(equipment) },
                   on: {
@@ -68710,20 +68766,10 @@ var staticRenderFns = [
           "th",
           {
             staticClass: "text-center",
-            staticStyle: { width: "10%" },
+            staticStyle: { width: "15%" },
             attrs: { scope: "col" }
           },
-          [_vm._v("Giá nhập")]
-        ),
-        _vm._v(" "),
-        _c(
-          "th",
-          {
-            staticClass: "text-center",
-            staticStyle: { width: "12%" },
-            attrs: { scope: "col" }
-          },
-          [_vm._v("Nhà cung cấp")]
+          [_vm._v("Tên")]
         ),
         _vm._v(" "),
         _c(

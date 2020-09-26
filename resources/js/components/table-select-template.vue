@@ -52,7 +52,6 @@
                         v-model="getDisabledTemplate(template.id).amount"
                         @change="sendEvent()"
                         >
-                        <!-- <div v-if="itemDisabled(template)">{{getDisabledTemplate(template.id).amount}}</div> -->
                     </td>
 
                     <td class="align-middle text-center">

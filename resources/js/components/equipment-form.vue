@@ -1,6 +1,10 @@
 <template>
     <div>
         <div class="form-group">
+            <label for="price">Tên thiết bị</label>
+            <input type="text" class="form-control" v-model="eq.name" placeholder="Tên thiết bị">
+        </div>
+        <div class="form-group">
             <label for="price"><i class="fa fa-calendar"></i> Ngày nhập</label>
             <input type="datetime-local" class="form-control" v-model="eq.input_date" placeholder="Giá nhập">
         </div>

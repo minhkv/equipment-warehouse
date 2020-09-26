@@ -11,6 +11,7 @@ class Equipment extends Model
     protected $table="equipments";
     protected $fillable = [
         'template_id',
+        'name',
         'price', 
         'size',
         'supplier_id',

@@ -3,8 +3,7 @@
         <thead class="thead-light">
             <tr>
                 <th class="text-center" scope="col" style="width: 5%">Mã</th>
-                <th class="text-center" scope="col" style="width: 10%;">Giá nhập</th>
-                <th class="text-center" scope="col" style="width: 12%;">Nhà cung cấp</th>
+                <th class="text-center" scope="col" style="width: 15%">Tên</th>
                 <th class="text-center" scope="col" style="width: 10%;">Tình trạng</th>
                 <th class="text-center" scope="col" style="width: 10%;">Trạng thái</th>
                 <th class="text-center" scope="col" style="width: 15%;">Ghi chú</th>
@@ -14,10 +13,8 @@
         <tbody>
             <tr v-for="equipment in requestInfo.template.equipments" :key="equipment.id" :class="rowClass(equipment)">
                 <th class="text-center align-middle" scope="row">{{ equipment.id }}</th>
-                <td class="text-center align-middle">{{ equipment.price|formatEquipmentPrice }}</td>
-                <td class="text-center align-middle">
-                    <supplier-name :equipment="equipment"></supplier-name></td>
-                <td class="text-center align-middle">
+                <td class="text-center align-middle">{{ equipment.name }}</td>
+                <td>
                     <equipment-condition :condition="equipment.condition"></equipment-condition>
                 </td>
                 <td class="align-middle text-center">
@@ -27,7 +24,7 @@
                 <td class="align-middle">
                     <div class="form-check form-check-inline">
                         <label class="form-check-label">
-                            <input class="form-check-input" type="checkbox" :disabled="equipmentNotAvailable(equipment)" :checked="equipmentSelected(equipment)" @change="updateSelectedEquipment($event, equipment)"> 
+                            <input class="form-check-input" type="checkbox" :disabled="disableCheckbox(equipment)" :checked="equipmentSelected(equipment)" @change="updateSelectedEquipment($event, equipment)"> 
                         </label>
                     </div>
                 </td>
@@ -70,12 +67,10 @@ export default {
         equipmentNotAvailable(equipment) {
             return equipment.status != 1;
         },
-        disablePlusButton(equipment) {
-            return this.equipmentSelected(equipment) || equipment.status != 1;
+        disableCheckbox(equipment) {
+            return this.equipmentNotAvailable(equipment) && !this.equipmentSelected(equipment);
         },
-        disableMinusButton(equipment) {
-            return !this.equipmentSelected(equipment);
-        },
+        
         updateSelectedEquipment(e, equipment) {
             if(e.srcElement.checked) {
                 this.addEquipment(equipment);
