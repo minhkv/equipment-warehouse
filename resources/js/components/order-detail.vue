@@ -184,7 +184,9 @@
 
 <script>
 import moment from 'moment';
+import RequestMixin from '../mixins/RequestMixin'
 export default {
+    mixins: [RequestMixin],
     props: [
         "categories",
         "equipmentTemplates",
@@ -485,21 +487,6 @@ export default {
                 dateCompleted: this.getCurrentLocalTime()
             };
             this.sendRequest(this.completeUrl, 'put', data, this.updatePage);
-        },
-        sendRequest(url, method, data, callback) {
-            let app = this;
-            axios({
-                url: url,
-                method: method,
-                data: data
-            })
-            .then(function(res) {
-                console.log(res);
-                callback(res.data);
-            })
-            .catch(function(error) { 
-                console.log(error);
-            });
         },
         enableButton() {
             this.buttonDisabled = false;
