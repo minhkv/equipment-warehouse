@@ -174,7 +174,7 @@
         </modal-component>
 
         <modal-component id="addAriseTemplate" title="Thiết bị phát sinh thêm" size="lg">
-            <table-select-template @change="updateRequest($event)" :items="equipmentTemplates" :disabledTemplates="selectedTemplates" :categories="categories" :templateNeedToRemove="templateNeedToRemove.template"></table-select-template>
+            <table-select-template @change="updateRequest($event)" :items="equipmentTemplates" :initTemplates="selectedTemplates" :categories="categories" :templateNeedToRemove="templateNeedToRemove.template"></table-select-template>
             <template v-slot:footer>
                 <button type="button" class="btn btn-primary" data-dismiss="modal">Xong</button>
             </template>

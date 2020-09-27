@@ -1,6 +1,5 @@
 @extends('layouts.app')
 @section('content')
-<link rel="stylesheet" href="/css/card.css">
 <equipment-templates 
     :eqs="{{json_encode($equipmentTemplates)}}"
     :equipment-templates="{{json_encode($equipmentTemplates)}}"

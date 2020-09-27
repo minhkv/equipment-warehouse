@@ -72,7 +72,7 @@
 </template>
 <script>
 export default {
-    props: ['items', 'categories', 'disabledTemplates', 'templateNeedToRemove'],
+    props: ['items', 'categories', 'initTemplates', 'templateNeedToRemove'],
     data() {
         return {
             selectedItems: [],
@@ -131,9 +131,9 @@ export default {
             }
         },
         getDisabledTemplate(template_id) {
-            for(let i in this.disabledTemplates) {
-                if(this.disabledTemplates[i].id == template_id) {
-                    return this.disabledTemplates[i];
+            for(let i in this.initTemplates) {
+                if(this.initTemplates[i].id == template_id) {
+                    return this.initTemplates[i];
                 }
             }
         },
@@ -171,9 +171,9 @@ export default {
             let index = this.selectedItems.findIndex(x => x.id == id);
             if(index != -1)
                 this.selectedItems.splice(index, 1);
-            index = this.disabledTemplates.findIndex(x => x.id == id);
+            index = this.initTemplates.findIndex(x => x.id == id);
             if(index != -1)
-                this.disabledTemplates.splice(index, 1);
+                this.initTemplates.splice(index, 1);
         },
         enableButton(template_id) {
             Vue.set(this.buttonDisabled, template_id, false);
@@ -188,7 +188,7 @@ export default {
             return selected;
         },
         itemDisabled(item) {
-            let disabled = this.disabledTemplates.some(x => {
+            let disabled = this.initTemplates.some(x => {
                 return x.id == item.id;
             });
             return disabled;
@@ -202,7 +202,7 @@ export default {
         sendEvent() {
             console.log('send');
             let data = {
-                origin: this.disabledTemplates,
+                origin: this.initTemplates,
                 arise: this.selectedItems
             };
             this.$emit('change', data);

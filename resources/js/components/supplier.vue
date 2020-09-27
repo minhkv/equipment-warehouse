@@ -37,7 +37,7 @@
          <div class="row justify-content-center">
             <!-- Add supplier -->
             <button type="button" class="btn btn-success" data-toggle="modal" data-target="#addSupplier">
-                <span class="fa fa-plus"></span>
+                Thêm nhà cung cấp
             </button>
         </div>
         <modal-component v-for="(supplier, index) in displayedSuppliers" :key="supplier.id" :id="'editSupplier' + supplier.id" title="Chỉnh sửa nhà cung cấp" size="">

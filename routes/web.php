@@ -55,13 +55,9 @@ Route::middleware('auth')->group(function() {
     Route::put('order-request/{order}/complete', 'OrderController@completeOrder')->name('order-request.complete');
     Route::put('order-request/{order}/back', 'OrderController@back')->name('order-request.back');
     Route::get('/test', function() {
-        $template = App\EquipmentTemplate::where('id', 1)->first();
-        $equipment = $template->equipments()->where('id', 1)->first();
-        $suppliers = App\Supplier::all();
-        // dd($equipment);
+        $categories = App\Category::all();
         return view('test')->with([
-            'suppliers' => $suppliers,
-            'equipment' => $equipment
+            'categories' => $categories,
         ]);
     });
 });
