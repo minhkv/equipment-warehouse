@@ -67525,8 +67525,7 @@ var render = function() {
                           },
                           on: {
                             click: function($event) {
-                              _vm.destroyOrder(order.id)
-                              _vm.filterOrder()
+                              return _vm.destroyOrder(order.id)
                             }
                           }
                         },

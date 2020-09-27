@@ -28,10 +28,11 @@ class OrderController extends Controller
             'orderRequestInfos.orderInfos', 
             'stocker',
             'guest'
-            ])->orderBy('created_at', 'DESC')->get();
-        return view('order')->with([
-            'orders' => $orders
-        ]);
+            ])
+            ->where('display', 1)
+            ->orderBy('created_at', 'DESC')
+            ->get();
+        return view('order')->with(['orders' => $orders]);
     }
 
     /**
@@ -42,7 +43,7 @@ class OrderController extends Controller
     public function create()
     {
         $users = User::all();
-        $equipmentTemplates = EquipmentTemplate::with(['equipments'])->get();
+        $equipmentTemplates = EquipmentTemplate::with(['equipments'])->where('display', 1)->get();
         $channels = Channel::all();
         $stocker_id = Auth::user()->id;
         $categories = Category::all();
@@ -131,8 +132,8 @@ class OrderController extends Controller
      */
     public function destroy(Order $order)
     {
-        $order->delete();
-        return redirect()->back();
+        $order->update(['display' => 0]);
+        return Order::where('display', 1)->get();
     }
 
     public function storeRequest(Request $request) {

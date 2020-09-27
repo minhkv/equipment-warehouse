@@ -26,6 +26,7 @@ class Order extends Model
         'reason',
         'status',
         'comment',
+        'display'
     ];
     public function orderInfos() {
         return $this->hasMany(OrderInfo::class);
