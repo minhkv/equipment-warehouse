@@ -1,9 +1,11 @@
 <template>
-    <span :class="displayStatusClass()">{{status | formatOrderStatus}}</span>
+    <span :class="displayStatusClass()">{{status | formatOrderStatus}}
+        <i v-if="error" class="fa fa-exclamation-circle text-danger"></i>
+    </span>
 </template>
 <script>
 export default {
-    props: ['status'],
+    props: ['status', 'error'],
     methods: {
         displayStatusClass() {
             return {

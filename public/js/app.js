@@ -3726,6 +3726,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ["categories", "equipmentTemplates", "order", "orderIndexUrl", "acceptUrl", "rejectUrl", "equipmentOutputUrl", "equipmentReturnUrl", "completeUrl", "backUrl"],
@@ -3750,9 +3752,8 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {
     initialize: function initialize() {
+      this.initNote();
       this.initializeOrderRequestInfos();
-      this.initializeEquipmentOutput();
-      this.initializeEquipmentReturn();
       this.initSearchInput();
       this.initSelectedTemplates();
     },
@@ -3760,7 +3761,6 @@ __webpack_require__.r(__webpack_exports__);
       Object.assign(this.displayedOrder, this.order);
     },
     setOrder: function setOrder(order) {
-      // Object.assign(this.displayedOrder, order);
       this.displayedOrder = order;
     },
     initializeOrderRequestInfos: function initializeOrderRequestInfos() {
@@ -3779,10 +3779,14 @@ __webpack_require__.r(__webpack_exports__);
       });
       this.orderRequestInfos = orderRequestInfos;
     },
-    initializeEquipmentOutput: function initializeEquipmentOutput() {},
-    initializeEquipmentReturn: function initializeEquipmentReturn() {},
+    initNote: function initNote() {
+      if (this.displayedOrder.status >= 2 && !this.displayedOrder.note) {
+        this.displayedOrder.note = "Thất lạc: " + this.getTotalLostAmount();
+        this.displayedOrder.note += ', Lỗi: ' + this.getTotalErrorAmount();
+      }
+    },
     initSearchInput: function initSearchInput() {
-      this.searchInputItems = this.order.order_request_infos;
+      this.searchInputItems = this.displayedOrder.order_request_infos;
     },
     initSelectedTemplates: function initSelectedTemplates() {
       this.selectedTemplates = this.displayedOrder.order_request_infos.map(function (info) {
@@ -3794,6 +3798,28 @@ __webpack_require__.r(__webpack_exports__);
           image: info.template.image
         };
       });
+    },
+    getTotalLostAmount: function getTotalLostAmount() {
+      var total = 0;
+      this.displayedOrder.order_request_infos.forEach(function (requestInfo) {
+        requestInfo.order_infos.forEach(function (orderInfo) {
+          if (orderInfo.status == 0) {
+            total++;
+          }
+        });
+      });
+      return total;
+    },
+    getTotalErrorAmount: function getTotalErrorAmount() {
+      var total = 0;
+      this.displayedOrder.order_request_infos.forEach(function (requestInfo) {
+        requestInfo.order_infos.forEach(function (orderInfo) {
+          if (orderInfo.condition_received == 0) {
+            total++;
+          }
+        });
+      });
+      return total;
     },
     freshRequest: function freshRequest(data) {
       console.log('fresh');
@@ -3844,7 +3870,7 @@ __webpack_require__.r(__webpack_exports__);
           amount: template.amount,
           borrowed_amount: 0,
           order_infos: [],
-          order_id: app.order.id,
+          order_id: app.displayedOrder.id,
           template: template,
           template_id: template.id
         };
@@ -4037,8 +4063,10 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ['status'],
+  props: ['status', 'error'],
   methods: {
     displayStatusClass: function displayStatusClass() {
       return {
@@ -4106,6 +4134,7 @@ __webpack_require__.r(__webpack_exports__);
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _mixins_ObjectMixin__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../mixins/ObjectMixin */ "./resources/js/mixins/ObjectMixin.js");
+/* harmony import */ var _mixins_OrderMixin__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../mixins/OrderMixin */ "./resources/js/mixins/OrderMixin.js");
 //
 //
 //
@@ -4174,8 +4203,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 
+
 /* harmony default export */ __webpack_exports__["default"] = ({
-  mixins: [_mixins_ObjectMixin__WEBPACK_IMPORTED_MODULE_0__["default"]],
+  mixins: [_mixins_ObjectMixin__WEBPACK_IMPORTED_MODULE_0__["default"], _mixins_OrderMixin__WEBPACK_IMPORTED_MODULE_1__["default"]],
   props: ['orders', 'orderCreateUrl', 'orderIndexUrl'],
   data: function data() {
     return {
@@ -66301,7 +66331,7 @@ var render = function() {
       _c(
         "h3",
         [
-          _vm._v("Đơn mượn: " + _vm._s(_vm.order.id) + " \n        "),
+          _vm._v("Đơn mượn: " + _vm._s(_vm.displayedOrder.id) + " \n        "),
           _c("order-status", { attrs: { status: _vm.displayedOrder.status } })
         ],
         1
@@ -66312,13 +66342,15 @@ var render = function() {
           _vm._m(0),
           _vm._v(" "),
           _c("label", { staticClass: "col-3 text-left" }, [
-            _vm._v(_vm._s(_vm.order.guest_name))
+            _vm._v(_vm._s(_vm.displayedOrder.guest_name))
           ]),
           _vm._v(" "),
           _vm._m(1),
           _vm._v(" "),
           _c("label", { staticClass: "col-3 text-left" }, [
-            _vm._v(_vm._s(_vm._f("formatDate")(_vm.order.date_borrowed)))
+            _vm._v(
+              _vm._s(_vm._f("formatDate")(_vm.displayedOrder.date_borrowed))
+            )
           ])
         ]),
         _vm._v(" "),
@@ -66326,13 +66358,13 @@ var render = function() {
           _vm._m(2),
           _vm._v(" "),
           _c("label", { staticClass: "col-3 text-left" }, [
-            _vm._v(_vm._s(_vm.order.department))
+            _vm._v(_vm._s(_vm.displayedOrder.department))
           ]),
           _vm._v(" "),
           _vm._m(3),
           _vm._v(" "),
           _c("label", { staticClass: "col-3 text-left" }, [
-            _vm._v(_vm._s(_vm._f("formatDate")(_vm.order.date_return)))
+            _vm._v(_vm._s(_vm._f("formatDate")(_vm.displayedOrder.date_return)))
           ])
         ]),
         _vm._v(" "),
@@ -66340,21 +66372,30 @@ var render = function() {
           _vm._m(4),
           _vm._v(" "),
           _c("label", { staticClass: "col-3 text-left" }, [
-            _vm._v(" " + _vm._s(_vm._f("formatBoolean")(_vm.order.long_term)))
+            _vm._v(
+              " " +
+                _vm._s(_vm._f("formatBoolean")(_vm.displayedOrder.long_term))
+            )
           ]),
           _vm._v(" "),
           _vm._m(5),
           _vm._v(" "),
           _c("label", { staticClass: "col-3 text-left" }, [
-            _vm._v(_vm._s(_vm.order.reason))
+            _vm._v(_vm._s(_vm.displayedOrder.reason))
           ])
         ]),
         _vm._v(" "),
         _c("div", { staticClass: "row" }, [
           _vm._m(6),
           _vm._v(" "),
-          _c("label", { staticClass: "col-6 text-left" }, [
-            _vm._v(_vm._s(_vm.order.note))
+          _c("label", { staticClass: "col-3 text-left" }, [
+            _vm._v(_vm._s(_vm.displayedOrder.stocker.name))
+          ]),
+          _vm._v(" "),
+          _vm._m(7),
+          _vm._v(" "),
+          _c("label", { staticClass: "col-3 text-left" }, [
+            _vm._v(_vm._s(_vm.displayedOrder.note))
           ])
         ])
       ]),
@@ -66364,12 +66405,14 @@ var render = function() {
           "div",
           { class: { step: true, active: _vm.displayedOrder.status >= 0 } },
           [
-            _vm._m(7),
+            _vm._m(8),
             _vm._v(" "),
             _c("span", { staticClass: "text" }, [_vm._v("Tạo đơn hàng")]),
             _vm._v(" "),
             _c("span", { staticClass: "text-muted" }, [
-              _vm._v(_vm._s(_vm._f("formatDate")(_vm.order.created_at)))
+              _vm._v(
+                _vm._s(_vm._f("formatDate")(_vm.displayedOrder.created_at))
+              )
             ])
           ]
         ),
@@ -66378,12 +66421,14 @@ var render = function() {
           "div",
           { class: { step: true, active: _vm.displayedOrder.status >= 1 } },
           [
-            _vm._m(8),
+            _vm._m(9),
             _vm._v(" "),
             _c("span", { staticClass: "text" }, [_vm._v("Chấp nhận")]),
             _vm._v(" "),
             _c("span", { staticClass: "text-muted" }, [
-              _vm._v(_vm._s(_vm._f("formatDate")(_vm.order.date_approved)))
+              _vm._v(
+                _vm._s(_vm._f("formatDate")(_vm.displayedOrder.date_approved))
+              )
             ])
           ]
         ),
@@ -66392,12 +66437,14 @@ var render = function() {
           "div",
           { class: { step: true, active: _vm.displayedOrder.status >= 2 } },
           [
-            _vm._m(9),
+            _vm._m(10),
             _vm._v(" "),
             _c("span", { staticClass: "text" }, [_vm._v(" Xuất đồ")]),
             _vm._v(" "),
             _c("span", { staticClass: "text-muted" }, [
-              _vm._v(_vm._s(_vm._f("formatDate")(_vm.order.date_output)))
+              _vm._v(
+                _vm._s(_vm._f("formatDate")(_vm.displayedOrder.date_output))
+              )
             ])
           ]
         ),
@@ -66406,12 +66453,14 @@ var render = function() {
           "div",
           { class: { step: true, active: _vm.displayedOrder.status >= 3 } },
           [
-            _vm._m(10),
+            _vm._m(11),
             _vm._v(" "),
             _c("span", { staticClass: "text" }, [_vm._v(" Trả đồ ")]),
             _vm._v(" "),
             _c("span", { staticClass: "text-muted" }, [
-              _vm._v(_vm._s(_vm._f("formatDate")(_vm.order.date_received)))
+              _vm._v(
+                _vm._s(_vm._f("formatDate")(_vm.displayedOrder.date_received))
+              )
             ])
           ]
         ),
@@ -66420,12 +66469,14 @@ var render = function() {
           "div",
           { class: { step: true, active: _vm.displayedOrder.status >= 4 } },
           [
-            _vm._m(11),
+            _vm._m(12),
             _vm._v(" "),
             _c("span", { staticClass: "text" }, [_vm._v("Hoàn tất")]),
             _vm._v(" "),
             _c("span", { staticClass: "text-muted" }, [
-              _vm._v(_vm._s(_vm._f("formatDate")(_vm.order.date_completed)))
+              _vm._v(
+                _vm._s(_vm._f("formatDate")(_vm.displayedOrder.date_completed))
+              )
             ])
           ]
         )
@@ -66491,10 +66542,10 @@ var render = function() {
       _vm._v(" "),
       _vm.displayedOrder.status == 1 && _vm.ariseRequest.length > 0
         ? _c("div", [
-            _vm._m(12),
+            _vm._m(13),
             _vm._v(" "),
             _c("table", { staticClass: "table table-hover" }, [
-              _vm._m(13),
+              _vm._m(14),
               _vm._v(" "),
               _c(
                 "tbody",
@@ -66561,7 +66612,7 @@ var render = function() {
                     _c("td", { staticClass: "align-middle text-center" }, [
                       _vm._v(
                         "\n                        " +
-                          _vm._s(_vm.getBorrowedAmountByInfo(info)) +
+                          _vm._s(info.order_infos.length) +
                           "\n                    "
                       )
                     ]),
@@ -66976,7 +67027,15 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("label", { staticClass: "col-3 offset-3 text-left" }, [
+    return _c("label", { staticClass: "col-3 text-left" }, [
+      _c("strong", [_vm._v("Người cho mượn:")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("label", { staticClass: "col-3 text-left" }, [
       _c("strong", [_vm._v("Ghi chú:")])
     ])
   },
@@ -67098,7 +67157,10 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("span", { class: _vm.displayStatusClass() }, [
-    _vm._v(_vm._s(_vm._f("formatOrderStatus")(_vm.status)))
+    _vm._v(_vm._s(_vm._f("formatOrderStatus")(_vm.status)) + "\n    "),
+    _vm.error
+      ? _c("i", { staticClass: "fa fa-exclamation-circle text-danger" })
+      : _vm._e()
   ])
 }
 var staticRenderFns = []
@@ -67441,7 +67503,10 @@ var render = function() {
                           "h6",
                           [
                             _c("order-status", {
-                              attrs: { status: order.status }
+                              attrs: {
+                                error: _vm.checkOrderError(order),
+                                status: order.status
+                              }
                             })
                           ],
                           1
@@ -83966,6 +84031,47 @@ __webpack_require__.r(__webpack_exports__);
         i++;
       });
       return value;
+    }
+  }
+});
+
+/***/ }),
+
+/***/ "./resources/js/mixins/OrderMixin.js":
+/*!*******************************************!*\
+  !*** ./resources/js/mixins/OrderMixin.js ***!
+  \*******************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony default export */ __webpack_exports__["default"] = ({
+  methods: {
+    getTotalLostAmount: function getTotalLostAmount(order) {
+      var total = 0;
+      order.order_request_infos.forEach(function (requestInfo) {
+        requestInfo.order_infos.forEach(function (orderInfo) {
+          if (orderInfo.status == 0) {
+            total++;
+          }
+        });
+      });
+      return total;
+    },
+    getTotalErrorAmount: function getTotalErrorAmount(order) {
+      var total = 0;
+      order.order_request_infos.forEach(function (requestInfo) {
+        requestInfo.order_infos.forEach(function (orderInfo) {
+          if (orderInfo.condition_received == 0) {
+            total++;
+          }
+        });
+      });
+      return total;
+    },
+    checkOrderError: function checkOrderError(order) {
+      return this.getTotalErrorAmount(order) + this.getTotalLostAmount(order) > 0;
     }
   }
 });

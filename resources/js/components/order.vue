@@ -44,7 +44,7 @@
                         <td @click="redirect(orderDetailUrl(order.id))" class="text-center align-middle">{{order.date_output|formatDate}}</td>
                         <td @click="redirect(orderDetailUrl(order.id))" class="text-center align-middle">
                             <h6>
-                                <order-status :status="order.status"></order-status>
+                                <order-status :error="checkOrderError(order)" :status="order.status"></order-status>
                             </h6>
                         </td>
                         <td class="align-middle">
@@ -67,8 +67,9 @@
 </template>
 <script>
 import ObjectMixin from '../mixins/ObjectMixin';
+import OrderMixin from '../mixins/OrderMixin';
 export default {
-    mixins: [ObjectMixin],
+    mixins: [ObjectMixin, OrderMixin],
     props: [
         'orders',
         'orderCreateUrl',
