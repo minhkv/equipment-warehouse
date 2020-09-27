@@ -8,19 +8,23 @@ use App\Category;
 class EquipmentTemplate extends Model
 {
     protected $fillable = [
-        'name', 'image', 'category_id'
+        'name', 'image', 'category_id', 'display'
     ];
     public function category() {
         return $this->belongsTo(Category::class, 'category_id');
     }
     public function equipments() {
-        return $this->hasMany(Equipment::class, 'template_id');
+        return $this->hasMany(Equipment::class, 'template_id')->where('display', 1);
     }
     public function getLostEquipments() {
-        $lostEquipments = $this->equipments()->where('status', 0)->get();
+        $lostEquipments = $this->equipments()
+        ->where([['status', 0],['display', 1]])
+        ->get();
         return $lostEquipments;
     }
     public function hasLostEquipments() {
-        return $this->equipments()->where('status', 0)->exists();
+        return $this->equipments()
+        ->where([['status', 0],['display', 1]])
+        ->exists();
     }
 }

@@ -21,7 +21,8 @@ class Equipment extends Model
         'status',
         'note',
         'input_date',
-        'warranty'
+        'warranty',
+        'display'
     ];
     public function supplier() {
         return $this->belongsTo(Supplier::class);

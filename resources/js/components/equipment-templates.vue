@@ -10,7 +10,7 @@
             <div class="col-sm-12 col-md-3 col-lg-2 dropdown">
                 <!-- Select -->
                 <selection-filter
-                    :items="equipmentTemplates"
+                    :items="displayedTemplates"
                     :values="filterConfig.values"
                     :all="filterConfig.all"
                     :by="filterConfig.by"
@@ -51,7 +51,7 @@
                             </a>
                             <button
                                 class="btn btn-danger btn-sm"
-                                @click="equipmentDestroy(template.id, index)">
+                                @click="equipmentDestroy(template, updatePage)">
                                 <span class="fa fa-trash"></span>
                             </button>
                         </div>
@@ -94,6 +94,7 @@ export default {
     },
     methods: {
         init() {
+            this.displayedTemplates = this.equipmentTemplates;
             this.initFilter();
         },
         initFilter() {
@@ -119,25 +120,20 @@ export default {
         equipmentTemplateDeleteUrl(id) {
             return this.equipmentTemplateIndexUrl + "/" + id;
         },
-        equipmentDestroy(id, index) {
-            if (confirm("Bạn có chắc chắn muốn xóa?")) {
-                axios
-                    .delete(this.equipmentTemplateDeleteUrl(id))
-                    .then((res) => {
-                        console.log(res);
-                    })
-                    .catch(function (error) {
-                        console.log(error);
-                    });
-                for (var i in this.equipmentTemplates) {
-                    if (this.equipmentTemplates[i].id == id) {
-                        console.log(i);
-                        this.equipmentTemplates.splice(i, 1);
-                        break;
-                    }
-                }
-                this.filterTemplate();
-            }
+        updatePage(res) {
+            this.displayedTemplates = res.data;
+        },
+        equipmentDestroy(template, callback) {
+            if (!confirm("Bạn có chắc chắn muốn xóa?")) { return; }
+            axios
+                .delete(this.equipmentTemplateDeleteUrl(template.id))
+                .then((res) => {
+                    console.log(res);
+                    callback(res);
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
         },
     },
 };

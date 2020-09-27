@@ -17,7 +17,9 @@ class EquipmentTemplateController extends Controller
      */
     public function index()
     {
-        $equipmentTemplates = EquipmentTemplate::with('equipments')->get();
+        $equipmentTemplates = EquipmentTemplate::with('equipments')
+        ->where('display', 1)
+        ->get();
         $categories = Category::all();
         return view('equipment')->with([
             'equipmentTemplates' => $equipmentTemplates,
@@ -124,7 +126,8 @@ class EquipmentTemplateController extends Controller
      */
     public function destroy(EquipmentTemplate $equipmentTemplate)
     {
-        $equipmentTemplate->delete();
-        return 'delete template';
+        $equipmentTemplate->update(['display' => 0]);
+        return EquipmentTemplate::where('display', 1)
+        ->with('equipments')->get();
     }
 }

@@ -20,7 +20,7 @@ class EquipmentController extends Controller
     public function equipmentLost() {
         $lostEquipments = Equipment::with([
             'template',
-            ])->where('status', 0)->get();
+            ])->where([['status', 0], ['display', 1]])->get();
         $recentOrderInfos = [];
         foreach($lostEquipments as $lostEquipment) {
             $recentOrderInfos[$lostEquipment->id] = $lostEquipment->getRecentOrderInfo();
@@ -105,9 +105,9 @@ class EquipmentController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Equipment $equipment)
     {
-        Equipment::find($id)->delete();
-        return 'delete equipment';
+        $equipment->update(['display' => 0]);
+        return $equipment;
     }
 }

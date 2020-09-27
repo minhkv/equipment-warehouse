@@ -2917,6 +2917,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {
     init: function init() {
+      this.displayedTemplates = this.equipmentTemplates;
       this.initFilter();
     },
     initFilter: function initFilter() {
@@ -2944,24 +2945,20 @@ __webpack_require__.r(__webpack_exports__);
     equipmentTemplateDeleteUrl: function equipmentTemplateDeleteUrl(id) {
       return this.equipmentTemplateIndexUrl + "/" + id;
     },
-    equipmentDestroy: function equipmentDestroy(id, index) {
-      if (confirm("Bạn có chắc chắn muốn xóa?")) {
-        axios["delete"](this.equipmentTemplateDeleteUrl(id)).then(function (res) {
-          console.log(res);
-        })["catch"](function (error) {
-          console.log(error);
-        });
-
-        for (var i in this.equipmentTemplates) {
-          if (this.equipmentTemplates[i].id == id) {
-            console.log(i);
-            this.equipmentTemplates.splice(i, 1);
-            break;
-          }
-        }
-
-        this.filterTemplate();
+    updatePage: function updatePage(res) {
+      this.displayedTemplates = res.data;
+    },
+    equipmentDestroy: function equipmentDestroy(template, callback) {
+      if (!confirm("Bạn có chắc chắn muốn xóa?")) {
+        return;
       }
+
+      axios["delete"](this.equipmentTemplateDeleteUrl(template.id)).then(function (res) {
+        console.log(res);
+        callback(res);
+      })["catch"](function (error) {
+        console.log(error);
+      });
     }
   }
 });
@@ -64985,7 +64982,7 @@ var render = function() {
         [
           _c("selection-filter", {
             attrs: {
-              items: _vm.equipmentTemplates,
+              items: _vm.displayedTemplates,
               values: _vm.filterConfig.values,
               all: _vm.filterConfig.all,
               by: _vm.filterConfig.by
@@ -65099,7 +65096,10 @@ var render = function() {
                         staticClass: "btn btn-danger btn-sm",
                         on: {
                           click: function($event) {
-                            return _vm.equipmentDestroy(template.id, index)
+                            return _vm.equipmentDestroy(
+                              template,
+                              _vm.updatePage
+                            )
                           }
                         }
                       },
