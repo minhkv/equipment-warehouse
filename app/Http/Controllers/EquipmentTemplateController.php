@@ -48,19 +48,17 @@ class EquipmentTemplateController extends Controller
      */
     public function store(Request $request)
     {
+        $template = new EquipmentTemplate($request->all());
+        $template->save();
         if($request->hasFile('imageFile')) {
             $fileName = $request->imageFile->getClientOriginalName();
             $request->imageFile->storeAs('img', $fileName, 'public');
-            $template = new EquipmentTemplate($request->all());
-            $template->save();
             $template->update(['image' => '/storage/img/'.$fileName]);
         } else {
-            $template = new EquipmentTemplate($request->all());
-            $template->save();
             $template->update(['image' => '/storage/img/empty.jpg']);
         }
         
-        return redirect(route('equipment-template.index'));
+        return route('equipment-template.show', $template);
     }
 
     /**

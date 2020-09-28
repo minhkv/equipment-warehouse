@@ -2124,10 +2124,10 @@ __webpack_require__.r(__webpack_exports__);
       formData.append("name", this.name);
       formData.append("category_id", this.category);
       formData.append("imageFile", this.imageFile);
-      this.sendRequest(this.equipmentTemplateCreateUrl, 'post', formData, this.redirectEquipmentTemplateIndexUrl);
+      this.sendRequest(this.equipmentTemplateCreateUrl, 'post', formData, this.redirectUrl);
     },
-    redirectEquipmentTemplateIndexUrl: function redirectEquipmentTemplateIndexUrl() {
-      window.location.href = this.equipmentTemplateIndexUrl;
+    redirectUrl: function redirectUrl(data) {
+      window.location.href = data;
     },
     submitCategory: function submitCategory() {
       var data = {
@@ -63863,7 +63863,7 @@ var staticRenderFns = [
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
     return _c("div", { staticClass: "text-center" }, [
-      _c("h2", { staticClass: "fs-title" }, [_vm._v("Thêm thiết bị mới")])
+      _c("h2", { staticClass: "fs-title" }, [_vm._v("Thêm mẫu mới")])
     ])
   },
   function() {

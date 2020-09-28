@@ -2,7 +2,7 @@
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-6">
-                <div class="text-center"><h2 class="fs-title">Thêm thiết bị mới</h2></div>
+                <div class="text-center"><h2 class="fs-title">Thêm mẫu mới</h2></div>
                 
                 <div class="form-group">
                     <label>Tên thiết bị</label>
@@ -75,10 +75,10 @@ export default {
             formData.append("category_id", this.category);
             formData.append("imageFile", this.imageFile);
             this.sendRequest(this.equipmentTemplateCreateUrl,
-                'post', formData, this.redirectEquipmentTemplateIndexUrl);
+                'post', formData, this.redirectUrl);
         },
-        redirectEquipmentTemplateIndexUrl() {
-            window.location.href= this.equipmentTemplateIndexUrl;
+        redirectUrl(data) {
+            window.location.href= data;
         },
         submitCategory() {
             let data = {
