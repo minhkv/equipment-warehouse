@@ -94,6 +94,8 @@ Vue.component('supplier',require('./components/supplier.vue').default);
 Vue.component('supplier-form',require('./components/supplier-form.vue').default);
 Vue.component('selector',require('./components/selector.vue').default);
 Vue.component('equipment-create',require('./components/equipment-create.vue').default);
+Vue.component('category-form',require('./components/category-form.vue').default);
+Vue.component('category',require('./components/category.vue').default);
 Vue.component('test',require('./components/test.vue').default);
 
 var app = new Vue({

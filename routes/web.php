@@ -55,7 +55,7 @@ Route::middleware('auth')->group(function() {
     Route::put('order-request/{order}/complete', 'OrderController@completeOrder')->name('order-request.complete');
     Route::put('order-request/{order}/back', 'OrderController@back')->name('order-request.back');
     Route::get('/test', function() {
-        $categories = App\Category::all();
+        $categories = App\Category::with('templates')->get();
         return view('test')->with([
             'categories' => $categories,
         ]);
