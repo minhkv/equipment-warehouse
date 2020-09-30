@@ -2334,6 +2334,48 @@ __webpack_require__.r(__webpack_exports__);
   methods: {
     init: function init() {},
     validate: function validate() {
+      var app = this;
+
+      if (this.step == 0) {
+        if (!this.supplier_name) {
+          alert('Bạn chưa nhập nhà cung cấp');
+          return false;
+        }
+
+        if (!this.dateInput) {
+          alert('Bạn chưa nhập ngày');
+          return false;
+        }
+      } else if (this.step == 1) {
+        if (this.displayedItems.length == 0) {
+          alert("Bạn chưa chọn thiết bị");
+          return false;
+        }
+
+        var checkItems = this.displayedItems.every(function (item) {
+          return app.checkInfo(item) == true;
+        });
+        if (!checkItems) return false;
+      }
+
+      return true;
+    },
+    checkInfo: function checkInfo(item) {
+      if (item.amount == 0) {
+        alert('Số lượng của thiết bị ' + item.template.name + ' phải > 0');
+        return false;
+      }
+
+      if (item.price == 0) {
+        alert('Giá của thiết bị ' + item.template.name + ' phải > 0');
+        return false;
+      }
+
+      if (!item.warranty) {
+        alert('Bạn chưa nhập ngày bảo hành của thiết bị ' + item.template.name);
+        return false;
+      }
+
       return true;
     },
     nextStep: function nextStep() {
@@ -64708,7 +64750,7 @@ var render = function() {
                                       }
                                     ],
                                     staticClass: "form-control",
-                                    attrs: { type: "number" },
+                                    attrs: { type: "number", min: "0" },
                                     domProps: { value: item.amount },
                                     on: {
                                       input: function($event) {
@@ -64746,7 +64788,7 @@ var render = function() {
                                       }
                                     ],
                                     staticClass: "form-control",
-                                    attrs: { type: "number" },
+                                    attrs: { type: "number", min: "0" },
                                     domProps: { value: item.price },
                                     on: {
                                       input: function($event) {

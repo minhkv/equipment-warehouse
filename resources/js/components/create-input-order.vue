@@ -70,11 +70,11 @@
                                     {{item.template.name}}
                                 </td>
                                 <td class="align-middle text-center">
-                                    <input v-if="displayInput()" type="number" class="form-control" v-model="item.amount">
+                                    <input v-if="displayInput()" type="number" min="0" class="form-control" v-model="item.amount">
                                     <div v-if="displayText()">{{item.amount}}</div>
                                 </td>
                                 <td class="align-middle text-center">
-                                    <input v-if="displayInput()" type="number" class="form-control" v-model="item.price">
+                                    <input v-if="displayInput()" type="number" min="0" class="form-control" v-model="item.price">
                                     <div v-if="displayText()">{{item.price}}</div>
                                 </td>
                                 <td class="align-middle text-center">
@@ -148,6 +148,39 @@ export default {
 
         },
         validate() {
+            let app = this;
+            if(this.step == 0) {
+                if(!this.supplier_name) {
+                    alert('Bạn chưa nhập nhà cung cấp');
+                    return false;
+                }
+                if(!this.dateInput) {
+                    alert('Bạn chưa nhập ngày');
+                    return false;
+                }
+            } else if(this.step == 1) {
+                if(this.displayedItems.length == 0) {
+                    alert("Bạn chưa chọn thiết bị");
+                    return false;
+                }
+                let checkItems = this.displayedItems.every(item => app.checkInfo(item) == true);
+                if(!checkItems) return false;
+            }
+            return true;
+        },
+        checkInfo(item) {
+            if(item.amount == 0) {
+                alert('Số lượng của thiết bị ' + item.template.name + ' phải > 0');
+                return false;
+            }
+            if(item.price == 0) {
+                alert('Giá của thiết bị ' + item.template.name + ' phải > 0');
+                return false;
+            }
+            if(!item.warranty) {
+                alert('Bạn chưa nhập ngày bảo hành của thiết bị ' + item.template.name);
+                return false;
+            }
             return true;
         },
         nextStep() {
