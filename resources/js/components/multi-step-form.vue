@@ -25,26 +25,25 @@
                             <div class="form-group row">
                                 <label for="guest_name" class="col-3 col-form-label text-left">Người mượn</label>
                                 <div class="col-9">
-                                    <input v-model="guestName" @blur="storeStorageValue" required type="text" name="guest_name" id="guest_name" class="form-control" placeholder="Người mượn">
+                                    <input v-model="guestName" @blur="storeStorageValue"  type="text" name="guest_name" id="guest_name" class="form-control" placeholder="Người mượn">
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <label for="room" class="col-3 col-form-label text-left">Phòng</label>
                                 <div class="col-9">
-                                    <!-- <input v-model="department" @blur="storeStorageValue" required type="text" name="room" id="room" class="form-control" placeholder="Phòng"> -->
                                     <selector v-model="department" :items="channels" labelAtt="name" valueAtt="name"></selector>
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <label for="dateBorrowed" class="col-3 col-form-label text-left">Ngày mượn</label>
                                 <div class="col-9">
-                                    <input v-model="dateBorrowed" @blur="storeStorageValue" required class="form-control" type="datetime-local" id="dateBorrowed">
+                                    <input v-model="dateBorrowed" @blur="storeStorageValue"  class="form-control" type="datetime-local" id="dateBorrowed">
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <label for="dateReturn" class="col-3 col-form-label text-left">Ngày trả</label>
                                 <div class="col-9">
-                                    <input v-model="dateReturn" @blur="storeStorageValue" required class="form-control" type="datetime-local"  id="dateReturn">
+                                    <input v-model="dateReturn" @blur="storeStorageValue"  class="form-control" type="datetime-local"  id="dateReturn">
                                 </div>
                             </div>
                             <div class="form-group row">
@@ -60,7 +59,7 @@
                             <div class="form-group row">
                                 <label for="reason" class="col-3 col-form-label text-left">Lý do mượn</label>
                                 <div class="col-9">
-                                    <input v-model="reason" @blur="storeStorageValue" required class="form-control" type="text"  id="reason" placeholder="Lý do mượn">
+                                    <input v-model="reason" @blur="storeStorageValue"  class="form-control" type="text"  id="reason" placeholder="Lý do mượn">
                                 </div>
                             </div>
                         </div>
@@ -95,7 +94,7 @@
                             </div>
                         </div>
                         <div v-if="step > 0">
-                            <table class="table mt-2">
+                            <table class="table mt-2 templateTable">
                                 <thead class="thead-light">
                                     <tr>
                                         <th class="text-center" scope="col" width="10%"></th>
@@ -442,103 +441,6 @@ export default {
 </script>
 
 <style scoped>
-#msform {
-    text-align: center;
-    position: relative;
-    margin-top: 30px;
-}
 
-#msform fieldset {
-    background: white;
-    border: 0 none;
-    border-radius: 0px;
-    box-shadow: 0 0 15px 1px rgba(0, 0, 0, 0.4);
-    padding: 20px 30px;
-    box-sizing: border-box;
-    width: 80%;
-    margin: 0 10%;
-
-    /*stacking fieldsets above each other*/
-    position: relative;
-}
-
-/*Hide all except first fieldset*/
-#msform fieldset:not(:first-of-type) {
-    display: none;
-}
-
-/*buttons*/
-#msform .action-button {
-    font-size: 13px;
-    font-weight: bold;
-    width: 100px;
-    cursor: pointer;
-    padding: 10px 5px;
-    margin: 10px 5px;
-    border-radius: 25px;
-}
-
-.page {
-    min-height: 500px;
-}
-
-#msform .action-button:hover, #msform .action-button:focus {
-    box-shadow: 0 0 0 2px white, 0 0 0 3px #007bff;
-}
-
-#msform .action-button-previous {
-    width: 100px;
-    border: 0 none;
-    border-radius: 25px;
-    cursor: pointer;
-    padding: 10px 5px;
-    margin: 10px 5px;
-}
-
-#msform .action-button-previous:hover, #msform .action-button-previous:focus {
-    box-shadow: 0 0 0 2px white, 0 0 0 3px #efefef;
-}
-/*headings*/
-.fs-title {
-    font-size: 18px;
-    text-transform: uppercase;
-    color: #2C3E50;
-    margin-bottom: 10px;
-    letter-spacing: 2px;
-    font-weight: bold;
-}
-
-.fs-subtitle {
-    font-weight: normal;
-    font-size: 13px;
-    color: #666;
-    margin-bottom: 20px;
-}
-
-.templateTable, .templateTable input {
-    font-size: small;
-}
-
-
-/* Not relevant to this form */
-.dme_link {
-    margin-top: 30px;
-    text-align: center;
-}
-.dme_link a {
-    background: #FFF;
-    font-weight: bold;
-    color: #ee0979;
-    border: 0 none;
-    border-radius: 25px;
-    cursor: pointer;
-    padding: 5px 25px;
-    font-size: 12px;
-}
-
-.dme_link a:hover, .dme_link a:focus {
-    background: #C5C5F1;
-    text-decoration: none;
-}
     
 </style>

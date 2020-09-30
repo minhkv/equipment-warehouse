@@ -84,7 +84,9 @@ class OrderController extends Controller
     public function show(Order $order)
     {
         $categories = Category::all();
-        $equipmentTemplates = EquipmentTemplate::with('equipments.supplier')->get();
+        $equipmentTemplates = EquipmentTemplate::with([
+            'equipments.supplier'
+        ])->get();
         $order->load(['stocker', 'guest']);
         $order->orderRequestInfos->load([
             'template', 
@@ -166,6 +168,7 @@ class OrderController extends Controller
             'orderInfos', 
             'orderInfos.equipment',
             'template.equipments',
+            'template.equipments.orderInfos.orderRequestInfo.order',
             'template.equipments.supplier',
             ]);
         return $order;

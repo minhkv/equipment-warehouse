@@ -16,11 +16,8 @@ class EquipmentTemplate extends Model
     public function equipments() {
         return $this->hasMany(Equipment::class, 'template_id')->where('display', 1);
     }
-    public function getLostEquipments() {
-        $lostEquipments = $this->equipments()
-        ->where([['status', 0],['display', 1]])
-        ->get();
-        return $lostEquipments;
+    public function lostEquipments() {
+        $this->hasMany(Equipment::class, 'template_id')->where([['display', 1], ['status', 0]]);
     }
     public function hasLostEquipments() {
         return $this->equipments()
