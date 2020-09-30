@@ -66,49 +66,6 @@
                         </div>
                         <div v-show="step==1">
                             <h2 class="fs-title">Chọn thiết bị</h2>
-
-                            <table class="table mt-2 templateTable">
-                                <thead class="thead-light">
-                                    <tr>
-                                        <th class="text-center" scope="col" width="10%"></th>
-                                        <th class="text-center" scope="col" width="50%">Tên thiết bị</th>
-                                        <th class="text-center" scope="col" width="15%">Trong kho</th>
-                                        <th class="text-center" scope="col" width="15%">Yêu cầu</th>
-                                        <th class="text-center" scope="col" width="15%"></th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr v-for="(template, index) in selectedTemplates" :key="template.id">
-                                        <th class="text-center" scope="row"><img :src="template.image" height=40 alt="template.name"></th>
-                                        <td class="align-middle text-center">{{template.name}}</td>
-                                        <td class="align-middle text-center">{{template.maxAmount}}</td>
-                                        <td class="align-middle text-center">
-                                            <input 
-                                            @change="storeStorageValue();"
-                                            class="form-control" 
-                                            type="number" 
-                                            name="amount" 
-                                            min='0' 
-                                            :max='template.maxAmount' 
-                                            v-model="template.amount"
-                                            >
-                                        </td>
-                                        <td class="align-middle text-center"><button @click="removeEquipmentCard(index);storeStorageValue();" type="button" class="btn btn-danger btn-sm"><span class="fa fa-trash"></span></button></td>
-                                    </tr>
-                                    <tr v-show="selectedTemplates.length == 0">
-                                        <td colspan="5">Chưa có thiết bị nào. Hãy chọn thiết bị cần mượn.</td>
-                                    </tr>
-                                    <tr>
-                                        <td colspan="5">
-                                            <div class="form-group">
-                                                <button class="btn btn-success" type="button" data-toggle="modal" data-target="#addEquipment">
-                                                    Chọn thiết bị
-                                                </button>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
                         </div>
                         <div v-show="step==2">
                             <h2 class="fs-title">Xác nhận</h2>
@@ -136,29 +93,54 @@
                                 <label class="col-3 text-left">Lý do mượn</label>
                                 <label class="col-9 text-left">{{ reason }}</label>
                             </div>
-                            
-                            <table class="table mt-2 templateTable">
+                        </div>
+                        <div v-if="step > 0">
+                            <table class="table mt-2">
                                 <thead class="thead-light">
                                     <tr>
                                         <th class="text-center" scope="col" width="10%"></th>
                                         <th class="text-center" scope="col" width="50%">Tên thiết bị</th>
+                                        <th class="text-center" scope="col" width="15%">Trong kho</th>
                                         <th class="text-center" scope="col" width="15%">Yêu cầu</th>
+                                        <th class="text-center" scope="col" width="15%"></th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr v-for="template in selectedTemplates" :key="template.id">
+                                    <tr v-for="(template, index) in paginateSelectedItems" :key="template.id">
                                         <th class="text-center" scope="row"><img :src="template.image" height=40 alt="template.name"></th>
                                         <td class="align-middle text-center">{{template.name}}</td>
+                                        <td class="align-middle text-center">{{template.maxAmount}}</td>
                                         <td class="align-middle text-center">
-                                            {{template.amount}}
+                                            <input v-if="step == 1"
+                                            @change="storeStorageValue();"
+                                            class="form-control" 
+                                            type="number" 
+                                            name="amount" 
+                                            min='0' 
+                                            :max='template.maxAmount' 
+                                            v-model="template.amount"
+                                            >
+                                            <div v-if="step == 2">{{template.amount}}</div>
                                         </td>
+                                        <td class="align-middle text-center"><button v-if="step == 1" @click="removeEquipmentCard(index);storeStorageValue();" type="button" class="btn btn-danger btn-sm"><span class="fa fa-trash"></span></button></td>
                                     </tr>
                                     <tr v-show="selectedTemplates.length == 0">
                                         <td colspan="5">Chưa có thiết bị nào. Hãy chọn thiết bị cần mượn.</td>
                                     </tr>
                                 </tbody>
                             </table>
+                            <div class="row justify-content-center">
+                                <!-- Paginator -->
+                                <pagination @change="paginationSelected" :items="selectedTemplates" per="6"></pagination>
+                            </div>
+                            <div class="form-group">
+                                <button class="btn btn-success" type="button" data-toggle="modal" data-target="#addEquipment">
+                                    Chọn thiết bị
+                                </button>
+                            </div>
                         </div>
+                        
+                        
                         <button v-show="step > 0" type="button" class="btn btn-secondary next action-button" @click="previousStep()">Quay lại</button>
                         <button v-show="step < 2" type="button" class="btn btn-primary previous action-button" @click="nextStep()">Tiếp tục</button>
                         <button v-show="step == 2" type="button" class="btn btn-success previous action-button" :disabled="submit" @click="clearStorage();submitBorrowedOrder();">Hoàn tất</button>
@@ -272,6 +254,7 @@ export default {
             filterItems: [],
             searchItems: [],
             paginateItems: [],
+            paginateSelectedItems: [],
             displayedTemplates: [],
             submit: false
         };
@@ -300,6 +283,9 @@ export default {
         },
         pagination(items) {
             this.paginateItems = items;
+        },
+        paginationSelected(items) {
+            this.paginateSelectedItems = items;
         },
         loadStorageValue() {
             if(localStorage.guestName) {

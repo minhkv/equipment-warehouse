@@ -3570,24 +3570,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ["orderIndexUrl", "templates", "categories", "channels", "type", "stockerId", "orderCreateUrl"],
   data: function data() {
@@ -3612,6 +3594,7 @@ __webpack_require__.r(__webpack_exports__);
       filterItems: [],
       searchItems: [],
       paginateItems: [],
+      paginateSelectedItems: [],
       displayedTemplates: [],
       submit: false
     };
@@ -3642,6 +3625,9 @@ __webpack_require__.r(__webpack_exports__);
     },
     pagination: function pagination(items) {
       this.paginateItems = items;
+    },
+    paginationSelected: function paginationSelected(items) {
+      this.paginateSelectedItems = items;
     },
     loadStorageValue: function loadStorageValue() {
       if (localStorage.guestName) {
@@ -66482,136 +66468,6 @@ var render = function() {
                 [
                   _c("h2", { staticClass: "fs-title" }, [
                     _vm._v("Chọn thiết bị")
-                  ]),
-                  _vm._v(" "),
-                  _c("table", { staticClass: "table mt-2 templateTable" }, [
-                    _vm._m(3),
-                    _vm._v(" "),
-                    _c(
-                      "tbody",
-                      [
-                        _vm._l(_vm.selectedTemplates, function(
-                          template,
-                          index
-                        ) {
-                          return _c("tr", { key: template.id }, [
-                            _c(
-                              "th",
-                              {
-                                staticClass: "text-center",
-                                attrs: { scope: "row" }
-                              },
-                              [
-                                _c("img", {
-                                  attrs: {
-                                    src: template.image,
-                                    height: "40",
-                                    alt: "template.name"
-                                  }
-                                })
-                              ]
-                            ),
-                            _vm._v(" "),
-                            _c(
-                              "td",
-                              { staticClass: "align-middle text-center" },
-                              [_vm._v(_vm._s(template.name))]
-                            ),
-                            _vm._v(" "),
-                            _c(
-                              "td",
-                              { staticClass: "align-middle text-center" },
-                              [_vm._v(_vm._s(template.maxAmount))]
-                            ),
-                            _vm._v(" "),
-                            _c(
-                              "td",
-                              { staticClass: "align-middle text-center" },
-                              [
-                                _c("input", {
-                                  directives: [
-                                    {
-                                      name: "model",
-                                      rawName: "v-model",
-                                      value: template.amount,
-                                      expression: "template.amount"
-                                    }
-                                  ],
-                                  staticClass: "form-control",
-                                  attrs: {
-                                    type: "number",
-                                    name: "amount",
-                                    min: "0",
-                                    max: template.maxAmount
-                                  },
-                                  domProps: { value: template.amount },
-                                  on: {
-                                    change: function($event) {
-                                      return _vm.storeStorageValue()
-                                    },
-                                    input: function($event) {
-                                      if ($event.target.composing) {
-                                        return
-                                      }
-                                      _vm.$set(
-                                        template,
-                                        "amount",
-                                        $event.target.value
-                                      )
-                                    }
-                                  }
-                                })
-                              ]
-                            ),
-                            _vm._v(" "),
-                            _c(
-                              "td",
-                              { staticClass: "align-middle text-center" },
-                              [
-                                _c(
-                                  "button",
-                                  {
-                                    staticClass: "btn btn-danger btn-sm",
-                                    attrs: { type: "button" },
-                                    on: {
-                                      click: function($event) {
-                                        _vm.removeEquipmentCard(index)
-                                        _vm.storeStorageValue()
-                                      }
-                                    }
-                                  },
-                                  [_c("span", { staticClass: "fa fa-trash" })]
-                                )
-                              ]
-                            )
-                          ])
-                        }),
-                        _vm._v(" "),
-                        _c(
-                          "tr",
-                          {
-                            directives: [
-                              {
-                                name: "show",
-                                rawName: "v-show",
-                                value: _vm.selectedTemplates.length == 0,
-                                expression: "selectedTemplates.length == 0"
-                              }
-                            ]
-                          },
-                          [
-                            _c("td", { attrs: { colspan: "5" } }, [
-                              _vm._v(
-                                "Chưa có thiết bị nào. Hãy chọn thiết bị cần mượn."
-                              )
-                            ])
-                          ]
-                        ),
-                        _vm._v(" "),
-                        _vm._m(4)
-                      ],
-                      2
-                    )
                   ])
                 ]
               ),
@@ -66689,79 +66545,169 @@ var render = function() {
                     _c("label", { staticClass: "col-9 text-left" }, [
                       _vm._v(_vm._s(_vm.reason))
                     ])
-                  ]),
-                  _vm._v(" "),
-                  _c("table", { staticClass: "table mt-2 templateTable" }, [
-                    _vm._m(5),
-                    _vm._v(" "),
-                    _c(
-                      "tbody",
-                      [
-                        _vm._l(_vm.selectedTemplates, function(template) {
-                          return _c("tr", { key: template.id }, [
-                            _c(
-                              "th",
-                              {
-                                staticClass: "text-center",
-                                attrs: { scope: "row" }
-                              },
-                              [
-                                _c("img", {
-                                  attrs: {
-                                    src: template.image,
-                                    height: "40",
-                                    alt: "template.name"
-                                  }
-                                })
-                              ]
-                            ),
-                            _vm._v(" "),
-                            _c(
-                              "td",
-                              { staticClass: "align-middle text-center" },
-                              [_vm._v(_vm._s(template.name))]
-                            ),
-                            _vm._v(" "),
-                            _c(
-                              "td",
-                              { staticClass: "align-middle text-center" },
-                              [
-                                _vm._v(
-                                  "\n                                        " +
-                                    _vm._s(template.amount) +
-                                    "\n                                    "
-                                )
-                              ]
-                            )
-                          ])
-                        }),
-                        _vm._v(" "),
-                        _c(
-                          "tr",
-                          {
-                            directives: [
-                              {
-                                name: "show",
-                                rawName: "v-show",
-                                value: _vm.selectedTemplates.length == 0,
-                                expression: "selectedTemplates.length == 0"
-                              }
-                            ]
-                          },
-                          [
-                            _c("td", { attrs: { colspan: "5" } }, [
-                              _vm._v(
-                                "Chưa có thiết bị nào. Hãy chọn thiết bị cần mượn."
-                              )
-                            ])
-                          ]
-                        )
-                      ],
-                      2
-                    )
                   ])
                 ]
               ),
+              _vm._v(" "),
+              _vm.step > 0
+                ? _c("div", [
+                    _c("table", { staticClass: "table mt-2" }, [
+                      _vm._m(3),
+                      _vm._v(" "),
+                      _c(
+                        "tbody",
+                        [
+                          _vm._l(_vm.paginateSelectedItems, function(
+                            template,
+                            index
+                          ) {
+                            return _c("tr", { key: template.id }, [
+                              _c(
+                                "th",
+                                {
+                                  staticClass: "text-center",
+                                  attrs: { scope: "row" }
+                                },
+                                [
+                                  _c("img", {
+                                    attrs: {
+                                      src: template.image,
+                                      height: "40",
+                                      alt: "template.name"
+                                    }
+                                  })
+                                ]
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "td",
+                                { staticClass: "align-middle text-center" },
+                                [_vm._v(_vm._s(template.name))]
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "td",
+                                { staticClass: "align-middle text-center" },
+                                [_vm._v(_vm._s(template.maxAmount))]
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "td",
+                                { staticClass: "align-middle text-center" },
+                                [
+                                  _vm.step == 1
+                                    ? _c("input", {
+                                        directives: [
+                                          {
+                                            name: "model",
+                                            rawName: "v-model",
+                                            value: template.amount,
+                                            expression: "template.amount"
+                                          }
+                                        ],
+                                        staticClass: "form-control",
+                                        attrs: {
+                                          type: "number",
+                                          name: "amount",
+                                          min: "0",
+                                          max: template.maxAmount
+                                        },
+                                        domProps: { value: template.amount },
+                                        on: {
+                                          change: function($event) {
+                                            return _vm.storeStorageValue()
+                                          },
+                                          input: function($event) {
+                                            if ($event.target.composing) {
+                                              return
+                                            }
+                                            _vm.$set(
+                                              template,
+                                              "amount",
+                                              $event.target.value
+                                            )
+                                          }
+                                        }
+                                      })
+                                    : _vm._e(),
+                                  _vm._v(" "),
+                                  _vm.step == 2
+                                    ? _c("div", [
+                                        _vm._v(_vm._s(template.amount))
+                                      ])
+                                    : _vm._e()
+                                ]
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "td",
+                                { staticClass: "align-middle text-center" },
+                                [
+                                  _vm.step == 1
+                                    ? _c(
+                                        "button",
+                                        {
+                                          staticClass: "btn btn-danger btn-sm",
+                                          attrs: { type: "button" },
+                                          on: {
+                                            click: function($event) {
+                                              _vm.removeEquipmentCard(index)
+                                              _vm.storeStorageValue()
+                                            }
+                                          }
+                                        },
+                                        [
+                                          _c("span", {
+                                            staticClass: "fa fa-trash"
+                                          })
+                                        ]
+                                      )
+                                    : _vm._e()
+                                ]
+                              )
+                            ])
+                          }),
+                          _vm._v(" "),
+                          _c(
+                            "tr",
+                            {
+                              directives: [
+                                {
+                                  name: "show",
+                                  rawName: "v-show",
+                                  value: _vm.selectedTemplates.length == 0,
+                                  expression: "selectedTemplates.length == 0"
+                                }
+                              ]
+                            },
+                            [
+                              _c("td", { attrs: { colspan: "5" } }, [
+                                _vm._v(
+                                  "Chưa có thiết bị nào. Hãy chọn thiết bị cần mượn."
+                                )
+                              ])
+                            ]
+                          )
+                        ],
+                        2
+                      )
+                    ]),
+                    _vm._v(" "),
+                    _c(
+                      "div",
+                      { staticClass: "row justify-content-center" },
+                      [
+                        _c("pagination", {
+                          attrs: { items: _vm.selectedTemplates, per: "6" },
+                          on: { change: _vm.paginationSelected }
+                        })
+                      ],
+                      1
+                    ),
+                    _vm._v(" "),
+                    _vm._m(4)
+                  ])
+                : _vm._e(),
               _vm._v(" "),
               _c(
                 "button",
@@ -67136,52 +67082,23 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("tr", [
-      _c("td", { attrs: { colspan: "5" } }, [
-        _c("div", { staticClass: "form-group" }, [
-          _c(
-            "button",
-            {
-              staticClass: "btn btn-success",
-              attrs: {
-                type: "button",
-                "data-toggle": "modal",
-                "data-target": "#addEquipment"
-              }
-            },
-            [
-              _vm._v(
-                "\n                                                Chọn thiết bị\n                                            "
-              )
-            ]
+    return _c("div", { staticClass: "form-group" }, [
+      _c(
+        "button",
+        {
+          staticClass: "btn btn-success",
+          attrs: {
+            type: "button",
+            "data-toggle": "modal",
+            "data-target": "#addEquipment"
+          }
+        },
+        [
+          _vm._v(
+            "\n                                Chọn thiết bị\n                            "
           )
-        ])
-      ])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("thead", { staticClass: "thead-light" }, [
-      _c("tr", [
-        _c("th", {
-          staticClass: "text-center",
-          attrs: { scope: "col", width: "10%" }
-        }),
-        _vm._v(" "),
-        _c(
-          "th",
-          { staticClass: "text-center", attrs: { scope: "col", width: "50%" } },
-          [_vm._v("Tên thiết bị")]
-        ),
-        _vm._v(" "),
-        _c(
-          "th",
-          { staticClass: "text-center", attrs: { scope: "col", width: "15%" } },
-          [_vm._v("Yêu cầu")]
-        )
-      ])
+        ]
+      )
     ])
   }
 ]
