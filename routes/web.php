@@ -56,9 +56,11 @@ Route::middleware('auth')->group(function() {
     Route::put('order-request/{order}/back', 'OrderController@back')->name('order-request.back');
     Route::get('/test', function() {
         $equipmentTemplates= App\EquipmentTemplate::with('equipments')->get();
+        $suppliers = App\Supplier::all();
         $categories = App\Category::with('templates')->get();
         return view('test')->with([
             'categories' => $categories,
+            'suppliers' => $suppliers,
             'equipmentTemplates' => $equipmentTemplates
         ]);
     });

@@ -98,6 +98,7 @@ Vue.component('category-form',require('./components/category-form.vue').default)
 Vue.component('category',require('./components/category.vue').default);
 Vue.component('create-input-order',require('./components/create-input-order.vue').default);
 Vue.component('equipment-template-form',require('./components/equipment-template-form.vue').default);
+Vue.component('table-input-template',require('./components/table-input-template.vue').default);
 Vue.component('test',require('./components/test.vue').default);
 
 var app = new Vue({

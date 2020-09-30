@@ -1,7 +1,7 @@
 <template>
     <div class="container">
         <div class="row">
-            <div class="col-lg-10 m-auto">
+            <div class="col-lg-12 m-auto">
                 <form id="msform">
                     <div class="track">
                         <div :class="{'step': true, 'active': step >= 0}">
@@ -23,7 +23,8 @@
                             <div class="form-group row">
                                 <label class="col-3 col-form-label text-left">Nhà cung cấp</label>
                                 <div class="col-9">
-                                    <input v-model="guestName" type="text" class="form-control" placeholder="Nhà cung cấp">
+                                    <!-- <input v-model="guestName" type="text" class="form-control" placeholder="Nhà cung cấp"> -->
+                                    <autocomplete-input @change="changeSupplier($event)" :items="suppliers" name-attribute="name" placeholder="Nhà cung cấp" :value="supplier_name"></autocomplete-input>
                                 </div>
                             </div>
                             <div class="form-group row">
@@ -40,11 +41,11 @@
                             <h2 class="fs-title">Xác nhận</h2>
                             <div class="row">
                                 <label class="col-3 text-left">Nhà cung cấp</label>
-                                <label class="col-9 text-left">{{guestName}}</label>
+                                <label class="col-9 text-left">{{supplier_name}}</label>
                             </div>
                             <div class="row">
                                 <label class="col-3 text-left">Ngày nhập</label>
-                                <label class="col-9 text-left">{{ dateInput }}</label>
+                                <label class="col-9 text-left">{{ dateInput | formatDate }}</label>
                             </div>
                         </div>
 
@@ -52,22 +53,39 @@
                             <table class="table mt-2 templateTable">
                                 <thead class="thead-light">
                                     <tr>
+                                        <th class="text-center" scope="col" width="10%">Mã</th>
                                         <th class="text-center" scope="col" width="10%"></th>
                                         <th class="text-center" scope="col" width="25%">Tên thiết bị</th>
                                         <th class="text-center" scope="col" width="11%">Số lượng</th>
                                         <th class="text-center" scope="col" width="15%">Giá nhập</th>
-                                        <th class="text-center" scope="col" width="15%">Bảo hành</th>
+                                        <th class="text-center" scope="col" width="20%">Bảo hành</th>
                                         <th class="text-center" scope="col" width="10%"></th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <th class="text-center" scope="row"></th>
-                                        <td class="align-middle text-center">Máy ảnh canon m50</td>
-                                        <td class="align-middle text-center">10</td>
-                                        <td class="align-middle text-center">15,000,000đ</td>
-                                        <td class="align-middle text-center">20/09/2020</td>
-                                        <td class="align-middle text-center"></td>
+                                    <tr v-for="item in paginateItems" :key="item.template.id">
+                                        <th class="align-middle text-center" scope="row">{{item.template.id}}</th>
+                                        <th class="align-middle text-center" scope="row">
+                                            <img :src="item.template.image" height=40 :alt="item.template.name">
+                                        </th>
+                                        <td class="align-middle text-center">
+                                            {{item.template.name}}
+                                        </td>
+                                        <td class="align-middle text-center">
+                                            <input v-if="displayInput()" type="number" class="form-control" v-model="item.amount">
+                                            <div v-if="displayText()">{{item.amount}}</div>
+                                        </td>
+                                        <td class="align-middle text-center">
+                                            <input v-if="displayInput()" type="number" class="form-control" v-model="item.price">
+                                            <div v-if="displayText()">{{item.price}}</div>
+                                        </td>
+                                        <td class="align-middle text-center">
+                                            <input v-if="displayInput()" type="datetime-local" class="form-control" v-model="item.warranty">
+                                            <div v-if="displayText()">{{item.warranty | formatDate}}</div>
+                                        </td>
+                                        <td class="align-middle text-center">
+                                            <button @click="removeItem(item)" v-if="displayInput()" type="button" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></button>
+                                        </td>
                                     </tr>
                                     <tr v-show="false">
                                         <td colspan="5">Chưa có thiết bị nào. Hãy chọn thiết bị cần mượn.</td>
@@ -76,7 +94,7 @@
                             </table>
                             <div class="row justify-content-center">
                                 <!-- Paginator -->
-                                <!-- <pagination @change="paginationSelected" :items="selectedTemplates" per="6"></pagination> -->
+                                <pagination @change="pagination($event)" :items="displayedItems" per="6"></pagination>
                             </div>
                             <div v-if="step==1">
                                 <div class="form-group">
@@ -101,88 +119,29 @@
             </div>
         </div>
         <modal-component id="addEquipment" title="Thêm thiết bị" size="xl">
-            <div class="row">
-                <div class="dropdown col-3">
-                    <!-- Select -->
-                    <selection-filter
-                        :items="templates"
-                        :values="filterConfig.values"
-                        :all="filterConfig.all"
-                        :by="filterConfig.by"
-                        @change="selectionFilter($event)"
-                    ></selection-filter>
-                </div>
-                <div class="col-8">
-                    <!-- Search -->
-                    <search-input :items="filterItems" :by="['name']" @change="searchInput($event)"></search-input>
-                </div>
-            </div>
-            <table class="table mt-2">
-                <thead class="thead-light">
-                    <tr>
-                        <th class="text-center" scope="col" width="10%"></th>
-                        <th class="text-center" scope="col" width="25%">Tên thiết bị</th>
-                        <th class="text-center" scope="col" width="11%">Số lượng</th>
-                        <th class="text-center" scope="col" width="15%">Giá nhập</th>
-                        <th class="text-center" scope="col" width="15%">Bảo hành</th>
-                        <th class="text-center" scope="col" width="10%"></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr v-for="template in paginateItems" :key="template.id">
-                        <th class="text-center" scope="row"><img :src="template.image" height=40 :alt="template.name"></th>
-                        <td class="align-middle text-center">{{ template.name }}</td>
-                        <td class="align-middle text-center">
-                            <input type="number" class="form-control">
-                        </td>
-                        <td class="align-middle text-center">
-                            <input type="number" class="form-control">
-                        </td>
-                        <td class="align-middle text-center">
-                            <input type="datetime-local" class="form-control">
-                        </td>
-                        <td class="align-middle text-center">
-                            <div class="form-check form-check-inline">
-                                <label class="form-check-label">
-                                    <input class="form-check-input" type="checkbox"> 
-                                </label>
-                            </div>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-            <!-- Paginator -->
-            <div class="row justify-content-center">
-                <pagination :items="searchItems" :per="6" @change="pagination($event)"></pagination>
-            </div>
+            <table-input-template @change="updateSelectedTemplates($event)" :templates="templates" :categories="categories"></table-input-template>
             <template v-slot:footer>
                 <button type="button" class="btn btn-primary" data-dismiss="modal">Xong</button>
             </template>
         </modal-component>
         <modal-component id="createEquipment" title="Tạo mẫu mới">
-            <equipment-template-form :categories="categories"></equipment-template-form>
+            <equipment-template-form @change="createTemplate()" :categories="categories"></equipment-template-form>
         </modal-component>
     </div>
 </template>
 <script>
 export default {
-    props: ["templates", 'categories'],
+    props: ['suppliers', 'templates', 'categories'],
     data() {
         return {
             step: 0,
-            guestName: '',
+            supplier_name: '',
+            supplier_id: '',
             dateInput: '',
             submit: false,
-            filterConfig: {
-                values: [],
-                all: { name: "Loại thiết bị", value: 0 },
-                by: "category_id",
-            },
-            filterItems: [],
-            searchItems: [],
+            displayedItems: [],
             paginateItems: [],
-            paginateSelectedItems: [],
-            displayedTemplates: [],
+            itemNeedToRemove: {}
         };
     },
     created() {
@@ -190,44 +149,57 @@ export default {
     },
     methods: {
         init() {
-            this.initFilter();
-        },
-        initFilter() {
-            this.categories.forEach((cate) => {
-                this.filterConfig.values.push({
-                    name: cate.name,
-                    value: cate.id,
-                });
-            });
-        },
-        selectionFilter(items) {
-            this.filterItems = items;
-        },
-        searchInput(items) {
-            this.searchItems = items;
-        },
-        pagination(items) {
-            this.paginateItems = items;
+
         },
         validate() {
             return true;
         },
-        nextStep: function() {
+        nextStep() {
             if(!this.validate()) return;
             if(this.step < 2)
                 this.step ++;
         },
-        previousStep: function() {
+        previousStep() {
             if(this.step > 0) {
                 this.step --;
             }
         },
+        createTemplate() {
+            console.log('createTemplate');
+        },
+        updateSelectedTemplates(items) {
+            this.displayedItems = items;
+        },
+        pagination(items) {
+            this.paginateItems = items;
+        },
+        displayInput() {
+            return this.step == 1;
+        },
+        displayText() {
+            return this.step == 2;
+        },
+        changeSupplier(result){
+            this.supplier_name = result.value.name;
+            if(result.found) {
+                this.supplier_id = result.value.id;
+            } else {
+                this.supplier_id = null;
+            }
+        },
+        removeItem(item) {
+            console.log('removeItem');
+            this.itemNeedToRemove = item;
+            let index = this.displayedItems.findIndex(i => i.template.id == item.template.id);
+            this.displayedItems.splice(index, 1);
+        },
+
     }
 }
 </script>
 <style scoped>
 #msform fieldset {
-    width: 90%;
+    width: 100%;
     margin: auto;
 }
 </style>

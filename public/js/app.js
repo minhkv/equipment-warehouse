@@ -2318,90 +2318,25 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ["templates", 'categories'],
+  props: ['suppliers', 'templates', 'categories'],
   data: function data() {
     return {
       step: 0,
-      guestName: '',
+      supplier_name: '',
+      supplier_id: '',
       dateInput: '',
       submit: false,
-      filterConfig: {
-        values: [],
-        all: {
-          name: "Loại thiết bị",
-          value: 0
-        },
-        by: "category_id"
-      },
-      filterItems: [],
-      searchItems: [],
+      displayedItems: [],
       paginateItems: [],
-      paginateSelectedItems: [],
-      displayedTemplates: []
+      itemNeedToRemove: {}
     };
   },
   created: function created() {
     this.init();
   },
   methods: {
-    init: function init() {
-      this.initFilter();
-    },
-    initFilter: function initFilter() {
-      var _this = this;
-
-      this.categories.forEach(function (cate) {
-        _this.filterConfig.values.push({
-          name: cate.name,
-          value: cate.id
-        });
-      });
-    },
-    selectionFilter: function selectionFilter(items) {
-      this.filterItems = items;
-    },
-    searchInput: function searchInput(items) {
-      this.searchItems = items;
-    },
-    pagination: function pagination(items) {
-      this.paginateItems = items;
-    },
+    init: function init() {},
     validate: function validate() {
       return true;
     },
@@ -2413,6 +2348,38 @@ __webpack_require__.r(__webpack_exports__);
       if (this.step > 0) {
         this.step--;
       }
+    },
+    createTemplate: function createTemplate() {
+      console.log('createTemplate');
+    },
+    updateSelectedTemplates: function updateSelectedTemplates(items) {
+      this.displayedItems = items;
+    },
+    pagination: function pagination(items) {
+      this.paginateItems = items;
+    },
+    displayInput: function displayInput() {
+      return this.step == 1;
+    },
+    displayText: function displayText() {
+      return this.step == 2;
+    },
+    changeSupplier: function changeSupplier(result) {
+      this.supplier_name = result.value.name;
+
+      if (result.found) {
+        this.supplier_id = result.value.id;
+      } else {
+        this.supplier_id = null;
+      }
+    },
+    removeItem: function removeItem(item) {
+      console.log('removeItem');
+      this.itemNeedToRemove = item;
+      var index = this.displayedItems.findIndex(function (i) {
+        return i.template.id == item.template.id;
+      });
+      this.displayedItems.splice(index, 1);
     }
   }
 });
@@ -2965,8 +2932,6 @@ __webpack_require__.r(__webpack_exports__);
       this.$emit('close');
     },
     changeSupplier: function changeSupplier(result) {
-      console.log('changeSupplier');
-      console.log(result);
       this.eq.supplier_name = result.value.name;
 
       if (result.found) {
@@ -3386,7 +3351,9 @@ __webpack_require__.r(__webpack_exports__);
     init: function init() {
       this.displayedCategories = this.categories;
     },
-    submitTemplate: function submitTemplate() {},
+    submitTemplate: function submitTemplate() {
+      this.sendEvent();
+    },
     handleFileUpload: function handleFileUpload() {},
     sendEvent: function sendEvent() {
       var data = {
@@ -5739,6 +5706,180 @@ __webpack_require__.r(__webpack_exports__);
       var dateA = new Date(this.getOrder(a).date_output);
       var dateB = new Date(this.getOrder(b).date_output);
       return dateB.getTime() - dateA.getTime();
+    }
+  }
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/table-input-template.vue?vue&type=script&lang=js&":
+/*!*******************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/table-input-template.vue?vue&type=script&lang=js& ***!
+  \*******************************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+/* harmony default export */ __webpack_exports__["default"] = ({
+  props: ['templates', 'categories', 'itemNeedToRemove'],
+  data: function data() {
+    return {
+      filterConfig: {
+        values: [],
+        all: {
+          name: "Loại thiết bị",
+          value: 0
+        },
+        by: "category_id"
+      },
+      filterItems: [],
+      searchItems: [],
+      paginateItems: [],
+      displayedItems: [],
+      selectedItems: []
+    };
+  },
+  created: function created() {
+    this.init();
+  },
+  watch: {
+    itemNeedToRemove: function itemNeedToRemove() {
+      console.log('remove');
+
+      if (this.templateNeedToRemove) {
+        this.remove(this.itemNeedToRemove);
+      }
+    }
+  },
+  methods: {
+    init: function init() {
+      this.initRequest();
+      this.initFilter();
+    },
+    initRequest: function initRequest() {
+      this.displayedItems = this.templates.map(function (tem) {
+        return {
+          template: tem,
+          amount: 0,
+          price: 0,
+          warranty: ''
+        };
+      });
+    },
+    initFilter: function initFilter() {
+      var _this = this;
+
+      this.categories.forEach(function (cate) {
+        _this.filterConfig.values.push({
+          name: cate.name,
+          value: cate.id
+        });
+      });
+    },
+    selectionFilter: function selectionFilter(items) {
+      this.filterItems = items;
+    },
+    searchInput: function searchInput(items) {
+      this.searchItems = items;
+    },
+    pagination: function pagination(items) {
+      this.paginateItems = items;
+    },
+    addTemplate: function addTemplate(item) {
+      this.selectedItems.push(item);
+    },
+    removeTemplate: function removeTemplate(item) {
+      var index = this.selectedItems.findIndex(function (i) {
+        return i.template.id == item.id;
+      });
+      this.selectedItems.splice(index, 1);
+    },
+    add: function add(item) {
+      this.addTemplate(item);
+      this.sendEvent();
+    },
+    remove: function remove(item) {
+      this.removeTemplate(item);
+      this.sendEvent();
+    },
+    updateSelectedItems: function updateSelectedItems(e, item) {
+      if (e.srcElement.checked) {
+        this.add(item);
+      } else {
+        this.remove(item);
+      }
+    },
+    changeInput: function changeInput(e) {
+      this.sendEvent();
+    },
+    itemSelected: function itemSelected(item) {
+      return this.selectedItems.some(function (i) {
+        return item.template.id == i.template.id;
+      });
+    },
+    sendEvent: function sendEvent() {
+      this.$emit('change', this.selectedItems);
     }
   }
 });
@@ -10747,7 +10888,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, "\n#msform fieldset[data-v-1655c676] {\r\n    width: 90%;\r\n    margin: auto;\n}\r\n", ""]);
+exports.push([module.i, "\n#msform fieldset[data-v-1655c676] {\r\n    width: 100%;\r\n    margin: auto;\n}\r\n", ""]);
 
 // exports
 
@@ -64354,7 +64495,7 @@ var render = function() {
     { staticClass: "container" },
     [
       _c("div", { staticClass: "row" }, [
-        _c("div", { staticClass: "col-lg-10 m-auto" }, [
+        _c("div", { staticClass: "col-lg-12 m-auto" }, [
           _c("form", { attrs: { id: "msform" } }, [
             _c("div", { staticClass: "track" }, [
               _c("div", { class: { step: true, active: _vm.step >= 0 } }, [
@@ -64403,29 +64544,26 @@ var render = function() {
                       [_vm._v("Nhà cung cấp")]
                     ),
                     _vm._v(" "),
-                    _c("div", { staticClass: "col-9" }, [
-                      _c("input", {
-                        directives: [
-                          {
-                            name: "model",
-                            rawName: "v-model",
-                            value: _vm.guestName,
-                            expression: "guestName"
-                          }
-                        ],
-                        staticClass: "form-control",
-                        attrs: { type: "text", placeholder: "Nhà cung cấp" },
-                        domProps: { value: _vm.guestName },
-                        on: {
-                          input: function($event) {
-                            if ($event.target.composing) {
-                              return
+                    _c(
+                      "div",
+                      { staticClass: "col-9" },
+                      [
+                        _c("autocomplete-input", {
+                          attrs: {
+                            items: _vm.suppliers,
+                            "name-attribute": "name",
+                            placeholder: "Nhà cung cấp",
+                            value: _vm.supplier_name
+                          },
+                          on: {
+                            change: function($event) {
+                              return _vm.changeSupplier($event)
                             }
-                            _vm.guestName = $event.target.value
                           }
-                        }
-                      })
-                    ])
+                        })
+                      ],
+                      1
+                    )
                   ]),
                   _vm._v(" "),
                   _c("div", { staticClass: "form-group row" }, [
@@ -64505,7 +64643,7 @@ var render = function() {
                     ]),
                     _vm._v(" "),
                     _c("label", { staticClass: "col-9 text-left" }, [
-                      _vm._v(_vm._s(_vm.guestName))
+                      _vm._v(_vm._s(_vm.supplier_name))
                     ])
                   ]),
                   _vm._v(" "),
@@ -64515,7 +64653,7 @@ var render = function() {
                     ]),
                     _vm._v(" "),
                     _c("label", { staticClass: "col-9 text-left" }, [
-                      _vm._v(_vm._s(_vm.dateInput))
+                      _vm._v(_vm._s(_vm._f("formatDate")(_vm.dateInput)))
                     ])
                   ])
                 ]
@@ -64526,36 +64664,240 @@ var render = function() {
                     _c("table", { staticClass: "table mt-2 templateTable" }, [
                       _vm._m(3),
                       _vm._v(" "),
-                      _c("tbody", [
-                        _vm._m(4),
-                        _vm._v(" "),
-                        _c(
-                          "tr",
-                          {
-                            directives: [
-                              {
-                                name: "show",
-                                rawName: "v-show",
-                                value: false,
-                                expression: "false"
-                              }
-                            ]
-                          },
-                          [
-                            _c("td", { attrs: { colspan: "5" } }, [
-                              _vm._v(
-                                "Chưa có thiết bị nào. Hãy chọn thiết bị cần mượn."
+                      _c(
+                        "tbody",
+                        [
+                          _vm._l(_vm.paginateItems, function(item) {
+                            return _c("tr", { key: item.template.id }, [
+                              _c(
+                                "th",
+                                {
+                                  staticClass: "align-middle text-center",
+                                  attrs: { scope: "row" }
+                                },
+                                [_vm._v(_vm._s(item.template.id))]
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "th",
+                                {
+                                  staticClass: "align-middle text-center",
+                                  attrs: { scope: "row" }
+                                },
+                                [
+                                  _c("img", {
+                                    attrs: {
+                                      src: item.template.image,
+                                      height: "40",
+                                      alt: item.template.name
+                                    }
+                                  })
+                                ]
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "td",
+                                { staticClass: "align-middle text-center" },
+                                [
+                                  _vm._v(
+                                    "\n                                        " +
+                                      _vm._s(item.template.name) +
+                                      "\n                                    "
+                                  )
+                                ]
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "td",
+                                { staticClass: "align-middle text-center" },
+                                [
+                                  _vm.displayInput()
+                                    ? _c("input", {
+                                        directives: [
+                                          {
+                                            name: "model",
+                                            rawName: "v-model",
+                                            value: item.amount,
+                                            expression: "item.amount"
+                                          }
+                                        ],
+                                        staticClass: "form-control",
+                                        attrs: { type: "number" },
+                                        domProps: { value: item.amount },
+                                        on: {
+                                          input: function($event) {
+                                            if ($event.target.composing) {
+                                              return
+                                            }
+                                            _vm.$set(
+                                              item,
+                                              "amount",
+                                              $event.target.value
+                                            )
+                                          }
+                                        }
+                                      })
+                                    : _vm._e(),
+                                  _vm._v(" "),
+                                  _vm.displayText()
+                                    ? _c("div", [_vm._v(_vm._s(item.amount))])
+                                    : _vm._e()
+                                ]
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "td",
+                                { staticClass: "align-middle text-center" },
+                                [
+                                  _vm.displayInput()
+                                    ? _c("input", {
+                                        directives: [
+                                          {
+                                            name: "model",
+                                            rawName: "v-model",
+                                            value: item.price,
+                                            expression: "item.price"
+                                          }
+                                        ],
+                                        staticClass: "form-control",
+                                        attrs: { type: "number" },
+                                        domProps: { value: item.price },
+                                        on: {
+                                          input: function($event) {
+                                            if ($event.target.composing) {
+                                              return
+                                            }
+                                            _vm.$set(
+                                              item,
+                                              "price",
+                                              $event.target.value
+                                            )
+                                          }
+                                        }
+                                      })
+                                    : _vm._e(),
+                                  _vm._v(" "),
+                                  _vm.displayText()
+                                    ? _c("div", [_vm._v(_vm._s(item.price))])
+                                    : _vm._e()
+                                ]
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "td",
+                                { staticClass: "align-middle text-center" },
+                                [
+                                  _vm.displayInput()
+                                    ? _c("input", {
+                                        directives: [
+                                          {
+                                            name: "model",
+                                            rawName: "v-model",
+                                            value: item.warranty,
+                                            expression: "item.warranty"
+                                          }
+                                        ],
+                                        staticClass: "form-control",
+                                        attrs: { type: "datetime-local" },
+                                        domProps: { value: item.warranty },
+                                        on: {
+                                          input: function($event) {
+                                            if ($event.target.composing) {
+                                              return
+                                            }
+                                            _vm.$set(
+                                              item,
+                                              "warranty",
+                                              $event.target.value
+                                            )
+                                          }
+                                        }
+                                      })
+                                    : _vm._e(),
+                                  _vm._v(" "),
+                                  _vm.displayText()
+                                    ? _c("div", [
+                                        _vm._v(
+                                          _vm._s(
+                                            _vm._f("formatDate")(item.warranty)
+                                          )
+                                        )
+                                      ])
+                                    : _vm._e()
+                                ]
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "td",
+                                { staticClass: "align-middle text-center" },
+                                [
+                                  _vm.displayInput()
+                                    ? _c(
+                                        "button",
+                                        {
+                                          staticClass: "btn btn-danger btn-sm",
+                                          attrs: { type: "button" },
+                                          on: {
+                                            click: function($event) {
+                                              return _vm.removeItem(item)
+                                            }
+                                          }
+                                        },
+                                        [
+                                          _c("i", {
+                                            staticClass: "fa fa-trash"
+                                          })
+                                        ]
+                                      )
+                                    : _vm._e()
+                                ]
                               )
                             ])
-                          ]
-                        )
-                      ])
+                          }),
+                          _vm._v(" "),
+                          _c(
+                            "tr",
+                            {
+                              directives: [
+                                {
+                                  name: "show",
+                                  rawName: "v-show",
+                                  value: false,
+                                  expression: "false"
+                                }
+                              ]
+                            },
+                            [
+                              _c("td", { attrs: { colspan: "5" } }, [
+                                _vm._v(
+                                  "Chưa có thiết bị nào. Hãy chọn thiết bị cần mượn."
+                                )
+                              ])
+                            ]
+                          )
+                        ],
+                        2
+                      )
                     ]),
                     _vm._v(" "),
-                    _c("div", { staticClass: "row justify-content-center" }),
+                    _c(
+                      "div",
+                      { staticClass: "row justify-content-center" },
+                      [
+                        _c("pagination", {
+                          attrs: { items: _vm.displayedItems, per: "6" },
+                          on: {
+                            change: function($event) {
+                              return _vm.pagination($event)
+                            }
+                          }
+                        })
+                      ],
+                      1
+                    ),
                     _vm._v(" "),
                     _vm.step == 1
-                      ? _c("div", [_vm._m(5), _vm._v(" "), _vm._m(6)])
+                      ? _c("div", [_vm._m(4), _vm._v(" "), _vm._m(5)])
                       : _vm._e()
                   ])
                 : _vm._e(),
@@ -64649,171 +64991,16 @@ var render = function() {
           ])
         },
         [
-          _c("div", { staticClass: "row" }, [
-            _c(
-              "div",
-              { staticClass: "dropdown col-3" },
-              [
-                _c("selection-filter", {
-                  attrs: {
-                    items: _vm.templates,
-                    values: _vm.filterConfig.values,
-                    all: _vm.filterConfig.all,
-                    by: _vm.filterConfig.by
-                  },
-                  on: {
-                    change: function($event) {
-                      return _vm.selectionFilter($event)
-                    }
-                  }
-                })
-              ],
-              1
-            ),
-            _vm._v(" "),
-            _c(
-              "div",
-              { staticClass: "col-8" },
-              [
-                _c("search-input", {
-                  attrs: { items: _vm.filterItems, by: ["name"] },
-                  on: {
-                    change: function($event) {
-                      return _vm.searchInput($event)
-                    }
-                  }
-                })
-              ],
-              1
-            )
-          ]),
-          _vm._v(" "),
-          _c("table", { staticClass: "table mt-2" }, [
-            _c("thead", { staticClass: "thead-light" }, [
-              _c("tr", [
-                _c("th", {
-                  staticClass: "text-center",
-                  attrs: { scope: "col", width: "10%" }
-                }),
-                _vm._v(" "),
-                _c(
-                  "th",
-                  {
-                    staticClass: "text-center",
-                    attrs: { scope: "col", width: "25%" }
-                  },
-                  [_vm._v("Tên thiết bị")]
-                ),
-                _vm._v(" "),
-                _c(
-                  "th",
-                  {
-                    staticClass: "text-center",
-                    attrs: { scope: "col", width: "11%" }
-                  },
-                  [_vm._v("Số lượng")]
-                ),
-                _vm._v(" "),
-                _c(
-                  "th",
-                  {
-                    staticClass: "text-center",
-                    attrs: { scope: "col", width: "15%" }
-                  },
-                  [_vm._v("Giá nhập")]
-                ),
-                _vm._v(" "),
-                _c(
-                  "th",
-                  {
-                    staticClass: "text-center",
-                    attrs: { scope: "col", width: "15%" }
-                  },
-                  [_vm._v("Bảo hành")]
-                ),
-                _vm._v(" "),
-                _c("th", {
-                  staticClass: "text-center",
-                  attrs: { scope: "col", width: "10%" }
-                })
-              ])
-            ]),
-            _vm._v(" "),
-            _c(
-              "tbody",
-              _vm._l(_vm.paginateItems, function(template) {
-                return _c("tr", { key: template.id }, [
-                  _c(
-                    "th",
-                    { staticClass: "text-center", attrs: { scope: "row" } },
-                    [
-                      _c("img", {
-                        attrs: {
-                          src: template.image,
-                          height: "40",
-                          alt: template.name
-                        }
-                      })
-                    ]
-                  ),
-                  _vm._v(" "),
-                  _c("td", { staticClass: "align-middle text-center" }, [
-                    _vm._v(_vm._s(template.name))
-                  ]),
-                  _vm._v(" "),
-                  _c("td", { staticClass: "align-middle text-center" }, [
-                    _c("input", {
-                      staticClass: "form-control",
-                      attrs: { type: "number" }
-                    })
-                  ]),
-                  _vm._v(" "),
-                  _c("td", { staticClass: "align-middle text-center" }, [
-                    _c("input", {
-                      staticClass: "form-control",
-                      attrs: { type: "number" }
-                    })
-                  ]),
-                  _vm._v(" "),
-                  _c("td", { staticClass: "align-middle text-center" }, [
-                    _c("input", {
-                      staticClass: "form-control",
-                      attrs: { type: "datetime-local" }
-                    })
-                  ]),
-                  _vm._v(" "),
-                  _c("td", { staticClass: "align-middle text-center" }, [
-                    _c("div", { staticClass: "form-check form-check-inline" }, [
-                      _c("label", { staticClass: "form-check-label" }, [
-                        _c("input", {
-                          staticClass: "form-check-input",
-                          attrs: { type: "checkbox" }
-                        })
-                      ])
-                    ])
-                  ])
-                ])
-              }),
-              0
-            )
-          ]),
-          _vm._v(" "),
-          _c(
-            "div",
-            { staticClass: "row justify-content-center" },
-            [
-              _c("pagination", {
-                attrs: { items: _vm.searchItems, per: 6 },
-                on: {
-                  change: function($event) {
-                    return _vm.pagination($event)
-                  }
-                }
-              })
-            ],
-            1
-          )
-        ]
+          _c("table-input-template", {
+            attrs: { templates: _vm.templates, categories: _vm.categories },
+            on: {
+              change: function($event) {
+                return _vm.updateSelectedTemplates($event)
+              }
+            }
+          })
+        ],
+        1
       ),
       _vm._v(" "),
       _c(
@@ -64821,7 +65008,12 @@ var render = function() {
         { attrs: { id: "createEquipment", title: "Tạo mẫu mới" } },
         [
           _c("equipment-template-form", {
-            attrs: { categories: _vm.categories }
+            attrs: { categories: _vm.categories },
+            on: {
+              change: function($event) {
+                return _vm.createTemplate()
+              }
+            }
           })
         ],
         1
@@ -64861,6 +65053,12 @@ var staticRenderFns = [
     var _c = _vm._self._c || _h
     return _c("thead", { staticClass: "thead-light" }, [
       _c("tr", [
+        _c(
+          "th",
+          { staticClass: "text-center", attrs: { scope: "col", width: "10%" } },
+          [_vm._v("Mã")]
+        ),
+        _vm._v(" "),
         _c("th", {
           staticClass: "text-center",
           attrs: { scope: "col", width: "10%" }
@@ -64886,7 +65084,7 @@ var staticRenderFns = [
         _vm._v(" "),
         _c(
           "th",
-          { staticClass: "text-center", attrs: { scope: "col", width: "15%" } },
+          { staticClass: "text-center", attrs: { scope: "col", width: "20%" } },
           [_vm._v("Bảo hành")]
         ),
         _vm._v(" "),
@@ -64895,30 +65093,6 @@ var staticRenderFns = [
           attrs: { scope: "col", width: "10%" }
         })
       ])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("tr", [
-      _c("th", { staticClass: "text-center", attrs: { scope: "row" } }),
-      _vm._v(" "),
-      _c("td", { staticClass: "align-middle text-center" }, [
-        _vm._v("Máy ảnh canon m50")
-      ]),
-      _vm._v(" "),
-      _c("td", { staticClass: "align-middle text-center" }, [_vm._v("10")]),
-      _vm._v(" "),
-      _c("td", { staticClass: "align-middle text-center" }, [
-        _vm._v("15,000,000đ")
-      ]),
-      _vm._v(" "),
-      _c("td", { staticClass: "align-middle text-center" }, [
-        _vm._v("20/09/2020")
-      ]),
-      _vm._v(" "),
-      _c("td", { staticClass: "align-middle text-center" })
     ])
   },
   function() {
@@ -70578,6 +70752,258 @@ var staticRenderFns = [
         _c("th", [_vm._v("Trạng thái")]),
         _vm._v(" "),
         _c("th", [_vm._v("Ngày mượn")])
+      ])
+    ])
+  }
+]
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/table-input-template.vue?vue&type=template&id=95adb472&scoped=true&":
+/*!***********************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/table-input-template.vue?vue&type=template&id=95adb472&scoped=true& ***!
+  \***********************************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", [
+    _c("div", { staticClass: "row" }, [
+      _c(
+        "div",
+        { staticClass: "dropdown col-3" },
+        [
+          _c("selection-filter", {
+            attrs: {
+              items: _vm.displayedItems,
+              values: _vm.filterConfig.values,
+              all: _vm.filterConfig.all,
+              by: _vm.filterConfig.by
+            },
+            on: {
+              change: function($event) {
+                return _vm.selectionFilter($event)
+              }
+            }
+          })
+        ],
+        1
+      ),
+      _vm._v(" "),
+      _c(
+        "div",
+        { staticClass: "col-8" },
+        [
+          _c("search-input", {
+            attrs: { items: _vm.filterItems, by: ["name"] },
+            on: {
+              change: function($event) {
+                return _vm.searchInput($event)
+              }
+            }
+          })
+        ],
+        1
+      )
+    ]),
+    _vm._v(" "),
+    _c("table", { staticClass: "table mt-2" }, [
+      _vm._m(0),
+      _vm._v(" "),
+      _c(
+        "tbody",
+        _vm._l(_vm.paginateItems, function(item) {
+          return _c("tr", { key: item.id }, [
+            _c("th", { staticClass: "text-center", attrs: { scope: "row" } }, [
+              _c("img", {
+                attrs: {
+                  src: item.template.image,
+                  height: "40",
+                  alt: item.template.name
+                }
+              })
+            ]),
+            _vm._v(" "),
+            _c("td", { staticClass: "align-middle text-center" }, [
+              _vm._v(_vm._s(item.template.name))
+            ]),
+            _vm._v(" "),
+            _c("td", { staticClass: "align-middle text-center" }, [
+              _vm.itemSelected(item)
+                ? _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: item.amount,
+                        expression: "item.amount"
+                      }
+                    ],
+                    staticClass: "form-control",
+                    attrs: { type: "number" },
+                    domProps: { value: item.amount },
+                    on: {
+                      change: function($event) {
+                        return _vm.changeInput($event)
+                      },
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.$set(item, "amount", $event.target.value)
+                      }
+                    }
+                  })
+                : _vm._e()
+            ]),
+            _vm._v(" "),
+            _c("td", { staticClass: "align-middle text-center" }, [
+              _vm.itemSelected(item)
+                ? _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: item.price,
+                        expression: "item.price"
+                      }
+                    ],
+                    staticClass: "form-control",
+                    attrs: { type: "number" },
+                    domProps: { value: item.price },
+                    on: {
+                      change: function($event) {
+                        return _vm.changeInput($event)
+                      },
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.$set(item, "price", $event.target.value)
+                      }
+                    }
+                  })
+                : _vm._e()
+            ]),
+            _vm._v(" "),
+            _c("td", { staticClass: "align-middle text-center" }, [
+              _vm.itemSelected(item)
+                ? _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: item.warranty,
+                        expression: "item.warranty"
+                      }
+                    ],
+                    staticClass: "form-control",
+                    attrs: { type: "datetime-local" },
+                    domProps: { value: item.warranty },
+                    on: {
+                      change: function($event) {
+                        return _vm.changeInput($event)
+                      },
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.$set(item, "warranty", $event.target.value)
+                      }
+                    }
+                  })
+                : _vm._e()
+            ]),
+            _vm._v(" "),
+            _c("td", { staticClass: "align-middle text-center" }, [
+              _c("div", { staticClass: "form-check form-check-inline" }, [
+                _c("label", { staticClass: "form-check-label" }, [
+                  _c("input", {
+                    staticClass: "form-check-input",
+                    attrs: { type: "checkbox" },
+                    domProps: { checked: _vm.itemSelected(item) },
+                    on: {
+                      change: function($event) {
+                        return _vm.updateSelectedItems($event, item)
+                      }
+                    }
+                  })
+                ])
+              ])
+            ])
+          ])
+        }),
+        0
+      )
+    ]),
+    _vm._v(" "),
+    _c(
+      "div",
+      { staticClass: "row justify-content-center" },
+      [
+        _c("pagination", {
+          attrs: { items: _vm.searchItems, per: 6 },
+          on: {
+            change: function($event) {
+              return _vm.pagination($event)
+            }
+          }
+        })
+      ],
+      1
+    )
+  ])
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("thead", { staticClass: "thead-light" }, [
+      _c("tr", [
+        _c("th", {
+          staticClass: "text-center",
+          attrs: { scope: "col", width: "10%" }
+        }),
+        _vm._v(" "),
+        _c(
+          "th",
+          { staticClass: "text-center", attrs: { scope: "col", width: "25%" } },
+          [_vm._v("Tên thiết bị")]
+        ),
+        _vm._v(" "),
+        _c(
+          "th",
+          { staticClass: "text-center", attrs: { scope: "col", width: "11%" } },
+          [_vm._v("Số lượng")]
+        ),
+        _vm._v(" "),
+        _c(
+          "th",
+          { staticClass: "text-center", attrs: { scope: "col", width: "15%" } },
+          [_vm._v("Giá nhập")]
+        ),
+        _vm._v(" "),
+        _c(
+          "th",
+          { staticClass: "text-center", attrs: { scope: "col", width: "15%" } },
+          [_vm._v("Bảo hành")]
+        ),
+        _vm._v(" "),
+        _c("th", {
+          staticClass: "text-center",
+          attrs: { scope: "col", width: "10%" }
+        })
       ])
     ])
   }
@@ -83733,6 +84159,7 @@ Vue.component('category-form', __webpack_require__(/*! ./components/category-for
 Vue.component('category', __webpack_require__(/*! ./components/category.vue */ "./resources/js/components/category.vue")["default"]);
 Vue.component('create-input-order', __webpack_require__(/*! ./components/create-input-order.vue */ "./resources/js/components/create-input-order.vue")["default"]);
 Vue.component('equipment-template-form', __webpack_require__(/*! ./components/equipment-template-form.vue */ "./resources/js/components/equipment-template-form.vue")["default"]);
+Vue.component('table-input-template', __webpack_require__(/*! ./components/table-input-template.vue */ "./resources/js/components/table-input-template.vue")["default"]);
 Vue.component('test', __webpack_require__(/*! ./components/test.vue */ "./resources/js/components/test.vue")["default"]);
 var app = new Vue({
   el: '#app'
@@ -86117,6 +86544,76 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_table_history_vue_vue_type_template_id_439a5eda_scoped_true___WEBPACK_IMPORTED_MODULE_0__["render"]; });
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_table_history_vue_vue_type_template_id_439a5eda_scoped_true___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
+/***/ "./resources/js/components/table-input-template.vue":
+/*!**********************************************************!*\
+  !*** ./resources/js/components/table-input-template.vue ***!
+  \**********************************************************/
+/*! no static exports found */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _table_input_template_vue_vue_type_template_id_95adb472_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./table-input-template.vue?vue&type=template&id=95adb472&scoped=true& */ "./resources/js/components/table-input-template.vue?vue&type=template&id=95adb472&scoped=true&");
+/* harmony import */ var _table_input_template_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./table-input-template.vue?vue&type=script&lang=js& */ "./resources/js/components/table-input-template.vue?vue&type=script&lang=js&");
+/* harmony reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in _table_input_template_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__) if(["default"].indexOf(__WEBPACK_IMPORT_KEY__) < 0) (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return _table_input_template_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__[key]; }) }(__WEBPACK_IMPORT_KEY__));
+/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _table_input_template_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _table_input_template_vue_vue_type_template_id_95adb472_scoped_true___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _table_input_template_vue_vue_type_template_id_95adb472_scoped_true___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  "95adb472",
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/table-input-template.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/components/table-input-template.vue?vue&type=script&lang=js&":
+/*!***********************************************************************************!*\
+  !*** ./resources/js/components/table-input-template.vue?vue&type=script&lang=js& ***!
+  \***********************************************************************************/
+/*! no static exports found */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_table_input_template_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/babel-loader/lib??ref--4-0!../../../node_modules/vue-loader/lib??vue-loader-options!./table-input-template.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/table-input-template.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_table_input_template_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/components/table-input-template.vue?vue&type=template&id=95adb472&scoped=true&":
+/*!*****************************************************************************************************!*\
+  !*** ./resources/js/components/table-input-template.vue?vue&type=template&id=95adb472&scoped=true& ***!
+  \*****************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_table_input_template_vue_vue_type_template_id_95adb472_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../node_modules/vue-loader/lib??vue-loader-options!./table-input-template.vue?vue&type=template&id=95adb472&scoped=true& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/table-input-template.vue?vue&type=template&id=95adb472&scoped=true&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_table_input_template_vue_vue_type_template_id_95adb472_scoped_true___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_table_input_template_vue_vue_type_template_id_95adb472_scoped_true___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
 

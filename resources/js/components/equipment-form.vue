@@ -126,8 +126,6 @@ export default {
             this.$emit('close');
         },
         changeSupplier(result){
-            console.log('changeSupplier');
-            console.log(result);
             this.eq.supplier_name = result.value.name;
             if(result.found) {
                 this.eq.supplier_id = result.value.id;

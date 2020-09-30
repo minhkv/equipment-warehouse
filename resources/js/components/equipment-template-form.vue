@@ -36,7 +36,7 @@ export default {
             this.displayedCategories = this.categories;
         },
         submitTemplate() {
-
+            this.sendEvent();
         },
         handleFileUpload() {
 
