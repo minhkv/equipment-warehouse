@@ -39,7 +39,7 @@ export default {
             this.sendEvent();
         },
         handleFileUpload() {
-
+            this.imageFile = this.$refs.imageFile.files[0];
         },
         sendEvent() {
             let data = {

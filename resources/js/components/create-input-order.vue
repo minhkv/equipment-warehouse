@@ -121,13 +121,15 @@
             </template>
         </modal-component>
         <modal-component id="createEquipment" title="Tạo mẫu mới">
-            <equipment-template-form @change="createTemplate()" :categories="categories"></equipment-template-form>
+            <equipment-template-form @change="createTemplate($event)" :categories="categories"></equipment-template-form>
         </modal-component>
     </div>
 </template>
 <script>
+import RequestMixin from '../mixins/RequestMixin';
 export default {
-    props: ['suppliers', 'templates', 'categories'],
+    mixins: [RequestMixin],
+    props: ['suppliers', 'templates', 'categories', 'templateCreateUrl'],
     data() {
         return {
             step: 0,
@@ -193,8 +195,29 @@ export default {
                 this.step --;
             }
         },
-        createTemplate() {
+        createTemplate(data) {
             console.log('createTemplate');
+            console.log(data);
+            let formData = new FormData();
+            let app = this;
+            let headers = {
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                },
+            };
+            formData.append("name", data.name);
+            formData.append("category_id", data.category);
+            formData.append("imageFile", data.imageFile);
+            this.sendRequest(this.templateCreateUrl, 'post', formData, this.updatePage);
+        },
+        updatePage(template) {
+            this.displayedItems.push({
+                template: template,
+                amount: 0,
+                price: 0,
+                warranty: ''
+            });
+            this.templates.push(template);
         },
         updateSelectedTemplates(items) {
             this.displayedItems = items;
@@ -217,12 +240,10 @@ export default {
             }
         },
         removeItem(item) {
-            console.log('removeItem');
             this.itemNeedToRemove = item;
             let index = this.displayedItems.findIndex(i => i.template.id == item.template.id);
             this.displayedItems.splice(index, 1);
         },
-
     }
 }
 </script>

@@ -2187,6 +2187,7 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _mixins_RequestMixin__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../mixins/RequestMixin */ "./resources/js/mixins/RequestMixin.js");
 //
 //
 //
@@ -2314,8 +2315,10 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ['suppliers', 'templates', 'categories'],
+  mixins: [_mixins_RequestMixin__WEBPACK_IMPORTED_MODULE_0__["default"]],
+  props: ['suppliers', 'templates', 'categories', 'templateCreateUrl'],
   data: function data() {
     return {
       step: 0,
@@ -2387,8 +2390,29 @@ __webpack_require__.r(__webpack_exports__);
         this.step--;
       }
     },
-    createTemplate: function createTemplate() {
+    createTemplate: function createTemplate(data) {
       console.log('createTemplate');
+      console.log(data);
+      var formData = new FormData();
+      var app = this;
+      var headers = {
+        headers: {
+          "Content-Type": "multipart/form-data"
+        }
+      };
+      formData.append("name", data.name);
+      formData.append("category_id", data.category);
+      formData.append("imageFile", data.imageFile);
+      this.sendRequest(this.templateCreateUrl, 'post', formData, this.updatePage);
+    },
+    updatePage: function updatePage(template) {
+      this.displayedItems.push({
+        template: template,
+        amount: 0,
+        price: 0,
+        warranty: ''
+      });
+      this.templates.push(template);
     },
     updateSelectedTemplates: function updateSelectedTemplates(items) {
       this.displayedItems = items;
@@ -2412,7 +2436,6 @@ __webpack_require__.r(__webpack_exports__);
       }
     },
     removeItem: function removeItem(item) {
-      console.log('removeItem');
       this.itemNeedToRemove = item;
       var index = this.displayedItems.findIndex(function (i) {
         return i.template.id == item.template.id;
@@ -3392,7 +3415,9 @@ __webpack_require__.r(__webpack_exports__);
     submitTemplate: function submitTemplate() {
       this.sendEvent();
     },
-    handleFileUpload: function handleFileUpload() {},
+    handleFileUpload: function handleFileUpload() {
+      this.imageFile = this.$refs.imageFile.files[0];
+    },
     sendEvent: function sendEvent() {
       var data = {
         name: this.name,
@@ -65033,7 +65058,7 @@ var render = function() {
             attrs: { categories: _vm.categories },
             on: {
               change: function($event) {
-                return _vm.createTemplate()
+                return _vm.createTemplate($event)
               }
             }
           })
