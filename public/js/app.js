@@ -2188,6 +2188,7 @@ __webpack_require__.r(__webpack_exports__);
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _mixins_RequestMixin__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../mixins/RequestMixin */ "./resources/js/mixins/RequestMixin.js");
+/* harmony import */ var _mixins_LocalStorageMixin__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../mixins/LocalStorageMixin */ "./resources/js/mixins/LocalStorageMixin.js");
 //
 //
 //
@@ -2316,8 +2317,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 
+
 /* harmony default export */ __webpack_exports__["default"] = ({
-  mixins: [_mixins_RequestMixin__WEBPACK_IMPORTED_MODULE_0__["default"]],
+  mixins: [_mixins_RequestMixin__WEBPACK_IMPORTED_MODULE_0__["default"], _mixins_LocalStorageMixin__WEBPACK_IMPORTED_MODULE_1__["default"]],
   props: ['suppliers', 'templates', 'categories', 'templateCreateUrl'],
   data: function data() {
     return {
@@ -2328,14 +2330,22 @@ __webpack_require__.r(__webpack_exports__);
       submit: false,
       displayedItems: [],
       paginateItems: [],
-      itemNeedToRemove: {}
+      newItem: {},
+      componentTemplates: {},
+      atts: ['supplier_id', 'supplier_name', 'dateInput']
     };
   },
   created: function created() {
     this.init();
   },
   methods: {
-    init: function init() {},
+    init: function init() {
+      this.componentTemplates = this.templates;
+      this.loadStorage(this.atts);
+    },
+    store: function store() {
+      this.storeStorage(this.atts);
+    },
     validate: function validate() {
       var app = this;
 
@@ -2390,6 +2400,7 @@ __webpack_require__.r(__webpack_exports__);
         this.step--;
       }
     },
+    submitInputOrder: function submitInputOrder() {},
     createTemplate: function createTemplate(data) {
       console.log('createTemplate');
       var formData = new FormData();
@@ -2406,14 +2417,15 @@ __webpack_require__.r(__webpack_exports__);
     },
     updatePage: function updatePage(template) {
       console.log(template);
-      var newItem = {
+      var item = {
         template: template,
         amount: 0,
         price: 0,
         warranty: ''
       };
-      this.displayedItems.push(newItem);
-      this.templates.push(template);
+      this.newItem = item;
+      this.displayedItems.push(item);
+      this.componentTemplates.push(template);
     },
     updateSelectedTemplates: function updateSelectedTemplates(items) {
       this.displayedItems = items;
@@ -2435,6 +2447,8 @@ __webpack_require__.r(__webpack_exports__);
       } else {
         this.supplier_id = null;
       }
+
+      this.store();
     },
     removeItem: function removeItem(item) {
       this.itemNeedToRemove = item;
@@ -3420,6 +3434,7 @@ __webpack_require__.r(__webpack_exports__);
     },
     submitTemplate: function submitTemplate() {
       this.sendEvent();
+      this.resetForm();
     },
     handleFileUpload: function handleFileUpload() {
       this.imageFile = this.$refs.imageFile.files[0];
@@ -4149,6 +4164,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js");
 /* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(moment__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _mixins_RequestMixin__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../mixins/RequestMixin */ "./resources/js/mixins/RequestMixin.js");
+//
 //
 //
 //
@@ -5790,6 +5806,7 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _mixins_LocalStorageMixin__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../mixins/LocalStorageMixin */ "./resources/js/mixins/LocalStorageMixin.js");
 //
 //
 //
@@ -5850,8 +5867,14 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ['templates', 'categories', 'itemNeedToRemove'],
+  mixins: [_mixins_LocalStorageMixin__WEBPACK_IMPORTED_MODULE_0__["default"]],
+  props: ['templates', 'categories', 'itemNeedToRemove', 'newItem'],
   data: function data() {
     return {
       filterConfig: {
@@ -5866,11 +5889,13 @@ __webpack_require__.r(__webpack_exports__);
       searchItems: [],
       paginateItems: [],
       displayedItems: [],
-      selectedItems: []
+      selectedItems: [],
+      atts: ['selectedItems']
     };
   },
   created: function created() {
     this.init();
+    this.sendEvent();
   },
   watch: {
     itemNeedToRemove: function itemNeedToRemove() {
@@ -5879,11 +5904,20 @@ __webpack_require__.r(__webpack_exports__);
       if (this.templateNeedToRemove) {
         this.remove(this.itemNeedToRemove);
       }
+    },
+    templates: function templates() {
+      console.log('refresh');
+      this.initRequest();
+    },
+    newItem: function newItem() {
+      console.log('new');
+      this.addTemplate(this.newItem);
     }
   },
   methods: {
     init: function init() {
       this.initRequest();
+      this.load();
       this.initFilter();
     },
     initRequest: function initRequest() {
@@ -5905,6 +5939,12 @@ __webpack_require__.r(__webpack_exports__);
           value: cate.id
         });
       });
+    },
+    load: function load() {
+      this.loadStorage(this.atts);
+    },
+    store: function store() {
+      this.storeStorage(this.atts);
     },
     selectionFilter: function selectionFilter(items) {
       this.filterItems = items;
@@ -5938,6 +5978,9 @@ __webpack_require__.r(__webpack_exports__);
       } else {
         this.remove(item);
       }
+
+      console.log('store');
+      this.store();
     },
     changeInput: function changeInput(e) {
       this.sendEvent();
@@ -64653,6 +64696,9 @@ var render = function() {
                     attrs: { type: "datetime-local", id: "dateBorrowed" },
                     domProps: { value: _vm.dateInput },
                     on: {
+                      blur: function($event) {
+                        return _vm.store()
+                      },
                       input: function($event) {
                         if ($event.target.composing) {
                           return
@@ -65045,7 +65091,11 @@ var render = function() {
         },
         [
           _c("table-input-template", {
-            attrs: { templates: _vm.templates, categories: _vm.categories },
+            attrs: {
+              templates: _vm.componentTemplates,
+              categories: _vm.categories,
+              newItem: _vm.newItem
+            },
             on: {
               change: function($event) {
                 return _vm.updateSelectedTemplates($event)
@@ -67168,7 +67218,11 @@ var render = function() {
         { staticClass: "col-sm-12 col-md-5 offset-md-1" },
         [
           _c("search-input", {
-            attrs: { items: _vm.filterItems, by: ["name"] },
+            attrs: {
+              items: _vm.filterItems,
+              by: ["id", "name"],
+              placeholder: "Nhập tên hoặc mã"
+            },
             on: {
               change: function($event) {
                 return _vm.searchInput($event)
@@ -67236,7 +67290,7 @@ var render = function() {
                 _c("div", { staticClass: "card-body d-flex flex-column" }, [
                   _c("div", { staticClass: "card-block mt-auto my-1" }, [
                     _c("h5", { staticClass: "card-title" }, [
-                      _vm._v(_vm._s(template.name))
+                      _vm._v(_vm._s(template.id) + ". " + _vm._s(template.name))
                     ]),
                     _vm._v(" "),
                     _c("p", { staticClass: "card-text" }, [
@@ -68659,7 +68713,8 @@ var render = function() {
                     _c("td", { staticClass: "align-middle text-center" }, [
                       _vm._v(
                         "\n                        " +
-                          _vm._s(info.template.equipments.length)
+                          _vm._s(info.template.equipments.length) +
+                          "\n                    "
                       )
                     ]),
                     _vm._v(" "),
@@ -70856,7 +70911,10 @@ var render = function() {
         { staticClass: "col-8" },
         [
           _c("search-input", {
-            attrs: { items: _vm.filterItems, by: ["name"] },
+            attrs: {
+              items: _vm.filterItems,
+              by: ["template.name", "template.id"]
+            },
             on: {
               change: function($event) {
                 return _vm.searchInput($event)
@@ -70875,6 +70933,14 @@ var render = function() {
         "tbody",
         _vm._l(_vm.paginateItems, function(item) {
           return _c("tr", { key: item.id }, [
+            _c("th", { staticClass: "text-center", attrs: { scope: "row" } }, [
+              _vm._v(
+                "\n                    " +
+                  _vm._s(item.template.id) +
+                  "\n                "
+              )
+            ]),
+            _vm._v(" "),
             _c("th", { staticClass: "text-center", attrs: { scope: "row" } }, [
               _c("img", {
                 attrs: {
@@ -71022,6 +71088,12 @@ var staticRenderFns = [
     var _c = _vm._self._c || _h
     return _c("thead", { staticClass: "thead-light" }, [
       _c("tr", [
+        _c(
+          "th",
+          { staticClass: "text-center", attrs: { scope: "col", width: "10%" } },
+          [_vm._v("Mã")]
+        ),
+        _vm._v(" "),
         _c("th", {
           staticClass: "text-center",
           attrs: { scope: "col", width: "10%" }
@@ -86942,6 +87014,61 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_test_vue_vue_type_template_id_5b6abe5d_scoped_true___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
+
+/***/ }),
+
+/***/ "./resources/js/mixins/LocalStorageMixin.js":
+/*!**************************************************!*\
+  !*** ./resources/js/mixins/LocalStorageMixin.js ***!
+  \**************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony default export */ __webpack_exports__["default"] = ({
+  methods: {
+    loadStorage: function loadStorage(atts) {
+      var _this = this;
+
+      atts.forEach(function (att) {
+        var value = JSON.parse(_this.getAtt(localStorage, att));
+        if (value) _this.$data[att] = value;
+      });
+    },
+    storeStorage: function storeStorage(atts) {
+      var _this2 = this;
+
+      atts.forEach(function (att) {
+        var value = JSON.stringify(_this2.getAtt(_this2.$data, att));
+        localStorage[att] = value;
+      });
+    },
+    getAtt: function getAtt(item, att) {
+      var splitAtt = att.split('.');
+
+      if (splitAtt.length > 1) {
+        return this.getNestedAtt(item, splitAtt);
+      }
+
+      return item[att];
+    },
+    getNestedAtt: function getNestedAtt(item, atts) {
+      var value,
+          i = 0;
+      atts.forEach(function (att) {
+        if (i == 0) {
+          value = item[att];
+        } else {
+          value = value[att];
+        }
+
+        i++;
+      });
+      return value;
+    }
+  }
+});
 
 /***/ }),
 

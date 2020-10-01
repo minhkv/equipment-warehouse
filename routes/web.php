@@ -55,7 +55,7 @@ Route::middleware('auth')->group(function() {
     Route::put('order-request/{order}/complete', 'OrderController@completeOrder')->name('order-request.complete');
     Route::put('order-request/{order}/back', 'OrderController@back')->name('order-request.back');
     Route::get('/test', function() {
-        $equipmentTemplates= App\EquipmentTemplate::with('equipments')->get();
+        $equipmentTemplates= App\EquipmentTemplate::with('equipments')->where('display', 1)->get();
         $suppliers = App\Supplier::all();
         $categories = App\Category::with('templates')->get();
         return view('test')->with([

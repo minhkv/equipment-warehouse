@@ -99,7 +99,8 @@
                         <th class="text-center" scope="row"><img :src="info.template.image" height=40 :alt="info.template.name"></th>
                         <td class="align-middle text-center">{{ info.template.name }}</td>
                         <td class="align-middle text-center">
-                            {{ info.template.equipments.length }}</td>
+                            {{ info.template.equipments.length }}
+                        </td>
                         <td class="align-middle text-center">
                             <input 
                                 class="form-control" 
@@ -109,7 +110,7 @@
                                 :max='info.template.maxAmount' 
                                 v-model="info.template.amount"
                                 >
-                            </td>
+                        </td>
                         <td class="align-middle text-center">
                             {{ (info.order_infos.length) }}
                         </td>

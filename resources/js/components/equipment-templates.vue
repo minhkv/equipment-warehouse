@@ -19,7 +19,7 @@
             </div>
             <div class="col-sm-12 col-md-5 offset-md-1">
                 <!-- Search -->
-                <search-input :items="filterItems" :by="['name']" @change="searchInput($event)"></search-input>
+                <search-input :items="filterItems" :by="['id', 'name']" @change="searchInput($event)" placeholder="Nhập tên hoặc mã"></search-input>
             </div>
             <div class="col-sm-12 col-md-3 col-lg-2 ml-auto">
                 <a :href="equipmentTemplateCreateUrl" class="btn btn-success shadow">Thêm thiết bị</a>
@@ -40,7 +40,7 @@
                     </a>
                     <div class="card-body d-flex flex-column">
                         <div class="card-block mt-auto my-1">
-                            <h5 class="card-title">{{ template.name }}</h5>
+                            <h5 class="card-title">{{template.id}}. {{ template.name }}</h5>
                             <p class="card-text">Số lượng: {{ template.equipments.length }}</p>
                         </div>
                         <div class="overlay">

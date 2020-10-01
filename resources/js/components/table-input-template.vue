@@ -13,12 +13,13 @@
             </div>
             <div class="col-8">
                 <!-- Search -->
-                <search-input :items="filterItems" :by="['name']" @change="searchInput($event)"></search-input>
+                <search-input :items="filterItems" :by="['template.name', 'template.id']" @change="searchInput($event)"></search-input>
             </div>
         </div>
         <table class="table mt-2">
             <thead class="thead-light">
                 <tr>
+                    <th class="text-center" scope="col" width="10%">Mã</th>
                     <th class="text-center" scope="col" width="10%"></th>
                     <th class="text-center" scope="col" width="25%">Tên thiết bị</th>
                     <th class="text-center" scope="col" width="11%">Số lượng</th>
@@ -29,6 +30,9 @@
             </thead>
             <tbody>
                 <tr v-for="item in paginateItems" :key="item.id">
+                    <th class="text-center" scope="row">
+                        {{item.template.id}}
+                    </th>
                     <th class="text-center" scope="row">
                         <img :src="item.template.image" height=40 :alt="item.template.name">
                     </th>
@@ -59,8 +63,10 @@
     </div>
 </template>
 <script>
+import LocalStorageMixin from '../mixins/LocalStorageMixin';
 export default {
-    props: ['templates', 'categories', 'itemNeedToRemove'],
+    mixins: [LocalStorageMixin],
+    props: ['templates', 'categories', 'itemNeedToRemove', 'newItem'],
     data() {
         return {
             filterConfig: {
@@ -73,22 +79,33 @@ export default {
             paginateItems: [],
             displayedItems: [],
             selectedItems: [],
+            atts: ['selectedItems']
         };
     },
     created() {
         this.init();
+        this.sendEvent();
     },
     watch: {
-        itemNeedToRemove: function() {
+        itemNeedToRemove() {
             console.log('remove');
             if(this.templateNeedToRemove) {
                 this.remove(this.itemNeedToRemove);
             }
+        },
+        templates() {
+            console.log('refresh');
+            this.initRequest();
+        },
+        newItem() {
+            console.log('new');
+            this.addTemplate(this.newItem);
         }
     },
     methods: {
         init() {
             this.initRequest();
+            this.load();
             this.initFilter();
         },
         initRequest() {
@@ -108,6 +125,12 @@ export default {
                     value: cate.id,
                 });
             });
+        },
+        load() {
+            this.loadStorage(this.atts);
+        },
+        store() {
+            this.storeStorage(this.atts);
         },
         selectionFilter(items) {
             this.filterItems = items;
@@ -139,6 +162,8 @@ export default {
             } else {
                 this.remove(item);
             }
+            console.log('store');
+            this.store();
         },
         changeInput(e) {
             this.sendEvent();

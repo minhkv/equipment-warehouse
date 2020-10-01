@@ -42,6 +42,7 @@ export default {
         },
         submitTemplate() {
             this.sendEvent();
+            this.resetForm();
         },
         handleFileUpload() {
             this.imageFile = this.$refs.imageFile.files[0];

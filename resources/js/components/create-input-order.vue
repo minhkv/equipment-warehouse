@@ -28,7 +28,7 @@
                     <div class="form-group row">
                         <label for="dateInput" class="col-3 col-form-label text-left">Ngày nhập</label>
                         <div class="col-9">
-                            <input v-model="dateInput" class="form-control" type="datetime-local" id="dateBorrowed">
+                            <input @blur="store()" v-model="dateInput" class="form-control" type="datetime-local" id="dateBorrowed">
                         </div>
                     </div>
                 </div>
@@ -115,7 +115,7 @@
             </fieldset>
         </form>
         <modal-component id="addEquipment" title="Thêm thiết bị" size="xl">
-            <table-input-template @change="updateSelectedTemplates($event)" :templates="templates" :categories="categories"></table-input-template>
+            <table-input-template @change="updateSelectedTemplates($event)" :templates="componentTemplates" :categories="categories" :newItem="newItem"></table-input-template>
             <template v-slot:footer>
                 <button type="button" class="btn btn-primary" data-dismiss="modal">Xong</button>
             </template>
@@ -127,9 +127,10 @@
 </template>
 <script>
 import RequestMixin from '../mixins/RequestMixin';
+import LocalStorageMixin from '../mixins/LocalStorageMixin';
 export default {
-    mixins: [RequestMixin],
-    props: ['suppliers', 'templates', 'categories', 'templateCreateUrl'],
+    mixins: [RequestMixin, LocalStorageMixin],
+    props: ['suppliers', 'templates', 'categories', 'templateCreateUrl', ],
     data() {
         return {
             step: 0,
@@ -139,7 +140,9 @@ export default {
             submit: false,
             displayedItems: [],
             paginateItems: [],
-            itemNeedToRemove: {}
+            newItem: {},
+            componentTemplates: {},
+            atts: ['supplier_id', 'supplier_name', 'dateInput']
         };
     },
     created() {
@@ -147,7 +150,11 @@ export default {
     },
     methods: {
         init() {
-
+            this.componentTemplates = this.templates;
+            this.loadStorage(this.atts);
+        },
+        store() {
+            this.storeStorage(this.atts);
         },
         validate() {
             let app = this;
@@ -195,6 +202,9 @@ export default {
                 this.step --;
             }
         },
+        submitInputOrder() {
+
+        },
         createTemplate(data) {
             console.log('createTemplate');
             let formData = new FormData();
@@ -211,14 +221,15 @@ export default {
         },
         updatePage(template) {
             console.log(template);
-            let newItem = {
+            let item = {
                 template: template,
                 amount: 0,
                 price: 0,
                 warranty: ''
             };
-            this.displayedItems.push(newItem);
-            this.templates.push(template);
+            this.newItem = item;
+            this.displayedItems.push(item);
+            this.componentTemplates.push(template);
         },
         updateSelectedTemplates(items) {
             this.displayedItems = items;
@@ -239,6 +250,7 @@ export default {
             } else {
                 this.supplier_id = null;
             }
+            this.store();
         },
         removeItem(item) {
             this.itemNeedToRemove = item;
