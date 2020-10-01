@@ -35,6 +35,11 @@ export default {
         init() {
             this.displayedCategories = this.categories;
         },
+        resetForm() {
+            this.name = '';
+            this.category = 1;
+            this.imageFile = {};
+        },
         submitTemplate() {
             this.sendEvent();
         },
@@ -44,7 +49,7 @@ export default {
         sendEvent() {
             let data = {
                 name: this.name,
-                category_id: this.categories,
+                category_id: this.category,
                 imageFile: this.imageFile
             };
             this.$emit('change', data);

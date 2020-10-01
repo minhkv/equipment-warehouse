@@ -2392,7 +2392,6 @@ __webpack_require__.r(__webpack_exports__);
     },
     createTemplate: function createTemplate(data) {
       console.log('createTemplate');
-      console.log(data);
       var formData = new FormData();
       var app = this;
       var headers = {
@@ -2401,17 +2400,19 @@ __webpack_require__.r(__webpack_exports__);
         }
       };
       formData.append("name", data.name);
-      formData.append("category_id", data.category);
+      formData.append("category_id", data.category_id);
       formData.append("imageFile", data.imageFile);
       this.sendRequest(this.templateCreateUrl, 'post', formData, this.updatePage);
     },
     updatePage: function updatePage(template) {
-      this.displayedItems.push({
+      console.log(template);
+      var newItem = {
         template: template,
         amount: 0,
         price: 0,
         warranty: ''
-      });
+      };
+      this.displayedItems.push(newItem);
       this.templates.push(template);
     },
     updateSelectedTemplates: function updateSelectedTemplates(items) {
@@ -3412,6 +3413,11 @@ __webpack_require__.r(__webpack_exports__);
     init: function init() {
       this.displayedCategories = this.categories;
     },
+    resetForm: function resetForm() {
+      this.name = '';
+      this.category = 1;
+      this.imageFile = {};
+    },
     submitTemplate: function submitTemplate() {
       this.sendEvent();
     },
@@ -3421,7 +3427,7 @@ __webpack_require__.r(__webpack_exports__);
     sendEvent: function sendEvent() {
       var data = {
         name: this.name,
-        category_id: this.categories,
+        category_id: this.category,
         imageFile: this.imageFile
       };
       this.$emit('change', data);
@@ -5854,7 +5860,7 @@ __webpack_require__.r(__webpack_exports__);
           name: "Loại thiết bị",
           value: 0
         },
-        by: "category_id"
+        by: "template.category_id"
       },
       filterItems: [],
       searchItems: [],
@@ -86598,15 +86604,14 @@ __webpack_require__.r(__webpack_exports__);
 /*!**********************************************************!*\
   !*** ./resources/js/components/table-input-template.vue ***!
   \**********************************************************/
-/*! no static exports found */
+/*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _table_input_template_vue_vue_type_template_id_95adb472_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./table-input-template.vue?vue&type=template&id=95adb472&scoped=true& */ "./resources/js/components/table-input-template.vue?vue&type=template&id=95adb472&scoped=true&");
 /* harmony import */ var _table_input_template_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./table-input-template.vue?vue&type=script&lang=js& */ "./resources/js/components/table-input-template.vue?vue&type=script&lang=js&");
-/* harmony reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in _table_input_template_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__) if(["default"].indexOf(__WEBPACK_IMPORT_KEY__) < 0) (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return _table_input_template_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__[key]; }) }(__WEBPACK_IMPORT_KEY__));
-/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
 
 
 
@@ -86636,7 +86641,7 @@ component.options.__file = "resources/js/components/table-input-template.vue"
 /*!***********************************************************************************!*\
   !*** ./resources/js/components/table-input-template.vue?vue&type=script&lang=js& ***!
   \***********************************************************************************/
-/*! no static exports found */
+/*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -87038,7 +87043,7 @@ __webpack_require__.r(__webpack_exports__);
         method: method,
         data: data
       }).then(function (res) {
-        console.log(res);
+        console.log("Response: " + res);
         callback(res.data);
       })["catch"](function (error) {
         console.log(error);

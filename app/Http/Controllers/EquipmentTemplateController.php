@@ -58,7 +58,7 @@ class EquipmentTemplateController extends Controller
             $template->update(['image' => '/storage/img/empty.jpg']);
         }
         
-        return route('equipment-template.show', $template);
+        return $template;
     }
 
     /**

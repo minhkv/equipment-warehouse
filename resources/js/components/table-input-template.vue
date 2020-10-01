@@ -66,7 +66,7 @@ export default {
             filterConfig: {
                 values: [],
                 all: { name: "Loại thiết bị", value: 0 },
-                by: "category_id",
+                by: "template.category_id",
             },
             filterItems: [],
             searchItems: [],
