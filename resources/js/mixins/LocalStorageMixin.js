@@ -4,7 +4,7 @@ export default {
             atts.forEach(att => {
                 let value = JSON.parse(this.getAtt(localStorage, att));
                 if(value)
-                    this.$data[att] = value;
+                    Vue.set(this.$data, att, value);
             });
         },
         storeStorage(atts) {

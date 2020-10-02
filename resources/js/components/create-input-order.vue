@@ -28,7 +28,7 @@
                     <div class="form-group row">
                         <label for="dateInput" class="col-3 col-form-label text-left">Ngày nhập</label>
                         <div class="col-9">
-                            <input @blur="store()" v-model="dateInput" class="form-control" type="datetime-local" id="dateBorrowed">
+                            <input v-model="dateInput" class="form-control" type="datetime-local" id="dateBorrowed">
                         </div>
                     </div>
                 </div>
@@ -70,15 +70,15 @@
                                     {{item.template.name}}
                                 </td>
                                 <td class="align-middle text-center">
-                                    <input v-if="displayInput()" type="number" min="0" class="form-control" v-model="item.amount">
+                                    <input @change="store()" v-if="displayInput()" type="number" min="0" class="form-control" v-model="item.amount">
                                     <div v-if="displayText()">{{item.amount}}</div>
                                 </td>
                                 <td class="align-middle text-center">
-                                    <input v-if="displayInput()" type="number" min="0" class="form-control" v-model="item.price">
+                                    <input @change="store()" v-if="displayInput()" type="number" min="0" class="form-control" v-model="item.price">
                                     <div v-if="displayText()">{{item.price}}</div>
                                 </td>
                                 <td class="align-middle text-center">
-                                    <input v-if="displayInput()" type="datetime-local" class="form-control" v-model="item.warranty">
+                                    <input @change="store()" v-if="displayInput()" type="datetime-local" class="form-control" v-model="item.warranty">
                                     <div v-if="displayText()">{{item.warranty | formatDate}}</div>
                                 </td>
                                 <td class="align-middle text-center">
@@ -92,7 +92,7 @@
                     </table>
                     <div class="row justify-content-center">
                         <!-- Paginator -->
-                        <pagination @change="pagination($event)" :items="displayedItems" per="6"></pagination>
+                        <pagination @change="pagination($event)" :items="selectedItems" per="6"></pagination>
                     </div>
                     <div v-if="step==1">
                         <div class="form-group">
@@ -111,7 +111,7 @@
 
                 <button v-show="step > 0" type="button" class="btn btn-secondary next action-button" @click="previousStep()">Quay lại</button>
                 <button v-show="step < 2" type="button" class="btn btn-primary previous action-button" @click="nextStep()">Tiếp tục</button>
-                <button v-show="step == 2" type="button" class="btn btn-success previous action-button" :disabled="submit">Hoàn tất</button>
+                <button @click="submitInputOrder()" v-show="step == 2" type="button" class="btn btn-success previous action-button" :disabled="submit">Hoàn tất</button>
             </fieldset>
         </form>
         <modal-component id="addEquipment" title="Thêm thiết bị" size="xl">
@@ -130,7 +130,14 @@ import RequestMixin from '../mixins/RequestMixin';
 import LocalStorageMixin from '../mixins/LocalStorageMixin';
 export default {
     mixins: [RequestMixin, LocalStorageMixin],
-    props: ['suppliers', 'templates', 'categories', 'templateCreateUrl', ],
+    props: [
+        'stocker_id', 
+        'suppliers', 
+        'templates', 
+        'categories', 
+        'templateCreateUrl', 
+        'storeInputOrderUrl'
+    ],
     data() {
         return {
             step: 0,
@@ -138,15 +145,26 @@ export default {
             supplier_id: '',
             dateInput: '',
             submit: false,
-            displayedItems: [],
+            selectedItems: [],
             paginateItems: [],
             newItem: {},
             componentTemplates: {},
-            atts: ['supplier_id', 'supplier_name', 'dateInput']
+            atts: ['supplier_id', 'supplier_name', 'dateInput', 'selectedItems']
         };
     },
     created() {
         this.init();
+    },
+    watch: {
+        supplier_name() {
+            this.store();
+        },
+        supplier_id() {
+            this.store();
+        },
+        dateInput() {
+            this.store();
+        }
     },
     methods: {
         init() {
@@ -168,11 +186,11 @@ export default {
                     return false;
                 }
             } else if(this.step == 1) {
-                if(this.displayedItems.length == 0) {
+                if(this.selectedItems.length == 0) {
                     alert("Bạn chưa chọn thiết bị");
                     return false;
                 }
-                let checkItems = this.displayedItems.every(item => app.checkInfo(item) == true);
+                let checkItems = this.selectedItems.every(item => app.checkInfo(item) == true);
                 if(!checkItems) return false;
             }
             return true;
@@ -203,7 +221,19 @@ export default {
             }
         },
         submitInputOrder() {
-
+            console.log('submit');
+            // this.submit = true;
+            let data = {
+                stocker_id: this.stocker_id,
+                type: 2,
+                supplier_id: this.supplier_id,
+                supplier_name: this.supplier_name,
+                dateInput: this.dateInput,
+                selectedItems: this.selectedItems,
+            };
+            this.sendRequest(this.storeInputOrderUrl, 'post', data, function(data) {
+                console.log(data);
+            });
         },
         createTemplate(data) {
             console.log('createTemplate');
@@ -228,11 +258,10 @@ export default {
                 warranty: ''
             };
             this.newItem = item;
-            this.displayedItems.push(item);
             this.componentTemplates.push(template);
         },
         updateSelectedTemplates(items) {
-            this.displayedItems = items;
+            this.selectedItems = items;
         },
         pagination(items) {
             this.paginateItems = items;
@@ -250,12 +279,11 @@ export default {
             } else {
                 this.supplier_id = null;
             }
-            this.store();
         },
         removeItem(item) {
             this.itemNeedToRemove = item;
-            let index = this.displayedItems.findIndex(i => i.template.id == item.template.id);
-            this.displayedItems.splice(index, 1);
+            let index = this.selectedItems.findIndex(i => i.template.id == item.template.id);
+            this.selectedItems.splice(index, 1);
         },
     }
 }

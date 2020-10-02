@@ -10,6 +10,7 @@ use App\Equipment;
 use App\Category;
 use App\OrderInfo;
 use App\OrderRequestInfo;
+use App\Supplier;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Exception;
@@ -29,12 +30,11 @@ class OrderController extends Controller
             'stocker',
             'guest'
             ])
-            ->where('display', 1)
+            ->where([['display', 1]])
             ->orderBy('created_at', 'DESC')
             ->get();
         return view('order')->with(['orders' => $orders]);
     }
-
     /**
      * Show the form for creating a new resource.
      *
@@ -74,6 +74,26 @@ class OrderController extends Controller
         return redirect(route('order.index'));
     }
 
+    public function createInputOrder() {
+        $equipmentTemplates = EquipmentTemplate::with('equipments')->where('display', 1)->get();
+        $suppliers = Supplier::all();
+        $stocker_id = Auth::user()->id;
+        $categories = Category::with('templates')->get();
+        return view('create-input-order')->with([
+            'stocker_id' => $stocker_id,
+            'categories' => $categories,
+            'suppliers' => $suppliers,
+            'equipmentTemplates' => $equipmentTemplates
+        ]);
+    }   
+    public function storeInputOrder(Request $request) {
+        try {
+            $order = Order::create($request->all());
+            return $order;
+        } catch(Exception $e) {
+            return json_encode((object) ['error' => $e->getMessage()]);
+        }
+    }
     
     /**
      * Display the specified resource.

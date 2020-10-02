@@ -66,7 +66,7 @@
 import LocalStorageMixin from '../mixins/LocalStorageMixin';
 export default {
     mixins: [LocalStorageMixin],
-    props: ['templates', 'categories', 'itemNeedToRemove', 'newItem'],
+    props: ['templates', 'categories', 'newItem'],
     data() {
         return {
             filterConfig: {
@@ -87,12 +87,6 @@ export default {
         this.sendEvent();
     },
     watch: {
-        itemNeedToRemove() {
-            console.log('remove');
-            if(this.templateNeedToRemove) {
-                this.remove(this.itemNeedToRemove);
-            }
-        },
         templates() {
             console.log('refresh');
             this.initRequest();
@@ -100,6 +94,9 @@ export default {
         newItem() {
             console.log('new');
             this.addTemplate(this.newItem);
+        },
+        selectedItems() {
+            this.store();
         }
     },
     methods: {
@@ -128,6 +125,12 @@ export default {
         },
         load() {
             this.loadStorage(this.atts);
+            let items = this.selectedItems;
+            let app = this;
+            items.forEach(item => {
+                let index = app.displayedItems.findIndex(i => i.template.id == item.template.id);
+                Vue.set(app.displayedItems, index, item);
+            });
         },
         store() {
             this.storeStorage(this.atts);
@@ -163,10 +166,10 @@ export default {
                 this.remove(item);
             }
             console.log('store');
-            this.store();
         },
         changeInput(e) {
             this.sendEvent();
+            this.store();
         },
         itemSelected(item) {
             return this.selectedItems.some(i => item.template.id == i.template.id);

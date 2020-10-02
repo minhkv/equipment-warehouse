@@ -48,6 +48,8 @@ Route::middleware('auth')->group(function() {
     Route::get('equipment-template-lost', 'EquipmentController@equipmentLost')->name('equipment-template.lost');
     Route::put('equipment-template-lost-received/{equipment}', 'EquipmentController@receivedLostEquipment')->name('equipment-template.received-lost');
     Route::post('order-request', 'OrderController@storeRequest')->name('order-request.store');
+    // Route::get('order/create-input', 'OrderController@createInputOrder')->name('order.create-input');
+    // Route::post('order/store-input', 'OrderController@storeInputOrder')->name('order.store-input');
     Route::put('order-request/{order}/accept', 'OrderController@acceptOrderRequest')->name('order-request.accept');
     Route::put('order-request/{order}/reject', 'OrderController@rejectOrderRequest')->name('order-request.reject');
     Route::put('order-request/{order}/output', 'OrderController@equipmentOutput')->name('order-request.output');
@@ -64,4 +66,7 @@ Route::middleware('auth')->group(function() {
             'equipmentTemplates' => $equipmentTemplates
         ]);
     });
+    Route::get('input-order', 'OrderController@inputOrderIndex')->name('input-order.index');
+    Route::get('create-input-order', 'OrderController@createInputOrder')->name('order.create-input');
+    Route::post('input-order-store', 'OrderController@storeInputOrder')->name('order.store-input');
 });

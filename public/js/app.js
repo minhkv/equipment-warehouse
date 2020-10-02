@@ -2320,7 +2320,7 @@ __webpack_require__.r(__webpack_exports__);
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   mixins: [_mixins_RequestMixin__WEBPACK_IMPORTED_MODULE_0__["default"], _mixins_LocalStorageMixin__WEBPACK_IMPORTED_MODULE_1__["default"]],
-  props: ['suppliers', 'templates', 'categories', 'templateCreateUrl'],
+  props: ['stocker_id', 'suppliers', 'templates', 'categories', 'templateCreateUrl', 'storeInputOrderUrl'],
   data: function data() {
     return {
       step: 0,
@@ -2328,15 +2328,26 @@ __webpack_require__.r(__webpack_exports__);
       supplier_id: '',
       dateInput: '',
       submit: false,
-      displayedItems: [],
+      selectedItems: [],
       paginateItems: [],
       newItem: {},
       componentTemplates: {},
-      atts: ['supplier_id', 'supplier_name', 'dateInput']
+      atts: ['supplier_id', 'supplier_name', 'dateInput', 'selectedItems']
     };
   },
   created: function created() {
     this.init();
+  },
+  watch: {
+    supplier_name: function supplier_name() {
+      this.store();
+    },
+    supplier_id: function supplier_id() {
+      this.store();
+    },
+    dateInput: function dateInput() {
+      this.store();
+    }
   },
   methods: {
     init: function init() {
@@ -2360,12 +2371,12 @@ __webpack_require__.r(__webpack_exports__);
           return false;
         }
       } else if (this.step == 1) {
-        if (this.displayedItems.length == 0) {
+        if (this.selectedItems.length == 0) {
           alert("Bạn chưa chọn thiết bị");
           return false;
         }
 
-        var checkItems = this.displayedItems.every(function (item) {
+        var checkItems = this.selectedItems.every(function (item) {
           return app.checkInfo(item) == true;
         });
         if (!checkItems) return false;
@@ -2400,7 +2411,21 @@ __webpack_require__.r(__webpack_exports__);
         this.step--;
       }
     },
-    submitInputOrder: function submitInputOrder() {},
+    submitInputOrder: function submitInputOrder() {
+      console.log('submit'); // this.submit = true;
+
+      var data = {
+        stocker_id: this.stocker_id,
+        type: 2,
+        supplier_id: this.supplier_id,
+        supplier_name: this.supplier_name,
+        dateInput: this.dateInput,
+        selectedItems: this.selectedItems
+      };
+      this.sendRequest(this.storeInputOrderUrl, 'post', data, function (data) {
+        console.log(data);
+      });
+    },
     createTemplate: function createTemplate(data) {
       console.log('createTemplate');
       var formData = new FormData();
@@ -2424,11 +2449,10 @@ __webpack_require__.r(__webpack_exports__);
         warranty: ''
       };
       this.newItem = item;
-      this.displayedItems.push(item);
       this.componentTemplates.push(template);
     },
     updateSelectedTemplates: function updateSelectedTemplates(items) {
-      this.displayedItems = items;
+      this.selectedItems = items;
     },
     pagination: function pagination(items) {
       this.paginateItems = items;
@@ -2447,15 +2471,13 @@ __webpack_require__.r(__webpack_exports__);
       } else {
         this.supplier_id = null;
       }
-
-      this.store();
     },
     removeItem: function removeItem(item) {
       this.itemNeedToRemove = item;
-      var index = this.displayedItems.findIndex(function (i) {
+      var index = this.selectedItems.findIndex(function (i) {
         return i.template.id == item.template.id;
       });
-      this.displayedItems.splice(index, 1);
+      this.selectedItems.splice(index, 1);
     }
   }
 });
@@ -5874,7 +5896,7 @@ __webpack_require__.r(__webpack_exports__);
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   mixins: [_mixins_LocalStorageMixin__WEBPACK_IMPORTED_MODULE_0__["default"]],
-  props: ['templates', 'categories', 'itemNeedToRemove', 'newItem'],
+  props: ['templates', 'categories', 'newItem'],
   data: function data() {
     return {
       filterConfig: {
@@ -5898,13 +5920,6 @@ __webpack_require__.r(__webpack_exports__);
     this.sendEvent();
   },
   watch: {
-    itemNeedToRemove: function itemNeedToRemove() {
-      console.log('remove');
-
-      if (this.templateNeedToRemove) {
-        this.remove(this.itemNeedToRemove);
-      }
-    },
     templates: function templates() {
       console.log('refresh');
       this.initRequest();
@@ -5912,6 +5927,9 @@ __webpack_require__.r(__webpack_exports__);
     newItem: function newItem() {
       console.log('new');
       this.addTemplate(this.newItem);
+    },
+    selectedItems: function selectedItems() {
+      this.store();
     }
   },
   methods: {
@@ -5942,6 +5960,14 @@ __webpack_require__.r(__webpack_exports__);
     },
     load: function load() {
       this.loadStorage(this.atts);
+      var items = this.selectedItems;
+      var app = this;
+      items.forEach(function (item) {
+        var index = app.displayedItems.findIndex(function (i) {
+          return i.template.id == item.template.id;
+        });
+        Vue.set(app.displayedItems, index, item);
+      });
     },
     store: function store() {
       this.storeStorage(this.atts);
@@ -5980,10 +6006,10 @@ __webpack_require__.r(__webpack_exports__);
       }
 
       console.log('store');
-      this.store();
     },
     changeInput: function changeInput(e) {
       this.sendEvent();
+      this.store();
     },
     itemSelected: function itemSelected(item) {
       return this.selectedItems.some(function (i) {
@@ -64696,9 +64722,6 @@ var render = function() {
                     attrs: { type: "datetime-local", id: "dateBorrowed" },
                     domProps: { value: _vm.dateInput },
                     on: {
-                      blur: function($event) {
-                        return _vm.store()
-                      },
                       input: function($event) {
                         if ($event.target.composing) {
                           return
@@ -64830,6 +64853,9 @@ var render = function() {
                                     attrs: { type: "number", min: "0" },
                                     domProps: { value: item.amount },
                                     on: {
+                                      change: function($event) {
+                                        return _vm.store()
+                                      },
                                       input: function($event) {
                                         if ($event.target.composing) {
                                           return
@@ -64868,6 +64894,9 @@ var render = function() {
                                     attrs: { type: "number", min: "0" },
                                     domProps: { value: item.price },
                                     on: {
+                                      change: function($event) {
+                                        return _vm.store()
+                                      },
                                       input: function($event) {
                                         if ($event.target.composing) {
                                           return
@@ -64906,6 +64935,9 @@ var render = function() {
                                     attrs: { type: "datetime-local" },
                                     domProps: { value: item.warranty },
                                     on: {
+                                      change: function($event) {
+                                        return _vm.store()
+                                      },
                                       input: function($event) {
                                         if ($event.target.composing) {
                                           return
@@ -64986,7 +65018,7 @@ var render = function() {
                   { staticClass: "row justify-content-center" },
                   [
                     _c("pagination", {
-                      attrs: { items: _vm.displayedItems, per: "6" },
+                      attrs: { items: _vm.selectedItems, per: "6" },
                       on: {
                         change: function($event) {
                           return _vm.pagination($event)
@@ -65059,7 +65091,12 @@ var render = function() {
                 }
               ],
               staticClass: "btn btn-success previous action-button",
-              attrs: { type: "button", disabled: _vm.submit }
+              attrs: { type: "button", disabled: _vm.submit },
+              on: {
+                click: function($event) {
+                  return _vm.submitInputOrder()
+                }
+              }
             },
             [_vm._v("Hoàn tất")]
           )
@@ -84322,6 +84359,9 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 $(function () {
   $('[data-toggle="popover"]').popover();
 });
+$(document).on('click', '#app .dropdown-menu', function (e) {
+  e.stopPropagation();
+});
 /**
  * Echo exposes an expressive API for subscribing to channels and listening
  * for events that are broadcast by Laravel. Echo and event broadcasting
@@ -87033,7 +87073,7 @@ __webpack_require__.r(__webpack_exports__);
 
       atts.forEach(function (att) {
         var value = JSON.parse(_this.getAtt(localStorage, att));
-        if (value) _this.$data[att] = value;
+        if (value) Vue.set(_this.$data, att, value);
       });
     },
     storeStorage: function storeStorage(atts) {

@@ -14,17 +14,23 @@
                     <a class="nav-link {{Route::currentRouteName() == 'home' ? 'active' : ''}}" href="{{route('home')}}">Trang chủ</a>
                 </li>
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>Đơn mượn
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>Đơn
                     @if($notification > 0)
                     <span class="badge badge-warning">{{ $notification }}</span>
                     @endif
                     </a>
                     <div class="dropdown-menu dropdown-menu-left" aria-labelledby="navbarDropdown">
                         <a class="dropdown-item" href="{{ route('order.index') }}">
-                            Danh sách đơn
+                            Danh sách đơn mượn
                         </a>
                         <a class="dropdown-item" href="{{ route('order.create') }}">
-                            Tạo đơn
+                            Tạo đơn mượn
+                        </a>
+                        <a class="dropdown-item" href="{{ route('input-order.index') }}">
+                            Danh sách đơn nhập
+                        </a>
+                        <a class="dropdown-item" href="{{ route('order.create-input') }}">
+                            Tạo đơn nhập
                         </a>
                     </div>
                 </li>

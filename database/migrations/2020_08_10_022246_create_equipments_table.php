@@ -26,7 +26,6 @@ class CreateEquipmentsTable extends Migration
             $table->dateTime('input_date')->nullable();
             $table->dateTime('warranty')->nullable();
             $table->timestamps();
-            
         });
     }
 
