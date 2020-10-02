@@ -8,6 +8,6 @@ class Category extends Model
 {
     protected $fillable = ['name'];
     public function templates() {
-        return $this->hasMany(EquipmentTemplate::class);
+        return $this->hasMany(EquipmentTemplate::class)->where('display', 1);
     }
 }

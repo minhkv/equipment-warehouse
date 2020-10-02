@@ -14,7 +14,7 @@ Vue.filter('formatBoolean', function (value) {
     return 'Không';
 });
 Vue.filter('formatPrice', function(num) {
-    return num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,') + "vnd";
+    return num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,') + "đ";
 });
 Vue.filter('formatEquipmentStatus', function(status){
     switch(status) {
@@ -99,6 +99,8 @@ Vue.component('category',require('./components/category.vue').default);
 Vue.component('create-input-order',require('./components/create-input-order.vue').default);
 Vue.component('equipment-template-form',require('./components/equipment-template-form.vue').default);
 Vue.component('table-input-template',require('./components/table-input-template.vue').default);
+Vue.component('input-order',require('./components/input-order.vue').default);
+Vue.component('input-order-detail',require('./components/input-order-detail.vue').default);
 Vue.component('test',require('./components/test.vue').default);
 
 var app = new Vue({

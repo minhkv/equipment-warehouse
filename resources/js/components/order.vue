@@ -48,6 +48,7 @@
                             </h6>
                         </td>
                         <td class="align-middle">
+                            <button @click="duplicate(order)" class="btn btn-primary btn-sm"><i class="fa fa-clone"></i></button>
                             <button :disabled="order.status != -1 && order.status != 4" type="button" class="btn btn-danger btn-sm" @click="destroyOrder(order.id);">
                                 <span class="fa fa-trash"></span>
                             </button>

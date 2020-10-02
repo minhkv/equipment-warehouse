@@ -75,7 +75,7 @@
                                 </td>
                                 <td class="align-middle text-center">
                                     <input @change="store()" v-if="displayInput()" type="number" min="0" class="form-control" v-model="item.price">
-                                    <div v-if="displayText()">{{item.price}}</div>
+                                    <div v-if="displayText()">{{item.price | formatPrice}}</div>
                                 </td>
                                 <td class="align-middle text-center">
                                     <input @change="store()" v-if="displayInput()" type="datetime-local" class="form-control" v-model="item.warranty">
@@ -136,7 +136,8 @@ export default {
         'templates', 
         'categories', 
         'templateCreateUrl', 
-        'storeInputOrderUrl'
+        'storeInputOrderUrl',
+        'inputOrderIndexUrl',
     ],
     data() {
         return {
@@ -222,7 +223,7 @@ export default {
         },
         submitInputOrder() {
             console.log('submit');
-            // this.submit = true;
+            this.submit = true;
             let data = {
                 stocker_id: this.stocker_id,
                 type: 2,
@@ -231,8 +232,10 @@ export default {
                 dateInput: this.dateInput,
                 selectedItems: this.selectedItems,
             };
+            let app = this;
             this.sendRequest(this.storeInputOrderUrl, 'post', data, function(data) {
                 console.log(data);
+                window.location.replace(app.inputOrderIndexUrl);
             });
         },
         createTemplate(data) {
@@ -240,9 +243,7 @@ export default {
             let formData = new FormData();
             let app = this;
             let headers = {
-                headers: {
-                    "Content-Type": "multipart/form-data",
-                },
+                headers: {"Content-Type": "multipart/form-data",},
             };
             formData.append("name", data.name);
             formData.append("category_id", data.category_id);

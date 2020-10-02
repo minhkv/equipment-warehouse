@@ -11,5 +11,6 @@
     :equipment-return-url="{{ json_encode(route('order-request.return', $order)) }}"
     :complete-url="{{ json_encode(route('order-request.complete', $order)) }}"
     :back-url="{{ json_encode(route('order-request.back', $order)) }}"
+    :order-create-url="{{ json_encode(route('order.create')) }}"
     ></order-detail>
 @endsection

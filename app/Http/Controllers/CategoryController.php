@@ -15,7 +15,7 @@ class CategoryController extends Controller
     public function index()
     {
         $categories = Category::with('templates')->get();
-        return view('test')->with([
+        return view('category')->with([
             'categories' => $categories,
         ]);
     }

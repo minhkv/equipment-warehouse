@@ -27,10 +27,11 @@ class OrderController extends Controller
         $orders = Order::with([
             'orderRequestInfos', 
             'orderRequestInfos.orderInfos', 
+            'orderRequestInfos.template.equipments', 
             'stocker',
             'guest'
             ])
-            ->where([['display', 1]])
+            ->where([['display', 1], ['type', 1]])
             ->orderBy('created_at', 'DESC')
             ->get();
         return view('order')->with(['orders' => $orders]);
@@ -72,27 +73,6 @@ class OrderController extends Controller
             'status' => '0',
         ]);
         return redirect(route('order.index'));
-    }
-
-    public function createInputOrder() {
-        $equipmentTemplates = EquipmentTemplate::with('equipments')->where('display', 1)->get();
-        $suppliers = Supplier::all();
-        $stocker_id = Auth::user()->id;
-        $categories = Category::with('templates')->get();
-        return view('create-input-order')->with([
-            'stocker_id' => $stocker_id,
-            'categories' => $categories,
-            'suppliers' => $suppliers,
-            'equipmentTemplates' => $equipmentTemplates
-        ]);
-    }   
-    public function storeInputOrder(Request $request) {
-        try {
-            $order = Order::create($request->all());
-            return $order;
-        } catch(Exception $e) {
-            return json_encode((object) ['error' => $e->getMessage()]);
-        }
     }
     
     /**

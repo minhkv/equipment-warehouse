@@ -183,7 +183,7 @@
                             <input 
                             @change="storeStorageValue();"
                             class="form-control" 
-                            v-if="buttonDisabled[template.id]" 
+                            v-if="displayInput(template)" 
                             type="number" 
                             name="amount" 
                             min='0' 
@@ -194,7 +194,7 @@
 
                         <td class="align-middle text-center">
                             <button 
-                            :disabled="buttonDisabled[template.id]" 
+                            :disabled="disablePlusButton(template)" 
                             v-on:click="addEquipment(template);storeStorageValue();" 
                             type="button" 
                             class="btn btn-success btn-sm" 
@@ -202,7 +202,7 @@
                                 <span class="fa fa-plus"></span>
                             </button>
                             <button 
-                            :disabled="!buttonDisabled[template.id]" 
+                            :disabled="disableMinusButton(template)" 
                             @click="removeEquipmentCardById(template.id);storeStorageValue();" 
                             type="button" 
                             class="btn btn-danger btn-sm">
@@ -285,6 +285,18 @@ export default {
         },
         paginationSelected(items) {
             this.paginateSelectedItems = items;
+        },
+        templateSelected(template) {
+            return this.selectedTemplates.some(x => x.id == template.id);
+        },
+        disablePlusButton(template) {
+            return this.templateSelected(template);
+        },
+        disableMinusButton(template) {
+            return !this.templateSelected(template);
+        },
+        displayInput(template) {
+            return this.templateSelected(template);
         },
         loadStorageValue() {
             if(localStorage.guestName) {
@@ -390,6 +402,7 @@ export default {
                     return this.selectedTemplates[i];
                 }
             }
+            return {};
         },
         removeEquipmentCard: function(index) {
             let templateId = this.selectedTemplates[index].id;

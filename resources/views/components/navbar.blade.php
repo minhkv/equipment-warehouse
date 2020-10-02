@@ -29,7 +29,7 @@
                         <a class="dropdown-item" href="{{ route('input-order.index') }}">
                             Danh sách đơn nhập
                         </a>
-                        <a class="dropdown-item" href="{{ route('order.create-input') }}">
+                        <a class="dropdown-item" href="{{ route('input-order.create') }}">
                             Tạo đơn nhập
                         </a>
                     </div>

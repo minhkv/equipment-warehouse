@@ -8,7 +8,6 @@ export default {
                 data: data
             })
             .then(function(res) {
-                console.log("Response: " + res);
                 callback(res.data);
             })
             .catch(function(error) { 

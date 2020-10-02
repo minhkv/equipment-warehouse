@@ -5,6 +5,7 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use App\OrderInfo;
 use App\OrderRequestInfo;
+use App\Supplier;
 
 class Order extends Model
 {
@@ -42,6 +43,9 @@ class Order extends Model
     }
     public function guest() {
         return $this->belongsTo(User::class, 'guest_id', 'id');
+    }
+    public function supplier() {
+        return $this->belongsto(Supplier::class, 'supplier_id', 'id');
     }
     public function getTotalRequestAmount() {
         $total = 0;

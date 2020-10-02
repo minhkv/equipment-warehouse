@@ -4,9 +4,16 @@
         <a :href="orderIndexUrl" class="btn btn-outline-dark mb-3" data-abc="true">
             <i class="fa fa-chevron-left"></i> Quay lại
         </a>
-        <h3>Đơn mượn: {{displayedOrder.id}} 
-            <order-status :status="displayedOrder.status"></order-status>
-        </h3>
+        <div class="row">
+            <div class="col-5">
+                <h3>Đơn mượn: {{displayedOrder.id}} 
+                    <order-status :status="displayedOrder.status"></order-status>
+                </h3>
+            </div>
+            <div class="ml-auto">
+                <button @click="duplicate(displayedOrder)" class="btn btn-primary"><i class="fa fa-clone"></i> Sao chép đơn</button>
+            </div>
+        </div>
         <div class="col-10 mx-auto py-3">
             <div class="row">
                 <label class="col-3 text-left"><strong><i class="fa fa-user"></i> Người mượn</strong></label>
@@ -185,9 +192,10 @@
 
 <script>
 import moment from 'moment';
-import RequestMixin from '../mixins/RequestMixin'
+import RequestMixin from '../mixins/RequestMixin';
+import OrderMixin from '../mixins/OrderMixin';
 export default {
-    mixins: [RequestMixin],
+    mixins: [RequestMixin, OrderMixin],
     props: [
         "categories",
         "equipmentTemplates",
@@ -198,7 +206,8 @@ export default {
         "equipmentOutputUrl",
         "equipmentReturnUrl",
         "completeUrl",
-        "backUrl"
+        "backUrl",
+        "orderCreateUrl"
         ],
     data() {
         return {
@@ -498,168 +507,3 @@ export default {
     }
 };
 </script>
-<style scoped>
-@import url("https://fonts.googleapis.com/css?family=Open+Sans&display=swap");
-
-body {
-    background-color: #eeeeee;
-    font-family: "Open Sans", serif;
-}
-
-.card {
-    position: relative;
-    display: -webkit-box;
-    display: -ms-flexbox;
-    display: flex;
-    -webkit-box-orient: vertical;
-    -webkit-box-direction: normal;
-    -ms-flex-direction: column;
-    flex-direction: column;
-    min-width: 0;
-    word-wrap: break-word;
-    background-color: #fff;
-    background-clip: border-box;
-    border: 1px solid rgba(0, 0, 0, 0.1);
-    border-radius: 0.1rem;
-}
-
-.card-header:first-child {
-    border-radius: calc(0.37rem - 1px) calc(0.37rem - 1px) 0 0;
-}
-
-.card-header {
-    padding: 0.75rem 1.25rem;
-    margin-bottom: 0;
-    background-color: #fff;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-}
-
-.track {
-    position: relative;
-    background-color: #ddd;
-    height: 7px;
-    display: -webkit-box;
-    display: -ms-flexbox;
-    display: flex;
-    margin-bottom: 70px;
-    margin-top: 50px;
-}
-
-.track .step {
-    -webkit-box-flex: 1;
-    -ms-flex-positive: 1;
-    flex-grow: 1;
-    width: 25%;
-    margin-top: -18px;
-    text-align: center;
-    position: relative;
-}
-
-.track .step.active:before {
-    background: #009aeb;
-}
-
-.track .step::before {
-    height: 7px;
-    position: absolute;
-    content: "";
-    width: 100%;
-    left: 0;
-    top: 18px;
-}
-
-.track .step.active .icon {
-    background: #009aeb;
-    color: #fff;
-}
-
-.track .icon {
-    display: inline-block;
-    width: 40px;
-    height: 40px;
-    line-height: 40px;
-    position: relative;
-    border-radius: 100%;
-    background: #ddd;
-}
-
-.track .step.active .text {
-    font-weight: 400;
-    color: #000;
-}
-
-.track .text {
-    display: block;
-    margin-top: 7px;
-}
-
-.itemside {
-    position: relative;
-    display: -webkit-box;
-    display: -ms-flexbox;
-    display: flex;
-    width: 100%;
-}
-
-.itemside .aside {
-    position: relative;
-    -ms-flex-negative: 0;
-    flex-shrink: 0;
-}
-
-.img-sm {
-    width: 80px;
-    height: 80px;
-    padding: 7px;
-}
-
-ul.row,
-ul.row-sm {
-    list-style: none;
-    padding: 0;
-}
-
-.itemside .info {
-    padding-left: 15px;
-    padding-right: 7px;
-}
-
-.itemside .title {
-    display: block;
-    margin-bottom: 5px;
-    color: #212529;
-}
-
-p {
-    margin-top: 0;
-    margin-bottom: 1rem;
-}
-
-.checked {
-    color: orange;
-}
-.starrating > input {
-    display: none;
-} /* Remove radio buttons */
-
-.starrating > label:before {
-    content: "\f005"; /* Star */
-    margin: 2px;
-    font-size: 2em;
-    font-family: FontAwesome;
-    display: inline-block;
-}
-
-.starrating > label {
-    color: #222222; /* Start color when not clicked */
-    font-size: 0.5rem;
-}
-
-.starrating > input:checked ~ label {
-    color: #ffca08;
-} /* Set yellow color when star checked */
-
-.starrating > input:hover ~ label {
-    color: #ffca08;
-} /* Set yellow color when star hover */
-</style>

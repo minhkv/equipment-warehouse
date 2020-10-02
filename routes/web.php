@@ -31,7 +31,8 @@ Route::middleware('auth')->group(function() {
         'equipment' => 'EquipmentController',
         'equipment-template' => 'EquipmentTemplateController',
         'order' => 'OrderController',
-        'supplier' => 'SupplierController'
+        'supplier' => 'SupplierController',
+        'input-order' => 'InputOrderController',
     ]);
     
     Route::resource('borrowed-history', 'BorrowedHistoryController')->only([
@@ -66,7 +67,4 @@ Route::middleware('auth')->group(function() {
             'equipmentTemplates' => $equipmentTemplates
         ]);
     });
-    Route::get('input-order', 'OrderController@inputOrderIndex')->name('input-order.index');
-    Route::get('create-input-order', 'OrderController@createInputOrder')->name('order.create-input');
-    Route::post('input-order-store', 'OrderController@storeInputOrder')->name('order.store-input');
 });

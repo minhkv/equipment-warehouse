@@ -58,7 +58,7 @@
                             </td>
                             <td data-toggle="modal" :data-target="'#detail' + equipment.id" class="align-middle text-center">{{equipment.note}}</td>
                             <td class="align-middle text-center">
-                                <button class="btn btn-primary btn-sm" data-toggle="modal" :data-target="'#detail' + equipment.id" >Chi tiết</button>
+                                <button class="btn btn-primary btn-sm" data-toggle="modal" :data-target="'#detail' + equipment.id">Chi tiết</button>
                             </td>
                             <td class="align-middle px-0">
                                 <button :disabled="equipment.status != 1" type="button" class="btn btn-primary btn-sm" data-toggle="modal" :data-target="'#editEquipment' + equipment.id">
