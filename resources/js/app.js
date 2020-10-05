@@ -117,6 +117,8 @@ Vue.component('input-order-detail',require('./components/input-order-detail.vue'
 Vue.component('print-order',require('./components/print-order.vue').default);
 Vue.component('user-index',require('./components/user/user-index.vue').default);
 Vue.component('user-form',require('./components/user/user-form.vue').default);
+Vue.component('department-index',require('./components/department/department-index.vue').default);
+Vue.component('department-form',require('./components/department/department-form.vue').default);
 Vue.component('test',require('./components/test.vue').default);
 
 var app = new Vue({

@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Order;
-use App\Channel;
+use App\Department;
 use App\User;
 use App\EquipmentTemplate;
 use App\Equipment;
@@ -45,12 +45,12 @@ class OrderController extends Controller
     {
         $users = User::all();
         $equipmentTemplates = EquipmentTemplate::with(['equipments'])->where('display', 1)->get();
-        $channels = Channel::all();
+        $departments = Department::all();
         $stocker_id = Auth::user()->id;
         $categories = Category::all();
         return view('create-order-multi')->with([
             'users' => $users,
-            'channels' => $channels,
+            'departments' => $departments,
             'equipmentTemplates' =>$equipmentTemplates,
             'stocker_id' => $stocker_id,
             'categories' => $categories

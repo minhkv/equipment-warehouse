@@ -15,6 +15,7 @@ class DatabaseSeeder extends Seeder
         DB::statement('SET FOREIGN_KEY_CHECKS=0;');
         DB::table('role_user')->truncate();
         $this->call([
+            DepartmentSeeder::class,
             ChannelSeeder::class,
             SupplierSeeder::class,
             CategorySeeder::class,

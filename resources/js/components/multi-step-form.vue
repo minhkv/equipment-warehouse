@@ -31,7 +31,7 @@
                             <div class="form-group row">
                                 <label for="room" class="col-3 col-form-label text-left">Phòng</label>
                                 <div class="col-9">
-                                    <selector v-model="department" :items="channels" labelAtt="name" valueAtt="name"></selector>
+                                    <selector v-model="department" :items="departments" labelAtt="name" valueAtt="name"></selector>
                                 </div>
                             </div>
                             <div class="form-group row">
@@ -229,7 +229,7 @@ export default {
         "orderIndexUrl",
         "templates",
         "categories",
-        "channels",
+        "departments",
         "type",
         "stockerId",
         "orderCreateUrl"

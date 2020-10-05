@@ -20,7 +20,7 @@ Auth::routes();
 
 Route::middleware('auth')->group(function() {
     Route::resource('equipment-template', 'EquipmentTemplateController')->only(['index', 'show']);    
-    Route::resource('order', 'OrderController')->only(['index', 'show']);
+    Route::resource('order', 'OrderController')->only(['index', 'show', 'create']);
     Route::post('order-request', 'OrderController@storeRequest')->name('order-request.store');
     Route::resource('category', 'CategoryController')->only(['index']);
     
@@ -32,9 +32,9 @@ Route::middleware('auth')->group(function() {
 
         Route::resource('equipment', 'EquipmentController');
         Route::resource('equipment-template', 'EquipmentTemplateController')->except(['index', 'show']);
-        Route::resource('order', 'OrderController')->except(['index', 'show']);
+        Route::resource('order', 'OrderController')->except(['index', 'show', 'create']);
         Route::resource('category', 'CategoryController')->except(['index']);
-        Route::resource('channel', 'ChannelController');
+        Route::resource('department', 'DepartmentController');
         Route::resource('supplier', 'SupplierController');
         Route::resource('input-order', 'InputOrderController');
         Route::get('equipment-template-lost', 'EquipmentController@equipmentLost')->name('equipment-template.lost');
