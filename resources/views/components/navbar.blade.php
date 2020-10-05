@@ -75,6 +75,11 @@
                         <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                             @csrf
                         </form>
+                        @can('manage-users')
+                        <a href="{{ route('user.index') }}" class="dropdown-item">
+                            Quản lý người dùng
+                        </a>
+                        @endcan
                     </div>
                 </li>
                 

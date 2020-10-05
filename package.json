@@ -25,6 +25,7 @@
         "vue-template-compiler": "^2.6.11"
     },
     "dependencies": {
-        "moment": "^2.27.0"
+        "moment": "^2.27.0",
+        "vue-html-to-paper": "^1.3.1"
     }
 }

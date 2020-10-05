@@ -132,7 +132,7 @@
                                 <!-- Paginator -->
                                 <pagination @change="paginationSelected" :items="selectedTemplates" per="6"></pagination>
                             </div>
-                            <div class="form-group">
+                            <div v-if="step==1" class="form-group">
                                 <button class="btn btn-success" type="button" data-toggle="modal" data-target="#addEquipment">
                                     Chọn thiết bị
                                 </button>

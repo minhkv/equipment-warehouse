@@ -1,7 +1,10 @@
 <?php
 
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use App\User;
+use App\Role;
 
 class UserSeeder extends Seeder
 {
@@ -12,11 +15,33 @@ class UserSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('users')->insertOrIgnore([
-            'name' => "minh khong",
-            'email' => "minhqctb194@gmail.com",
+        User::truncate();
+        $adminRole = Role::where('name', 'admin')->first();
+        $authorRole = Role::where('name', 'author')->first();
+        $userRole = Role::where('name', 'user')->first();
+
+        $admin = User::create([
+            'name' => "Admin User",
+            'email' => "admin@gmail.com",
             'password' => Hash::make('secret123')
         ]);
-        factory(User::class, 5)->create();
+        $author = User::create([
+            'name' => "Author User",
+            'email' => "author@gmail.com",
+            'password' => Hash::make('secret123')
+        ]);
+        $user = User::create([
+            'name' => "Generic User",
+            'email' => "user@gmail.com",
+            'password' => Hash::make('secret123')
+        ]);
+        $admin->roles()->attach($adminRole);
+        $author->roles()->attach($authorRole);
+        $user->roles()->attach($userRole);
+
+        factory(User::class, 10)->create()->each(function($u) {
+            $userRole = Role::where('name', 'user')->first();
+            $u->roles()->attach($userRole);
+        });
     }
 }

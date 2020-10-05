@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+use App\Supplier;
 
 class SupplierSeeder extends Seeder
 {
@@ -12,6 +13,7 @@ class SupplierSeeder extends Seeder
      */
     public function run()
     {
+        Supplier::truncate();
         DB::table('suppliers')->insertOrIgnore([
             'name' => "Canon",
             'address' => "Hà Nội"

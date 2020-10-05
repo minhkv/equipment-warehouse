@@ -11,7 +11,10 @@
                 </h3>
             </div>
             <div class="ml-auto">
-                <button @click="duplicate(displayedOrder)" class="btn btn-primary"><i class="fa fa-clone"></i> Sao chép đơn</button>
+                <print-order v-if="displayPrint()" :order="displayedOrder"></print-order>
+                <button @click="duplicate(displayedOrder)" class="btn btn-primary">
+                    <i class="fa fa-clone"></i> Sao chép đơn
+                </button>
             </div>
         </div>
         <div class="col-10 mx-auto py-3">
@@ -503,6 +506,9 @@ export default {
         },
         disableButton() {
             this.buttonDisabled = true;
+        },
+        displayPrint() {
+            return this.order.status == 4 || this.order.status == 2;
         },
     }
 };

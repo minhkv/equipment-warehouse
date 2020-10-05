@@ -1,6 +1,7 @@
 require('./bootstrap');
 
 window.Vue = require('vue');
+import VueHtmlToPaper from 'vue-html-to-paper';
 
 import moment from 'moment';
 
@@ -61,8 +62,20 @@ Vue.filter('formatEquipmentPrice', function(price){
     return new Intl.NumberFormat().format(price) + 'đ';
 });
 
+const options = {
+    name: '_blank',
+    specs: [
+        'fullscreen=yes',
+        'titlebar=yes',
+        'scrollbars=yes'
+    ],
+    styles: [
+        'https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css',
+        'https://unpkg.com/kidlat-css/css/kidlat.css'
+    ]
+};
 
-
+Vue.use(VueHtmlToPaper, options);
 Vue.component('multi-step-form',require('./components/multi-step-form.vue').default);
 Vue.component('equipment-templates',require('./components/equipment-templates.vue').default);
 Vue.component('equipment-lost',require('./components/equipment-lost.vue').default);
@@ -101,6 +114,9 @@ Vue.component('equipment-template-form',require('./components/equipment-template
 Vue.component('table-input-template',require('./components/table-input-template.vue').default);
 Vue.component('input-order',require('./components/input-order.vue').default);
 Vue.component('input-order-detail',require('./components/input-order-detail.vue').default);
+Vue.component('print-order',require('./components/print-order.vue').default);
+Vue.component('user-index',require('./components/user/user-index.vue').default);
+Vue.component('user-form',require('./components/user/user-form.vue').default);
 Vue.component('test',require('./components/test.vue').default);
 
 var app = new Vue({

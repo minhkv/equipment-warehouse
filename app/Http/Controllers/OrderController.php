@@ -183,9 +183,7 @@ class OrderController extends Controller
                 foreach($orderRequestInfo->orderInfos as $orderInfo) {
                     if($order->status == 2) {
                         $orderInfo->equipment->update(['status' => 1]);
-                        $orderInfo->update([
-                            'backing' => 1, 
-                        ]); // backing
+                        $orderInfo->update(['backing' => 1, ]); // backing
                     } 
                 }
             }

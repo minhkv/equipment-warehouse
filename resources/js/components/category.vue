@@ -8,7 +8,7 @@
             </div>
             <div class="row justify-content-center">
                 <div class="col-md-8">
-                    <table class="table">
+                    <table class="table table-hover">
                         <thead class="thead-light">
                             <tr>
                                 <th scope="col">Mã</th>
@@ -18,7 +18,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr v-for="category in paginateItems" :key="category.id">
+                            <tr v-for="category in paginateItems" :key="category.id" class="cursor-pointer">
                                 <th class="align-middle" scope="row">{{ category.id }}</th>
                                 <td class="align-middle">{{ category.name}}</td>
                                 <td class="align-middle">{{ category.templates.length }}</td>

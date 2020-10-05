@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+use App\Category;
 
 class CategorySeeder extends Seeder
 {
@@ -12,6 +13,7 @@ class CategorySeeder extends Seeder
      */
     public function run()
     {
+        Category::truncate();
         DB::table('categories')->insertOrIgnore([
             'name' => "Máy ảnh",
         ]);

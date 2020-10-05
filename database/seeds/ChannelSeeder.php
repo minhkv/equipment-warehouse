@@ -1,6 +1,8 @@
 <?php
 
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
+use App\Channel;
 
 class ChannelSeeder extends Seeder
 {
@@ -11,6 +13,7 @@ class ChannelSeeder extends Seeder
      */
     public function run()
     {
+        Channel::truncate();
         DB::table('channels')->insertOrIgnore([
             'name' => "Phòng Cinehome",
         ]);

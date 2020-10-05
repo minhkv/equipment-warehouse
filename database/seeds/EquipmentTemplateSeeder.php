@@ -13,7 +13,8 @@ class EquipmentTemplateSeeder extends Seeder
      */
     public function run()
     {
-
+        EquipmentTemplate::truncate();
+        Equipment::truncate();
         EquipmentTemplate::insert([
             [
                 'name' => 'MÁY ẢNH CANON EOS M50', 
