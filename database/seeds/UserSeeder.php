@@ -17,7 +17,7 @@ class UserSeeder extends Seeder
     {
         User::truncate();
         $adminRole = Role::where('name', 'admin')->first();
-        $authorRole = Role::where('name', 'author')->first();
+        $stockerRole = Role::where('name', 'stocker')->first();
         $userRole = Role::where('name', 'user')->first();
 
         $admin = User::create([
@@ -25,9 +25,9 @@ class UserSeeder extends Seeder
             'email' => "admin@gmail.com",
             'password' => Hash::make('secret123')
         ]);
-        $author = User::create([
+        $stocker = User::create([
             'name' => "Author User",
-            'email' => "author@gmail.com",
+            'email' => "stocker@gmail.com",
             'password' => Hash::make('secret123')
         ]);
         $user = User::create([
@@ -36,7 +36,7 @@ class UserSeeder extends Seeder
             'password' => Hash::make('secret123')
         ]);
         $admin->roles()->attach($adminRole);
-        $author->roles()->attach($authorRole);
+        $stocker->roles()->attach($stockerRole);
         $user->roles()->attach($userRole);
 
         factory(User::class, 10)->create()->each(function($u) {

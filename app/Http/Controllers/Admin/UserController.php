@@ -20,7 +20,7 @@ class UserController extends Controller
         return view('admin.user.index', compact(['users', 'roles']));
     }
     public function update(Request $request, User $user) {
-        if(Gate::denies('users')) {
+        if(Gate::denies('edit-users')) {
             return redirect(route('home'));
         }
         try {
@@ -31,7 +31,7 @@ class UserController extends Controller
         }
     }
     public function destroy(User $user) {
-        if(Gate::denies('users')) {
+        if(Gate::denies('delete-users')) {
             return redirect(route('home'));
         }
         $user->roles()->detach();
