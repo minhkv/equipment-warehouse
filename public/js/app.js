@@ -7063,6 +7063,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -7070,7 +7073,8 @@ __webpack_require__.r(__webpack_exports__);
   props: ['users', 'roles', 'userIndexUrl'],
   data: function data() {
     return {
-      displayedUsers: []
+      displayedUsers: [],
+      paginateItems: []
     };
   },
   created: function created() {
@@ -7102,6 +7106,9 @@ __webpack_require__.r(__webpack_exports__);
         });
         app.displayedUsers.splice(index, 1);
       });
+    },
+    pagination: function pagination(items) {
+      this.paginateItems = items;
     }
   }
 });
@@ -73726,7 +73733,7 @@ var render = function() {
             _vm._v(" "),
             _c(
               "tbody",
-              _vm._l(_vm.displayedUsers, function(user, index) {
+              _vm._l(_vm.paginateItems, function(user) {
                 return _c("tr", { key: user.id }, [
                   _c(
                     "th",
@@ -73734,7 +73741,7 @@ var render = function() {
                       staticClass: " align-middle text-center",
                       attrs: { scope: "row" }
                     },
-                    [_vm._v(_vm._s(index + 1))]
+                    [_vm._v(_vm._s(user.id))]
                   ),
                   _vm._v(" "),
                   _c(
@@ -73788,6 +73795,22 @@ var render = function() {
         ])
       ]),
       _vm._v(" "),
+      _c(
+        "div",
+        { staticClass: "row justify-content-center" },
+        [
+          _c("pagination", {
+            attrs: { items: _vm.displayedUsers, per: "10" },
+            on: {
+              change: function($event) {
+                return _vm.pagination($event)
+              }
+            }
+          })
+        ],
+        1
+      ),
+      _vm._v(" "),
       _vm._l(_vm.displayedUsers, function(user) {
         return _c(
           "modal-component",
@@ -73830,7 +73853,7 @@ var staticRenderFns = [
             staticClass: "align-middle text-center",
             attrs: { scope: "col", width: "5%" }
           },
-          [_vm._v("#")]
+          [_vm._v("ID")]
         ),
         _vm._v(" "),
         _c(

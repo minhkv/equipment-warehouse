@@ -5,7 +5,7 @@
                 <table class="table table-bordered mt-2">
                     <thead class="thead-light">
                         <tr>
-                            <th class="align-middle text-center" scope="col" width="5%">#</th>
+                            <th class="align-middle text-center" scope="col" width="5%">ID</th>
                             <th class="align-middle text-center" scope="col" width="15%">Name</th>
                             <th class="align-middle text-center" scope="col" width="20%">Email</th>
                             <th class="align-middle text-center" scope="col" width="20%">Roles</th>
@@ -13,8 +13,8 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr v-for="(user, index) in displayedUsers" :key="user.id">
-                            <th class=" align-middle text-center" scope="row">{{index + 1}}</th>
+                        <tr v-for="(user) in paginateItems" :key="user.id">
+                            <th class=" align-middle text-center" scope="row">{{user.id}}</th>
                             <td class=" align-middle text-center" scope="row">{{user.name}}</td>
                             <td class="align-middle text-center">{{ user.email }}</td>
                             <td class="align-middle text-center">{{ displayRoles(user) }}</td>
@@ -26,6 +26,9 @@
                     </tbody>
                 </table>
             </div>
+        </div>
+        <div class="row justify-content-center">
+            <pagination @change="pagination($event)" :items="displayedUsers" per='10'></pagination>
         </div>
         <modal-component v-for="user in displayedUsers" :key="user.id" :id="'editUser' + user.id" :title="'Edit user' + user.id">
             <user-form @change="updateUser($event, user)" :user="user" :roles="roles" :url="userIndexUrl + '/' + user.id" method="put"></user-form>
@@ -41,7 +44,8 @@ export default {
     props: ['users', 'roles', 'userIndexUrl'],
     data() {
         return {
-            displayedUsers: []
+            displayedUsers: [],
+            paginateItems: []
         };
     },
     created() {
@@ -71,6 +75,9 @@ export default {
                 let index = app.displayedUsers.findIndex(x => x.id == user.id);
                 app.displayedUsers.splice(index, 1);
             });
+        },
+        pagination(items) {
+            this.paginateItems = items;
         },
     }
 }

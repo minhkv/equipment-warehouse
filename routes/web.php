@@ -19,37 +19,34 @@ use Illuminate\Http\Request;
 Auth::routes();
 
 Route::middleware('auth')->group(function() {
-    Route::get('/', 'HomeController@index');
-    Route::get('/home', 'HomeController@index')->name('home');
-    Route::get('/borrowing-cart', function() {
-        return view('borrowing-cart');
-    })->name('borrowing-cart');
-    Route::resources([    
-        'category' => 'CategoryController',
-        'channel' => 'ChannelController',
-        'combo' => 'ComboController',
-        'equipment' => 'EquipmentController',
-        'equipment-template' => 'EquipmentTemplateController',
-        'order' => 'OrderController',
-        'supplier' => 'SupplierController',
-        'input-order' => 'InputOrderController',
-    ]);
-    
-    Route::resource('user', 'Admin\UserController')->middleware('can:manage-users')->except(['show', 'create', 'store']);
-    Route::resource('borrowed-history', 'BorrowedHistoryController')->only(['index']);
-    
-    Route::resource('combo-info', 'ComboInfoController')->only(['store', 'destroy']);
-    
-    Route::resource('usage-history', 'UsageHistoryController')->only(['index']);
-    Route::get('equipment-template-lost', 'EquipmentController@equipmentLost')->name('equipment-template.lost');
-    Route::put('equipment-template-lost-received/{equipment}', 'EquipmentController@receivedLostEquipment')->name('equipment-template.received-lost');
+    Route::resource('equipment-template', 'EquipmentTemplateController')->only(['index', 'show']);    
+    Route::resource('order', 'OrderController')->only(['index', 'show']);
     Route::post('order-request', 'OrderController@storeRequest')->name('order-request.store');
-    Route::put('order-request/{order}/accept', 'OrderController@acceptOrderRequest')->name('order-request.accept');
-    Route::put('order-request/{order}/reject', 'OrderController@rejectOrderRequest')->name('order-request.reject');
-    Route::put('order-request/{order}/output', 'OrderController@equipmentOutput')->name('order-request.output');
-    Route::put('order-request/{order}/return', 'OrderController@equipmentReturn')->name('order-request.return');
-    Route::put('order-request/{order}/complete', 'OrderController@completeOrder')->name('order-request.complete');
-    Route::put('order-request/{order}/back', 'OrderController@back')->name('order-request.back');
+    Route::resource('category', 'CategoryController')->only(['index']);
+    
+    Route::resource('user', 'Admin\UserController')->middleware('can:modify-users')->except(['show', 'create', 'store']);
+    
+    Route::middleware('can:modify-items')->group(function() {
+        Route::get('/', 'HomeController@index');
+        Route::get('/home', 'HomeController@index')->name('home');
+
+        Route::resource('equipment', 'EquipmentController');
+        Route::resource('equipment-template', 'EquipmentTemplateController')->except(['index', 'show']);
+        Route::resource('order', 'OrderController')->except(['index', 'show']);
+        Route::resource('category', 'CategoryController')->except(['index']);
+        Route::resource('channel', 'ChannelController');
+        Route::resource('supplier', 'SupplierController');
+        Route::resource('input-order', 'InputOrderController');
+        Route::get('equipment-template-lost', 'EquipmentController@equipmentLost')->name('equipment-template.lost');
+        Route::put('equipment-template-lost-received/{equipment}', 'EquipmentController@receivedLostEquipment')->name('equipment-template.received-lost');
+        Route::put('order-request/{order}/accept', 'OrderController@acceptOrderRequest')->name('order-request.accept');
+        Route::put('order-request/{order}/reject', 'OrderController@rejectOrderRequest')->name('order-request.reject');
+        Route::put('order-request/{order}/output', 'OrderController@equipmentOutput')->name('order-request.output');
+        Route::put('order-request/{order}/return', 'OrderController@equipmentReturn')->name('order-request.return');
+        Route::put('order-request/{order}/complete', 'OrderController@completeOrder')->name('order-request.complete');
+        Route::put('order-request/{order}/back', 'OrderController@back')->name('order-request.back');
+    });
+
     Route::get('/test', function() {
         $equipmentTemplates= App\EquipmentTemplate::with('equipments')->where('display', 1)->get();
         $suppliers = App\Supplier::all();

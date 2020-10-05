@@ -10,9 +10,11 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <!-- Left Side Of Navbar -->
             <ul class="navbar-nav">
+                @can('modify-items')
                 <li class="nav-item ">
                     <a class="nav-link {{Route::currentRouteName() == 'home' ? 'active' : ''}}" href="{{route('home')}}">Trang chủ</a>
                 </li>
+                @endcan
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>Đơn
                     @if($notification > 0)
@@ -26,12 +28,14 @@
                         <a class="dropdown-item" href="{{ route('order.create') }}">
                             Tạo đơn mượn
                         </a>
+                        @can('modify-items')
                         <a class="dropdown-item" href="{{ route('input-order.index') }}">
                             Danh sách đơn nhập
                         </a>
                         <a class="dropdown-item" href="{{ route('input-order.create') }}">
                             Tạo đơn nhập
                         </a>
+                        @endcan
                     </div>
                 </li>
                 <li class="nav-item dropdown">
@@ -43,19 +47,21 @@
                         <a class="dropdown-item" href="{{ route('equipment-template.index') }}">
                             Danh sách thiết bị
                         </a>
+                        @can('modify-items')
                         <a class="dropdown-item" href="{{ route('equipment-template.create') }}">
                             Thêm thiết bị
                         </a>
                         <a class="dropdown-item" href="{{ route('equipment-template.lost') }}">
                             Thiết bị thất lạc
                         </a>
+                        @endcan
                     </div>
                 </li>
-
+                @can('modify-items')
                 <li class="nav-item">
                     <a class="nav-link {{Route::currentRouteName() == 'supplier.index' ? 'active' : ''}}" href="{{route('supplier.index')}}">Nhà cung cấp</a>
                 </li>
-
+                @endcan
             </ul>
 
             <!-- Right Side Of Navbar -->
@@ -75,7 +81,7 @@
                         <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                             @csrf
                         </form>
-                        @can('manage-users')
+                        @can('modify-users')
                         <a href="{{ route('user.index') }}" class="dropdown-item">
                             Quản lý người dùng
                         </a>

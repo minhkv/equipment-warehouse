@@ -139,7 +139,6 @@ class OrderController extends Controller
     }
 
     public function storeRequest(Request $request) {
-        // return $request->input('longTerm') ? 1 : 0;
         $order = Order::create([
             'type' => $request->input('type'),
             'stocker_id' => $request->input('stockerId'),
@@ -156,7 +155,7 @@ class OrderController extends Controller
             $order->orderRequestInfos()->create([
                 'template_id' => $template['id'],
                 'amount' => $template['amount'],
-            ]);            
+            ]);
         }
         return (route('order.show', $order));
     }

@@ -26,7 +26,7 @@ class UserSeeder extends Seeder
             'password' => Hash::make('secret123')
         ]);
         $stocker = User::create([
-            'name' => "Author User",
+            'name' => "Stocker User",
             'email' => "stocker@gmail.com",
             'password' => Hash::make('secret123')
         ]);
