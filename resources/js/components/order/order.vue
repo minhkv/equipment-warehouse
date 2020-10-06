@@ -67,8 +67,8 @@
     </div>
 </template>
 <script>
-import ObjectMixin from '../mixins/ObjectMixin';
-import OrderMixin from '../mixins/OrderMixin';
+import ObjectMixin from '../../mixins/ObjectMixin';
+import OrderMixin from '../../mixins/OrderMixin';
 export default {
     mixins: [ObjectMixin, OrderMixin],
     props: [

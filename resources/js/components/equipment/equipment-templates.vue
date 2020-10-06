@@ -31,7 +31,7 @@
         </div>
         <div class="row justify-content-center py-4">
             <div
-                v-for="(template, index) in paginateItems"
+                v-for="(template) in paginateItems"
                 :key="template.id"
                 class="col-sm-6 col-md-4 col-lg-3 my-2">
                 <div class="card fast-transition">

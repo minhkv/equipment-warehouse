@@ -63,7 +63,7 @@
     </div>
 </template>
 <script>
-import LocalStorageMixin from '../mixins/LocalStorageMixin';
+import LocalStorageMixin from '../../mixins/LocalStorageMixin';
 export default {
     mixins: [LocalStorageMixin],
     props: ['templates', 'categories', 'newItem'],

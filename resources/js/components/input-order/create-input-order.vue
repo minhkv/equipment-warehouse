@@ -126,8 +126,8 @@
     </div>
 </template>
 <script>
-import RequestMixin from '../mixins/RequestMixin';
-import LocalStorageMixin from '../mixins/LocalStorageMixin';
+import RequestMixin from '../../mixins/RequestMixin';
+import LocalStorageMixin from '../../mixins/LocalStorageMixin';
 export default {
     mixins: [RequestMixin, LocalStorageMixin],
     props: [

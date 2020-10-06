@@ -20,7 +20,7 @@
     </table>
 </template>
 <script>
-import ObjectMixin from '../mixins/ObjectMixin';
+import ObjectMixin from '../../mixins/ObjectMixin';
 export default {
     mixins: [ObjectMixin],
     props: ['items', 'columns'],

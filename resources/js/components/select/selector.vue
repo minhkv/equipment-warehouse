@@ -15,7 +15,7 @@
     </div>
 </template>
 <script>
-import ObjectMixin from '../mixins/ObjectMixin';
+import ObjectMixin from '../../mixins/ObjectMixin';
 export default {
     mixins: [ObjectMixin],
     props: ["title", "items", "labelAtt", "valueAtt", "value"],

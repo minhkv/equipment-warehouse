@@ -195,8 +195,8 @@
 
 <script>
 import moment from 'moment';
-import RequestMixin from '../mixins/RequestMixin';
-import OrderMixin from '../mixins/OrderMixin';
+import RequestMixin from '../../mixins/RequestMixin';
+import OrderMixin from '../../mixins/OrderMixin';
 export default {
     mixins: [RequestMixin, OrderMixin],
     props: [
