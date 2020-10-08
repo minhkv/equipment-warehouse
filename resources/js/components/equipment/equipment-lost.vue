@@ -28,7 +28,7 @@
                             <td class="align-middle text-center">{{ equipment.template.name }}</td>
                             <td class="align-middle text-center">{{ getRecentOrder(equipment).id }}</td>
                             <td class="align-middle text-center">{{ getRecentOrder(equipment).guest_name }}</td>
-                            <td class="align-middle text-center">{{ getRecentOrder(equipment).created_at|formatDate }}</td>
+                            <td class="align-middle text-center">{{ getRecentOrder(equipment).created_at|formatDateTime }}</td>
                             <td class="align-middle text-center">
                                 <button type="button" class="btn btn-primary" data-toggle="modal" :data-target="'#checkEquipment' + equipment.id">
                                     Tìm thấy đồ

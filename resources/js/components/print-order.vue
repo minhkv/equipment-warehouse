@@ -11,13 +11,13 @@
                     <label class="col-3 text-left"><strong><i class="fa fa-user"></i> Người mượn</strong></label>
                     <label class="col-3 text-left">{{order.guest_name}}</label>
                     <label class="col-3 text-left"><strong><i class="fa fa-calendar"></i> Ngày mượn</strong></label>
-                    <label class="col-3 text-left">{{order.date_borrowed|formatDate}}</label>
+                    <label class="col-3 text-left">{{order.date_borrowed|formatDateTime}}</label>
                 </div>
                 <div class="row">
                     <label class="col-3 text-left"><strong><i class="fa fa-building"></i> Phòng ban</strong></label>
                     <label class="col-3 text-left">{{order.department}}</label>
                     <label class="col-3 text-left"><strong><i class="fa fa-calendar"></i> Ngày hẹn trả</strong></label>
-                    <label class="col-3 text-left">{{order.date_return|formatDate}}</label>
+                    <label class="col-3 text-left">{{order.date_return|formatDateTime}}</label>
                 </div>
                 <div class="row">
                     <label class="col-3 text-left"><strong>Mượn lâu dài:</strong></label>

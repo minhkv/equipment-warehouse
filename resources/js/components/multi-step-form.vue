@@ -78,11 +78,11 @@
                             </div>
                             <div class="row">
                                 <label class="col-3 text-left">Ngày mượn</label>
-                                <label class="col-9 text-left">{{ dateBorrowed|formatDate }}</label>
+                                <label class="col-9 text-left">{{ dateBorrowed|formatDateTime }}</label>
                             </div>
                             <div class="row">
                                 <label class="col-3 text-left">Ngày trả</label>
-                                <label class="col-9 text-left">{{ dateReturn|formatDate }}</label>
+                                <label class="col-9 text-left">{{ dateReturn|formatDateTime }}</label>
                             </div>
                             <div class="row">
                                 <label class="col-3 text-left">Mượn lâu dài</label>

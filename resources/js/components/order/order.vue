@@ -40,8 +40,8 @@
                         <td @click="redirect(orderDetailUrl(order.id))" class="text-center align-middle">{{order.guest_name}}</td>
                         <td @click="redirect(orderDetailUrl(order.id))" class="text-center align-middle">{{order.stocker.name}}</td>
                         <td @click="redirect(orderDetailUrl(order.id))" class="text-center align-middle">{{order.long_term|formatBoolean}}</td>
-                        <td @click="redirect(orderDetailUrl(order.id))" class="text-center align-middle">{{order.created_at|formatDate}}</td>
-                        <td @click="redirect(orderDetailUrl(order.id))" class="text-center align-middle">{{order.date_output|formatDate}}</td>
+                        <td @click="redirect(orderDetailUrl(order.id))" class="text-center align-middle">{{order.created_at|formatDateTime}}</td>
+                        <td @click="redirect(orderDetailUrl(order.id))" class="text-center align-middle">{{order.date_output|formatDateTime}}</td>
                         <td @click="redirect(orderDetailUrl(order.id))" class="text-center align-middle">
                             <h6>
                                 <order-status :error="checkOrderError(order)" :status="order.status"></order-status>

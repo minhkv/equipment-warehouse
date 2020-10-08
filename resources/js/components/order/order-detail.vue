@@ -22,13 +22,13 @@
                 <label class="col-3 text-left"><strong><i class="fa fa-user"></i> Người mượn</strong></label>
                 <label class="col-3 text-left">{{displayedOrder.guest_name}}</label>
                 <label class="col-3 text-left"><strong><i class="fa fa-calendar"></i> Ngày mượn</strong></label>
-                <label class="col-3 text-left">{{displayedOrder.date_borrowed|formatDate}}</label>
+                <label class="col-3 text-left">{{displayedOrder.date_borrowed|formatDateTime}}</label>
             </div>
             <div class="row">
                 <label class="col-3 text-left"><strong><i class="fa fa-building"></i> Phòng ban</strong></label>
                 <label class="col-3 text-left">{{displayedOrder.department}}</label>
                 <label class="col-3 text-left"><strong><i class="fa fa-calendar"></i> Ngày hẹn trả</strong></label>
-                <label class="col-3 text-left">{{displayedOrder.date_return|formatDate}}</label>
+                <label class="col-3 text-left">{{displayedOrder.date_return|formatDateTime}}</label>
             </div>
             <div class="row">
                 <label class="col-3 text-left"><strong>Mượn lâu dài:</strong></label>
@@ -48,27 +48,27 @@
             <div :class="{'step': true, 'active': displayedOrder.status >=0}">
                 <span class="icon"> <i class="fa fa-book"></i> </span>
                 <span class="text">Tạo đơn hàng</span>
-                <span class="text-muted">{{displayedOrder.created_at|formatDate}}</span>
+                <span class="text-muted">{{displayedOrder.created_at|formatDateTime}}</span>
             </div>
             <div :class="{'step': true, 'active': displayedOrder.status >=1}">
                 <span class="icon"> <i class="fa fa-check"></i> </span>
                 <span class="text">Chấp nhận</span>
-                <span class="text-muted">{{displayedOrder.date_approved|formatDate}}</span>
+                <span class="text-muted">{{displayedOrder.date_approved|formatDateTime}}</span>
             </div>
             <div :class="{'step': true, 'active': displayedOrder.status >=2}">
                 <span class="icon"> <i class="fa fa-user"></i> </span>
                 <span class="text"> Xuất đồ</span>
-                <span class="text-muted">{{displayedOrder.date_output|formatDate}}</span>
+                <span class="text-muted">{{displayedOrder.date_output|formatDateTime}}</span>
             </div>
             <div :class="{'step': true, 'active': displayedOrder.status >=3}">
                 <span class="icon"> <i class="fa fa-truck"></i> </span>
                 <span class="text"> Trả đồ </span>
-                <span class="text-muted">{{displayedOrder.date_received|formatDate}}</span>
+                <span class="text-muted">{{displayedOrder.date_received|formatDateTime}}</span>
             </div>
             <div :class="{'step': true, 'active': displayedOrder.status >=4}">
                 <span class="icon"> <i class="fa fa-thumbs-up"></i> </span>
                 <span class="text">Hoàn tất</span>
-                <span class="text-muted">{{displayedOrder.date_completed|formatDate}}</span>
+                <span class="text-muted">{{displayedOrder.date_completed|formatDateTime}}</span>
             </div>
         </div>
         <hr>

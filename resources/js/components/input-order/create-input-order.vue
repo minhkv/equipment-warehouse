@@ -43,7 +43,7 @@
                     </div>
                     <div class="row">
                         <label class="col-3 text-left">Ngày nhập</label>
-                        <label class="col-9 text-left">{{ dateInput | formatDate }}</label>
+                        <label class="col-9 text-left">{{ dateInput | formatDateTime }}</label>
                     </div>
                 </div>
 
@@ -79,7 +79,7 @@
                                 </td>
                                 <td class="align-middle text-center">
                                     <input @change="store()" v-if="displayInput()" type="datetime-local" class="form-control" v-model="item.warranty">
-                                    <div v-if="displayText()">{{item.warranty | formatDate}}</div>
+                                    <div v-if="displayText()">{{item.warranty | formatDateTime}}</div>
                                 </td>
                                 <td class="align-middle text-center">
                                     <button @click="removeItem(item)" v-if="displayInput()" type="button" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></button>
@@ -120,7 +120,7 @@
                 <button type="button" class="btn btn-primary" data-dismiss="modal">Xong</button>
             </template>
         </modal-component>
-        <modal-component id="createEquipment" title="Tạo mẫu mới">
+        <modal-component id="createEquipment" title="Tạo mẫu mới" size="xl">
             <equipment-template-form @change="createTemplate($event)" :categories="categories"></equipment-template-form>
         </modal-component>
     </div>

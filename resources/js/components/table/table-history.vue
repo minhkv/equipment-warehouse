@@ -37,7 +37,7 @@
                     <td>
                         <info-status :status="info.status"></info-status>
                     </td>
-                    <td>{{ getOrder(info).date_output|formatDate }}</td>
+                    <td>{{ getOrder(info).date_output|formatDateTime }}</td>
                 </tr>
             </tbody>
         </table>

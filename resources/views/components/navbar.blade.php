@@ -38,6 +38,7 @@
                         @endcan
                     </div>
                 </li>
+                @can('modify-items')
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>Thiết bị</a>
                     <div class="dropdown-menu dropdown-menu-left" aria-labelledby="navbarDropdown">
@@ -47,16 +48,15 @@
                         <a class="dropdown-item" href="{{ route('equipment-template.index') }}">
                             Danh sách thiết bị
                         </a>
-                        @can('modify-items')
                         <a class="dropdown-item" href="{{ route('equipment-template.create') }}">
                             Thêm thiết bị
                         </a>
                         <a class="dropdown-item" href="{{ route('equipment-template.lost') }}">
                             Thiết bị thất lạc
                         </a>
-                        @endcan
                     </div>
                 </li>
+                @endcan
                 @can('modify-items')
                 <li class="nav-item">
                     <a class="nav-link {{Route::currentRouteName() == 'supplier.index' ? 'active' : ''}}" href="{{route('supplier.index')}}">Nhà cung cấp</a>

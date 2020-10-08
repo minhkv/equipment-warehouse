@@ -19,19 +19,20 @@ use Illuminate\Http\Request;
 Auth::routes();
 
 Route::middleware('auth')->group(function() {
-    Route::resource('equipment-template', 'EquipmentTemplateController')->only(['index', 'show']);    
+    // Route::resource('equipment-template', 'EquipmentTemplateController')->only(['index', 'show']);    
     Route::resource('order', 'OrderController')->only(['index', 'show', 'create']);
     Route::post('order-request', 'OrderController@storeRequest')->name('order-request.store');
     Route::resource('category', 'CategoryController')->only(['index']);
     
     Route::resource('user', 'Admin\UserController')->middleware('can:modify-users')->except(['show', 'create', 'store']);
-    
     Route::middleware('can:modify-items')->group(function() {
         Route::get('/', 'HomeController@index');
         Route::get('/home', 'HomeController@index')->name('home');
 
         Route::resource('equipment', 'EquipmentController');
-        Route::resource('equipment-template', 'EquipmentTemplateController')->except(['index', 'show']);
+
+        Route::resource('equipment-template', 'EquipmentTemplateController');//->except(['index', 'show',]);
+
         Route::resource('order', 'OrderController')->except(['index', 'show', 'create']);
         Route::resource('category', 'CategoryController')->except(['index']);
         Route::resource('department', 'DepartmentController');

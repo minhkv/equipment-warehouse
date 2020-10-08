@@ -35,8 +35,10 @@ class EquipmentTemplateController extends Controller
     public function create()
     {
         $categories = Category::all();
+        $suppliers = Supplier::all();
         return view('create-equipment')->with([
             'categories' => $categories,
+            'suppliers' => $suppliers,
         ]);
     }
 
@@ -49,6 +51,7 @@ class EquipmentTemplateController extends Controller
     public function store(Request $request)
     {
         $template = new EquipmentTemplate($request->all());
+        $equipments = $request->equipments;
         $template->save();
         if($request->hasFile('imageFile')) {
             $fileName = $request->imageFile->getClientOriginalName();
@@ -56,6 +59,10 @@ class EquipmentTemplateController extends Controller
             $template->update(['image' => '/storage/img/'.$fileName]);
         } else {
             $template->update(['image' => '/storage/img/empty.jpg']);
+        }
+
+        foreach($equipments as $equipment) {
+            $template->equipments()->create($equipment);
         }
         
         return $template;
