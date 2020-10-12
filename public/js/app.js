@@ -2333,7 +2333,7 @@ __webpack_require__.r(__webpack_exports__);
       var formData = new FormData();
       formData.append('name', data.name);
       formData.append('category_id', data.category_id);
-      formData.append('equipments', data.equipments);
+      formData.append('equipments', JSON.stringify(data.equipments));
       formData.append('imageFile', data.imageFile);
       this.sendRequest(this.equipmentTemplateCreateUrl, 'post', formData, this.redirect);
     },
