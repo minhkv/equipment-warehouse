@@ -150,7 +150,7 @@
             <button v-if="displayedOrder.status >= 1 && displayedOrder.status <= 3" :disabled="buttonDisabled" @click="back" class="btn btn-secondary mr-2">
                 <i class="fa fa-chevron-left"></i> Quay lại
             </button>
-            <button v-if="displayedOrder.status == 1 || displayedOrder.status == 2" :disabled="buttonDisabled" @click="saveStatus" class="btn btn-primary mr-2">Lưu</button>
+            <button v-if="displayedOrder.status == 1 || displayedOrder.status == 2" :disabled="buttonDisabled" @click="saveStatus" class="btn btn-primary mr-2">Lưu <i class="fas fa-save    "></i></button>
 
             <button v-if="displayedOrder.status == 0" :disabled="buttonDisabled" @click="acceptOrder" class="btn btn-primary mx-2" data-abc="true">Chấp nhận</button>
             <button v-if="displayedOrder.status == 0" :disabled="buttonDisabled" @click="rejectOrder" class="btn btn-danger" data-abc="true">Từ chối</button>
@@ -160,7 +160,7 @@
             <button v-if="displayedOrder.status == 2" :disabled="buttonDisabled" @click="equipmentReturn" class="btn btn-primary" data-abc="true">
                 Trả đồ <i class="fa fa-chevron-right"></i>
             </button>
-            <button v-if="displayedOrder.status == 3" :disabled="buttonDisabled" @click="completeOrder" class="btn btn-primary" data-abc="true">Hoàn tất</button>
+            <button v-if="displayedOrder.status == 3" :disabled="buttonDisabled" @click="completeOrder" class="btn btn-success" data-abc="true">Hoàn tất <i class="fa fa-check"></i></button>
         </div>
 
         <modal-component v-for="(info, i) in displayedOrder.order_request_infos" :key="'a' + info.id" :id="'addEquipment-' + info.template.id" :title="'Thêm thiết bị ' + info.template.name" size="xl">

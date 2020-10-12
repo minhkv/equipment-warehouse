@@ -16,7 +16,7 @@
                 </div>
             </div>
             <fieldset>
-                <div v-if="step == 0">
+                <div v-show="step == 0">
                     <div class="text-center"><h2 class="fs-title">Thêm mẫu mới</h2></div>
                 
                     <div class="form-group row">
@@ -43,7 +43,7 @@
                         <label class="col-9 text-left">{{ getCategoryName(category) }}</label>
                     </div>
                 </div>
-                <div v-if="step >= 1">
+                <div v-show="step >= 1">
                     <table class="table table-hover mx-auto">
                         <thead class="thead-light">
                             <tr>
@@ -71,8 +71,8 @@
                                     <div v-if="displayText()">{{equipment.price|formatPrice}}</div>
                                 </td>
                                 <th class="align-middle text-center" scope="row">
-                                    <input @change="store()" v-model="equipment.dateInput" v-if="displayInput()" type="date" class="form-control date-picker">
-                                    <div v-if="displayText()">{{equipment.dateInput | formatDate}}</div>
+                                    <input @change="store()" v-model="equipment.input_date" v-if="displayInput()" type="date" class="form-control date-picker">
+                                    <div v-if="displayText()">{{equipment.input_date | formatDate}}</div>
                                 </th>
                                 <td class="align-middle text-center">
                                     <input @change="store()" v-model="equipment.warranty" v-if="displayInput()" type="date" class="form-control date-picker">
@@ -145,13 +145,13 @@ export default {
             this.storeStorage(this.atts);
         },
         validate() {
-            if(this.step == 0) {
+            if(this.step == 0 || this.step == 2) {
                 if(!this.name) {
                     alert('Tên không được để trống');
                     return false;
                 }
             }
-            if(this.step == 1) {
+            if(this.step == 1 || this.step == 2) {
                 let index = 0, accept = true;
                 let app = this;
                 let checkEquipments = this.equipments.every(e => {
@@ -181,7 +181,7 @@ export default {
         addEquipmentInput() {
             let equipmentInput = {
                 name: '',
-                dateInput: '',
+                input_date: '',
                 price: '',
                 supplier_id: '',
                 supplier_name: '',
@@ -197,7 +197,6 @@ export default {
         },
         submitTemplate() {
             this.sendEvent();
-            this.resetForm();
         },
         changeSupplier(result, equipment){
             equipment.supplier_name = result.value.name;
@@ -213,7 +212,8 @@ export default {
             return cate.name;
         },
         handleFileUpload() {
-            this.imageFile = this.$refs.imageFile.files[0];
+            // this.imageFile = this.$refs.imageFile.files[0];
+            Vue.set(this.$data, 'imageFile', this.$refs.imageFile.files[0]);
         },
         sendEvent() {
             let data = {

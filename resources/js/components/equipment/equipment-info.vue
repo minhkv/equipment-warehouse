@@ -21,7 +21,7 @@
                 <strong><i class="fa fa-calendar"></i> Ngày nhập</strong>
             </label>
             <label class="col-3 text-left">
-                {{ equipment.input_date|formatDateTime }}
+                {{ equipment.input_date|formatDate }}
             </label>
         </div>
         <div class="row">

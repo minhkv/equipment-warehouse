@@ -26,12 +26,21 @@ export default {
         },
         submit(data) {
             console.log(data);
-            this.sendRequest(this.equipmentTemplateCreateUrl, 'post', data, this.redirect);
+            let formData = new FormData();
+            formData.append('name', data.name);
+            formData.append('category_id', data.category_id);
+            formData.append('equipments', data.equipments);
+            formData.append('imageFile', data.imageFile);
+            this.sendRequest(this.equipmentTemplateCreateUrl, 'post', formData, this.redirect);
         }, 
         redirect(data) {
             console.log(data);
+            if(data.error) {
+                alert(data.error);
+                return;
+            }
             let url = this.equipmentTemplateIndexUrl + '/' + data.id;
-            // window.location.replace(url);
+            window.location.replace(url);
         }
     },
 };

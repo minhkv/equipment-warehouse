@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Equipment;
 use App\Category;
 use App\Supplier;
+use Exception;
 
 class EquipmentTemplateController extends Controller
 {
@@ -50,22 +51,28 @@ class EquipmentTemplateController extends Controller
      */
     public function store(Request $request)
     {
-        $template = new EquipmentTemplate($request->all());
-        $equipments = $request->equipments;
-        $template->save();
-        if($request->hasFile('imageFile')) {
-            $fileName = $request->imageFile->getClientOriginalName();
-            $request->imageFile->storeAs('img', $fileName, 'public');
-            $template->update(['image' => '/storage/img/'.$fileName]);
-        } else {
-            $template->update(['image' => '/storage/img/empty.jpg']);
-        }
+        try {
+            $template = new EquipmentTemplate($request->all());
+            $template->save();
+            $equipments = json_decode($request->equipments);
+            return $equipments;
+            if($request->hasFile('imageFile')) {
+                $fileName = $request->imageFile->getClientOriginalName();
+                $request->imageFile->storeAs('img', $fileName, 'public');
+                $template->update(['image' => '/storage/img/'.$fileName]);
+            } else {
+                $template->update(['image' => '/storage/img/empty.jpg']);
+            }
 
-        foreach($equipments as $equipment) {
-            $template->equipments()->create($equipment);
+            foreach($equipments as $equipment) {
+                $equipment = (array) $equipment;
+                $template->equipments()->create($equipment);
+            }
+            
+            return $template;
+        } catch(Exception $e) {
+            return json_encode((object) ['error' => $e->getMessage()]);
         }
-        
-        return $template;
     }
 
     /**

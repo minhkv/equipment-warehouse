@@ -6,7 +6,7 @@
         </div>
         <div class="form-group">
             <label for="price"><i class="fa fa-calendar"></i> Ngày nhập</label>
-            <input type="datetime-local" class="form-control" v-model="eq.input_date" placeholder="Giá nhập">
+            <input type="date" class="form-control" v-model="eq.input_date" placeholder="Giá nhập">
         </div>
         <div class="form-group">
             <label for="price"><i class="fa fa-money"></i> Giá nhập</label>
