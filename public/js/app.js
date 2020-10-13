@@ -2479,11 +2479,15 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ["equipmentTemplateIndexUrl", "equipmentTemplateUpdateUrl", "equipmentIndexUrl", "equipmentCreateUrl", "equipmentTemplate", "suppliers", "categories"],
   data: function data() {
     return {
       template: {},
+      paginateItems: [],
       templateName: '',
       templateCategoryId: '',
       imageFile: "",
@@ -2577,7 +2581,6 @@ __webpack_require__.r(__webpack_exports__);
     },
     addEquipment: function addEquipment(equipment) {
       console.log('addEquipment');
-      console.log(equipment);
       this.equipmentTemplate.equipments.push(equipment);
     },
     updateEquipment: function updateEquipment(newEquipment, index) {
@@ -2598,6 +2601,9 @@ __webpack_require__.r(__webpack_exports__);
     displayHistory: function displayHistory(equipment) {
       console.log(equipment.id);
       this.openModal('#newModal');
+    },
+    pagination: function pagination(items) {
+      this.paginateItems = items;
     },
     openModal: function openModal(id) {
       console.log('openModal ' + id);
@@ -2682,26 +2688,29 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   created: function created() {
-    this.eq = Object.assign({}, this.eq, this.blankEq);
-
-    if (this.equipment) {
-      this.eq = Object.assign({}, this.eq, this.equipment);
-      this.eq.input_date = moment__WEBPACK_IMPORTED_MODULE_0___default()(this.eq.input_date).format("YYYY-MM-DDTHH:MM:SS");
-    }
-
-    if (this.template) {
-      this.eq['template_id'] = this.template.id;
-    }
-
-    if (this.method == "POST") {
-      this.event = 'store';
-    }
-
-    if (this.method == "PUT") {
-      this.event = 'update';
-    }
+    this.init();
   },
   methods: {
+    init: function init() {
+      this.eq = Object.assign({}, this.eq, this.blankEq);
+
+      if (this.equipment) {
+        this.eq = Object.assign({}, this.eq, this.equipment);
+        this.eq.input_date = moment__WEBPACK_IMPORTED_MODULE_0___default()(this.eq.input_date).format("YYYY-MM-DD");
+      }
+
+      if (this.template) {
+        this.eq['template_id'] = this.template.id;
+      }
+
+      if (this.method == "POST") {
+        this.event = 'store';
+      }
+
+      if (this.method == "PUT") {
+        this.event = 'update';
+      }
+    },
     validateData: function validateData() {
       if (!this.eq.input_date) {
         alert('Bạn chưa nhập ngày');
@@ -2744,6 +2753,7 @@ __webpack_require__.r(__webpack_exports__);
         console.log(res);
         app.eq = res.data;
         app.sendEvent();
+        app.init();
       })["catch"](function (err) {
         console.log(err);
       });
@@ -65763,7 +65773,7 @@ var render = function() {
             _vm._v(" "),
             _c(
               "tbody",
-              _vm._l(_vm.template.equipments, function(equipment, index) {
+              _vm._l(_vm.paginateItems, function(equipment, index) {
                 return _c(
                   "tr",
                   { key: equipment.id, staticClass: "cursor-pointer" },
@@ -65888,6 +65898,22 @@ var render = function() {
               0
             )
           ]),
+          _vm._v(" "),
+          _c(
+            "div",
+            { staticClass: "row justify-content-center" },
+            [
+              _c("pagination", {
+                attrs: { items: _vm.template.equipments, per: "8" },
+                on: {
+                  change: function($event) {
+                    return _vm.pagination($event)
+                  }
+                }
+              })
+            ],
+            1
+          ),
           _vm._v(" "),
           _vm._m(4)
         ])

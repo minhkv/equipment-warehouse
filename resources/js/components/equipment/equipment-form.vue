@@ -61,23 +61,26 @@ export default {
         };
     },
     created() {
-        this.eq = Object.assign({}, this.eq, this.blankEq);
-        if (this.equipment) {
-            this.eq = Object.assign({}, this.eq, this.equipment);
-            this.eq.input_date = moment(this.eq.input_date).format("YYYY-MM-DDTHH:MM:SS");
-        }
-
-        if(this.template) {
-            this.eq['template_id'] = this.template.id;
-        }
-        if(this.method == "POST") {
-            this.event = 'store';
-        }
-        if(this.method == "PUT") {
-            this.event = 'update';
-        }
+        this.init();
     },
     methods: {
+        init() {
+            this.eq = Object.assign({}, this.eq, this.blankEq);
+            if (this.equipment) {
+                this.eq = Object.assign({}, this.eq, this.equipment);
+                this.eq.input_date = moment(this.eq.input_date).format("YYYY-MM-DD");
+            }
+
+            if(this.template) {
+                this.eq['template_id'] = this.template.id;
+            }
+            if(this.method == "POST") {
+                this.event = 'store';
+            }
+            if(this.method == "PUT") {
+                this.event = 'update';
+            }
+        },
         validateData() {
             if(!this.eq.input_date) {
                 alert('Bạn chưa nhập ngày');
@@ -115,6 +118,7 @@ export default {
                     console.log(res);
                     app.eq = res.data;
                     app.sendEvent();
+                    app.init();
                 })
                 .catch(function (err) {
                     console.log(err);

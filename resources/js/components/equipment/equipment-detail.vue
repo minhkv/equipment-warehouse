@@ -47,7 +47,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr v-for="(equipment, index) in template.equipments" :key="equipment.id" class="cursor-pointer" >
+                        <tr v-for="(equipment, index) in paginateItems" :key="equipment.id" class="cursor-pointer" >
                             <th data-toggle="modal" :data-target="'#detail' + equipment.id" class="align-middle text-center" scope="row">{{ equipment.id }}</th>
                             <th data-toggle="modal" :data-target="'#detail' + equipment.id" class="align-middle text-center" scope="row">{{ equipment.name }}</th>
                             <td data-toggle="modal" :data-target="'#detail' + equipment.id" class="align-middle text-center">
@@ -72,6 +72,9 @@
                         </tr>
                     </tbody>
                 </table>
+                <div class="row justify-content-center">
+                    <pagination @change="pagination($event)" :items="template.equipments" per="8"></pagination>
+                </div>
                 <div class="row justify-content-center">
                     <button type="button" class="btn btn-success btn-lg" data-toggle="modal" data-target="#addEquipment">
                         Thêm thiết bị
@@ -128,6 +131,7 @@
         data() {
             return {
                 template: {},
+                paginateItems: [],
                 templateName: '',
                 templateCategoryId: '',
                 imageFile: "",
@@ -222,7 +226,6 @@
             },
             addEquipment(equipment) {
                 console.log('addEquipment');
-                console.log(equipment);
                 this.equipmentTemplate.equipments.push(equipment);
             },
             updateEquipment(newEquipment, index) {
@@ -244,6 +247,9 @@
             displayHistory(equipment) {
                 console.log(equipment.id);
                 this.openModal('#newModal');
+            },
+            pagination(items) {
+                this.paginateItems = items;
             },
             openModal(id) {
                 console.log('openModal ' + id);
