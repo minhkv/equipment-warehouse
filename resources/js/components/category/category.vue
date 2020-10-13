@@ -93,6 +93,7 @@ export default {
         },
         pushCategory(category) {
             this.displayedCategories.push(category);
+            this.closeModal('#addCategory');
         },
         removeCategory(category) {
             let index = this.displayedCategories.findIndex(x => x.id == category.id);

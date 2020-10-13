@@ -2157,6 +2157,7 @@ __webpack_require__.r(__webpack_exports__);
     },
     pushCategory: function pushCategory(category) {
       this.displayedCategories.push(category);
+      this.closeModal('#addCategory');
     },
     removeCategory: function removeCategory(category) {
       var index = this.displayedCategories.findIndex(function (x) {
