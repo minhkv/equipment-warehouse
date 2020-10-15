@@ -4808,6 +4808,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 
 
 
@@ -4958,6 +4960,9 @@ __webpack_require__.r(__webpack_exports__);
           template_id: template.id
         };
       });
+    },
+    updateAriseAmount: function updateAriseAmount(info) {
+      info.amount = info.template.amount;
     },
     removeAriseRequest: function removeAriseRequest(request) {
       this.templateNeedToRemove = request;
@@ -6878,7 +6883,7 @@ __webpack_require__.r(__webpack_exports__);
         }
       }
     },
-    getDisabledTemplate: function getDisabledTemplate(template_id) {
+    getInitTemplate: function getInitTemplate(template_id) {
       for (var i in this.initTemplates) {
         if (this.initTemplates[i].id == template_id) {
           return this.initTemplates[i];
@@ -6937,17 +6942,17 @@ __webpack_require__.r(__webpack_exports__);
       });
       return selected;
     },
-    itemDisabled: function itemDisabled(item) {
+    itemInited: function itemInited(item) {
       var disabled = this.initTemplates.some(function (x) {
         return x.id == item.id;
       });
       return disabled;
     },
     templateChecked: function templateChecked(template) {
-      return this.itemSelected(template) || this.itemDisabled(template);
+      return this.itemSelected(template) || this.itemInited(template);
     },
     disableMinusButton: function disableMinusButton(template) {
-      return !this.itemSelected(template) && !this.itemDisabled(template);
+      return !this.itemSelected(template) && !this.itemInited(template);
     },
     sendEvent: function sendEvent() {
       console.log('send');
@@ -70656,6 +70661,9 @@ var render = function() {
                         },
                         domProps: { value: info.template.amount },
                         on: {
+                          change: function($event) {
+                            return _vm.updateAriseAmount(info)
+                          },
                           input: function($event) {
                             if ($event.target.composing) {
                               return
@@ -73789,14 +73797,14 @@ var render = function() {
                       }
                     }
                   })
-                : _vm.itemDisabled(template)
+                : _vm.itemInited(template)
                 ? _c("input", {
                     directives: [
                       {
                         name: "model",
                         rawName: "v-model",
-                        value: _vm.getDisabledTemplate(template.id).amount,
-                        expression: "getDisabledTemplate(template.id).amount"
+                        value: _vm.getInitTemplate(template.id).amount,
+                        expression: "getInitTemplate(template.id).amount"
                       }
                     ],
                     staticClass: "form-control",
@@ -73807,7 +73815,7 @@ var render = function() {
                       max: template.equipments.length
                     },
                     domProps: {
-                      value: _vm.getDisabledTemplate(template.id).amount
+                      value: _vm.getInitTemplate(template.id).amount
                     },
                     on: {
                       change: function($event) {
@@ -73818,7 +73826,7 @@ var render = function() {
                           return
                         }
                         _vm.$set(
-                          _vm.getDisabledTemplate(template.id),
+                          _vm.getInitTemplate(template.id),
                           "amount",
                           $event.target.value
                         )

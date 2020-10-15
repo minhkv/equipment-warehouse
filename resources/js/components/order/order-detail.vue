@@ -119,6 +119,7 @@
                                 min='0' 
                                 :max='info.template.maxAmount' 
                                 v-model="info.template.amount"
+                                @change="updateAriseAmount(info)"
                                 >
                         </td>
                         <td class="align-middle text-center">
@@ -185,7 +186,8 @@
         </modal-component>
 
         <modal-component id="addAriseTemplate" title="Thiết bị phát sinh thêm" size="lg">
-            <table-select-template @change="updateRequest($event)" :items="equipmentTemplates" :initTemplates="selectedTemplates" :categories="categories" :templateNeedToRemove="templateNeedToRemove.template"></table-select-template>
+            <table-select-template @change="updateRequest($event)" :items="equipmentTemplates" :initTemplates="selectedTemplates" :categories="categories" 
+            :templateNeedToRemove="templateNeedToRemove.template"></table-select-template>
             <template v-slot:footer>
                 <button type="button" class="btn btn-primary" data-dismiss="modal">Xong</button>
             </template>
@@ -353,7 +355,9 @@ export default {
                     template_id: template.id
                 });
             });
-            
+        },
+        updateAriseAmount(info) {
+            info.amount = info.template.amount;
         },
         removeAriseRequest(request) {
             this.templateNeedToRemove = request;

@@ -44,12 +44,12 @@
                         >
                         <input 
                         class="form-control" 
-                        v-else-if="itemDisabled(template)"
+                        v-else-if="itemInited(template)"
                         type="number" 
                         name="amount" 
                         min='0' 
                         :max='template.equipments.length' 
-                        v-model="getDisabledTemplate(template.id).amount"
+                        v-model="getInitTemplate(template.id).amount"
                         @change="sendEvent()"
                         >
                     </td>
@@ -95,7 +95,7 @@ export default {
             if(this.templateNeedToRemove) {
                 this.remove(this.templateNeedToRemove);
             }
-        }
+        },
     },
     methods: {
         init() {
@@ -130,7 +130,7 @@ export default {
                 }
             }
         },
-        getDisabledTemplate(template_id) {
+        getInitTemplate(template_id) {
             for(let i in this.initTemplates) {
                 if(this.initTemplates[i].id == template_id) {
                     return this.initTemplates[i];
@@ -187,17 +187,17 @@ export default {
             });
             return selected;
         },
-        itemDisabled(item) {
+        itemInited(item) {
             let disabled = this.initTemplates.some(x => {
                 return x.id == item.id;
             });
             return disabled;
         },
         templateChecked(template) {
-            return this.itemSelected(template) || this.itemDisabled(template);
+            return this.itemSelected(template) || this.itemInited(template);
         },
         disableMinusButton(template) {
-            return !this.itemSelected(template) && !this.itemDisabled(template);
+            return !this.itemSelected(template) && !this.itemInited(template);
         },
         sendEvent() {
             console.log('send');
