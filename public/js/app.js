@@ -67508,46 +67508,36 @@ var render = function() {
                         1
                       ),
                       _vm._v(" "),
-                      _c("td", [
-                        _vm.displayInput()
-                          ? _c("input", {
-                              directives: [
-                                {
-                                  name: "model",
-                                  rawName: "v-model",
+                      _c(
+                        "td",
+                        [
+                          _vm.displayInput()
+                            ? _c("number-input", {
+                                on: {
+                                  change: function($event) {
+                                    return _vm.store()
+                                  }
+                                },
+                                model: {
                                   value: equipment.price,
+                                  callback: function($$v) {
+                                    _vm.$set(equipment, "price", $$v)
+                                  },
                                   expression: "equipment.price"
                                 }
-                              ],
-                              staticClass: "form-control",
-                              attrs: { type: "number" },
-                              domProps: { value: equipment.price },
-                              on: {
-                                change: function($event) {
-                                  return _vm.store()
-                                },
-                                input: function($event) {
-                                  if ($event.target.composing) {
-                                    return
-                                  }
-                                  _vm.$set(
-                                    equipment,
-                                    "price",
-                                    $event.target.value
-                                  )
-                                }
-                              }
-                            })
-                          : _vm._e(),
-                        _vm._v(" "),
-                        _vm.displayText()
-                          ? _c("div", [
-                              _vm._v(
-                                _vm._s(_vm._f("formatPrice")(equipment.price))
-                              )
-                            ])
-                          : _vm._e()
-                      ]),
+                              })
+                            : _vm._e(),
+                          _vm._v(" "),
+                          _vm.displayText()
+                            ? _c("div", [
+                                _vm._v(
+                                  _vm._s(_vm._f("formatPrice")(equipment.price))
+                                )
+                              ])
+                            : _vm._e()
+                        ],
+                        1
+                      ),
                       _vm._v(" "),
                       _c(
                         "th",

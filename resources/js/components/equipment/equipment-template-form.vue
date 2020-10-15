@@ -67,7 +67,7 @@
                                     <div v-if="displayText()">{{equipment.supplier_name}}</div>
                                 </td>
                                 <td>
-                                    <input @change="store()" v-model="equipment.price" v-if="displayInput()" type="number" class="form-control">
+                                    <number-input @change="store()" v-model="equipment.price" v-if="displayInput()"></number-input>
                                     <div v-if="displayText()">{{equipment.price|formatPrice}}</div>
                                 </td>
                                 <th class="align-middle text-center" scope="row">
