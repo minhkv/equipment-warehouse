@@ -3620,6 +3620,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -4080,6 +4081,12 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ["value", "placeholder"],
   methods: {
@@ -4090,11 +4097,12 @@ __webpack_require__.r(__webpack_exports__);
       return result;
     },
     removeComma: function removeComma(value) {
-      var splits = value.split(',');
-      return splits.join('');
+      var splits = value.split(",");
+      return splits.join("");
     },
     sendEvent: function sendEvent(e) {
-      this.$emit('input', this.removeComma(e.target.value));
+      this.$emit("input", this.removeComma(e.target.value));
+      this.$emit("change", this.removeComma(e.target.value));
     }
   }
 });
@@ -68379,32 +68387,18 @@ var render = function() {
                             { staticClass: "align-middle text-center" },
                             [
                               _vm.displayInput()
-                                ? _c("input", {
-                                    directives: [
-                                      {
-                                        name: "model",
-                                        rawName: "v-model",
-                                        value: item.price,
-                                        expression: "item.price"
-                                      }
-                                    ],
-                                    staticClass: "form-control",
-                                    attrs: { type: "number", min: "0" },
-                                    domProps: { value: item.price },
+                                ? _c("number-input", {
                                     on: {
                                       change: function($event) {
                                         return _vm.store()
-                                      },
-                                      input: function($event) {
-                                        if ($event.target.composing) {
-                                          return
-                                        }
-                                        _vm.$set(
-                                          item,
-                                          "price",
-                                          $event.target.value
-                                        )
                                       }
+                                    },
+                                    model: {
+                                      value: item.price,
+                                      callback: function($$v) {
+                                        _vm.$set(item, "price", $$v)
+                                      },
+                                      expression: "item.price"
                                     }
                                   })
                                 : _vm._e(),
@@ -68416,7 +68410,8 @@ var render = function() {
                                     )
                                   ])
                                 : _vm._e()
-                            ]
+                            ],
+                            1
                           ),
                           _vm._v(" "),
                           _c(

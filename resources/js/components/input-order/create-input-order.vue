@@ -74,7 +74,8 @@
                                     <div v-if="displayText()">{{item.amount}}</div>
                                 </td>
                                 <td class="align-middle text-center">
-                                    <input @change="store()" v-if="displayInput()" type="number" min="0" class="form-control" v-model="item.price">
+                                    <!-- <input @change="store()" v-if="displayInput()" type="number" min="0" class="form-control" v-model="item.price"> -->
+                                    <number-input @change="store()" v-if="displayInput()" v-model="item.price"></number-input>
                                     <div v-if="displayText()">{{item.price | formatPrice}}</div>
                                 </td>
                                 <td class="align-middle text-center">
