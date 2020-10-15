@@ -10,7 +10,7 @@
         </div>
         <div class="form-group">
             <label for="price"><i class="fa fa-money"></i> Giá nhập</label>
-            <input type="text" class="form-control" name="price" v-model="eq.price" placeholder="Giá nhập">
+            <number-input v-model="eq.price" placeholder="Giá nhập"></number-input>
         </div>
         <div class="form-group">
             <label for="price"><i class="fa fa-building"></i> Nhà cung cấp</label>
