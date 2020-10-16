@@ -95,7 +95,7 @@
                 <button type="button" class="btn btn-primary" data-dismiss="modal">Xong</button>
             </template>
         </modal-component>
-        <modal-component id="createEquipment" title="Tạo mẫu mới" size="xl">
+        <modal-component id="createEquipment" title="Tạo mẫu mới" size="">
             <template-form @change="createTemplate($event)" :categories="categories"></template-form>
         </modal-component>
     </div>
@@ -208,7 +208,7 @@ export default {
             });
         },
         createTemplate(data) {
-            console.log('createTemplate');
+            console.log(data);
             let formData = new FormData();
             let app = this;
             let headers = {
@@ -217,7 +217,6 @@ export default {
             formData.append("name", data.name);
             formData.append("category_id", data.category_id);
             formData.append("imageFile", data.imageFile);
-            this.sendRequest(this.templateCreateUrl, 'post', formData, this.updatePage);
         },
         updatePage(template) {
             console.log(template);

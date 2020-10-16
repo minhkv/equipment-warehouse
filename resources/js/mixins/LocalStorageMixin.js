@@ -2,7 +2,8 @@ export default {
     methods: {
         loadStorage(atts) {
             atts.forEach(att => {
-                let value = JSON.parse(this.getAtt(localStorage, att));
+                console.log(att);
+                let value = this.getAtt(localStorage, att);
                 if(value)
                     Vue.set(this.$data, att, value);
             });
@@ -14,13 +15,23 @@ export default {
             });
         },
         getAtt(item, att) {
+            let value = '';
             let splitAtt = att.split('.');
             if(splitAtt.length > 1) {
                 return this.getNestedAtt(item, splitAtt);
             }
-            return item[att];
+            if(item[att]) {
+                if(typeof(item[att]) == 'string' && 
+                (item[att][0] == '[' || item[att][0] == '{')) {
+                    value = JSON.parse(item[att]);
+                } else {
+                    value = item[att];
+                }
+            }
+            return value;
         },
         getNestedAtt(item, atts) {
+            console.log('getNestedAtt');
             let value, i = 0;
             atts.forEach(att => {
                 if(i == 0) {

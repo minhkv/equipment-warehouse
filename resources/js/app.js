@@ -92,7 +92,7 @@ Vue.component('equipment-info',require('./components/equipment/equipment-info.vu
 Vue.component('equipment-status-popover',require('./components/equipment/equipment-status-popover.vue').default);
 Vue.component('equipment-create',require('./components/equipment/equipment-create.vue').default);
 Vue.component('equipment-template-form',require('./components/equipment/equipment-template-form.vue').default);
-Vue.component('template-form',require('./components/equipment/equipment-template-form.vue').default);
+Vue.component('template-form',require('./components/equipment/template-form.vue').default);
 Vue.component('multi-step-form',require('./components/multi-step-form.vue').default);
 Vue.component('table-select-equipment',require('./components/table/table-select-equipment.vue').default);
 Vue.component('table-verify-equipment',require('./components/table/table-verify-equipment.vue').default);
