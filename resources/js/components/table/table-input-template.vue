@@ -41,10 +41,10 @@
                         <input @change="changeInput($event)" v-if="itemSelected(item)" v-model="item.amount" type="number" class="form-control">
                     </td>
                     <td class="align-middle text-center">
-                        <input @change="changeInput($event)" v-if="itemSelected(item)" v-model="item.price" type="number" class="form-control">
+                        <number-input @change="changeInput($event)" v-if="itemSelected(item)" v-model="item.price" ></number-input>
                     </td>
                     <td class="align-middle text-center">
-                        <input @change="changeInput($event)" v-if="itemSelected(item)" v-model="item.warranty" type="datetime-local" class="form-control">
+                        <input @change="changeInput($event)" v-if="itemSelected(item)" v-model="item.warranty" type="date" class="form-control">
                     </td>
                     <td class="align-middle text-center">
                         <div class="form-check form-check-inline">

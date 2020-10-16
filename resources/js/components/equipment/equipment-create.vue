@@ -2,7 +2,7 @@
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-12">
-                <equipment-template-form @change="submit($event)" :categories="categories" :suppliers="suppliers"></equipment-template-form>
+                <equipment-template-form @category="submitCategory($event)" @change="submit($event)" :categories="categories" :suppliers="suppliers"></equipment-template-form>
             </div>
         </div>
     </div>
@@ -33,6 +33,12 @@ export default {
             formData.append('imageFile', data.imageFile);
             this.sendRequest(this.equipmentTemplateCreateUrl, 'post', formData, this.redirect);
         }, 
+        submitCategory(data) {
+            let app = this;
+            this.sendRequest(this.categoryCreateUrl, 'post', data, function(data) {
+                app.categories.push(data);
+            });
+        },
         redirect(data) {
             console.log(data);
             if(data.error) {

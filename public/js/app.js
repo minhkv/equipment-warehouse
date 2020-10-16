@@ -2233,6 +2233,12 @@ __webpack_require__.r(__webpack_exports__);
       formData.append('imageFile', data.imageFile);
       this.sendRequest(this.equipmentTemplateCreateUrl, 'post', formData, this.redirect);
     },
+    submitCategory: function submitCategory(data) {
+      var app = this;
+      this.sendRequest(this.categoryCreateUrl, 'post', data, function (data) {
+        app.categories.push(data);
+      });
+    },
     redirect: function redirect(data) {
       console.log(data);
 
@@ -3043,6 +3049,13 @@ __webpack_require__.r(__webpack_exports__);
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _mixins_LocalStorageMixin__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../mixins/LocalStorageMixin */ "./resources/js/mixins/LocalStorageMixin.js");
+/* harmony import */ var _mixins_ModalMixin__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../mixins/ModalMixin */ "./resources/js/mixins/ModalMixin.js");
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -3149,8 +3162,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 
+
 /* harmony default export */ __webpack_exports__["default"] = ({
-  mixins: [_mixins_LocalStorageMixin__WEBPACK_IMPORTED_MODULE_0__["default"]],
+  mixins: [_mixins_LocalStorageMixin__WEBPACK_IMPORTED_MODULE_0__["default"], _mixins_ModalMixin__WEBPACK_IMPORTED_MODULE_1__["default"]],
   props: ['categories', 'suppliers'],
   data: function data() {
     return {
@@ -3263,10 +3277,14 @@ __webpack_require__.r(__webpack_exports__);
       var cate = this.categories.find(function (x) {
         return x.id == id;
       });
-      return cate.name;
+      if (cate) return cate.name;
+      return '';
+    },
+    submitCategory: function submitCategory(category) {
+      this.$emit('category', category);
+      this.closeModal('#addCategory');
     },
     handleFileUpload: function handleFileUpload() {
-      // this.imageFile = this.$refs.imageFile.files[0];
       Vue.set(this.$data, 'imageFile', this.$refs.imageFile.files[0]);
     },
     sendEvent: function sendEvent() {
@@ -3595,32 +3613,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -3629,15 +3621,13 @@ __webpack_require__.r(__webpack_exports__);
   data: function data() {
     return {
       step: 0,
-      supplier_name: '',
-      supplier_id: '',
       dateInput: '',
       submit: false,
       selectedItems: [],
       paginateItems: [],
       newItem: {},
       componentTemplates: {},
-      atts: ['supplier_id', 'supplier_name', 'dateInput', 'selectedItems']
+      atts: ['dateInput', 'selectedItems']
     };
   },
   created: function created() {
@@ -3666,11 +3656,6 @@ __webpack_require__.r(__webpack_exports__);
       var app = this;
 
       if (this.step == 0) {
-        if (!this.supplier_name) {
-          alert('Bạn chưa nhập nhà cung cấp');
-          return false;
-        }
-
         if (!this.dateInput) {
           alert('Bạn chưa nhập ngày');
           return false;
@@ -3765,18 +3750,18 @@ __webpack_require__.r(__webpack_exports__);
       this.paginateItems = items;
     },
     displayInput: function displayInput() {
-      return this.step == 1;
+      return this.step == 0;
     },
     displayText: function displayText() {
-      return this.step == 2;
+      return this.step == 1;
     },
-    changeSupplier: function changeSupplier(result) {
-      this.supplier_name = result.value.name;
+    changeSupplier: function changeSupplier(result, item) {
+      item.supplier_name = result.value.name;
 
       if (result.found) {
-        this.supplier_id = result.value.id;
+        item.supplier_id = result.value.id;
       } else {
-        this.supplier_id = null;
+        item.supplier_id = null;
       }
     },
     removeItem: function removeItem(item) {
@@ -65654,6 +65639,9 @@ var render = function() {
           _c("equipment-template-form", {
             attrs: { categories: _vm.categories, suppliers: _vm.suppliers },
             on: {
+              category: function($event) {
+                return _vm.submitCategory($event)
+              },
               change: function($event) {
                 return _vm.submit($event)
               }
@@ -67247,318 +67235,373 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", [
-    _c("form", { attrs: { id: "msform" } }, [
-      _c("div", { staticClass: "track" }, [
-        _c("div", { class: { step: true, active: _vm.step >= 0 } }, [
-          _vm._m(0),
-          _vm._v(" "),
-          _c("span", { staticClass: "text" }, [_vm._v("Thông tin mẫu")])
-        ]),
-        _vm._v(" "),
-        _c("div", { class: { step: true, active: _vm.step >= 1 } }, [
-          _vm._m(1),
-          _vm._v(" "),
-          _c("span", { staticClass: "text" }, [_vm._v("Thêm thiết bị")])
-        ]),
-        _vm._v(" "),
-        _c("div", { class: { step: true, active: _vm.step >= 2 } }, [
-          _vm._m(2),
-          _vm._v(" "),
-          _c("span", { staticClass: "text" }, [_vm._v(" Xác nhận")])
-        ])
-      ]),
-      _vm._v(" "),
-      _c("fieldset", [
-        _c(
-          "div",
-          {
-            directives: [
-              {
-                name: "show",
-                rawName: "v-show",
-                value: _vm.step == 0,
-                expression: "step == 0"
-              }
-            ]
-          },
-          [
-            _vm._m(3),
+  return _c(
+    "div",
+    [
+      _c("form", { attrs: { id: "msform" } }, [
+        _c("div", { staticClass: "track" }, [
+          _c("div", { class: { step: true, active: _vm.step >= 0 } }, [
+            _vm._m(0),
             _vm._v(" "),
-            _c("div", { staticClass: "form-group row" }, [
-              _c("label", { staticClass: "col-3 col-form-label text-left" }, [
-                _vm._v("Tên mẫu thiết bị")
+            _c("span", { staticClass: "text" }, [_vm._v("Thông tin mẫu")])
+          ]),
+          _vm._v(" "),
+          _c("div", { class: { step: true, active: _vm.step >= 1 } }, [
+            _vm._m(1),
+            _vm._v(" "),
+            _c("span", { staticClass: "text" }, [_vm._v("Thêm thiết bị")])
+          ]),
+          _vm._v(" "),
+          _c("div", { class: { step: true, active: _vm.step >= 2 } }, [
+            _vm._m(2),
+            _vm._v(" "),
+            _c("span", { staticClass: "text" }, [_vm._v(" Xác nhận")])
+          ])
+        ]),
+        _vm._v(" "),
+        _c("fieldset", [
+          _c(
+            "div",
+            {
+              directives: [
+                {
+                  name: "show",
+                  rawName: "v-show",
+                  value: _vm.step == 0,
+                  expression: "step == 0"
+                }
+              ]
+            },
+            [
+              _vm._m(3),
+              _vm._v(" "),
+              _c("div", { staticClass: "form-group row" }, [
+                _c("label", { staticClass: "col-3 col-form-label text-left" }, [
+                  _vm._v("Tên mẫu thiết bị")
+                ]),
+                _vm._v(" "),
+                _c("input", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.name,
+                      expression: "name"
+                    }
+                  ],
+                  staticClass: "col-9 form-control",
+                  attrs: { type: "text", placeholder: "Tên mẫu thiết bị" },
+                  domProps: { value: _vm.name },
+                  on: {
+                    change: function($event) {
+                      return _vm.store()
+                    },
+                    input: function($event) {
+                      if ($event.target.composing) {
+                        return
+                      }
+                      _vm.name = $event.target.value
+                    }
+                  }
+                })
               ]),
               _vm._v(" "),
-              _c("input", {
-                directives: [
-                  {
-                    name: "model",
-                    rawName: "v-model",
-                    value: _vm.name,
-                    expression: "name"
-                  }
-                ],
-                staticClass: "col-9 form-control",
-                attrs: { type: "text", placeholder: "Tên mẫu thiết bị" },
-                domProps: { value: _vm.name },
-                on: {
-                  change: function($event) {
-                    return _vm.store()
-                  },
-                  input: function($event) {
-                    if ($event.target.composing) {
-                      return
+              _c(
+                "div",
+                { staticClass: "form-group row" },
+                [
+                  _c(
+                    "label",
+                    {
+                      staticClass: "col-3 col-form-label text-left",
+                      attrs: { for: "equipmentCategory" }
+                    },
+                    [_vm._v("Loại")]
+                  ),
+                  _vm._v(" "),
+                  _c("selector", {
+                    staticClass: "col-8",
+                    attrs: {
+                      items: _vm.displayedCategories,
+                      labelAtt: "name",
+                      valueAtt: "id"
+                    },
+                    model: {
+                      value: _vm.category,
+                      callback: function($$v) {
+                        _vm.category = $$v
+                      },
+                      expression: "category"
                     }
-                    _vm.name = $event.target.value
-                  }
-                }
-              })
-            ]),
-            _vm._v(" "),
-            _c(
-              "div",
-              { staticClass: "form-group row" },
-              [
+                  }),
+                  _vm._v(" "),
+                  _vm._m(4)
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c("div", { staticClass: "form-group row" }, [
                 _c(
                   "label",
                   {
                     staticClass: "col-3 col-form-label text-left",
-                    attrs: { for: "equipmentCategory" }
+                    attrs: { for: "equipmentImage" }
                   },
-                  [_vm._v("Loại")]
+                  [_vm._v("Hình ảnh")]
                 ),
                 _vm._v(" "),
-                _c("selector", {
-                  staticClass: "col-9",
-                  attrs: {
-                    items: _vm.displayedCategories,
-                    labelAtt: "name",
-                    valueAtt: "id"
-                  },
-                  model: {
-                    value: _vm.category,
-                    callback: function($$v) {
-                      _vm.category = $$v
-                    },
-                    expression: "category"
+                _c("input", {
+                  ref: "imageFile",
+                  staticClass: "form-control-file col-9",
+                  attrs: { type: "file" },
+                  on: {
+                    change: function($event) {
+                      return _vm.handleFileUpload()
+                    }
                   }
                 })
-              ],
-              1
-            ),
-            _vm._v(" "),
-            _c("div", { staticClass: "form-group row" }, [
-              _c(
-                "label",
-                {
-                  staticClass: "col-3 col-form-label text-left",
-                  attrs: { for: "equipmentImage" }
-                },
-                [_vm._v("Hình ảnh")]
-              ),
-              _vm._v(" "),
-              _c("input", {
-                ref: "imageFile",
-                staticClass: "form-control-file col-9",
-                attrs: { type: "file" },
-                on: {
-                  change: function($event) {
-                    return _vm.handleFileUpload()
-                  }
-                }
-              })
-            ])
-          ]
-        ),
-        _vm._v(" "),
-        _c(
-          "div",
-          {
-            directives: [
-              {
-                name: "show",
-                rawName: "v-show",
-                value: _vm.step == 2,
-                expression: "step==2"
-              }
+              ])
             ]
-          },
-          [
-            _c("h2", { staticClass: "fs-title" }, [_vm._v("Xác nhận")]),
-            _vm._v(" "),
-            _c("div", { staticClass: "row" }, [
-              _c("label", { staticClass: "col-3 text-left" }, [
-                _vm._v("Tên mẫu thiết bị")
+          ),
+          _vm._v(" "),
+          _c(
+            "div",
+            {
+              directives: [
+                {
+                  name: "show",
+                  rawName: "v-show",
+                  value: _vm.step == 2,
+                  expression: "step==2"
+                }
+              ]
+            },
+            [
+              _c("h2", { staticClass: "fs-title" }, [_vm._v("Xác nhận")]),
+              _vm._v(" "),
+              _c("div", { staticClass: "row" }, [
+                _c("label", { staticClass: "col-3 text-left" }, [
+                  _vm._v("Tên mẫu thiết bị")
+                ]),
+                _vm._v(" "),
+                _c("label", { staticClass: "col-9 text-left" }, [
+                  _vm._v(_vm._s(_vm.name))
+                ])
               ]),
               _vm._v(" "),
-              _c("label", { staticClass: "col-9 text-left" }, [
-                _vm._v(_vm._s(_vm.name))
+              _c("div", { staticClass: "row" }, [
+                _c("label", { staticClass: "col-3 text-left" }, [
+                  _vm._v("Loại")
+                ]),
+                _vm._v(" "),
+                _c("label", { staticClass: "col-9 text-left" }, [
+                  _vm._v(_vm._s(_vm.getCategoryName(_vm.category)))
+                ])
               ])
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "row" }, [
-              _c("label", { staticClass: "col-3 text-left" }, [_vm._v("Loại")]),
-              _vm._v(" "),
-              _c("label", { staticClass: "col-9 text-left" }, [
-                _vm._v(_vm._s(_vm.getCategoryName(_vm.category)))
-              ])
-            ])
-          ]
-        ),
-        _vm._v(" "),
-        _c(
-          "div",
-          {
-            directives: [
-              {
-                name: "show",
-                rawName: "v-show",
-                value: _vm.step >= 1,
-                expression: "step >= 1"
-              }
             ]
-          },
-          [
-            _c("table", { staticClass: "table table-hover mx-auto" }, [
-              _vm._m(4),
-              _vm._v(" "),
-              _c(
-                "tbody",
-                _vm._l(_vm.equipments, function(equipment, index) {
-                  return _c(
-                    "tr",
-                    { key: index, staticClass: "cursor-pointer" },
-                    [
-                      _c(
-                        "th",
-                        {
-                          staticClass: "align-middle text-center",
-                          attrs: { scope: "row" }
-                        },
-                        [
-                          _vm.displayInput()
-                            ? _c("input", {
-                                directives: [
-                                  {
-                                    name: "model",
-                                    rawName: "v-model",
-                                    value: equipment.name,
-                                    expression: "equipment.name"
-                                  }
-                                ],
-                                staticClass: "form-control",
-                                attrs: { type: "text" },
-                                domProps: { value: equipment.name },
-                                on: {
-                                  change: function($event) {
-                                    return _vm.store()
-                                  },
-                                  input: function($event) {
-                                    if ($event.target.composing) {
-                                      return
+          ),
+          _vm._v(" "),
+          _c(
+            "div",
+            {
+              directives: [
+                {
+                  name: "show",
+                  rawName: "v-show",
+                  value: _vm.step >= 1,
+                  expression: "step >= 1"
+                }
+              ]
+            },
+            [
+              _c("table", { staticClass: "table table-hover mx-auto" }, [
+                _vm._m(5),
+                _vm._v(" "),
+                _c(
+                  "tbody",
+                  _vm._l(_vm.equipments, function(equipment, index) {
+                    return _c(
+                      "tr",
+                      { key: index, staticClass: "cursor-pointer" },
+                      [
+                        _c(
+                          "th",
+                          {
+                            staticClass: "align-middle text-center",
+                            attrs: { scope: "row" }
+                          },
+                          [
+                            _vm.displayInput()
+                              ? _c("input", {
+                                  directives: [
+                                    {
+                                      name: "model",
+                                      rawName: "v-model",
+                                      value: equipment.name,
+                                      expression: "equipment.name"
                                     }
-                                    _vm.$set(
-                                      equipment,
-                                      "name",
-                                      $event.target.value
+                                  ],
+                                  staticClass: "form-control",
+                                  attrs: { type: "text" },
+                                  domProps: { value: equipment.name },
+                                  on: {
+                                    change: function($event) {
+                                      return _vm.store()
+                                    },
+                                    input: function($event) {
+                                      if ($event.target.composing) {
+                                        return
+                                      }
+                                      _vm.$set(
+                                        equipment,
+                                        "name",
+                                        $event.target.value
+                                      )
+                                    }
+                                  }
+                                })
+                              : _vm._e(),
+                            _vm._v(" "),
+                            _vm.displayText()
+                              ? _c("div", [_vm._v(_vm._s(equipment.name))])
+                              : _vm._e()
+                          ]
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "td",
+                          { staticClass: "align-middle text-center" },
+                          [
+                            _vm.displayInput()
+                              ? _c("autocomplete-input", {
+                                  attrs: {
+                                    items: _vm.suppliers,
+                                    nameAttribute: "name"
+                                  },
+                                  on: {
+                                    change: function($event) {
+                                      return _vm.changeSupplier(
+                                        $event,
+                                        equipment
+                                      )
+                                    }
+                                  },
+                                  model: {
+                                    value: equipment.supplier_name,
+                                    callback: function($$v) {
+                                      _vm.$set(equipment, "supplier_name", $$v)
+                                    },
+                                    expression: "equipment.supplier_name"
+                                  }
+                                })
+                              : _vm._e(),
+                            _vm._v(" "),
+                            _vm.displayText()
+                              ? _c("div", [
+                                  _vm._v(_vm._s(equipment.supplier_name))
+                                ])
+                              : _vm._e()
+                          ],
+                          1
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "td",
+                          [
+                            _vm.displayInput()
+                              ? _c("number-input", {
+                                  on: {
+                                    change: function($event) {
+                                      return _vm.store()
+                                    }
+                                  },
+                                  model: {
+                                    value: equipment.price,
+                                    callback: function($$v) {
+                                      _vm.$set(equipment, "price", $$v)
+                                    },
+                                    expression: "equipment.price"
+                                  }
+                                })
+                              : _vm._e(),
+                            _vm._v(" "),
+                            _vm.displayText()
+                              ? _c("div", [
+                                  _vm._v(
+                                    _vm._s(
+                                      _vm._f("formatPrice")(equipment.price)
                                     )
+                                  )
+                                ])
+                              : _vm._e()
+                          ],
+                          1
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "th",
+                          {
+                            staticClass: "align-middle text-center",
+                            attrs: { scope: "row" }
+                          },
+                          [
+                            _vm.displayInput()
+                              ? _c("input", {
+                                  directives: [
+                                    {
+                                      name: "model",
+                                      rawName: "v-model",
+                                      value: equipment.input_date,
+                                      expression: "equipment.input_date"
+                                    }
+                                  ],
+                                  staticClass: "form-control date-picker",
+                                  attrs: { type: "date" },
+                                  domProps: { value: equipment.input_date },
+                                  on: {
+                                    change: function($event) {
+                                      return _vm.store()
+                                    },
+                                    input: function($event) {
+                                      if ($event.target.composing) {
+                                        return
+                                      }
+                                      _vm.$set(
+                                        equipment,
+                                        "input_date",
+                                        $event.target.value
+                                      )
+                                    }
                                   }
-                                }
-                              })
-                            : _vm._e(),
-                          _vm._v(" "),
-                          _vm.displayText()
-                            ? _c("div", [_vm._v(_vm._s(equipment.name))])
-                            : _vm._e()
-                        ]
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "td",
-                        { staticClass: "align-middle text-center" },
-                        [
-                          _vm.displayInput()
-                            ? _c("autocomplete-input", {
-                                attrs: {
-                                  items: _vm.suppliers,
-                                  nameAttribute: "name"
-                                },
-                                on: {
-                                  change: function($event) {
-                                    return _vm.changeSupplier($event, equipment)
-                                  }
-                                },
-                                model: {
-                                  value: equipment.supplier_name,
-                                  callback: function($$v) {
-                                    _vm.$set(equipment, "supplier_name", $$v)
-                                  },
-                                  expression: "equipment.supplier_name"
-                                }
-                              })
-                            : _vm._e(),
-                          _vm._v(" "),
-                          _vm.displayText()
-                            ? _c("div", [
-                                _vm._v(_vm._s(equipment.supplier_name))
-                              ])
-                            : _vm._e()
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "td",
-                        [
-                          _vm.displayInput()
-                            ? _c("number-input", {
-                                on: {
-                                  change: function($event) {
-                                    return _vm.store()
-                                  }
-                                },
-                                model: {
-                                  value: equipment.price,
-                                  callback: function($$v) {
-                                    _vm.$set(equipment, "price", $$v)
-                                  },
-                                  expression: "equipment.price"
-                                }
-                              })
-                            : _vm._e(),
-                          _vm._v(" "),
-                          _vm.displayText()
-                            ? _c("div", [
-                                _vm._v(
-                                  _vm._s(_vm._f("formatPrice")(equipment.price))
-                                )
-                              ])
-                            : _vm._e()
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "th",
-                        {
-                          staticClass: "align-middle text-center",
-                          attrs: { scope: "row" }
-                        },
-                        [
+                                })
+                              : _vm._e(),
+                            _vm._v(" "),
+                            _vm.displayText()
+                              ? _c("div", [
+                                  _vm._v(
+                                    _vm._s(
+                                      _vm._f("formatDate")(equipment.input_date)
+                                    )
+                                  )
+                                ])
+                              : _vm._e()
+                          ]
+                        ),
+                        _vm._v(" "),
+                        _c("td", { staticClass: "align-middle text-center" }, [
                           _vm.displayInput()
                             ? _c("input", {
                                 directives: [
                                   {
                                     name: "model",
                                     rawName: "v-model",
-                                    value: equipment.input_date,
-                                    expression: "equipment.input_date"
+                                    value: equipment.warranty,
+                                    expression: "equipment.warranty"
                                   }
                                 ],
                                 staticClass: "form-control date-picker",
                                 attrs: { type: "date" },
-                                domProps: { value: equipment.input_date },
+                                domProps: { value: equipment.warranty },
                                 on: {
                                   change: function($event) {
                                     return _vm.store()
@@ -67569,7 +67612,7 @@ var render = function() {
                                     }
                                     _vm.$set(
                                       equipment,
-                                      "input_date",
+                                      "warranty",
                                       $event.target.value
                                     )
                                   }
@@ -67581,208 +67624,183 @@ var render = function() {
                             ? _c("div", [
                                 _vm._v(
                                   _vm._s(
-                                    _vm._f("formatDate")(equipment.input_date)
+                                    _vm._f("formatDate")(equipment.warranty)
                                   )
                                 )
                               ])
                             : _vm._e()
-                        ]
-                      ),
-                      _vm._v(" "),
-                      _c("td", { staticClass: "align-middle text-center" }, [
-                        _vm.displayInput()
-                          ? _c("input", {
-                              directives: [
-                                {
-                                  name: "model",
-                                  rawName: "v-model",
-                                  value: equipment.warranty,
-                                  expression: "equipment.warranty"
-                                }
-                              ],
-                              staticClass: "form-control date-picker",
-                              attrs: { type: "date" },
-                              domProps: { value: equipment.warranty },
-                              on: {
-                                change: function($event) {
-                                  return _vm.store()
-                                },
-                                input: function($event) {
-                                  if ($event.target.composing) {
-                                    return
-                                  }
-                                  _vm.$set(
-                                    equipment,
-                                    "warranty",
-                                    $event.target.value
-                                  )
-                                }
-                              }
-                            })
-                          : _vm._e(),
+                        ]),
                         _vm._v(" "),
-                        _vm.displayText()
-                          ? _c("div", [
-                              _vm._v(
-                                _vm._s(_vm._f("formatDate")(equipment.warranty))
-                              )
-                            ])
-                          : _vm._e()
-                      ]),
-                      _vm._v(" "),
-                      _c("td", { staticClass: "align-middle text-center" }, [
-                        _vm.displayInput()
-                          ? _c("input", {
-                              directives: [
-                                {
-                                  name: "model",
-                                  rawName: "v-model",
-                                  value: equipment.note,
-                                  expression: "equipment.note"
-                                }
-                              ],
-                              staticClass: "form-control",
-                              attrs: { type: "text" },
-                              domProps: { value: equipment.note },
-                              on: {
-                                change: function($event) {
-                                  return _vm.store()
-                                },
-                                input: function($event) {
-                                  if ($event.target.composing) {
-                                    return
+                        _c("td", { staticClass: "align-middle text-center" }, [
+                          _vm.displayInput()
+                            ? _c("input", {
+                                directives: [
+                                  {
+                                    name: "model",
+                                    rawName: "v-model",
+                                    value: equipment.note,
+                                    expression: "equipment.note"
                                   }
-                                  _vm.$set(
-                                    equipment,
-                                    "note",
-                                    $event.target.value
-                                  )
-                                }
-                              }
-                            })
-                          : _vm._e(),
-                        _vm._v(" "),
-                        _vm.displayText()
-                          ? _c("div", [_vm._v(_vm._s(equipment.note))])
-                          : _vm._e()
-                      ]),
-                      _vm._v(" "),
-                      _c("td", { staticClass: "align-middle text-center" }, [
-                        _vm.displayInput()
-                          ? _c(
-                              "button",
-                              {
-                                staticClass: "btn btn-danger btn-sm",
-                                attrs: { type: "button" },
+                                ],
+                                staticClass: "form-control",
+                                attrs: { type: "text" },
+                                domProps: { value: equipment.note },
                                 on: {
-                                  click: function($event) {
-                                    return _vm.removeEquipmentInput(index)
+                                  change: function($event) {
+                                    return _vm.store()
+                                  },
+                                  input: function($event) {
+                                    if ($event.target.composing) {
+                                      return
+                                    }
+                                    _vm.$set(
+                                      equipment,
+                                      "note",
+                                      $event.target.value
+                                    )
                                   }
                                 }
-                              },
-                              [_c("i", { staticClass: "fa fa-trash" })]
-                            )
-                          : _vm._e()
-                      ])
-                    ]
-                  )
-                }),
-                0
-              )
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "row justify-content-center" }, [
-              _vm.displayInput()
-                ? _c(
-                    "button",
-                    {
-                      staticClass: "btn btn-success",
-                      attrs: { type: "button" },
-                      on: {
-                        click: function($event) {
-                          return _vm.addEquipmentInput()
+                              })
+                            : _vm._e(),
+                          _vm._v(" "),
+                          _vm.displayText()
+                            ? _c("div", [_vm._v(_vm._s(equipment.note))])
+                            : _vm._e()
+                        ]),
+                        _vm._v(" "),
+                        _c("td", { staticClass: "align-middle text-center" }, [
+                          _vm.displayInput()
+                            ? _c(
+                                "button",
+                                {
+                                  staticClass: "btn btn-danger btn-sm",
+                                  attrs: { type: "button" },
+                                  on: {
+                                    click: function($event) {
+                                      return _vm.removeEquipmentInput(index)
+                                    }
+                                  }
+                                },
+                                [_c("i", { staticClass: "fa fa-trash" })]
+                              )
+                            : _vm._e()
+                        ])
+                      ]
+                    )
+                  }),
+                  0
+                )
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "row justify-content-center" }, [
+                _vm.displayInput()
+                  ? _c(
+                      "button",
+                      {
+                        staticClass: "btn btn-success",
+                        attrs: { type: "button" },
+                        on: {
+                          click: function($event) {
+                            return _vm.addEquipmentInput()
+                          }
                         }
-                      }
-                    },
-                    [
-                      _vm._v(
-                        "\n                        Thêm thiết bị\n                    "
-                      )
-                    ]
-                  )
-                : _vm._e()
-            ])
-          ]
-        ),
-        _vm._v(" "),
-        _c(
-          "button",
-          {
-            directives: [
-              {
-                name: "show",
-                rawName: "v-show",
-                value: _vm.step > 0,
-                expression: "step > 0"
+                      },
+                      [
+                        _vm._v(
+                          "\n                        Thêm thiết bị\n                    "
+                        )
+                      ]
+                    )
+                  : _vm._e()
+              ])
+            ]
+          ),
+          _vm._v(" "),
+          _c(
+            "button",
+            {
+              directives: [
+                {
+                  name: "show",
+                  rawName: "v-show",
+                  value: _vm.step > 0,
+                  expression: "step > 0"
+                }
+              ],
+              staticClass: "btn btn-secondary next action-button",
+              attrs: { type: "button" },
+              on: {
+                click: function($event) {
+                  return _vm.previousStep()
+                }
               }
-            ],
-            staticClass: "btn btn-secondary next action-button",
-            attrs: { type: "button" },
+            },
+            [_vm._v("Quay lại")]
+          ),
+          _vm._v(" "),
+          _c(
+            "button",
+            {
+              directives: [
+                {
+                  name: "show",
+                  rawName: "v-show",
+                  value: _vm.step < 2,
+                  expression: "step < 2"
+                }
+              ],
+              staticClass: "btn btn-primary previous action-button",
+              attrs: { type: "button" },
+              on: {
+                click: function($event) {
+                  return _vm.nextStep()
+                }
+              }
+            },
+            [_vm._v("Tiếp tục")]
+          ),
+          _vm._v(" "),
+          _c(
+            "button",
+            {
+              directives: [
+                {
+                  name: "show",
+                  rawName: "v-show",
+                  value: _vm.step == 2,
+                  expression: "step == 2"
+                }
+              ],
+              staticClass: "btn btn-success previous action-button",
+              attrs: { type: "button", disabled: _vm.submitted },
+              on: {
+                click: function($event) {
+                  return _vm.submitTemplate()
+                }
+              }
+            },
+            [_vm._v("Hoàn tất")]
+          )
+        ])
+      ]),
+      _vm._v(" "),
+      _c(
+        "modal-component",
+        { attrs: { id: "addCategory", title: "Thêm loại thiết bị" } },
+        [
+          _c("category-form", {
             on: {
-              click: function($event) {
-                return _vm.previousStep()
+              change: function($event) {
+                return _vm.submitCategory($event)
               }
             }
-          },
-          [_vm._v("Quay lại")]
-        ),
-        _vm._v(" "),
-        _c(
-          "button",
-          {
-            directives: [
-              {
-                name: "show",
-                rawName: "v-show",
-                value: _vm.step < 2,
-                expression: "step < 2"
-              }
-            ],
-            staticClass: "btn btn-primary previous action-button",
-            attrs: { type: "button" },
-            on: {
-              click: function($event) {
-                return _vm.nextStep()
-              }
-            }
-          },
-          [_vm._v("Tiếp tục")]
-        ),
-        _vm._v(" "),
-        _c(
-          "button",
-          {
-            directives: [
-              {
-                name: "show",
-                rawName: "v-show",
-                value: _vm.step == 2,
-                expression: "step == 2"
-              }
-            ],
-            staticClass: "btn btn-success previous action-button",
-            attrs: { type: "button", disabled: _vm.submitted },
-            on: {
-              click: function($event) {
-                return _vm.submitTemplate()
-              }
-            }
-          },
-          [_vm._v("Hoàn tất")]
-        )
-      ])
-    ])
-  ])
+          })
+        ],
+        1
+      )
+    ],
+    1
+  )
 }
 var staticRenderFns = [
   function() {
@@ -67815,6 +67833,25 @@ var staticRenderFns = [
     var _c = _vm._self._c || _h
     return _c("div", { staticClass: "text-center" }, [
       _c("h2", { staticClass: "fs-title" }, [_vm._v("Thêm mẫu mới")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "col-1" }, [
+      _c(
+        "button",
+        {
+          staticClass: "btn btn-primary",
+          attrs: {
+            type: "button",
+            "data-toggle": "modal",
+            "data-target": "#addCategory"
+          }
+        },
+        [_c("i", { staticClass: "fa fa-plus" })]
+      )
     ])
   },
   function() {
@@ -68139,13 +68176,7 @@ var render = function() {
           _c("div", { class: { step: true, active: _vm.step >= 1 } }, [
             _vm._m(1),
             _vm._v(" "),
-            _c("span", { staticClass: "text" }, [_vm._v("Chọn thiết bị")])
-          ]),
-          _vm._v(" "),
-          _c("div", { class: { step: true, active: _vm.step >= 2 } }, [
-            _vm._m(2),
-            _vm._v(" "),
-            _c("span", { staticClass: "text" }, [_vm._v(" Xác nhận")])
+            _c("span", { staticClass: "text" }, [_vm._v("Xác nhận")])
           ])
         ]),
         _vm._v(" "),
@@ -68165,33 +68196,6 @@ var render = function() {
             [
               _c("h2", { staticClass: "fs-title" }, [
                 _vm._v("Thông tin đơn nhập")
-              ]),
-              _vm._v(" "),
-              _c("div", { staticClass: "form-group row" }, [
-                _c("label", { staticClass: "col-3 col-form-label text-left" }, [
-                  _vm._v("Nhà cung cấp")
-                ]),
-                _vm._v(" "),
-                _c(
-                  "div",
-                  { staticClass: "col-9" },
-                  [
-                    _c("autocomplete-input", {
-                      attrs: {
-                        items: _vm.suppliers,
-                        "name-attribute": "name",
-                        placeholder: "Nhà cung cấp",
-                        value: _vm.supplier_name
-                      },
-                      on: {
-                        change: function($event) {
-                          return _vm.changeSupplier($event)
-                        }
-                      }
-                    })
-                  ],
-                  1
-                )
               ]),
               _vm._v(" "),
               _c("div", { staticClass: "form-group row" }, [
@@ -68215,7 +68219,7 @@ var render = function() {
                       }
                     ],
                     staticClass: "form-control",
-                    attrs: { type: "datetime-local", id: "dateBorrowed" },
+                    attrs: { type: "date", id: "dateBorrowed" },
                     domProps: { value: _vm.dateInput },
                     on: {
                       input: function($event) {
@@ -68243,33 +68247,8 @@ var render = function() {
                 }
               ]
             },
-            [_c("h2", { staticClass: "fs-title" }, [_vm._v("Chọn thiết bị")])]
-          ),
-          _vm._v(" "),
-          _c(
-            "div",
-            {
-              directives: [
-                {
-                  name: "show",
-                  rawName: "v-show",
-                  value: _vm.step == 2,
-                  expression: "step==2"
-                }
-              ]
-            },
             [
               _c("h2", { staticClass: "fs-title" }, [_vm._v("Xác nhận")]),
-              _vm._v(" "),
-              _c("div", { staticClass: "row" }, [
-                _c("label", { staticClass: "col-3 text-left" }, [
-                  _vm._v("Nhà cung cấp")
-                ]),
-                _vm._v(" "),
-                _c("label", { staticClass: "col-9 text-left" }, [
-                  _vm._v(_vm._s(_vm.supplier_name))
-                ])
-              ]),
               _vm._v(" "),
               _c("div", { staticClass: "row" }, [
                 _c("label", { staticClass: "col-3 text-left" }, [
@@ -68277,249 +68256,198 @@ var render = function() {
                 ]),
                 _vm._v(" "),
                 _c("label", { staticClass: "col-9 text-left" }, [
-                  _vm._v(_vm._s(_vm._f("formatDateTime")(_vm.dateInput)))
+                  _vm._v(_vm._s(_vm._f("formatDate")(_vm.dateInput)))
                 ])
               ])
             ]
           ),
           _vm._v(" "),
-          _vm.step > 0
-            ? _c("div", [
-                _c("table", { staticClass: "table mt-2 templateTable" }, [
-                  _vm._m(3),
+          _c("table", { staticClass: "table mt-2 templateTable" }, [
+            _vm._m(2),
+            _vm._v(" "),
+            _c(
+              "tbody",
+              _vm._l(_vm.paginateItems, function(item) {
+                return _c("tr", { key: item.template.id }, [
+                  _c(
+                    "th",
+                    {
+                      staticClass: "align-middle text-center",
+                      attrs: { scope: "row" }
+                    },
+                    [_vm._v(_vm._s(item.template.id))]
+                  ),
+                  _vm._v(" "),
+                  _c("td", { staticClass: "align-middle text-center" }, [
+                    _vm._v(_vm._s(item.template.name))
+                  ]),
                   _vm._v(" "),
                   _c(
-                    "tbody",
+                    "td",
+                    { staticClass: "align-middle text-center" },
                     [
-                      _vm._l(_vm.paginateItems, function(item) {
-                        return _c("tr", { key: item.template.id }, [
-                          _c(
-                            "th",
-                            {
-                              staticClass: "align-middle text-center",
-                              attrs: { scope: "row" }
+                      _vm.displayInput()
+                        ? _c("autocomplete-input", {
+                            attrs: {
+                              items: _vm.suppliers,
+                              value: item.supplier_name,
+                              "name-attribute": "name",
+                              placeholder: "Nhà cung cấp"
                             },
-                            [_vm._v(_vm._s(item.template.id))]
-                          ),
-                          _vm._v(" "),
-                          _c(
-                            "th",
-                            {
-                              staticClass: "align-middle text-center",
-                              attrs: { scope: "row" }
-                            },
-                            [
-                              _c("img", {
-                                attrs: {
-                                  src: item.template.image,
-                                  height: "40",
-                                  alt: item.template.name
-                                }
-                              })
-                            ]
-                          ),
-                          _vm._v(" "),
-                          _c(
-                            "td",
-                            { staticClass: "align-middle text-center" },
-                            [
-                              _vm._v(
-                                "\n                                " +
-                                  _vm._s(item.template.name) +
-                                  "\n                            "
-                              )
-                            ]
-                          ),
-                          _vm._v(" "),
-                          _c(
-                            "td",
-                            { staticClass: "align-middle text-center" },
-                            [
-                              _vm.displayInput()
-                                ? _c("input", {
-                                    directives: [
-                                      {
-                                        name: "model",
-                                        rawName: "v-model",
-                                        value: item.amount,
-                                        expression: "item.amount"
-                                      }
-                                    ],
-                                    staticClass: "form-control",
-                                    attrs: { type: "number", min: "0" },
-                                    domProps: { value: item.amount },
-                                    on: {
-                                      change: function($event) {
-                                        return _vm.store()
-                                      },
-                                      input: function($event) {
-                                        if ($event.target.composing) {
-                                          return
-                                        }
-                                        _vm.$set(
-                                          item,
-                                          "amount",
-                                          $event.target.value
-                                        )
-                                      }
-                                    }
-                                  })
-                                : _vm._e(),
-                              _vm._v(" "),
-                              _vm.displayText()
-                                ? _c("div", [_vm._v(_vm._s(item.amount))])
-                                : _vm._e()
-                            ]
-                          ),
-                          _vm._v(" "),
-                          _c(
-                            "td",
-                            { staticClass: "align-middle text-center" },
-                            [
-                              _vm.displayInput()
-                                ? _c("number-input", {
-                                    on: {
-                                      change: function($event) {
-                                        return _vm.store()
-                                      }
-                                    },
-                                    model: {
-                                      value: item.price,
-                                      callback: function($$v) {
-                                        _vm.$set(item, "price", $$v)
-                                      },
-                                      expression: "item.price"
-                                    }
-                                  })
-                                : _vm._e(),
-                              _vm._v(" "),
-                              _vm.displayText()
-                                ? _c("div", [
-                                    _vm._v(
-                                      _vm._s(_vm._f("formatPrice")(item.price))
-                                    )
-                                  ])
-                                : _vm._e()
-                            ],
-                            1
-                          ),
-                          _vm._v(" "),
-                          _c(
-                            "td",
-                            { staticClass: "align-middle text-center" },
-                            [
-                              _vm.displayInput()
-                                ? _c("input", {
-                                    directives: [
-                                      {
-                                        name: "model",
-                                        rawName: "v-model",
-                                        value: item.warranty,
-                                        expression: "item.warranty"
-                                      }
-                                    ],
-                                    staticClass: "form-control",
-                                    attrs: { type: "datetime-local" },
-                                    domProps: { value: item.warranty },
-                                    on: {
-                                      change: function($event) {
-                                        return _vm.store()
-                                      },
-                                      input: function($event) {
-                                        if ($event.target.composing) {
-                                          return
-                                        }
-                                        _vm.$set(
-                                          item,
-                                          "warranty",
-                                          $event.target.value
-                                        )
-                                      }
-                                    }
-                                  })
-                                : _vm._e(),
-                              _vm._v(" "),
-                              _vm.displayText()
-                                ? _c("div", [
-                                    _vm._v(
-                                      _vm._s(
-                                        _vm._f("formatDateTime")(item.warranty)
-                                      )
-                                    )
-                                  ])
-                                : _vm._e()
-                            ]
-                          ),
-                          _vm._v(" "),
-                          _c(
-                            "td",
-                            { staticClass: "align-middle text-center" },
-                            [
-                              _vm.displayInput()
-                                ? _c(
-                                    "button",
-                                    {
-                                      staticClass: "btn btn-danger btn-sm",
-                                      attrs: { type: "button" },
-                                      on: {
-                                        click: function($event) {
-                                          return _vm.removeItem(item)
-                                        }
-                                      }
-                                    },
-                                    [_c("i", { staticClass: "fa fa-trash" })]
-                                  )
-                                : _vm._e()
-                            ]
-                          )
-                        ])
-                      }),
+                            on: {
+                              change: function($event) {
+                                return _vm.changeSupplier($event, item)
+                              }
+                            }
+                          })
+                        : _vm._e(),
                       _vm._v(" "),
-                      _c(
-                        "tr",
-                        {
+                      _vm.displayText()
+                        ? _c("div", [_vm._v(_vm._s(item.supplier_name))])
+                        : _vm._e()
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c("td", { staticClass: "align-middle text-center" }, [
+                    _vm.displayInput()
+                      ? _c("input", {
                           directives: [
                             {
-                              name: "show",
-                              rawName: "v-show",
-                              value: false,
-                              expression: "false"
+                              name: "model",
+                              rawName: "v-model",
+                              value: item.amount,
+                              expression: "item.amount"
                             }
-                          ]
-                        },
-                        [
-                          _c("td", { attrs: { colspan: "5" } }, [
-                            _vm._v(
-                              "Chưa có thiết bị nào. Hãy chọn thiết bị cần mượn."
-                            )
+                          ],
+                          staticClass: "form-control",
+                          attrs: { type: "number", min: "0" },
+                          domProps: { value: item.amount },
+                          on: {
+                            change: function($event) {
+                              return _vm.store()
+                            },
+                            input: function($event) {
+                              if ($event.target.composing) {
+                                return
+                              }
+                              _vm.$set(item, "amount", $event.target.value)
+                            }
+                          }
+                        })
+                      : _vm._e(),
+                    _vm._v(" "),
+                    _vm.displayText()
+                      ? _c("div", [_vm._v(_vm._s(item.amount))])
+                      : _vm._e()
+                  ]),
+                  _vm._v(" "),
+                  _c(
+                    "td",
+                    { staticClass: "align-middle text-center" },
+                    [
+                      _vm.displayInput()
+                        ? _c("number-input", {
+                            on: {
+                              change: function($event) {
+                                return _vm.store()
+                              }
+                            },
+                            model: {
+                              value: item.price,
+                              callback: function($$v) {
+                                _vm.$set(item, "price", $$v)
+                              },
+                              expression: "item.price"
+                            }
+                          })
+                        : _vm._e(),
+                      _vm._v(" "),
+                      _vm.displayText()
+                        ? _c("div", [
+                            _vm._v(_vm._s(_vm._f("formatPrice")(item.price)))
                           ])
-                        ]
-                      )
+                        : _vm._e()
                     ],
-                    2
-                  )
-                ]),
-                _vm._v(" "),
-                _c(
-                  "div",
-                  { staticClass: "row justify-content-center" },
-                  [
-                    _c("pagination", {
-                      attrs: { items: _vm.selectedItems, per: "6" },
-                      on: {
-                        change: function($event) {
-                          return _vm.pagination($event)
-                        }
-                      }
-                    })
-                  ],
-                  1
-                ),
-                _vm._v(" "),
-                _vm.step == 1
-                  ? _c("div", [_vm._m(4), _vm._v(" "), _vm._m(5)])
-                  : _vm._e()
-              ])
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c("td", { staticClass: "align-middle text-center" }, [
+                    _vm.displayInput()
+                      ? _c("input", {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: item.warranty,
+                              expression: "item.warranty"
+                            }
+                          ],
+                          staticClass: "form-control",
+                          attrs: { type: "date" },
+                          domProps: { value: item.warranty },
+                          on: {
+                            change: function($event) {
+                              return _vm.store()
+                            },
+                            input: function($event) {
+                              if ($event.target.composing) {
+                                return
+                              }
+                              _vm.$set(item, "warranty", $event.target.value)
+                            }
+                          }
+                        })
+                      : _vm._e(),
+                    _vm._v(" "),
+                    _vm.displayText()
+                      ? _c("div", [
+                          _vm._v(_vm._s(_vm._f("formatDate")(item.warranty)))
+                        ])
+                      : _vm._e()
+                  ]),
+                  _vm._v(" "),
+                  _c("td", { staticClass: "align-middle text-center" }, [
+                    _vm.displayInput()
+                      ? _c(
+                          "button",
+                          {
+                            staticClass: "btn btn-danger btn-sm",
+                            attrs: { type: "button" },
+                            on: {
+                              click: function($event) {
+                                return _vm.removeItem(item)
+                              }
+                            }
+                          },
+                          [_c("i", { staticClass: "fa fa-trash" })]
+                        )
+                      : _vm._e()
+                  ])
+                ])
+              }),
+              0
+            )
+          ]),
+          _vm._v(" "),
+          _c(
+            "div",
+            { staticClass: "row justify-content-center" },
+            [
+              _c("pagination", {
+                attrs: { items: _vm.selectedItems, per: "6" },
+                on: {
+                  change: function($event) {
+                    return _vm.pagination($event)
+                  }
+                }
+              })
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _vm.step == 0
+            ? _c("div", [_vm._m(3), _vm._v(" "), _vm._m(4)])
             : _vm._e(),
           _vm._v(" "),
           _c(
@@ -68551,8 +68479,8 @@ var render = function() {
                 {
                   name: "show",
                   rawName: "v-show",
-                  value: _vm.step < 2,
-                  expression: "step < 2"
+                  value: _vm.step == 0,
+                  expression: "step == 0"
                 }
               ],
               staticClass: "btn btn-primary previous action-button",
@@ -68573,8 +68501,8 @@ var render = function() {
                 {
                   name: "show",
                   rawName: "v-show",
-                  value: _vm.step == 2,
-                  expression: "step == 2"
+                  value: _vm.step == 1,
+                  expression: "step == 1"
                 }
               ],
               staticClass: "btn btn-success previous action-button",
@@ -68634,7 +68562,7 @@ var render = function() {
         "modal-component",
         { attrs: { id: "createEquipment", title: "Tạo mẫu mới", size: "xl" } },
         [
-          _c("equipment-template-form", {
+          _c("template-form", {
             attrs: { categories: _vm.categories },
             on: {
               change: function($event) {
@@ -68663,14 +68591,6 @@ var staticRenderFns = [
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
     return _c("span", { staticClass: "icon" }, [
-      _c("i", { staticClass: "fa fa-desktop" })
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("span", { staticClass: "icon" }, [
       _c("i", { staticClass: "fa fa-check" })
     ])
   },
@@ -68686,15 +68606,16 @@ var staticRenderFns = [
           [_vm._v("Mã")]
         ),
         _vm._v(" "),
-        _c("th", {
-          staticClass: "text-center",
-          attrs: { scope: "col", width: "10%" }
-        }),
-        _vm._v(" "),
         _c(
           "th",
           { staticClass: "text-center", attrs: { scope: "col", width: "25%" } },
           [_vm._v("Tên thiết bị")]
+        ),
+        _vm._v(" "),
+        _c(
+          "th",
+          { staticClass: "text-center", attrs: { scope: "col", width: "25%" } },
+          [_vm._v("Nhà cung cấp")]
         ),
         _vm._v(" "),
         _c(
@@ -68711,13 +68632,13 @@ var staticRenderFns = [
         _vm._v(" "),
         _c(
           "th",
-          { staticClass: "text-center", attrs: { scope: "col", width: "20%" } },
+          { staticClass: "text-center", attrs: { scope: "col", width: "15%" } },
           [_vm._v("Bảo hành")]
         ),
         _vm._v(" "),
         _c("th", {
           staticClass: "text-center",
-          attrs: { scope: "col", width: "10%" }
+          attrs: { scope: "col", width: "5%" }
         })
       ])
     ])
@@ -68739,7 +68660,7 @@ var staticRenderFns = [
         },
         [
           _vm._v(
-            "\n                            Chọn thiết bị\n                        "
+            "\n                        Chọn thiết bị\n                    "
           )
         ]
       )
@@ -68750,7 +68671,7 @@ var staticRenderFns = [
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
     return _c("div", { staticClass: "form-group" }, [
-      _vm._v("\n                        hoặc \n                        "),
+      _vm._v("\n                    hoặc \n                    "),
       _c(
         "button",
         {
@@ -68761,11 +68682,7 @@ var staticRenderFns = [
             "data-target": "#createEquipment"
           }
         },
-        [
-          _vm._v(
-            "\n                            Tạo thiết bị\n                        "
-          )
-        ]
+        [_vm._v("\n                        Tạo thiết bị\n                    ")]
       )
     ])
   }
@@ -73421,34 +73338,29 @@ var render = function() {
                 : _vm._e()
             ]),
             _vm._v(" "),
-            _c("td", { staticClass: "align-middle text-center" }, [
-              _vm.itemSelected(item)
-                ? _c("input", {
-                    directives: [
-                      {
-                        name: "model",
-                        rawName: "v-model",
+            _c(
+              "td",
+              { staticClass: "align-middle text-center" },
+              [
+                _vm.itemSelected(item)
+                  ? _c("number-input", {
+                      on: {
+                        change: function($event) {
+                          return _vm.changeInput($event)
+                        }
+                      },
+                      model: {
                         value: item.price,
+                        callback: function($$v) {
+                          _vm.$set(item, "price", $$v)
+                        },
                         expression: "item.price"
                       }
-                    ],
-                    staticClass: "form-control",
-                    attrs: { type: "number" },
-                    domProps: { value: item.price },
-                    on: {
-                      change: function($event) {
-                        return _vm.changeInput($event)
-                      },
-                      input: function($event) {
-                        if ($event.target.composing) {
-                          return
-                        }
-                        _vm.$set(item, "price", $event.target.value)
-                      }
-                    }
-                  })
-                : _vm._e()
-            ]),
+                    })
+                  : _vm._e()
+              ],
+              1
+            ),
             _vm._v(" "),
             _c("td", { staticClass: "align-middle text-center" }, [
               _vm.itemSelected(item)
@@ -73462,7 +73374,7 @@ var render = function() {
                       }
                     ],
                     staticClass: "form-control",
-                    attrs: { type: "datetime-local" },
+                    attrs: { type: "date" },
                     domProps: { value: item.warranty },
                     on: {
                       change: function($event) {
@@ -87033,6 +86945,7 @@ Vue.component('equipment-info', __webpack_require__(/*! ./components/equipment/e
 Vue.component('equipment-status-popover', __webpack_require__(/*! ./components/equipment/equipment-status-popover.vue */ "./resources/js/components/equipment/equipment-status-popover.vue")["default"]);
 Vue.component('equipment-create', __webpack_require__(/*! ./components/equipment/equipment-create.vue */ "./resources/js/components/equipment/equipment-create.vue")["default"]);
 Vue.component('equipment-template-form', __webpack_require__(/*! ./components/equipment/equipment-template-form.vue */ "./resources/js/components/equipment/equipment-template-form.vue")["default"]);
+Vue.component('template-form', __webpack_require__(/*! ./components/equipment/equipment-template-form.vue */ "./resources/js/components/equipment/equipment-template-form.vue")["default"]);
 Vue.component('multi-step-form', __webpack_require__(/*! ./components/multi-step-form.vue */ "./resources/js/components/multi-step-form.vue")["default"]);
 Vue.component('table-select-equipment', __webpack_require__(/*! ./components/table/table-select-equipment.vue */ "./resources/js/components/table/table-select-equipment.vue")["default"]);
 Vue.component('table-verify-equipment', __webpack_require__(/*! ./components/table/table-verify-equipment.vue */ "./resources/js/components/table/table-verify-equipment.vue")["default"]);

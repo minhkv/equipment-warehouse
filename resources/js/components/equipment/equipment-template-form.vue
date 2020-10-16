@@ -25,7 +25,10 @@
                     </div>
                     <div class="form-group row">
                         <label class="col-3 col-form-label text-left" for="equipmentCategory">Loại</label>
-                        <selector v-model="category" :items="displayedCategories" labelAtt="name" valueAtt="id" class="col-9"></selector>
+                        <selector v-model="category" :items="displayedCategories" labelAtt="name" valueAtt="id" class="col-8"></selector>
+                        <div class="col-1">
+                            <button class="btn btn-primary" type="button" data-toggle="modal" data-target="#addCategory"><i class="fa fa-plus"></i></button>
+                        </div>
                     </div>
                     <div class="form-group row">
                         <label class="col-3 col-form-label text-left" for="equipmentImage">Hình ảnh</label>
@@ -101,12 +104,16 @@
                 <button @click="submitTemplate()" v-show="step == 2" type="button" class="btn btn-success previous action-button" :disabled="submitted">Hoàn tất</button>
             </fieldset>
         </form>
+        <modal-component id="addCategory" title="Thêm loại thiết bị">
+            <category-form @change="submitCategory($event)"></category-form>
+        </modal-component>
     </div>
 </template>
 <script>
 import LocalStorageMixin from '../../mixins/LocalStorageMixin';
+import ModalMixin from '../../mixins/ModalMixin';
 export default {
-    mixins: [LocalStorageMixin],
+    mixins: [LocalStorageMixin, ModalMixin],
     props: ['categories', 'suppliers'],
     data() {
         return {
@@ -209,10 +216,14 @@ export default {
         },
         getCategoryName(id) {
             let cate = this.categories.find(x => x.id == id);
-            return cate.name;
+            if(cate) return cate.name;
+            return '';
+        },
+        submitCategory(category) {
+            this.$emit('category', category);
+            this.closeModal('#addCategory');
         },
         handleFileUpload() {
-            // this.imageFile = this.$refs.imageFile.files[0];
             Vue.set(this.$data, 'imageFile', this.$refs.imageFile.files[0]);
         },
         sendEvent() {
