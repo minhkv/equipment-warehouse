@@ -130,12 +130,6 @@ export default {
         this.init();
     },
     watch: {
-        supplier_name() {
-            this.store();
-        },
-        supplier_id() {
-            this.store();
-        },
         dateInput() {
             this.store();
         }
@@ -196,8 +190,6 @@ export default {
             let data = {
                 stocker_id: this.stocker_id,
                 type: 2,
-                supplier_id: this.supplier_id,
-                supplier_name: this.supplier_name,
                 dateInput: this.dateInput,
                 selectedItems: this.selectedItems,
             };
@@ -208,6 +200,7 @@ export default {
             });
         },
         createTemplate(data) {
+            console.log('createTemplate');
             console.log(data);
             let formData = new FormData();
             let app = this;
@@ -217,6 +210,7 @@ export default {
             formData.append("name", data.name);
             formData.append("category_id", data.category_id);
             formData.append("imageFile", data.imageFile);
+            this.sendRequest(this.templateCreateUrl, 'post', formData, this.updatePage);
         },
         updatePage(template) {
             console.log(template);

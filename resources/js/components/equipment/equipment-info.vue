@@ -26,6 +26,14 @@
         </div>
         <div class="row">
             <label class="col-3 text-left">
+                <strong><i class="fa fa-calendar"></i> Bảo hành</strong>
+            </label>
+            <label class="col-3 text-left">
+                {{ equipment.warranty|formatDate }}
+            </label>
+        </div>
+        <div class="row">
+            <label class="col-3 text-left">
                 <strong><i class="fa fa-money"></i> Giá nhập</strong>
             </label>
             <label class="col-3 text-left">

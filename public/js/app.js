@@ -2755,6 +2755,14 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['equipment']
 });
@@ -3704,12 +3712,6 @@ __webpack_require__.r(__webpack_exports__);
     this.init();
   },
   watch: {
-    supplier_name: function supplier_name() {
-      this.store();
-    },
-    supplier_id: function supplier_id() {
-      this.store();
-    },
     dateInput: function dateInput() {
       this.store();
     }
@@ -3777,8 +3779,6 @@ __webpack_require__.r(__webpack_exports__);
       var data = {
         stocker_id: this.stocker_id,
         type: 2,
-        supplier_id: this.supplier_id,
-        supplier_name: this.supplier_name,
         dateInput: this.dateInput,
         selectedItems: this.selectedItems
       };
@@ -3789,6 +3789,7 @@ __webpack_require__.r(__webpack_exports__);
       });
     },
     createTemplate: function createTemplate(data) {
+      console.log('createTemplate');
       console.log(data);
       var formData = new FormData();
       var app = this;
@@ -3800,6 +3801,7 @@ __webpack_require__.r(__webpack_exports__);
       formData.append("name", data.name);
       formData.append("category_id", data.category_id);
       formData.append("imageFile", data.imageFile);
+      this.sendRequest(this.templateCreateUrl, 'post', formData, this.updatePage);
     },
     updatePage: function updatePage(template) {
       console.log(template);
@@ -3898,12 +3900,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['order']
 });
@@ -3920,6 +3916,7 @@ __webpack_require__.r(__webpack_exports__);
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _mixins_RequestMixin__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../mixins/RequestMixin */ "./resources/js/mixins/RequestMixin.js");
+//
 //
 //
 //
@@ -66651,7 +66648,7 @@ var render = function() {
       _c("label", { staticClass: "col-3 text-left" }, [
         _vm._v(
           "\n            " +
-            _vm._s(_vm._f("formatEquipmentPrice")(_vm.equipment.price)) +
+            _vm._s(_vm._f("formatDate")(_vm.equipment.warranty)) +
             "\n        "
         )
       ])
@@ -66659,6 +66656,18 @@ var render = function() {
     _vm._v(" "),
     _c("div", { staticClass: "row" }, [
       _vm._m(4),
+      _vm._v(" "),
+      _c("label", { staticClass: "col-3 text-left" }, [
+        _vm._v(
+          "\n            " +
+            _vm._s(_vm._f("formatEquipmentPrice")(_vm.equipment.price)) +
+            "\n        "
+        )
+      ])
+    ]),
+    _vm._v(" "),
+    _c("div", { staticClass: "row" }, [
+      _vm._m(5),
       _vm._v(" "),
       _c(
         "label",
@@ -66669,7 +66678,7 @@ var render = function() {
     ]),
     _vm._v(" "),
     _c("div", { staticClass: "row" }, [
-      _vm._m(5),
+      _vm._m(6),
       _vm._v(" "),
       _c(
         "label",
@@ -66684,7 +66693,7 @@ var render = function() {
     ]),
     _vm._v(" "),
     _c("div", { staticClass: "row" }, [
-      _vm._m(6),
+      _vm._m(7),
       _vm._v(" "),
       _c(
         "label",
@@ -66695,7 +66704,7 @@ var render = function() {
     ]),
     _vm._v(" "),
     _c("div", { staticClass: "row" }, [
-      _vm._m(7),
+      _vm._m(8),
       _vm._v(" "),
       _c("label", { staticClass: "col-3 text-left" }, [
         _vm._v("\n            " + _vm._s(_vm.equipment.note) + "\n        ")
@@ -66728,6 +66737,17 @@ var staticRenderFns = [
       _c("strong", [
         _c("i", { staticClass: "fa fa-calendar" }),
         _vm._v(" Ngày nhập")
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("label", { staticClass: "col-3 text-left" }, [
+      _c("strong", [
+        _c("i", { staticClass: "fa fa-calendar" }),
+        _vm._v(" Bảo hành")
       ])
     ])
   },
@@ -68908,23 +68928,13 @@ var render = function() {
       _vm._m(1),
       _vm._v(" "),
       _c("label", { staticClass: "col-3 text-left" }, [
-        _vm._v(
-          "\n            " + _vm._s(_vm.order.supplier_name) + "\n        "
-        )
-      ])
-    ]),
-    _vm._v(" "),
-    _c("div", { staticClass: "row" }, [
-      _vm._m(2),
-      _vm._v(" "),
-      _c("label", { staticClass: "col-3 text-left" }, [
         _vm._v("\n            " + _vm._s(_vm.order.stocker.name) + "\n        ")
       ])
     ]),
     _vm._v(" "),
     _c("div", { staticClass: "row" }, [
       _c("table", { staticClass: "table table-hover" }, [
-        _vm._m(3),
+        _vm._m(2),
         _vm._v(" "),
         _c(
           "tbody",
@@ -68951,6 +68961,10 @@ var render = function() {
                 ]),
                 _vm._v(" "),
                 _c("td", { staticClass: "text-center align-middle" }, [
+                  _vm._v(_vm._s(requestInfo.supplier_name))
+                ]),
+                _vm._v(" "),
+                _c("td", { staticClass: "text-center align-middle" }, [
                   _vm._v(_vm._s(requestInfo.amount))
                 ]),
                 _vm._v(" "),
@@ -68959,7 +68973,7 @@ var render = function() {
                 ]),
                 _vm._v(" "),
                 _c("td", { staticClass: "text-center align-middle" }, [
-                  _vm._v(_vm._s(requestInfo.warranty))
+                  _vm._v(_vm._s(_vm._f("formatDate")(requestInfo.warranty)))
                 ])
               ]
             )
@@ -68977,17 +68991,6 @@ var staticRenderFns = [
     var _c = _vm._self._c || _h
     return _c("label", { staticClass: "col-3 text-left" }, [
       _c("strong", [_c("i", { staticClass: "fa fa-barcode" }), _vm._v(" Mã")])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("label", { staticClass: "col-3 text-left" }, [
-      _c("strong", [
-        _c("i", { staticClass: "fa fa-building" }),
-        _vm._v(" Nhà cung cấp")
-      ])
     ])
   },
   function() {
@@ -69025,6 +69028,16 @@ var staticRenderFns = [
             attrs: { scope: "col" }
           },
           [_vm._v("Tên")]
+        ),
+        _vm._v(" "),
+        _c(
+          "th",
+          {
+            staticClass: "align-middle text-center",
+            staticStyle: { width: "25%" },
+            attrs: { scope: "col" }
+          },
+          [_vm._v("Nhà cung cấp")]
         ),
         _vm._v(" "),
         _c(
@@ -69143,15 +69156,11 @@ var render = function() {
                   ),
                   _vm._v(" "),
                   _c("td", { staticClass: "text-center align-middle" }, [
-                    _vm._v(_vm._s(order.supplier_name))
-                  ]),
-                  _vm._v(" "),
-                  _c("td", { staticClass: "text-center align-middle" }, [
                     _vm._v(_vm._s(order.stocker.name))
                   ]),
                   _vm._v(" "),
                   _c("td", { staticClass: "text-center align-middle" }, [
-                    _vm._v(_vm._s(order.date_input))
+                    _vm._v(_vm._s(_vm._f("formatDate")(order.date_input)))
                   ]),
                   _vm._v(" "),
                   _c("td", { staticClass: "text-center align-middle" }, [
@@ -69215,9 +69224,31 @@ var render = function() {
             key: order.id,
             attrs: {
               id: "detail" + order.id,
-              size: "lg",
+              size: "xl",
               title: "Chi tiết đơn nhập " + order.id
-            }
+            },
+            scopedSlots: _vm._u(
+              [
+                {
+                  key: "footer",
+                  fn: function() {
+                    return [
+                      _c(
+                        "button",
+                        {
+                          staticClass: "btn btn-primary",
+                          attrs: { type: "button", "data-dismiss": "modal" }
+                        },
+                        [_vm._v("Đóng")]
+                      )
+                    ]
+                  },
+                  proxy: true
+                }
+              ],
+              null,
+              true
+            )
           },
           [_c("input-order-detail", { attrs: { order: order } })],
           1
@@ -69252,16 +69283,6 @@ var staticRenderFns = [
             attrs: { scope: "col" }
           },
           [_vm._v("Mã")]
-        ),
-        _vm._v(" "),
-        _c(
-          "th",
-          {
-            staticClass: "align-middle text-center",
-            staticStyle: { width: "18%" },
-            attrs: { scope: "col" }
-          },
-          [_vm._v("Nhà cung cấp")]
         ),
         _vm._v(" "),
         _c(
@@ -90560,6 +90581,7 @@ __webpack_require__.r(__webpack_exports__);
 
         var value = _this.getAtt(localStorage, att);
 
+        console.log(value);
         if (value) Vue.set(_this.$data, att, value);
       });
     },
@@ -90574,13 +90596,14 @@ __webpack_require__.r(__webpack_exports__);
     getAtt: function getAtt(item, att) {
       var value = '';
       var splitAtt = att.split('.');
+      var parseStartCharacter = ['"', '[', '{'];
 
       if (splitAtt.length > 1) {
         return this.getNestedAtt(item, splitAtt);
       }
 
       if (item[att]) {
-        if (typeof item[att] == 'string' && (item[att][0] == '[' || item[att][0] == '{')) {
+        if (typeof item[att] == 'string' && parseStartCharacter.includes(item[att][0])) {
           value = JSON.parse(item[att]);
         } else {
           value = item[att];

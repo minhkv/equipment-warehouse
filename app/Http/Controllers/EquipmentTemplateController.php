@@ -55,7 +55,7 @@ class EquipmentTemplateController extends Controller
             $template = new EquipmentTemplate($request->all());
             $template->save();
             $equipments = json_decode($request->equipments);
-            // return $equipments;
+            
             if($request->hasFile('imageFile')) {
                 $fileName = $request->imageFile->getClientOriginalName();
                 $request->imageFile->storeAs('img', $fileName, 'public');
@@ -63,10 +63,11 @@ class EquipmentTemplateController extends Controller
             } else {
                 $template->update(['image' => '/storage/img/empty.jpg']);
             }
-            
-            foreach($equipments as $equipment) {
-                $equipment = (array) $equipment;
-                $template->equipments()->create($equipment);
+            if($equipments) {
+                foreach($equipments as $equipment) {
+                    $equipment = (array) $equipment;
+                    $template->equipments()->create($equipment);
+                }
             }
             return $template;
         } catch(Exception $e) {

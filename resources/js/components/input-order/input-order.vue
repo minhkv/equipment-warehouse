@@ -18,7 +18,6 @@
                 <thead class="thead-light">
                     <tr>
                         <th style="width: 5%;" class="align-middle text-center" scope="col">Mã</th>
-                        <th style="width: 18%;" class="align-middle text-center" scope="col">Nhà cung cấp</th>
                         <th style="width: 18%;" class="align-middle text-center" scope="col">Người nhập</th>
                         <th style="width: 16%;" class="align-middle text-center" scope="col">Ngày nhập</th>
                         <th style="width: 16%;" class="align-middle text-center" scope="col">Số lượng nhập</th>
@@ -28,9 +27,8 @@
                 <tbody>
                     <tr class="cursor-pointer" v-for="order in searchInputItems" :key="order.id">
                         <th data-toggle="modal" :data-target="'#detail' + order.id" scope="row" class="align-middle text-center">{{order.id}}</th>
-                        <td class="text-center align-middle">{{order.supplier_name}}</td>
                         <td class="text-center align-middle">{{order.stocker.name}}</td>
-                        <td class="text-center align-middle">{{order.date_input}}</td>
+                        <td class="text-center align-middle">{{order.date_input|formatDate}}</td>
                         <td class="text-center align-middle">{{getInputAmount(order)}}</td>
                         <td class="align-middle">
                             <button class="btn btn-primary btn-sm" data-toggle="modal" :data-target="'#detail' + order.id">Chi tiết</button>
@@ -43,8 +41,11 @@
         <div class="row justify-content-center">
             <pagination @change="pagination($event)" :items="searchInputItems" per="8"></pagination>
         </div>
-        <modal-component v-for="order in orders" :key="order.id" :id="'detail' + order.id" size="lg" :title="'Chi tiết đơn nhập ' + order.id">
+        <modal-component v-for="order in orders" :key="order.id" :id="'detail' + order.id" size="xl" :title="'Chi tiết đơn nhập ' + order.id">
             <input-order-detail :order="order"></input-order-detail>
+            <template v-slot:footer>
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Đóng</button>
+            </template>
         </modal-component>
     </div>
 </template>

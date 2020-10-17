@@ -63,14 +63,10 @@ class InputOrderController extends Controller
             $items = $request->input('selectedItems');
             $type = $request->input('type');
             $stockerId = $request->input('stocker_id');
-            $supplierId = $request->input('supplier_id');
-            $supplierName = $request->input('supplier_name');
             $dateInput = $request->input('dateInput');
             $order = Order::create([
                 'type' => $type,
                 'stocker_id' => $stockerId,
-                'supplier_id' => $supplierId,
-                'supplier_name' => $supplierName,
                 'date_input' => $dateInput,
                 'status' => 4
             ]);
@@ -78,6 +74,8 @@ class InputOrderController extends Controller
                 $order->orderRequestInfos()->create([
                     'template_id' => $item['template']['id'],
                     'amount' => $item['amount'],
+                    'supplier_id' => $item['supplier_id'],
+                    'supplier_name' => $item['supplier_name'],
                     'price' => $item['price'],
                     'warranty' => $item['warranty'],
                 ]);
@@ -87,8 +85,8 @@ class InputOrderController extends Controller
                 for($i = 0; $i < $item['amount']; $i++) {
                     $template->equipments()->create([
                         'price' => $item['price'],
-                        'supplier_id' => $supplierId,
-                        'supplier_name' => $supplierName,
+                        'supplier_id' => $item['supplier_id'],
+                        'supplier_name' => $item['supplier_name'],
                         'condition' => 2,
                         'input_date' => $dateInput,
                     ]);

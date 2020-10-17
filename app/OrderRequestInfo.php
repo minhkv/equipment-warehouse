@@ -10,6 +10,8 @@ class OrderRequestInfo extends Model
 {
     protected $fillable = [
         'template_id', 
+        'supplier_id',
+        'supplier_name',
         'amount', 
         'price',
         'warranty',

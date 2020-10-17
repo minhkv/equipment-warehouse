@@ -4,6 +4,7 @@ export default {
             atts.forEach(att => {
                 console.log(att);
                 let value = this.getAtt(localStorage, att);
+                console.log(value);
                 if(value)
                     Vue.set(this.$data, att, value);
             });
@@ -17,12 +18,13 @@ export default {
         getAtt(item, att) {
             let value = '';
             let splitAtt = att.split('.');
+            let parseStartCharacter = ['"', '[', '{'];
             if(splitAtt.length > 1) {
                 return this.getNestedAtt(item, splitAtt);
             }
             if(item[att]) {
                 if(typeof(item[att]) == 'string' && 
-                (item[att][0] == '[' || item[att][0] == '{')) {
+                parseStartCharacter.includes(item[att][0])) {
                     value = JSON.parse(item[att]);
                 } else {
                     value = item[att];

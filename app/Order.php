@@ -13,8 +13,6 @@ class Order extends Model
         'type', 
         'stocker_id',
         'guest_id',
-        'supplier_id',
-        'supplier_name',
         'guest_name',
         'department',
         'date_input',
