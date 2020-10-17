@@ -4572,13 +4572,27 @@ __webpack_require__.r(__webpack_exports__);
   methods: {
     init: function init() {
       this.loadStorageValue();
+      this.checkSelectedTemplates();
       this.initFilter();
     },
-    initFilter: function initFilter() {
+    checkSelectedTemplates: function checkSelectedTemplates() {
       var _this = this;
 
+      this.selectedTemplates.forEach(function (selectedTemplate) {
+        var temp = _this.templates.find(function (t) {
+          return t.id == selectedTemplate.id;
+        });
+
+        Vue.set(selectedTemplate, 'name', temp.name);
+        Vue.set(selectedTemplate, 'maxAmount', temp.equipments.length);
+        Vue.set(selectedTemplate, 'image', temp.image);
+      });
+    },
+    initFilter: function initFilter() {
+      var _this2 = this;
+
       this.categories.forEach(function (cate) {
-        _this.filterConfig.values.push({
+        _this2.filterConfig.values.push({
           name: cate.name,
           value: cate.id
         });

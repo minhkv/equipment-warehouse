@@ -264,7 +264,16 @@ export default {
     methods: {
         init() {
             this.loadStorageValue();
+            this.checkSelectedTemplates();
             this.initFilter();
+        },
+        checkSelectedTemplates() {
+            this.selectedTemplates.forEach(selectedTemplate => {
+                let temp = this.templates.find(t => t.id == selectedTemplate.id);
+                Vue.set(selectedTemplate, 'name', temp.name);
+                Vue.set(selectedTemplate, 'maxAmount', temp.equipments.length);
+                Vue.set(selectedTemplate, 'image', temp.image);
+            });
         },
         initFilter() {
             this.categories.forEach((cate) => {
