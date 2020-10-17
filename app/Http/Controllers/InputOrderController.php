@@ -89,6 +89,7 @@ class InputOrderController extends Controller
                         'supplier_name' => $item['supplier_name'],
                         'condition' => 2,
                         'input_date' => $dateInput,
+                        'warranty' => $item['warranty'],
                     ]);
                 }
             }

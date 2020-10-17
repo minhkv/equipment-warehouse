@@ -2570,6 +2570,10 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['equipment', 'template', 'suppliers', 'method', 'url'],
@@ -2598,6 +2602,7 @@ __webpack_require__.r(__webpack_exports__);
       if (this.equipment) {
         this.eq = Object.assign({}, this.eq, this.equipment);
         this.eq.input_date = moment__WEBPACK_IMPORTED_MODULE_0___default()(this.eq.input_date).format("YYYY-MM-DD");
+        this.eq.warranty = moment__WEBPACK_IMPORTED_MODULE_0___default()(this.eq.warranty).format("YYYY-MM-DD");
       }
 
       if (this.template) {
@@ -2651,10 +2656,8 @@ __webpack_require__.r(__webpack_exports__);
         url: this.url,
         data: formData
       }).then(function (res) {
-        console.log(res);
         app.eq = res.data;
         app.sendEvent();
-        app.init();
       })["catch"](function (err) {
         console.log(err);
       });
@@ -66401,11 +66404,37 @@ var render = function() {
       })
     ]),
     _vm._v(" "),
+    _c("div", { staticClass: "form-group" }, [
+      _vm._m(1),
+      _vm._v(" "),
+      _c("input", {
+        directives: [
+          {
+            name: "model",
+            rawName: "v-model",
+            value: _vm.eq.warranty,
+            expression: "eq.warranty"
+          }
+        ],
+        staticClass: "form-control",
+        attrs: { type: "date", placeholder: "Bảo hành" },
+        domProps: { value: _vm.eq.warranty },
+        on: {
+          input: function($event) {
+            if ($event.target.composing) {
+              return
+            }
+            _vm.$set(_vm.eq, "warranty", $event.target.value)
+          }
+        }
+      })
+    ]),
+    _vm._v(" "),
     _c(
       "div",
       { staticClass: "form-group" },
       [
-        _vm._m(1),
+        _vm._m(2),
         _vm._v(" "),
         _c("number-input", {
           attrs: { placeholder: "Giá nhập" },
@@ -66425,7 +66454,7 @@ var render = function() {
       "div",
       { staticClass: "form-group" },
       [
-        _vm._m(2),
+        _vm._m(3),
         _vm._v(" "),
         _c("autocomplete-input", {
           attrs: {
@@ -66445,7 +66474,7 @@ var render = function() {
     ),
     _vm._v(" "),
     _c("div", { staticClass: "form-group" }, [
-      _vm._m(3),
+      _vm._m(4),
       _vm._v(" "),
       _c("div", { staticClass: "dropdown" }, [
         _c(
@@ -66505,7 +66534,7 @@ var render = function() {
     ]),
     _vm._v(" "),
     _c("div", { staticClass: "form-group" }, [
-      _vm._m(4),
+      _vm._m(5),
       _vm._v(" "),
       _c("textarea", {
         directives: [
@@ -66550,7 +66579,7 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("label", { attrs: { for: "price" } }, [
+    return _c("label", [
       _c("i", { staticClass: "fa fa-calendar" }),
       _vm._v(" Ngày nhập")
     ])
@@ -66559,7 +66588,16 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("label", { attrs: { for: "price" } }, [
+    return _c("label", [
+      _c("i", { staticClass: "fa fa-calendar" }),
+      _vm._v(" Bảo hành")
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("label", [
       _c("i", { staticClass: "fa fa-money" }),
       _vm._v(" Giá nhập")
     ])
@@ -66568,7 +66606,7 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("label", { attrs: { for: "price" } }, [
+    return _c("label", [
       _c("i", { staticClass: "fa fa-building" }),
       _vm._v(" Nhà cung cấp")
     ])
@@ -66577,7 +66615,7 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("label", { attrs: { for: "price" } }, [
+    return _c("label", [
       _c("i", { staticClass: "fa fa-signal" }),
       _vm._v(" Tình trạng")
     ])

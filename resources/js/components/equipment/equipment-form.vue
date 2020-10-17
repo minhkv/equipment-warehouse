@@ -5,20 +5,24 @@
             <input type="text" class="form-control" v-model="eq.name" placeholder="Tên thiết bị">
         </div>
         <div class="form-group">
-            <label for="price"><i class="fa fa-calendar"></i> Ngày nhập</label>
+            <label><i class="fa fa-calendar"></i> Ngày nhập</label>
             <input type="date" class="form-control" v-model="eq.input_date" placeholder="Giá nhập">
         </div>
         <div class="form-group">
-            <label for="price"><i class="fa fa-money"></i> Giá nhập</label>
+            <label><i class="fa fa-calendar"></i> Bảo hành</label>
+            <input type="date" class="form-control" v-model="eq.warranty" placeholder="Bảo hành">
+        </div>
+        <div class="form-group">
+            <label><i class="fa fa-money"></i> Giá nhập</label>
             <number-input v-model="eq.price" placeholder="Giá nhập"></number-input>
         </div>
         <div class="form-group">
-            <label for="price"><i class="fa fa-building"></i> Nhà cung cấp</label>
+            <label><i class="fa fa-building"></i> Nhà cung cấp</label>
             <autocomplete-input @change="changeSupplier($event)" :items="suppliers" name-attribute="name" placeholder="Nhà cung cấp" :value="eq.supplier_name"></autocomplete-input>
         </div>
 
         <div class="form-group">
-            <label for="price"><i class="fa fa-signal"></i> Tình trạng</label>
+            <label><i class="fa fa-signal"></i> Tình trạng</label>
             <div class="dropdown">
                 <select v-model="eq.condition" class="custom-select mx-0">
                     <option value='2'><equipment-condition :condition="2"></equipment-condition></option>
@@ -69,6 +73,7 @@ export default {
             if (this.equipment) {
                 this.eq = Object.assign({}, this.eq, this.equipment);
                 this.eq.input_date = moment(this.eq.input_date).format("YYYY-MM-DD");
+                this.eq.warranty = moment(this.eq.warranty).format("YYYY-MM-DD");
             }
 
             if(this.template) {
@@ -115,10 +120,8 @@ export default {
                 data: formData
                 })
                 .then(function (res) {
-                    console.log(res);
                     app.eq = res.data;
                     app.sendEvent();
-                    app.init();
                 })
                 .catch(function (err) {
                     console.log(err);
