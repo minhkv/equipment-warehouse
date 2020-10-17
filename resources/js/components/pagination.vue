@@ -3,6 +3,7 @@
         <ul class="pagination">
             <li :class="previousClass()">
                 <button
+                    type="button"
                     class="page-link"
                     href="#"
                     :disabled="page <= 1"
@@ -18,6 +19,7 @@
             </li>
             <li :class="nextClass()">
                 <button
+                    type="button"
                     class="page-link"
                     href="#"
                     @click="next"

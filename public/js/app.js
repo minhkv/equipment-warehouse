@@ -5642,6 +5642,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ["items", "per"],
   data: function data() {
@@ -71979,7 +71981,7 @@ var render = function() {
             "button",
             {
               staticClass: "page-link",
-              attrs: { href: "#", disabled: _vm.page <= 1 },
+              attrs: { type: "button", href: "#", disabled: _vm.page <= 1 },
               on: { click: _vm.previous }
             },
             [_vm._v("Previous")]
@@ -72015,7 +72017,11 @@ var render = function() {
             "button",
             {
               staticClass: "page-link",
-              attrs: { href: "#", disabled: _vm.page >= _vm.pages.length },
+              attrs: {
+                type: "button",
+                href: "#",
+                disabled: _vm.page >= _vm.pages.length
+              },
               on: { click: _vm.next }
             },
             [_vm._v("Next")]
