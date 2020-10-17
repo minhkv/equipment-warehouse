@@ -3725,6 +3725,25 @@ __webpack_require__.r(__webpack_exports__);
     init: function init() {
       this.componentTemplates = this.templates;
       this.loadStorage(this.atts);
+      this.checkSelectedItems();
+    },
+    checkSelectedItems: function checkSelectedItems() {
+      var _this = this;
+
+      var i = 0;
+      this.selectedItems.forEach(function (selectedItem) {
+        console.log(selectedItem.template.id);
+
+        var temp = _this.templates.find(function (t) {
+          return t.id == selectedItem.template.id;
+        });
+
+        if (!temp) {
+          console.log('splice');
+        }
+
+        i++;
+      });
     },
     store: function store() {
       this.storeStorage(this.atts);
@@ -4578,7 +4597,6 @@ __webpack_require__.r(__webpack_exports__);
     checkSelectedTemplates: function checkSelectedTemplates() {
       var _this = this;
 
-      var i = 0;
       this.selectedTemplates.forEach(function (selectedTemplate) {
         var temp = _this.templates.find(function (t) {
           return t.id == selectedTemplate.id;
@@ -4588,11 +4606,7 @@ __webpack_require__.r(__webpack_exports__);
           Vue.set(selectedTemplate, 'name', temp.name);
           Vue.set(selectedTemplate, 'maxAmount', temp.equipments.length);
           Vue.set(selectedTemplate, 'image', temp.image);
-        } else {
-          _this.selectedTemplates.splice(i, 1);
         }
-
-        i++;
       });
     },
     initFilter: function initFilter() {

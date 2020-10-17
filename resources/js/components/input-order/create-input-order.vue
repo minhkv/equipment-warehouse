@@ -139,6 +139,18 @@ export default {
         init() {
             this.componentTemplates = this.templates;
             this.loadStorage(this.atts);
+            this.checkSelectedItems();
+        },
+        checkSelectedItems() {
+            let i = 0;
+            this.selectedItems.forEach(selectedItem => {
+                console.log(selectedItem.template.id);
+                let temp = this.templates.find(t => t.id == selectedItem.template.id);
+                if(!temp) {
+                    console.log('splice');
+                }
+                i++;
+            });
         },
         store() {
             this.storeStorage(this.atts);
