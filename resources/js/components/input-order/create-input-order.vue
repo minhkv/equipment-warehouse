@@ -103,8 +103,9 @@
 <script>
 import RequestMixin from '../../mixins/RequestMixin';
 import LocalStorageMixin from '../../mixins/LocalStorageMixin';
+import ModalMixin from '../../mixins/ModalMixin';
 export default {
-    mixins: [RequestMixin, LocalStorageMixin],
+    mixins: [RequestMixin, LocalStorageMixin, ModalMixin],
     props: [
         'stocker_id', 
         'suppliers', 
@@ -222,6 +223,7 @@ export default {
             };
             this.newItem = item;
             this.componentTemplates.push(template);
+            this.closeModal('#createEquipment');
         },
         updateSelectedTemplates(items) {
             this.selectedItems = items;

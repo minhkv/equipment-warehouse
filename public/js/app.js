@@ -3592,6 +3592,7 @@ __webpack_require__.r(__webpack_exports__);
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _mixins_RequestMixin__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../mixins/RequestMixin */ "./resources/js/mixins/RequestMixin.js");
 /* harmony import */ var _mixins_LocalStorageMixin__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../mixins/LocalStorageMixin */ "./resources/js/mixins/LocalStorageMixin.js");
+/* harmony import */ var _mixins_ModalMixin__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../mixins/ModalMixin */ "./resources/js/mixins/ModalMixin.js");
 //
 //
 //
@@ -3694,10 +3695,11 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-  mixins: [_mixins_RequestMixin__WEBPACK_IMPORTED_MODULE_0__["default"], _mixins_LocalStorageMixin__WEBPACK_IMPORTED_MODULE_1__["default"]],
+  mixins: [_mixins_RequestMixin__WEBPACK_IMPORTED_MODULE_0__["default"], _mixins_LocalStorageMixin__WEBPACK_IMPORTED_MODULE_1__["default"], _mixins_ModalMixin__WEBPACK_IMPORTED_MODULE_2__["default"]],
   props: ['stocker_id', 'suppliers', 'templates', 'categories', 'templateCreateUrl', 'storeInputOrderUrl', 'inputOrderIndexUrl'],
   data: function data() {
     return {
@@ -3816,6 +3818,7 @@ __webpack_require__.r(__webpack_exports__);
       };
       this.newItem = item;
       this.componentTemplates.push(template);
+      this.closeModal('#createEquipment');
     },
     updateSelectedTemplates: function updateSelectedTemplates(items) {
       this.selectedItems = items;
@@ -69175,7 +69178,7 @@ var render = function() {
           _vm._v(" "),
           _c(
             "tbody",
-            _vm._l(_vm.searchInputItems, function(order) {
+            _vm._l(_vm.paginationItems, function(order) {
               return _c(
                 "tr",
                 { key: order.id, staticClass: "cursor-pointer" },
@@ -69262,7 +69265,7 @@ var render = function() {
             key: order.id,
             attrs: {
               id: "detail" + order.id,
-              size: "xl",
+              size: "lg",
               title: "Chi tiết đơn nhập " + order.id
             },
             scopedSlots: _vm._u(

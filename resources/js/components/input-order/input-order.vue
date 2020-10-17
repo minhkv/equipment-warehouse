@@ -25,7 +25,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr class="cursor-pointer" v-for="order in searchInputItems" :key="order.id">
+                    <tr class="cursor-pointer" v-for="order in paginationItems" :key="order.id">
                         <th data-toggle="modal" :data-target="'#detail' + order.id" scope="row" class="align-middle text-center">{{order.id}}</th>
                         <td class="text-center align-middle">{{order.stocker.name}}</td>
                         <td class="text-center align-middle">{{order.date_input|formatDate}}</td>
@@ -41,7 +41,7 @@
         <div class="row justify-content-center">
             <pagination @change="pagination($event)" :items="searchInputItems" per="8"></pagination>
         </div>
-        <modal-component v-for="order in orders" :key="order.id" :id="'detail' + order.id" size="xl" :title="'Chi tiết đơn nhập ' + order.id">
+        <modal-component v-for="order in orders" :key="order.id" :id="'detail' + order.id" size="lg" :title="'Chi tiết đơn nhập ' + order.id">
             <input-order-detail :order="order"></input-order-detail>
             <template v-slot:footer>
                 <button type="button" class="btn btn-primary" data-dismiss="modal">Đóng</button>
