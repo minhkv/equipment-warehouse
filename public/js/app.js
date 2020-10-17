@@ -5012,7 +5012,9 @@ __webpack_require__.r(__webpack_exports__);
       selectedTemplates: [],
       ariseRequest: [],
       templateNeedToRemove: {},
-      save: false
+      save: false,
+      clear: false,
+      note: ''
     };
   },
   created: function created() {
@@ -5175,6 +5177,7 @@ __webpack_require__.r(__webpack_exports__);
       }
 
       this.save = false;
+      this.clear = false;
       this.enableButton();
     },
     updateCurrentEquipment: function updateCurrentEquipment(orderInfos, index) {
@@ -5259,6 +5262,7 @@ __webpack_require__.r(__webpack_exports__);
         dateOutput: this.getCurrentLocalTime(),
         save: this.save
       };
+      this.clear = true;
       this.sendRequest(this.equipmentOutputUrl, 'put', data, this.updatePage);
     },
     equipmentCheck: function equipmentCheck() {
@@ -6681,7 +6685,7 @@ __webpack_require__.r(__webpack_exports__);
     },
     removeTemplate: function removeTemplate(item) {
       var index = this.selectedItems.findIndex(function (i) {
-        return i.template.id == item.id;
+        return i.template.id == item.template.id;
       });
       this.selectedItems.splice(index, 1);
     },
@@ -6919,7 +6923,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ['items', 'categories', 'initTemplates', 'templateNeedToRemove'],
+  props: ['items', 'categories', 'initTemplates', 'templateNeedToRemove', 'clear'],
   data: function data() {
     return {
       selectedItems: [],
@@ -6945,6 +6949,11 @@ __webpack_require__.r(__webpack_exports__);
 
       if (this.templateNeedToRemove) {
         this.remove(this.templateNeedToRemove);
+      }
+    },
+    clear: function clear() {
+      if (this.clear) {
+        this.selectedItems = [];
       }
     }
   },
@@ -71049,7 +71058,7 @@ var render = function() {
                 attrs: { disabled: _vm.buttonDisabled },
                 on: { click: _vm.saveStatus }
               },
-              [_vm._v("Lưu "), _c("i", { staticClass: "fas fa-save    " })]
+              [_vm._v("Lưu "), _c("i", { staticClass: "fas fa-save" })]
             )
           : _vm._e(),
         _vm._v(" "),
@@ -71292,7 +71301,8 @@ var render = function() {
               items: _vm.equipmentTemplates,
               initTemplates: _vm.selectedTemplates,
               categories: _vm.categories,
-              templateNeedToRemove: _vm.templateNeedToRemove.template
+              templateNeedToRemove: _vm.templateNeedToRemove.template,
+              clear: _vm.clear
             },
             on: {
               change: function($event) {
@@ -73559,54 +73569,64 @@ var render = function() {
             ]),
             _vm._v(" "),
             _c("td", { staticClass: "align-middle text-center" }, [
-              _vm.itemSelected(item)
-                ? _c("input", {
-                    directives: [
-                      {
-                        name: "model",
-                        rawName: "v-model",
-                        value: item.amount,
-                        expression: "item.amount"
-                      }
-                    ],
-                    staticClass: "form-control",
-                    attrs: { type: "number" },
-                    domProps: { value: item.amount },
-                    on: {
-                      change: function($event) {
-                        return _vm.changeInput($event)
-                      },
-                      input: function($event) {
-                        if ($event.target.composing) {
-                          return
-                        }
-                        _vm.$set(item, "amount", $event.target.value)
-                      }
+              _c("input", {
+                directives: [
+                  {
+                    name: "show",
+                    rawName: "v-show",
+                    value: _vm.itemSelected(item),
+                    expression: "itemSelected(item)"
+                  },
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: item.amount,
+                    expression: "item.amount"
+                  }
+                ],
+                staticClass: "form-control",
+                attrs: { type: "number" },
+                domProps: { value: item.amount },
+                on: {
+                  change: function($event) {
+                    return _vm.changeInput($event)
+                  },
+                  input: function($event) {
+                    if ($event.target.composing) {
+                      return
                     }
-                  })
-                : _vm._e()
+                    _vm.$set(item, "amount", $event.target.value)
+                  }
+                }
+              })
             ]),
             _vm._v(" "),
             _c(
               "td",
               { staticClass: "align-middle text-center" },
               [
-                _vm.itemSelected(item)
-                  ? _c("number-input", {
-                      on: {
-                        change: function($event) {
-                          return _vm.changeInput($event)
-                        }
-                      },
-                      model: {
-                        value: item.price,
-                        callback: function($$v) {
-                          _vm.$set(item, "price", $$v)
-                        },
-                        expression: "item.price"
-                      }
-                    })
-                  : _vm._e()
+                _c("number-input", {
+                  directives: [
+                    {
+                      name: "show",
+                      rawName: "v-show",
+                      value: _vm.itemSelected(item),
+                      expression: "itemSelected(item)"
+                    }
+                  ],
+                  on: {
+                    change: function($event) {
+                      return _vm.changeInput($event)
+                    }
+                  },
+                  model: {
+                    value: item.price,
+                    callback: function($$v) {
+                      _vm.$set(item, "price", $$v)
+                    },
+                    expression: "item.price"
+                  }
+                })
               ],
               1
             ),

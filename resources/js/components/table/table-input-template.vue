@@ -38,10 +38,10 @@
                     </th>
                     <td class="align-middle text-center">{{ item.template.name }}</td>
                     <td class="align-middle text-center">
-                        <input @change="changeInput($event)" v-if="itemSelected(item)" v-model="item.amount" type="number" class="form-control">
+                        <input @change="changeInput($event)" v-show="itemSelected(item)" v-model="item.amount" type="number" class="form-control">
                     </td>
                     <td class="align-middle text-center">
-                        <number-input @change="changeInput($event)" v-if="itemSelected(item)" v-model="item.price" ></number-input>
+                        <number-input @change="changeInput($event)" v-show="itemSelected(item)" v-model="item.price" ></number-input>
                     </td>
                     <td class="align-middle text-center">
                         <input @change="changeInput($event)" v-if="itemSelected(item)" v-model="item.warranty" type="date" class="form-control">
@@ -148,7 +148,7 @@ export default {
             this.selectedItems.push(item);
         },
         removeTemplate(item) {
-            let index = this.selectedItems.findIndex(i => i.template.id == item.id);
+            let index = this.selectedItems.findIndex(i => i.template.id == item.template.id);
             this.selectedItems.splice(index, 1);
         },
         add(item) {

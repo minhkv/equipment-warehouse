@@ -151,7 +151,7 @@
             <button v-if="displayedOrder.status >= 1 && displayedOrder.status <= 3" :disabled="buttonDisabled" @click="back" class="btn btn-secondary mr-2">
                 <i class="fa fa-chevron-left"></i> Quay lại
             </button>
-            <button v-if="displayedOrder.status == 1 || displayedOrder.status == 2" :disabled="buttonDisabled" @click="saveStatus" class="btn btn-primary mr-2">Lưu <i class="fas fa-save    "></i></button>
+            <button v-if="displayedOrder.status == 1 || displayedOrder.status == 2" :disabled="buttonDisabled" @click="saveStatus" class="btn btn-primary mr-2">Lưu <i class="fas fa-save"></i></button>
 
             <button v-if="displayedOrder.status == 0" :disabled="buttonDisabled" @click="acceptOrder" class="btn btn-primary mx-2" data-abc="true">Chấp nhận</button>
             <button v-if="displayedOrder.status == 0" :disabled="buttonDisabled" @click="rejectOrder" class="btn btn-danger" data-abc="true">Từ chối</button>
@@ -187,7 +187,7 @@
 
         <modal-component id="addAriseTemplate" title="Thiết bị phát sinh thêm" size="lg">
             <table-select-template @change="updateRequest($event)" :items="equipmentTemplates" :initTemplates="selectedTemplates" :categories="categories" 
-            :templateNeedToRemove="templateNeedToRemove.template"></table-select-template>
+            :templateNeedToRemove="templateNeedToRemove.template" :clear="clear"></table-select-template>
             <template v-slot:footer>
                 <button type="button" class="btn btn-primary" data-dismiss="modal">Xong</button>
             </template>
@@ -227,6 +227,8 @@ export default {
             ariseRequest: [],
             templateNeedToRemove: {},
             save: false,
+            clear: false,
+            note: ''
         };
     },
     created() {
@@ -242,7 +244,6 @@ export default {
         },
         initOrder() {
             Object.assign(this.displayedOrder, this.order);
-            
         },
         setOrder(order) {
             this.displayedOrder = order;
@@ -341,7 +342,6 @@ export default {
             this.displayedOrder.order_request_infos.forEach(request => {
                 Vue.set(this.orderRequestInfos, request.template_id, request);
             });
-            
         },
         updateAriseRequest(data) {
             let app = this;
@@ -386,6 +386,7 @@ export default {
                 this.initialize();
             }
             this.save = false;
+            this.clear = false;
             this.enableButton();
         },
         updateCurrentEquipment(orderInfos, index) {
@@ -468,6 +469,7 @@ export default {
                 dateOutput: this.getCurrentLocalTime(),
                 save: this.save
             };
+            this.clear = true;
             this.sendRequest(this.equipmentOutputUrl, 'put', data, this.updatePage);
         },
         equipmentCheck() {

@@ -60,7 +60,10 @@ class EquipmentController extends Controller
     public function store(Request $request)
     {
         $equipment = Equipment::create($request->all());
-        return $equipment->load('supplier');
+        return $equipment->load([
+            'supplier',
+            'orderInfos.orderRequestInfo.order'
+        ]);
     }
 
     /**

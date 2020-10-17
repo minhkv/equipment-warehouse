@@ -72,7 +72,7 @@
 </template>
 <script>
 export default {
-    props: ['items', 'categories', 'initTemplates', 'templateNeedToRemove'],
+    props: ['items', 'categories', 'initTemplates', 'templateNeedToRemove', 'clear'],
     data() {
         return {
             selectedItems: [],
@@ -96,6 +96,11 @@ export default {
                 this.remove(this.templateNeedToRemove);
             }
         },
+        clear() {
+            if(this.clear) {
+                this.selectedItems = [];
+            }
+        }
     },
     methods: {
         init() {
