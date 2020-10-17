@@ -4578,6 +4578,7 @@ __webpack_require__.r(__webpack_exports__);
     checkSelectedTemplates: function checkSelectedTemplates() {
       var _this = this;
 
+      var i = 0;
       this.selectedTemplates.forEach(function (selectedTemplate) {
         var temp = _this.templates.find(function (t) {
           return t.id == selectedTemplate.id;
@@ -4587,7 +4588,11 @@ __webpack_require__.r(__webpack_exports__);
           Vue.set(selectedTemplate, 'name', temp.name);
           Vue.set(selectedTemplate, 'maxAmount', temp.equipments.length);
           Vue.set(selectedTemplate, 'image', temp.image);
+        } else {
+          _this.selectedTemplates.splice(i, 1);
         }
+
+        i++;
       });
     },
     initFilter: function initFilter() {

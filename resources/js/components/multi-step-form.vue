@@ -268,13 +268,17 @@ export default {
             this.initFilter();
         },
         checkSelectedTemplates() {
+            let i = 0;
             this.selectedTemplates.forEach(selectedTemplate => {
                 let temp = this.templates.find(t => t.id == selectedTemplate.id);
                 if(temp) {
                     Vue.set(selectedTemplate, 'name', temp.name);
                     Vue.set(selectedTemplate, 'maxAmount', temp.equipments.length);
                     Vue.set(selectedTemplate, 'image', temp.image);
+                } else {
+                    this.selectedTemplates.splice(i, 1);
                 }
+                i++;
             });
         },
         initFilter() {
