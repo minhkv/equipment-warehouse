@@ -59,10 +59,12 @@ export default {
         },
         setPages() {
             let numberOfPages = Math.ceil(this.items.length / this.perPage);
-            this.page = 1;
             this.pages = [];
             for (let index = 1; index <= numberOfPages; index++) {
                 this.pages.push(index);
+            }
+            if(!this.page || this.page > this.pages.length) {
+                this.page = 1;
             }
         },
         paginate(itemList) {

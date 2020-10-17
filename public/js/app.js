@@ -5673,11 +5673,14 @@ __webpack_require__.r(__webpack_exports__);
     },
     setPages: function setPages() {
       var numberOfPages = Math.ceil(this.items.length / this.perPage);
-      this.page = 1;
       this.pages = [];
 
       for (var index = 1; index <= numberOfPages; index++) {
         this.pages.push(index);
+      }
+
+      if (!this.page || this.page > this.pages.length) {
+        this.page = 1;
       }
     },
     paginate: function paginate(itemList) {
