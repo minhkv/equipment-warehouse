@@ -6823,11 +6823,17 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['requestInfo'],
   data: function data() {
     return {
-      displayedInfo: []
+      displayedInfo: [],
+      paginateItems: []
     };
   },
   created: function created() {
@@ -6841,6 +6847,9 @@ __webpack_require__.r(__webpack_exports__);
   methods: {
     init: function init() {
       this.setDisplayedInfo();
+    },
+    pagination: function pagination(items) {
+      this.paginateItems = items;
     },
     setDisplayedInfo: function setDisplayedInfo() {
       this.displayedInfo = Object.assign({}, this.displayedInfo, this.requestInfo);
@@ -73910,71 +73919,93 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("table", { staticClass: "table table-hover" }, [
-    _vm._m(0),
+  return _c("div", [
+    _c("table", { staticClass: "table table-hover" }, [
+      _vm._m(0),
+      _vm._v(" "),
+      _c(
+        "tbody",
+        _vm._l(_vm.paginateItems, function(equipment) {
+          return _c(
+            "tr",
+            { key: equipment.id, class: _vm.rowClass(equipment) },
+            [
+              _c(
+                "th",
+                {
+                  staticClass: "text-center align-middle",
+                  attrs: { scope: "row" }
+                },
+                [_vm._v(_vm._s(equipment.id))]
+              ),
+              _vm._v(" "),
+              _c("td", { staticClass: "text-center align-middle" }, [
+                _vm._v(_vm._s(equipment.name))
+              ]),
+              _vm._v(" "),
+              _c(
+                "td",
+                [
+                  _c("equipment-condition", {
+                    attrs: { condition: equipment.condition }
+                  })
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "td",
+                { staticClass: "align-middle text-center" },
+                [
+                  _c("equipment-status-popover", {
+                    attrs: { equipment: equipment }
+                  })
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c("td", [_vm._v(_vm._s(equipment.note))]),
+              _vm._v(" "),
+              _c("td", { staticClass: "align-middle" }, [
+                _c("div", { staticClass: "form-check form-check-inline" }, [
+                  _c("label", { staticClass: "form-check-label" }, [
+                    _c("input", {
+                      staticClass: "form-check-input",
+                      attrs: {
+                        type: "checkbox",
+                        disabled: _vm.disableCheckbox(equipment)
+                      },
+                      domProps: { checked: _vm.equipmentSelected(equipment) },
+                      on: {
+                        change: function($event) {
+                          return _vm.updateSelectedEquipment($event, equipment)
+                        }
+                      }
+                    })
+                  ])
+                ])
+              ])
+            ]
+          )
+        }),
+        0
+      )
+    ]),
     _vm._v(" "),
     _c(
-      "tbody",
-      _vm._l(_vm.requestInfo.template.equipments, function(equipment) {
-        return _c("tr", { key: equipment.id, class: _vm.rowClass(equipment) }, [
-          _c(
-            "th",
-            {
-              staticClass: "text-center align-middle",
-              attrs: { scope: "row" }
-            },
-            [_vm._v(_vm._s(equipment.id))]
-          ),
-          _vm._v(" "),
-          _c("td", { staticClass: "text-center align-middle" }, [
-            _vm._v(_vm._s(equipment.name))
-          ]),
-          _vm._v(" "),
-          _c(
-            "td",
-            [
-              _c("equipment-condition", {
-                attrs: { condition: equipment.condition }
-              })
-            ],
-            1
-          ),
-          _vm._v(" "),
-          _c(
-            "td",
-            { staticClass: "align-middle text-center" },
-            [
-              _c("equipment-status-popover", {
-                attrs: { equipment: equipment }
-              })
-            ],
-            1
-          ),
-          _vm._v(" "),
-          _c("td", [_vm._v(_vm._s(equipment.note))]),
-          _vm._v(" "),
-          _c("td", { staticClass: "align-middle" }, [
-            _c("div", { staticClass: "form-check form-check-inline" }, [
-              _c("label", { staticClass: "form-check-label" }, [
-                _c("input", {
-                  staticClass: "form-check-input",
-                  attrs: {
-                    type: "checkbox",
-                    disabled: _vm.disableCheckbox(equipment)
-                  },
-                  domProps: { checked: _vm.equipmentSelected(equipment) },
-                  on: {
-                    change: function($event) {
-                      return _vm.updateSelectedEquipment($event, equipment)
-                    }
-                  }
-                })
-              ])
-            ])
-          ])
-        ])
-      }),
-      0
+      "div",
+      { staticClass: "row justify-content-center" },
+      [
+        _c("pagination", {
+          attrs: { items: _vm.requestInfo.template.equipments, per: "8" },
+          on: {
+            change: function($event) {
+              return _vm.pagination($event)
+            }
+          }
+        })
+      ],
+      1
     )
   ])
 }
