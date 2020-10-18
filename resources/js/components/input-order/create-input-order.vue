@@ -138,24 +138,6 @@ export default {
     methods: {
         init() {
             this.componentTemplates = this.templates;
-            // this.loadStorage(this.atts);
-            // this.checkSelectedItems();
-        },
-        checkSelectedItems() {
-            console.log('check');
-            let i = 0;
-            let app = this;
-            while (i < this.selectedItems.length) {
-                let temp = this.templates.find(t => t.id == app.selectedItems[i].template.id);
-                if(temp) {
-                    console.log('found');
-                    i++;
-                } else {
-                    console.log('not found');
-                    this.selectedItems.splice(i, 1);
-                }
-                console.log(app.selectedItems.length);
-            }
         },
         store() {
             this.storeStorage(this.atts);

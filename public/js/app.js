@@ -3723,29 +3723,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {
     init: function init() {
-      this.componentTemplates = this.templates; // this.loadStorage(this.atts);
-      // this.checkSelectedItems();
-    },
-    checkSelectedItems: function checkSelectedItems() {
-      console.log('check');
-      var i = 0;
-      var app = this;
-
-      while (i < this.selectedItems.length) {
-        var temp = this.templates.find(function (t) {
-          return t.id == app.selectedItems[i].template.id;
-        });
-
-        if (temp) {
-          console.log('found');
-          i++;
-        } else {
-          console.log('not found');
-          this.selectedItems.splice(i, 1);
-        }
-
-        console.log(app.selectedItems.length);
-      }
+      this.componentTemplates = this.templates;
     },
     store: function store() {
       this.storeStorage(this.atts);
@@ -5723,7 +5701,6 @@ __webpack_require__.r(__webpack_exports__);
       }
     },
     paginate: function paginate(itemList) {
-      console.log(itemList.length);
       var page = this.page;
       var from = page * this.perPage - this.perPage;
       var to = page * this.perPage;
@@ -6675,6 +6652,7 @@ __webpack_require__.r(__webpack_exports__);
     init: function init() {
       this.initRequest();
       this.load();
+      this.checkSelectedItems();
       this.initFilter();
     },
     initRequest: function initRequest() {
@@ -6705,8 +6683,25 @@ __webpack_require__.r(__webpack_exports__);
         var index = app.displayedItems.findIndex(function (i) {
           return i.template.id == item.template.id;
         });
-        Vue.set(app.displayedItems, index, item);
+        if (index != -1) Vue.set(app.displayedItems, index, item);
       });
+    },
+    checkSelectedItems: function checkSelectedItems() {
+      console.log('check');
+      var i = 0;
+      var app = this;
+
+      while (i < this.selectedItems.length) {
+        var temp = this.displayedItems.find(function (t) {
+          return t.template.id == app.selectedItems[i].template.id;
+        });
+
+        if (temp) {
+          i++;
+        } else {
+          this.selectedItems.splice(i, 1);
+        }
+      }
     },
     store: function store() {
       this.storeStorage(this.atts);

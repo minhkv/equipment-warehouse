@@ -68,7 +68,6 @@ export default {
             }
         },
         paginate(itemList) {
-            console.log(itemList.length);
             let page = this.page;
             let from = page * this.perPage - this.perPage;
             let to = page * this.perPage;

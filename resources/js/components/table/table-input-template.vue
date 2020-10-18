@@ -101,6 +101,7 @@ export default {
         init() {
             this.initRequest();
             this.load();
+            this.checkSelectedItems();
             this.initFilter();
         },
         initRequest() {
@@ -127,8 +128,22 @@ export default {
             let app = this;
             items.forEach(item => {
                 let index = app.displayedItems.findIndex(i => i.template.id == item.template.id);
-                Vue.set(app.displayedItems, index, item);
+                if(index != -1)
+                    Vue.set(app.displayedItems, index, item);
             });
+        },
+        checkSelectedItems() {
+            console.log('check');
+            let i = 0;
+            let app = this;
+            while (i < this.selectedItems.length) {
+                let temp = this.displayedItems.find(t => t.template.id == app.selectedItems[i].template.id);
+                if(temp) {
+                    i++;
+                } else {
+                    this.selectedItems.splice(i, 1);
+                }
+            }
         },
         store() {
             this.storeStorage(this.atts);
