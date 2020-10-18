@@ -133,7 +133,6 @@ export default {
             });
         },
         checkSelectedItems() {
-            console.log('check');
             let i = 0;
             let app = this;
             while (i < this.selectedItems.length) {

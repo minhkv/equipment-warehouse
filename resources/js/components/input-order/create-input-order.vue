@@ -124,7 +124,7 @@ export default {
             paginateItems: [],
             newItem: {},
             componentTemplates: {},
-            atts: ['dateInput', 'selectedItems']
+            atts: ['dateInput']
         };
     },
     created() {
@@ -138,6 +138,7 @@ export default {
     methods: {
         init() {
             this.componentTemplates = this.templates;
+            this.loadStorage(this.atts);
         },
         store() {
             this.storeStorage(this.atts);

@@ -3710,7 +3710,7 @@ __webpack_require__.r(__webpack_exports__);
       paginateItems: [],
       newItem: {},
       componentTemplates: {},
-      atts: ['dateInput', 'selectedItems']
+      atts: ['dateInput']
     };
   },
   created: function created() {
@@ -3724,6 +3724,7 @@ __webpack_require__.r(__webpack_exports__);
   methods: {
     init: function init() {
       this.componentTemplates = this.templates;
+      this.loadStorage(this.atts);
     },
     store: function store() {
       this.storeStorage(this.atts);
@@ -6687,7 +6688,6 @@ __webpack_require__.r(__webpack_exports__);
       });
     },
     checkSelectedItems: function checkSelectedItems() {
-      console.log('check');
       var i = 0;
       var app = this;
 
