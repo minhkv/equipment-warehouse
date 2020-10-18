@@ -265,17 +265,23 @@ export default {
         init() {
             this.loadStorageValue();
             this.checkSelectedTemplates();
+            this.storeStorageValue();
             this.initFilter();
         },
         checkSelectedTemplates() {
-            this.selectedTemplates.forEach(selectedTemplate => {
-                let temp = this.templates.find(t => t.id == selectedTemplate.id);
+            let i = 0;
+            let app = this;
+            while (i < this.selectedTemplates.length) {
+                let temp = this.templates.find(t => t.id == app.selectedTemplates[i].id);
                 if(temp) {
-                    Vue.set(selectedTemplate, 'name', temp.name);
-                    Vue.set(selectedTemplate, 'maxAmount', temp.equipments.length);
-                    Vue.set(selectedTemplate, 'image', temp.image);
+                    Vue.set(this.selectedTemplates[i], 'name', temp.name);
+                    Vue.set(this.selectedTemplates[i], 'maxAmount', temp.equipments.length);
+                    Vue.set(this.selectedTemplates[i], 'image', temp.image);
+                    i++;
+                } else {
+                    this.selectedTemplates.splice(i, 1);
                 }
-            });
+            }
         },
         initFilter() {
             this.categories.forEach((cate) => {

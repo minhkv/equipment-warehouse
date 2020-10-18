@@ -2,9 +2,7 @@ export default {
     methods: {
         loadStorage(atts) {
             atts.forEach(att => {
-                console.log(att);
                 let value = this.getAtt(localStorage, att);
-                console.log(value);
                 if(value)
                     Vue.set(this.$data, att, value);
             });
@@ -33,7 +31,6 @@ export default {
             return value;
         },
         getNestedAtt(item, atts) {
-            console.log('getNestedAtt');
             let value, i = 0;
             atts.forEach(att => {
                 if(i == 0) {

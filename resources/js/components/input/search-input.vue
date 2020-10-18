@@ -61,7 +61,6 @@ export default {
             });
         },
         sendEvent() {
-            console.log('search');
             this.$emit('change', this.searchItems());
         },
         keyup(){

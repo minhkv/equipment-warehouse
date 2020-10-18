@@ -45,7 +45,6 @@ export default {
             this.sendEvent();
         },
         sendEvent() {
-            console.log('send filter ' + this.by);
             this.$emit('change', this.displayedItems);
         }
     }

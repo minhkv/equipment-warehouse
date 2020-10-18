@@ -88,11 +88,9 @@ export default {
     },
     watch: {
         templates() {
-            console.log('refresh');
             this.initRequest();
         },
         newItem() {
-            console.log('new');
             this.addTemplate(this.newItem);
         },
         selectedItems() {

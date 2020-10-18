@@ -138,19 +138,24 @@ export default {
     methods: {
         init() {
             this.componentTemplates = this.templates;
-            this.loadStorage(this.atts);
-            this.checkSelectedItems();
+            // this.loadStorage(this.atts);
+            // this.checkSelectedItems();
         },
         checkSelectedItems() {
+            console.log('check');
             let i = 0;
-            this.selectedItems.forEach(selectedItem => {
-                console.log(selectedItem.template.id);
-                let temp = this.templates.find(t => t.id == selectedItem.template.id);
-                if(!temp) {
-                    console.log('splice');
+            let app = this;
+            while (i < this.selectedItems.length) {
+                let temp = this.templates.find(t => t.id == app.selectedItems[i].template.id);
+                if(temp) {
+                    console.log('found');
+                    i++;
+                } else {
+                    console.log('not found');
+                    this.selectedItems.splice(i, 1);
                 }
-                i++;
-            });
+                console.log(app.selectedItems.length);
+            }
         },
         store() {
             this.storeStorage(this.atts);
@@ -198,7 +203,6 @@ export default {
             }
         },
         submitInputOrder() {
-            console.log('submit');
             this.submit = true;
             let data = {
                 stocker_id: this.stocker_id,
@@ -213,8 +217,6 @@ export default {
             });
         },
         createTemplate(data) {
-            console.log('createTemplate');
-            console.log(data);
             let formData = new FormData();
             let app = this;
             let headers = {
@@ -226,7 +228,6 @@ export default {
             this.sendRequest(this.templateCreateUrl, 'post', formData, this.updatePage);
         },
         updatePage(template) {
-            console.log(template);
             let item = {
                 template: template,
                 amount: 0,
@@ -256,6 +257,7 @@ export default {
             } else {
                 item.supplier_id = null;
             }
+            this.store();
         },
         removeItem(item) {
             this.itemNeedToRemove = item;

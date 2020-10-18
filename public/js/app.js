@@ -3723,27 +3723,29 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {
     init: function init() {
-      this.componentTemplates = this.templates;
-      this.loadStorage(this.atts);
-      this.checkSelectedItems();
+      this.componentTemplates = this.templates; // this.loadStorage(this.atts);
+      // this.checkSelectedItems();
     },
     checkSelectedItems: function checkSelectedItems() {
-      var _this = this;
-
+      console.log('check');
       var i = 0;
-      this.selectedItems.forEach(function (selectedItem) {
-        console.log(selectedItem.template.id);
+      var app = this;
 
-        var temp = _this.templates.find(function (t) {
-          return t.id == selectedItem.template.id;
+      while (i < this.selectedItems.length) {
+        var temp = this.templates.find(function (t) {
+          return t.id == app.selectedItems[i].template.id;
         });
 
-        if (!temp) {
-          console.log('splice');
+        if (temp) {
+          console.log('found');
+          i++;
+        } else {
+          console.log('not found');
+          this.selectedItems.splice(i, 1);
         }
 
-        i++;
-      });
+        console.log(app.selectedItems.length);
+      }
     },
     store: function store() {
       this.storeStorage(this.atts);
@@ -3798,7 +3800,6 @@ __webpack_require__.r(__webpack_exports__);
       }
     },
     submitInputOrder: function submitInputOrder() {
-      console.log('submit');
       this.submit = true;
       var data = {
         stocker_id: this.stocker_id,
@@ -3813,8 +3814,6 @@ __webpack_require__.r(__webpack_exports__);
       });
     },
     createTemplate: function createTemplate(data) {
-      console.log('createTemplate');
-      console.log(data);
       var formData = new FormData();
       var app = this;
       var headers = {
@@ -3828,7 +3827,6 @@ __webpack_require__.r(__webpack_exports__);
       this.sendRequest(this.templateCreateUrl, 'post', formData, this.updatePage);
     },
     updatePage: function updatePage(template) {
-      console.log(template);
       var item = {
         template: template,
         amount: 0,
@@ -3859,6 +3857,8 @@ __webpack_require__.r(__webpack_exports__);
       } else {
         item.supplier_id = null;
       }
+
+      this.store();
     },
     removeItem: function removeItem(item) {
       this.itemNeedToRemove = item;
@@ -4260,7 +4260,6 @@ __webpack_require__.r(__webpack_exports__);
       });
     },
     sendEvent: function sendEvent() {
-      console.log('search');
       this.$emit('change', this.searchItems());
     },
     keyup: function keyup() {
@@ -4592,28 +4591,33 @@ __webpack_require__.r(__webpack_exports__);
     init: function init() {
       this.loadStorageValue();
       this.checkSelectedTemplates();
+      this.storeStorageValue();
       this.initFilter();
     },
     checkSelectedTemplates: function checkSelectedTemplates() {
-      var _this = this;
+      var i = 0;
+      var app = this;
 
-      this.selectedTemplates.forEach(function (selectedTemplate) {
-        var temp = _this.templates.find(function (t) {
-          return t.id == selectedTemplate.id;
+      while (i < this.selectedTemplates.length) {
+        var temp = this.templates.find(function (t) {
+          return t.id == app.selectedTemplates[i].id;
         });
 
         if (temp) {
-          Vue.set(selectedTemplate, 'name', temp.name);
-          Vue.set(selectedTemplate, 'maxAmount', temp.equipments.length);
-          Vue.set(selectedTemplate, 'image', temp.image);
+          Vue.set(this.selectedTemplates[i], 'name', temp.name);
+          Vue.set(this.selectedTemplates[i], 'maxAmount', temp.equipments.length);
+          Vue.set(this.selectedTemplates[i], 'image', temp.image);
+          i++;
+        } else {
+          this.selectedTemplates.splice(i, 1);
         }
-      });
+      }
     },
     initFilter: function initFilter() {
-      var _this2 = this;
+      var _this = this;
 
       this.categories.forEach(function (cate) {
-        _this2.filterConfig.values.push({
+        _this.filterConfig.values.push({
           name: cate.name,
           value: cate.id
         });
@@ -5719,6 +5723,7 @@ __webpack_require__.r(__webpack_exports__);
       }
     },
     paginate: function paginate(itemList) {
+      console.log(itemList.length);
       var page = this.page;
       var from = page * this.perPage - this.perPage;
       var to = page * this.perPage;
@@ -5755,7 +5760,6 @@ __webpack_require__.r(__webpack_exports__);
       this.sendEvent();
     },
     sendEvent: function sendEvent() {
-      console.log("pagination");
       this.$emit("change", this.paginate(this.items));
     }
   }
@@ -5945,7 +5949,6 @@ __webpack_require__.r(__webpack_exports__);
       this.model = this.initValue;
     },
     change: function change() {
-      console.log('change');
       this.sendEvent();
     },
     sendEvent: function sendEvent() {
@@ -6018,7 +6021,6 @@ __webpack_require__.r(__webpack_exports__);
       this.sendEvent();
     },
     sendEvent: function sendEvent() {
-      console.log('send filter ' + this.by);
       this.$emit('change', this.displayedItems);
     }
   }
@@ -6660,11 +6662,9 @@ __webpack_require__.r(__webpack_exports__);
   },
   watch: {
     templates: function templates() {
-      console.log('refresh');
       this.initRequest();
     },
     newItem: function newItem() {
-      console.log('new');
       this.addTemplate(this.newItem);
     },
     selectedItems: function selectedItems() {
@@ -90682,11 +90682,8 @@ __webpack_require__.r(__webpack_exports__);
       var _this = this;
 
       atts.forEach(function (att) {
-        console.log(att);
-
         var value = _this.getAtt(localStorage, att);
 
-        console.log(value);
         if (value) Vue.set(_this.$data, att, value);
       });
     },
@@ -90718,7 +90715,6 @@ __webpack_require__.r(__webpack_exports__);
       return value;
     },
     getNestedAtt: function getNestedAtt(item, atts) {
-      console.log('getNestedAtt');
       var value,
           i = 0;
       atts.forEach(function (att) {

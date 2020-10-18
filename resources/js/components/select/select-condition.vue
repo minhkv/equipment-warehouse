@@ -22,7 +22,6 @@ export default {
             this.model = this.initValue;
         },
         change() {
-            console.log('change');
             this.sendEvent();
         },
         sendEvent() {
