@@ -87301,13 +87301,13 @@ Vue.filter('formatOrderStatus', function (status) {
       return 'Đang chờ';
 
     case 1:
-      return 'Chấp nhận';
-
-    case 2:
       return 'Xuất đồ';
 
-    case 3:
+    case 2:
       return 'Kiểm đồ';
+
+    case 3:
+      return 'Xác nhận';
 
     case 4:
       return 'Hoàn tất';
