@@ -42,6 +42,8 @@
                         <div class="card-block mt-auto my-1">
                             <h5 class="card-title">{{template.id}}. {{ template.name }}</h5>
                             <p class="card-text">Số lượng: {{ template.equipments.length }}</p>
+                            <p class="card-text">Cho mượn: {{ template.working_equipments.length }}</p>
+                            <p class="card-text">Thất lạc: {{ template.lost_equipments.length }}</p>
                         </div>
                         <div class="overlay">
                             <a

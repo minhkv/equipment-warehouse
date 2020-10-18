@@ -18,7 +18,11 @@ class EquipmentTemplateController extends Controller
      */
     public function index()
     {
-        $equipmentTemplates = EquipmentTemplate::with('equipments')
+        $equipmentTemplates = EquipmentTemplate::with([
+            'equipments',
+            'lostEquipments',
+            'workingEquipments'
+        ])
         ->where('display', 1)
         ->get();
         $categories = Category::all();

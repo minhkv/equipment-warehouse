@@ -3401,6 +3401,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ["equipmentTemplates", "categories", "equipmentTemplateIndexUrl", "equipmentTemplateCreateUrl"],
   data: function data() {
@@ -68251,6 +68253,19 @@ var render = function() {
                     _vm._v(" "),
                     _c("p", { staticClass: "card-text" }, [
                       _vm._v("Số lượng: " + _vm._s(template.equipments.length))
+                    ]),
+                    _vm._v(" "),
+                    _c("p", { staticClass: "card-text" }, [
+                      _vm._v(
+                        "Cho mượn: " +
+                          _vm._s(template.working_equipments.length)
+                      )
+                    ]),
+                    _vm._v(" "),
+                    _c("p", { staticClass: "card-text" }, [
+                      _vm._v(
+                        "Thất lạc: " + _vm._s(template.lost_equipments.length)
+                      )
                     ])
                   ]),
                   _vm._v(" "),
