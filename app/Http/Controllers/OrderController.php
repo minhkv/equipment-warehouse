@@ -148,6 +148,7 @@ class OrderController extends Controller
             'date_return' => $request->input('dateReturn'),
             'long_term' => $request->input('longTerm') ? 1 : 0,
             'reason' => $request->input('reason'),
+            'note' => $request->input('note'),
             'status' => '0',
         ]);
         $templates = ($request->input('templates'));

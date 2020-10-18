@@ -26,6 +26,7 @@ class Order extends Model
         'date_completed', 
         'due_date',
         'reason',
+        'note',
         'status',
         'comment',
         'display'

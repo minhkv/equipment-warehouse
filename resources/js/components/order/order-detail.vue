@@ -42,6 +42,10 @@
                 <label class="col-3 text-left"><strong>Ghi chú:</strong></label>
                 <label class="col-3 text-left">{{displayedOrder.note}}</label>
             </div>
+            <div v-show="displayNote()" class="row">
+                <label class="col-3 text-left"><strong>Thiết bị</strong></label>
+                <label class="col-3 text-left">{{note}}</label>
+            </div>
         </div>
         
         <div class="track">
@@ -264,10 +268,13 @@ export default {
             this.orderRequestInfos = orderRequestInfos;
         },
         initNote() {
-            if(this.displayedOrder.status >= 2 && !this.displayedOrder.note) {
-                this.displayedOrder.note = "Thất lạc: " + this.getTotalLostAmount();
-                this.displayedOrder.note += ', Lỗi: ' + this.getTotalErrorAmount();
+            if(this.displayNote()  && !this.note) {
+                this.note = "Thất lạc: " + this.getTotalLostAmount();
+                this.note += ', Lỗi: ' + this.getTotalErrorAmount();
             }
+        },
+        displayNote() {
+            return this.displayedOrder.status >= 2;
         },
         initSearchInput() {
             this.searchInputItems = this.displayedOrder.order_request_infos;

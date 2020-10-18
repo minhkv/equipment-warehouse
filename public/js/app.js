@@ -4534,6 +4534,12 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ["orderIndexUrl", "templates", "categories", "departments", "type", "stockerId", "orderCreateUrl"],
   data: function data() {
@@ -4545,6 +4551,7 @@ __webpack_require__.r(__webpack_exports__);
       dateReturn: '',
       longTerm: false,
       reason: '',
+      note: '',
       selectedTemplates: [],
       buttonDisabled: {},
       filterConfig: {
@@ -4653,6 +4660,10 @@ __webpack_require__.r(__webpack_exports__);
         this.reason = localStorage.reason;
       }
 
+      if (localStorage.note) {
+        this.note = localStorage.note;
+      }
+
       if (localStorage.buttonDisabled) {
         this.buttonDisabled = JSON.parse(localStorage.buttonDisabled);
       }
@@ -4668,6 +4679,7 @@ __webpack_require__.r(__webpack_exports__);
       localStorage.dateReturn = this.dateReturn;
       localStorage.longTerm = this.longTerm;
       localStorage.reason = this.reason;
+      localStorage.note = this.note;
       localStorage.buttonDisabled = JSON.stringify(this.buttonDisabled);
       localStorage.selectedTemplates = JSON.stringify(this.selectedTemplates);
     },
@@ -4789,6 +4801,7 @@ __webpack_require__.r(__webpack_exports__);
         dateReturn: this.dateReturn,
         longTerm: this.longTerm,
         reason: this.reason,
+        note: this.note,
         templates: this.selectedTemplates
       }).then(function (res) {
         console.log(res);
@@ -4815,6 +4828,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(moment__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _mixins_RequestMixin__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../mixins/RequestMixin */ "./resources/js/mixins/RequestMixin.js");
 /* harmony import */ var _mixins_OrderMixin__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../mixins/OrderMixin */ "./resources/js/mixins/OrderMixin.js");
+//
+//
+//
+//
 //
 //
 //
@@ -5069,10 +5086,13 @@ __webpack_require__.r(__webpack_exports__);
       this.orderRequestInfos = orderRequestInfos;
     },
     initNote: function initNote() {
-      if (this.displayedOrder.status >= 2 && !this.displayedOrder.note) {
-        this.displayedOrder.note = "Thất lạc: " + this.getTotalLostAmount();
-        this.displayedOrder.note += ', Lỗi: ' + this.getTotalErrorAmount();
+      if (this.displayNote() && !this.note) {
+        this.note = "Thất lạc: " + this.getTotalLostAmount();
+        this.note += ', Lỗi: ' + this.getTotalErrorAmount();
       }
+    },
+    displayNote: function displayNote() {
+      return this.displayedOrder.status >= 2;
     },
     initSearchInput: function initSearchInput() {
       this.searchInputItems = this.displayedOrder.order_request_infos;
@@ -69982,6 +70002,46 @@ var render = function() {
                         }
                       })
                     ])
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "form-group row" }, [
+                    _c(
+                      "label",
+                      {
+                        staticClass: "col-3 col-form-label text-left",
+                        attrs: { for: "note" }
+                      },
+                      [_vm._v("Ghi chú")]
+                    ),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "col-9" }, [
+                      _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.note,
+                            expression: "note"
+                          }
+                        ],
+                        staticClass: "form-control",
+                        attrs: {
+                          type: "text",
+                          id: "note",
+                          placeholder: "Ghi chú"
+                        },
+                        domProps: { value: _vm.note },
+                        on: {
+                          blur: _vm.storeStorageValue,
+                          input: function($event) {
+                            if ($event.target.composing) {
+                              return
+                            }
+                            _vm.note = $event.target.value
+                          }
+                        }
+                      })
+                    ])
                   ])
                 ]
               ),
@@ -70776,7 +70836,29 @@ var render = function() {
           _c("label", { staticClass: "col-3 text-left" }, [
             _vm._v(_vm._s(_vm.displayedOrder.note))
           ])
-        ])
+        ]),
+        _vm._v(" "),
+        _c(
+          "div",
+          {
+            directives: [
+              {
+                name: "show",
+                rawName: "v-show",
+                value: _vm.displayNote(),
+                expression: "displayNote()"
+              }
+            ],
+            staticClass: "row"
+          },
+          [
+            _vm._m(8),
+            _vm._v(" "),
+            _c("label", { staticClass: "col-3 text-left" }, [
+              _vm._v(_vm._s(_vm.note))
+            ])
+          ]
+        )
       ]),
       _vm._v(" "),
       _c("div", { staticClass: "track" }, [
@@ -70784,7 +70866,7 @@ var render = function() {
           "div",
           { class: { step: true, active: _vm.displayedOrder.status >= 0 } },
           [
-            _vm._m(8),
+            _vm._m(9),
             _vm._v(" "),
             _c("span", { staticClass: "text" }, [_vm._v("Tạo đơn hàng")]),
             _vm._v(" "),
@@ -70800,7 +70882,7 @@ var render = function() {
           "div",
           { class: { step: true, active: _vm.displayedOrder.status >= 1 } },
           [
-            _vm._m(9),
+            _vm._m(10),
             _vm._v(" "),
             _c("span", { staticClass: "text" }, [_vm._v("Chấp nhận")]),
             _vm._v(" "),
@@ -70818,7 +70900,7 @@ var render = function() {
           "div",
           { class: { step: true, active: _vm.displayedOrder.status >= 2 } },
           [
-            _vm._m(10),
+            _vm._m(11),
             _vm._v(" "),
             _c("span", { staticClass: "text" }, [_vm._v(" Xuất đồ")]),
             _vm._v(" "),
@@ -70834,7 +70916,7 @@ var render = function() {
           "div",
           { class: { step: true, active: _vm.displayedOrder.status >= 3 } },
           [
-            _vm._m(11),
+            _vm._m(12),
             _vm._v(" "),
             _c("span", { staticClass: "text" }, [_vm._v(" Trả đồ ")]),
             _vm._v(" "),
@@ -70852,7 +70934,7 @@ var render = function() {
           "div",
           { class: { step: true, active: _vm.displayedOrder.status >= 4 } },
           [
-            _vm._m(12),
+            _vm._m(13),
             _vm._v(" "),
             _c("span", { staticClass: "text" }, [_vm._v("Hoàn tất")]),
             _vm._v(" "),
@@ -70927,10 +71009,10 @@ var render = function() {
       _vm._v(" "),
       _vm.displayedOrder.status == 1 && _vm.ariseRequest.length > 0
         ? _c("div", [
-            _vm._m(13),
+            _vm._m(14),
             _vm._v(" "),
             _c("table", { staticClass: "table table-hover" }, [
-              _vm._m(14),
+              _vm._m(15),
               _vm._v(" "),
               _c(
                 "tbody",
@@ -71427,6 +71509,14 @@ var staticRenderFns = [
     var _c = _vm._self._c || _h
     return _c("label", { staticClass: "col-3 text-left" }, [
       _c("strong", [_vm._v("Ghi chú:")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("label", { staticClass: "col-3 text-left" }, [
+      _c("strong", [_vm._v("Thiết bị")])
     ])
   },
   function() {

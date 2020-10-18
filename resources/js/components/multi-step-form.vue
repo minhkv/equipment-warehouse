@@ -62,6 +62,12 @@
                                     <input v-model="reason" @blur="storeStorageValue"  class="form-control" type="text"  id="reason" placeholder="Lý do mượn">
                                 </div>
                             </div>
+                            <div class="form-group row">
+                                <label for="note" class="col-3 col-form-label text-left">Ghi chú</label>
+                                <div class="col-9">
+                                    <input v-model="note" @blur="storeStorageValue"  class="form-control" type="text"  id="note" placeholder="Ghi chú">
+                                </div>
+                            </div>
                         </div>
                         <div v-show="step==1">
                             <h2 class="fs-title">Chọn thiết bị</h2>
@@ -243,6 +249,7 @@ export default {
             dateReturn: '',
             longTerm: false,
             reason: '',
+            note: '',
             selectedTemplates: [],
             buttonDisabled: {},
             filterConfig: {
@@ -334,6 +341,9 @@ export default {
             if(localStorage.reason) {
                 this.reason = localStorage.reason;
             }
+            if(localStorage.note) {
+                this.note = localStorage.note;
+            }
             if(localStorage.buttonDisabled) {
                 this.buttonDisabled = JSON.parse(localStorage.buttonDisabled);
             }
@@ -348,6 +358,7 @@ export default {
             localStorage.dateReturn = this.dateReturn;
             localStorage.longTerm = this.longTerm;
             localStorage.reason = this.reason;
+            localStorage.note = this.note;
             localStorage.buttonDisabled = JSON.stringify(this.buttonDisabled);
             localStorage.selectedTemplates = JSON.stringify(this.selectedTemplates);
         },
@@ -456,6 +467,7 @@ export default {
                 dateReturn: this.dateReturn,
                 longTerm: this.longTerm,
                 reason: this.reason,
+                note: this.note,
                 templates: this.selectedTemplates
             })
             .then(res => {
