@@ -67437,7 +67437,7 @@ var render = function() {
           _c("div", { class: { step: true, active: _vm.step >= 0 } }, [
             _vm._m(0),
             _vm._v(" "),
-            _c("span", { staticClass: "text" }, [_vm._v("Thông tin mẫu")])
+            _c("span", { staticClass: "text" }, [_vm._v("Thông tin")])
           ]),
           _vm._v(" "),
           _c("div", { class: { step: true, active: _vm.step >= 1 } }, [
@@ -67471,7 +67471,7 @@ var render = function() {
               _vm._v(" "),
               _c("div", { staticClass: "form-group row" }, [
                 _c("label", { staticClass: "col-3 col-form-label text-left" }, [
-                  _vm._v("Tên mẫu thiết bị")
+                  _vm._v("Tên thiết bị")
                 ]),
                 _vm._v(" "),
                 _c("input", {
@@ -67575,7 +67575,7 @@ var render = function() {
               _vm._v(" "),
               _c("div", { staticClass: "row" }, [
                 _c("label", { staticClass: "col-3 text-left" }, [
-                  _vm._v("Tên mẫu thiết bị")
+                  _vm._v("Tên thiết bị")
                 ]),
                 _vm._v(" "),
                 _c("label", { staticClass: "col-9 text-left" }, [
@@ -68026,7 +68026,7 @@ var staticRenderFns = [
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
     return _c("div", { staticClass: "text-center" }, [
-      _c("h2", { staticClass: "fs-title" }, [_vm._v("Thêm mẫu mới")])
+      _c("h2", { staticClass: "fs-title" }, [_vm._v("Thêm thiết bị mới")])
     ])
   },
   function() {
@@ -68061,7 +68061,7 @@ var staticRenderFns = [
             staticStyle: { width: "20%" },
             attrs: { scope: "col" }
           },
-          [_vm._v("Tên thiết bị")]
+          [_vm._v("Tên")]
         ),
         _vm._v(" "),
         _c(
@@ -70733,11 +70733,7 @@ var render = function() {
           _c(
             "h3",
             [
-              _vm._v(
-                "Đơn mượn: " +
-                  _vm._s(_vm.displayedOrder.id) +
-                  " \n                "
-              ),
+              _vm._v("Trạng thái:\n                "),
               _c("order-status", {
                 attrs: { status: _vm.displayedOrder.status }
               })
@@ -70880,7 +70876,7 @@ var render = function() {
         _vm._v(" "),
         _c(
           "div",
-          { class: { step: true, active: _vm.displayedOrder.status >= 1 } },
+          { class: { step: true, active: _vm.displayedOrder.status >= 0 } },
           [
             _vm._m(10),
             _vm._v(" "),
@@ -70898,7 +70894,7 @@ var render = function() {
         _vm._v(" "),
         _c(
           "div",
-          { class: { step: true, active: _vm.displayedOrder.status >= 2 } },
+          { class: { step: true, active: _vm.displayedOrder.status >= 1 } },
           [
             _vm._m(11),
             _vm._v(" "),
@@ -70914,7 +70910,7 @@ var render = function() {
         _vm._v(" "),
         _c(
           "div",
-          { class: { step: true, active: _vm.displayedOrder.status >= 3 } },
+          { class: { step: true, active: _vm.displayedOrder.status >= 2 } },
           [
             _vm._m(12),
             _vm._v(" "),
@@ -70932,7 +70928,7 @@ var render = function() {
         _vm._v(" "),
         _c(
           "div",
-          { class: { step: true, active: _vm.displayedOrder.status >= 4 } },
+          { class: { step: true, active: _vm.displayedOrder.status >= 3 } },
           [
             _vm._m(13),
             _vm._v(" "),

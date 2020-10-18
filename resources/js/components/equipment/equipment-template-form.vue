@@ -4,7 +4,7 @@
             <div class="track">
                 <div :class="{'step': true, 'active': step >= 0}">
                     <span class="icon"> <i class="fa fa-info"></i> </span>
-                    <span class="text">Thông tin mẫu</span>
+                    <span class="text">Thông tin</span>
                 </div>
                 <div :class="{'step': true, 'active': step >= 1}">
                     <span class="icon"> <i class="fa fa-desktop"></i> </span>
@@ -17,10 +17,10 @@
             </div>
             <fieldset>
                 <div v-show="step == 0">
-                    <div class="text-center"><h2 class="fs-title">Thêm mẫu mới</h2></div>
+                    <div class="text-center"><h2 class="fs-title">Thêm thiết bị mới</h2></div>
                 
                     <div class="form-group row">
-                        <label class="col-3 col-form-label text-left">Tên mẫu thiết bị</label>
+                        <label class="col-3 col-form-label text-left">Tên thiết bị</label>
                         <input @change="store()" v-model="name" type="text" class="col-9 form-control" placeholder="Tên mẫu thiết bị">
                     </div>
                     <div class="form-group row">
@@ -38,7 +38,7 @@
                 <div v-show="step==2">
                     <h2 class="fs-title">Xác nhận</h2>
                     <div class="row">
-                        <label class="col-3 text-left">Tên mẫu thiết bị</label>
+                        <label class="col-3 text-left">Tên thiết bị</label>
                         <label class="col-9 text-left">{{name}}</label>
                     </div>
                     <div class="row">
@@ -50,7 +50,7 @@
                     <table class="table table-hover mx-auto">
                         <thead class="thead-light">
                             <tr>
-                                <th class="text-center" scope="col" style="width: 20%">Tên thiết bị</th>
+                                <th class="text-center" scope="col" style="width: 20%">Tên</th>
                                 <th class="text-center" scope="col" style="width: 15%;">Nhà cung cấp</th>
                                 <th class="text-center" scope="col" style="width: 15%;">Giá nhập</th>
                                 <th class="text-center" scope="col" style="width: 10%;">Ngày nhập</th>

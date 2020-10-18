@@ -6,7 +6,7 @@
         </a>
         <div class="row">
             <div class="col-5">
-                <h3>Đơn mượn: {{displayedOrder.id}} 
+                <h3>Trạng thái:
                     <order-status :status="displayedOrder.status"></order-status>
                 </h3>
             </div>
@@ -54,22 +54,22 @@
                 <span class="text">Tạo đơn hàng</span>
                 <span class="text-muted">{{displayedOrder.created_at|formatDateTime}}</span>
             </div>
-            <div :class="{'step': true, 'active': displayedOrder.status >=1}">
+            <div :class="{'step': true, 'active': displayedOrder.status >=0}">
                 <span class="icon"> <i class="fa fa-check"></i> </span>
                 <span class="text">Chấp nhận</span>
                 <span class="text-muted">{{displayedOrder.date_approved|formatDateTime}}</span>
             </div>
-            <div :class="{'step': true, 'active': displayedOrder.status >=2}">
+            <div :class="{'step': true, 'active': displayedOrder.status >=1}">
                 <span class="icon"> <i class="fa fa-user"></i> </span>
                 <span class="text"> Xuất đồ</span>
                 <span class="text-muted">{{displayedOrder.date_output|formatDateTime}}</span>
             </div>
-            <div :class="{'step': true, 'active': displayedOrder.status >=3}">
+            <div :class="{'step': true, 'active': displayedOrder.status >=2}">
                 <span class="icon"> <i class="fa fa-truck"></i> </span>
                 <span class="text"> Trả đồ </span>
                 <span class="text-muted">{{displayedOrder.date_received|formatDateTime}}</span>
             </div>
-            <div :class="{'step': true, 'active': displayedOrder.status >=4}">
+            <div :class="{'step': true, 'active': displayedOrder.status >=3}">
                 <span class="icon"> <i class="fa fa-thumbs-up"></i> </span>
                 <span class="text">Hoàn tất</span>
                 <span class="text-muted">{{displayedOrder.date_completed|formatDateTime}}</span>
