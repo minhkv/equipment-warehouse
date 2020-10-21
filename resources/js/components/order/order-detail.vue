@@ -54,7 +54,7 @@
                 <span class="text">Tạo đơn hàng</span>
                 <span class="text-muted">{{displayedOrder.created_at|formatDateTime}}</span>
             </div>
-            <div :class="{'step': true, 'active': displayedOrder.status >=0}">
+            <div v-show="false" :class="{'step': true, 'active': displayedOrder.status >=0}">
                 <span class="icon"> <i class="fa fa-check"></i> </span>
                 <span class="text">Chấp nhận</span>
                 <span class="text-muted">{{displayedOrder.date_approved|formatDateTime}}</span>
@@ -152,7 +152,7 @@
         </div>
         <hr>
         <div class="row justify-content-center">
-            <button v-if="displayedOrder.status >= 1 && displayedOrder.status <= 3" :disabled="buttonDisabled" @click="back" class="btn btn-secondary mr-2">
+            <button v-if="displayedOrder.status >= 2 && displayedOrder.status <= 3" :disabled="buttonDisabled" @click="back" class="btn btn-secondary mr-2">
                 <i class="fa fa-chevron-left"></i> Quay lại
             </button>
             <button v-if="displayedOrder.status == 1 || displayedOrder.status == 2" :disabled="buttonDisabled" @click="saveStatus" class="btn btn-primary mr-2">Lưu <i class="fas fa-save"></i></button>

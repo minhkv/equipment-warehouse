@@ -225,6 +225,7 @@ export default {
         },
         handleFileUpload() {
             Vue.set(this.$data, 'imageFile', this.$refs.imageFile.files[0]);
+            this.storeStorage(['imageFile']);
         },
         sendEvent() {
             let data = {

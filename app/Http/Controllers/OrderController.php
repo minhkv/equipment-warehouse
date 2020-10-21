@@ -70,7 +70,7 @@ class OrderController extends Controller
             'stocker_id' => $request->input('stocker_id'),
             'guest_id' => $request->input('guest_id'),
             'reason' => $request->input('reason'),
-            'status' => '0',
+            'status' => '2',
         ]);
         return redirect(route('order.index'));
     }

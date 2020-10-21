@@ -3297,6 +3297,7 @@ __webpack_require__.r(__webpack_exports__);
     },
     handleFileUpload: function handleFileUpload() {
       Vue.set(this.$data, 'imageFile', this.$refs.imageFile.files[0]);
+      this.storeStorage(['imageFile']);
     },
     sendEvent: function sendEvent() {
       var data = {
@@ -3336,7 +3337,6 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-//
 //
 //
 //
@@ -3443,6 +3443,11 @@ __webpack_require__.r(__webpack_exports__);
           value: cate.id
         });
       });
+    },
+    duplicate: function duplicate(template) {
+      localStorage.name = template.name;
+      localStorage.category = template.category_id;
+      window.location.replace(this.equipmentTemplateCreateUrl);
     },
     selectionFilter: function selectionFilter(items) {
       this.filterItems = items;
@@ -68280,20 +68285,24 @@ var render = function() {
                   _vm._v(" "),
                   _c("div", { staticClass: "overlay" }, [
                     _c(
-                      "a",
+                      "button",
                       {
                         staticClass: "btn btn-primary btn-sm",
-                        attrs: {
-                          href: _vm.equipmentTemplateShowUrl(template.id)
+                        attrs: { type: "button" },
+                        on: {
+                          click: function($event) {
+                            return _vm.duplicate(template)
+                          }
                         }
                       },
-                      [_c("span", { staticClass: "fa fa-edit" })]
+                      [_c("span", { staticClass: "fa fa-clone" })]
                     ),
                     _vm._v(" "),
                     _c(
                       "button",
                       {
                         staticClass: "btn btn-danger btn-sm",
+                        attrs: { type: "button" },
                         on: {
                           click: function($event) {
                             return _vm.equipmentDestroy(
@@ -70900,7 +70909,17 @@ var render = function() {
         _vm._v(" "),
         _c(
           "div",
-          { class: { step: true, active: _vm.displayedOrder.status >= 0 } },
+          {
+            directives: [
+              {
+                name: "show",
+                rawName: "v-show",
+                value: false,
+                expression: "false"
+              }
+            ],
+            class: { step: true, active: _vm.displayedOrder.status >= 0 }
+          },
           [
             _vm._m(10),
             _vm._v(" "),
@@ -71172,7 +71191,7 @@ var render = function() {
       _c("hr"),
       _vm._v(" "),
       _c("div", { staticClass: "row justify-content-center" }, [
-        _vm.displayedOrder.status >= 1 && _vm.displayedOrder.status <= 3
+        _vm.displayedOrder.status >= 2 && _vm.displayedOrder.status <= 3
           ? _c(
               "button",
               {

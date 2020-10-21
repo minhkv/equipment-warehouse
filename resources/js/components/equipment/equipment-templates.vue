@@ -46,12 +46,11 @@
                             <p class="card-text">Thất lạc: {{ template.lost_equipments.length }}</p>
                         </div>
                         <div class="overlay">
-                            <a
-                                :href="equipmentTemplateShowUrl(template.id)"
-                                class="btn btn-primary btn-sm">
-                                <span class="fa fa-edit"></span>
-                            </a>
+                            <button @click="duplicate(template)" type="button" class="btn btn-primary btn-sm">
+                                <span class="fa fa-clone"></span>
+                            </button>
                             <button
+                                type="button"
                                 class="btn btn-danger btn-sm"
                                 @click="equipmentDestroy(template, updatePage)">
                                 <span class="fa fa-trash"></span>
@@ -106,6 +105,11 @@ export default {
                     value: cate.id,
                 });
             });
+        },
+        duplicate(template) {
+            localStorage.name = template.name;
+            localStorage.category = template.category_id;
+            window.location.replace(this.equipmentTemplateCreateUrl);
         },
         selectionFilter(items) {
             this.filterItems = items;
