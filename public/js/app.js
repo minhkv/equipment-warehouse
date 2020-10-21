@@ -3172,6 +3172,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -3295,9 +3298,21 @@ __webpack_require__.r(__webpack_exports__);
       this.$emit('category', category);
       this.closeModal('#addCategory');
     },
-    handleFileUpload: function handleFileUpload() {
-      Vue.set(this.$data, 'imageFile', this.$refs.imageFile.files[0]);
-      this.storeStorage(['imageFile']);
+    handleFileUpload: function handleFileUpload(e) {
+      var file = e.target.files[0];
+      this.displayImage(file);
+      Vue.set(this.$data, 'imageFile', file);
+    },
+    displayImage: function displayImage(file) {
+      var reader = new FileReader();
+
+      reader.onload = function () {
+        var dataURL = reader.result;
+        var output = document.getElementById('imageFile');
+        output.src = dataURL;
+      };
+
+      reader.readAsDataURL(file);
     },
     sendEvent: function sendEvent() {
       var data = {
@@ -67560,16 +67575,21 @@ var render = function() {
                   [_vm._v("Hình ảnh")]
                 ),
                 _vm._v(" "),
-                _c("input", {
-                  ref: "imageFile",
-                  staticClass: "form-control-file col-9",
-                  attrs: { type: "file" },
-                  on: {
-                    change: function($event) {
-                      return _vm.handleFileUpload()
+                _c("div", { staticClass: "col-9 text-left" }, [
+                  _c("input", {
+                    ref: "imageFile",
+                    staticClass: "form-control-file",
+                    attrs: { type: "file" },
+                    on: {
+                      change: function($event) {
+                        return _vm.handleFileUpload($event)
+                      }
                     }
-                  }
-                })
+                  }),
+                  _c("br"),
+                  _vm._v(" "),
+                  _c("img", { attrs: { id: "imageFile", width: "100" } })
+                ])
               ])
             ]
           ),

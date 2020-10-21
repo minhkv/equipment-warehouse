@@ -32,7 +32,10 @@
                     </div>
                     <div class="form-group row">
                         <label class="col-3 col-form-label text-left" for="equipmentImage">Hình ảnh</label>
-                        <input v-on:change="handleFileUpload()" ref="imageFile" type="file" class="form-control-file col-9">
+                        <div class="col-9 text-left">
+                            <input v-on:change="handleFileUpload($event)" ref="imageFile" type="file" class="form-control-file"><br>
+                            <img id="imageFile" width="100">
+                        </div>
                     </div>
                 </div>
                 <div v-show="step==2">
@@ -223,9 +226,19 @@ export default {
             this.$emit('category', category);
             this.closeModal('#addCategory');
         },
-        handleFileUpload() {
-            Vue.set(this.$data, 'imageFile', this.$refs.imageFile.files[0]);
-            this.storeStorage(['imageFile']);
+        handleFileUpload(e) {
+            let file = e.target.files[0];
+            this.displayImage(file);
+            Vue.set(this.$data, 'imageFile', file);
+        },
+        displayImage(file) {
+            var reader = new FileReader();
+            reader.onload = function(){
+                var dataURL = reader.result;
+                var output = document.getElementById('imageFile');
+                output.src = dataURL;
+            };
+            reader.readAsDataURL(file);
         },
         sendEvent() {
             let data = {
